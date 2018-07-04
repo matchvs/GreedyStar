@@ -82,6 +82,7 @@ cc.Class({
         for (let i = 0; i < l; i++) {
             let player = players[i]
                 , userId = player.userId
+                , userName = player.userName
                 , score = player.score || 0;
 
             let node = new cc.Node()
@@ -96,7 +97,9 @@ cc.Class({
             label.fontFamily = 'Microsoft YaHei UI';
             label.fontSize = 16;
             label.lineHeight = 28;
-            label.string = userId + ':' + score;
+            // label.string = userId + ':' + score;
+            label.string = userName + ':' + score;
+
             node.userId = userId;
             this.itemNodeArr.push(node);
         }
@@ -179,7 +182,8 @@ cc.Class({
                 , label = node.getComponent(cc.Label);
 
             node.userId = players[i].userId;
-            label.string = players[i].userId + ':' + players[i].score
+            // label.string = players[i].userId + ':' + players[i].score
+            label.string = players[i].userName + ':' + players[i].score
         }
     },
 
@@ -232,7 +236,8 @@ cc.Class({
                 , label = node.getComponent(cc.Label);
 
             node.userId = players[i].userId;
-            label.string = players[i].userId + ':' + players[i].score
+            // label.string = players[i].userId + ':' + players[i].score
+            label.string = players[i].userName + ':' + players[i].score
         }
     },
 
@@ -298,7 +303,8 @@ cc.Class({
             let node = this.itemNodeArr[i];
             let label = node.getComponent(cc.Label);
             node.userId = players[i].userId;
-            label.string = players[i].userId + ':' + players[i].score
+            // label.string = players[i].userId + ':' + players[i].score
+            label.string = players[i].userName + ':' + players[i].score
         }
     }
 });

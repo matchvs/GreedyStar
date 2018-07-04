@@ -1392,7 +1392,7 @@ cc.Class({
             isClient: true,
         });
 
-        let result = Mvs.engine.sendEventEx(1, data);
+        let result = Mvs.engine.sendEventEx(1, data, 0, []);
         if (result.result === 0) {
             console.log('sdk sendEventEx "GAME_START_EVENT" ok', result);
         } else {
