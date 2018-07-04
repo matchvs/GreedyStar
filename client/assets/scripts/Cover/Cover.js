@@ -21,7 +21,7 @@ cc.Class({
 
     mvsBind() {
         Mvs.response.initResponse = this.mvsInitResponse.bind(this);
-        // Mvs.response.errorResponse = this.mvsErrorResponse.bind(this);
+        Mvs.response.errorResponse = this.mvsErrorResponse.bind(this);
     },
 
     init() {
@@ -70,24 +70,24 @@ cc.Class({
         }
     },
 
-    // mvsErrorResponse(code, errMsg) {
-    //     console.error('mvsErrorResponse', arguments);
-    //
-    //     // 目前只能处理code = 1000 的情况
-    //     // ??? code = 1000 && errMsg === "gateway disconnect"
-    //     if (code === 1000) {
-    //         GameData.isServerErrorCode1000 = true;
-    //         this.showPromptOfError('你已掉线 请刷新 重开');
-    //     }
-    // },
+    mvsErrorResponse(code, errMsg) {
+        console.error('mvsErrorResponse', arguments);
+    
+        // 目前只能处理code = 1001 的情况
+        // ??? code = 1001 && errMsg === "gateway disconnect"
+        if (code === 1001) {
+            GameData.isServerErrorCode1000 = true;
+            this.showPromptOfError('你已掉线 请刷新 重开');
+        }
+    },
 
-    // showPromptOfError(str) {
-    //     let promptNode = cc.find('Canvas/prompt');
-    //     let promptTxt = promptNode.getChildByName('label').getComponent(cc.Label);
-    //     promptTxt.string = str;
-    //
-    //     promptNode.active = true;
-    // },
+    showPromptOfError(str) {
+        let promptNode = cc.find('Canvas/prompt');
+        let promptTxt = promptNode.getChildByName('label').getComponent(cc.Label);
+        promptTxt.string = str;
+    
+        promptNode.active = true;
+    },
 
     play() {
         if (GameData.initStatus === 6) {

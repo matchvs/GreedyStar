@@ -578,7 +578,7 @@
     "_cascadeOpacityEnabled": true,
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 0.5,
+      "x": 0,
       "y": 0.5
     },
     "_contentSize": {
@@ -592,7 +592,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 105.5,
+      "x": 80,
       "y": 27.9
     },
     "_skewX": 0,
@@ -7725,7 +7725,7 @@
       "height": 720
     },
     "_fitWidth": false,
-    "_fitHeight": false
+    "_fitHeight": true
   },
   {
     "__type__": "4162bOuwyFNY5tDHM/AL0eN",

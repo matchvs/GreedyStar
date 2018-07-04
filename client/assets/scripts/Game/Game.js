@@ -412,9 +412,9 @@ cc.Class({
         // TODO: 测试困难
         // 异常退出,到cover界面,cover界面中由想正常运行
 
-        // 只处理code = 1000 的情况
-        // ??? code = 1000 && errMsg === "gateway disconnect"
-        if (code === 1000) {
+        // 只处理code = 1001 的情况
+        // ??? code = 1001 && errMsg === "gateway disconnect"
+        if (code === 1001) {
             GameData.isServerErrorCode1000 = true;
 
             this.foodPool.clear();

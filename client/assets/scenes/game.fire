@@ -3955,6 +3955,6 @@
       "height": 720
     },
     "_fitWidth": false,
-    "_fitHeight": false
+    "_fitHeight": true
   }
 ]

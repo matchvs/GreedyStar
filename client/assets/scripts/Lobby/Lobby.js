@@ -4,6 +4,7 @@ let Config = require('../Global/Config');
 let GameData = require('../Global/GameData');
 // let Config = require('Config');
 // let GameData = require('GameData');
+let wxshare = require('../Util/wxshare');
 
 cc.Class({
     extends: cc.Component,
@@ -21,9 +22,9 @@ cc.Class({
         this.mvsBind();
 
         if (Const.userId && GameData.logoutStatus === 6) {
-            this.loadAvatarImage();
+            // this.loadAvatarImage();
             this.login();
-            this.initProfileData();
+            // this.initProfileData();
         } else if (Const.userId && GameData.logoutStatus === 1) {
             this.loadAvatarImage();
             this.initProfileData();
@@ -317,9 +318,9 @@ cc.Class({
         GameData.joinRoomStatus = 1;
         this.resetSomeGameData();
 
-        // 目前只能处理code = 1000 的情况
-        // ??? code = 1000 && errMsg === "gateway disconnect"
-        if (code === 1000) {
+        // 目前只能处理code = 1001 的情况
+        // ??? code = 1001 && errMsg === "gateway disconnect"
+        if (code === 1001) {
             GameData.isServerErrorCode1000 = true;
             this.showPromptOfError('你已掉线 请刷新 重开');
         }
@@ -339,13 +340,17 @@ cc.Class({
 
     initProfileData() {
         let userNameNode = cc.find('Canvas/profile/username').getComponent(cc.Label);
-        userNameNode.string = Const.userId;
+        // userNameNode.string = Const.userId;
+        userNameNode.string = Const.userName;
 
         let goldNode = cc.find('Canvas/profile/disGold/value').getComponent(cc.Label);
         goldNode.string = GameData.gold;
 
         let userIdNode = cc.find('Canvas/stage1/layerProfile/userid').getComponent(cc.Label);
-        userIdNode.string = '用户ID:  ' + Const.userId;
+        userIdNode.string = '昵称: ' + Const.userName;
+
+        let userNameNode2 = cc.find('Canvas/stage1/layerProfile/username').getComponent(cc.Label);
+        userNameNode2.string = '用户ID:  ' + Const.userId;
 
         let allValueNode = cc.find('Canvas/stage1/layerProfile/numGame/num').getComponent(cc.Label);
         allValueNode.string = GameData.allValue;
@@ -402,20 +407,50 @@ cc.Class({
 
     // 添加图片avatar
     loadAvatarImage() {
-        // let avatarUrl = Const.avatarUrl;
-        let avatarUrl = 'http://tools.itharbors.com/res/logo.png';
+        let avatarUrl = Const.avatarUrl;
+        // let avatarUrl = "https://wx.qlogo.cn/mmopen/vi_32/1iaXQDdbeiaLMnpKmMicgvzdjFhf4o6kibdpPo5iagYJMt4m9kA8E0H3h0p4zeRq0CBILU8mKmDhrUygcPUCVdsV3pw/132";
+
+        // let avatarUrl = 'http://tools.itharbors.com/res/logo.png';
         // var avatarUrl = 'http://pic.vszone.cn/upload/avatar/1464079979.png'
         let avatarNode = cc.find('Canvas/profile/avator');
+        let sprite = avatarNode.getComponent(cc.Sprite);
+        // console.log('loadAvatarImage');
 
-        cc.loader.load(avatarUrl, function (err, res) {
-            if (err) {
-                console.error('load avatar image error', err);
-                return;
+        // cc.loader.load(avatarUrl, function (err, res) {
+        //     if (err) {
+        //         console.error('load avatar image error', err);
+        //         return;
+        //     }
+
+        //     let png = avatarNode.getComponent(cc.Sprite);
+        //     png.spriteFrame = new cc.SpriteFrame(res);
+        // })
+        try {
+            let image = wx.createImage();
+            image.onload = () => {
+                try {
+                    let texture = new cc.Texture2D();
+                    texture.initWithElement(image);
+                    texture.handleLoadedTexture();
+
+                    // let sprite = avatarNode.getComponent(cc.Sprite);
+                    sprite.spriteFrame = new cc.SpriteFrame(texture);
+                } catch (e) {
+                    console.log('wx onload image error');
+                }
             }
+            image.src = avatarUrl;
+        } catch (e) {
+            cc.loader.load(avatarUrl, function (err, res) {
+                if (err) {
+                    console.error('load avatar image error', err);
+                    return;
+                }
 
-            let png = avatarNode.getComponent(cc.Sprite);
-            png.spriteFrame = new cc.SpriteFrame(res);
-        })
+                // let png = avatarNode.getComponent(cc.Sprite);
+                sprite.spriteFrame = new cc.SpriteFrame(res);
+            })
+        }
     },
 
     login() {
@@ -463,8 +498,52 @@ cc.Class({
             return;
         }
 
-        this.initPlayersData();
-        this.getRoomList();
+        /* try {
+           wxshare.getWxUserInfo(function (userinfo) {
+               console.log("get wx.userinfo success ", userinfo);
+               // userNameTxt.text = userinfo.nickName;
+               // self.loadAvatar(userinfo.avatarUrl);
+               Const.userName = userinfo.nickName;
+               Const.avatarUrl = userinfo.avatarUrl;
+           });
+       } catch (error) {
+           console.log("get wx.userinfo is fail" + error);
+       } finally {
+           console.log('Const.userName', Const.userName);
+           console.log('Const.avatarUrl', Const.avatarUrl);
+
+           this.loadAvatarImage();
+           this.initProfileData();
+
+           this.initPlayersData();
+           this.getRoomList();
+       } */
+
+        // 注意: 这不是try catch的正确用法,try catch不能捕获异步错误
+        // 这里使用只是为了判断下可不可以使用wxshare.getWxUserInfo
+        try {
+            wxshare.getWxUserInfo((userinfo) => {
+                console.log("get wx.userinfo success ", userinfo);
+                // userNameTxt.text = userinfo.nickName;
+                // self.loadAvatar(userinfo.avatarUrl);
+                Const.userName = userinfo.nickName;
+                Const.avatarUrl = userinfo.avatarUrl;
+
+                this.loadAvatarImage();
+                this.initProfileData();
+
+                this.initPlayersData();
+                this.getRoomList();
+            });
+        } catch (error) {
+            console.log("get wx.userinfo is fail" + error);
+
+            this.loadAvatarImage();
+            this.initProfileData();
+
+            this.initPlayersData();
+            this.getRoomList();
+        }
     },
 
     backBtnHandler() {
@@ -529,28 +608,66 @@ cc.Class({
             this.showPrompt('登录中 请稍等');
             return;
         }
-        
+
         // 在房间场景中,点击无效
         if (GameData.isInRoomView === true) {
             return;
         }
 
-        // let avatarUrl = Const.avatarUrl;
-        let avatarUrl = 'http://tools.itharbors.com/res/logo.png';
+        let avatarUrl = Const.avatarUrl;
+        // let avatarUrl = "https://wx.qlogo.cn/mmopen/vi_32/1iaXQDdbeiaLMnpKmMicgvzdjFhf4o6kibdpPo5iagYJMt4m9kA8E0H3h0p4zeRq0CBILU8mKmDhrUygcPUCVdsV3pw/132";
+
+        // let avatarUrl = 'http://tools.itharbors.com/res/logo.png';
         let avatarNode = cc.find('Canvas/stage1/layerProfile/avator');
-        cc.loader.load(avatarUrl, (err, res) => {
-            if (err) {
-                console.error('avatar image click, load avatar image error', err);
-                return;
+        let sprite = avatarNode.getComponent(cc.Sprite);
+        // cc.loader.load(avatarUrl, (err, res) => {
+        //     if (err) {
+        //         console.error('avatar image click, load avatar image error', err);
+        //         return;
+        //     }
+
+        //     let png = avatarNode.getComponent(cc.Sprite);
+        //     png.spriteFrame = new cc.SpriteFrame(res);
+
+        //     this.showUserProfileLayer();
+
+        //     this.hideJoinRoomLayer();
+        // })
+
+        // 微信image
+        try {
+            let image = wx.createImage();
+            image.onload = () => {
+                try {
+                    let texture = new cc.Texture2D();
+                    texture.initWithElement(image);
+                    texture.handleLoadedTexture();
+
+
+                    sprite.spriteFrame = new cc.SpriteFrame(texture);
+                } catch (e) {
+                    console.log('wx onload image error');
+                } finally {
+                    this.showUserProfileLayer();
+                    this.hideJoinRoomLayer();
+                }
             }
+            image.src = avatarUrl;
+        } catch (e) {
+            console.log('not wx runtime');
+            cc.loader.load(avatarUrl, (err, res) => {
+                if (err) {
+                    console.error('avatar image click, load avatar image error', err);
+                    return;
+                }
 
-            let png = avatarNode.getComponent(cc.Sprite);
-            png.spriteFrame = new cc.SpriteFrame(res);
+                // let png = avatarNode.getComponent(cc.Sprite);
+                sprite.spriteFrame = new cc.SpriteFrame(res);
 
-            this.showUserProfileLayer();
-
-            this.hideJoinRoomLayer();
-        })
+                this.showUserProfileLayer();
+                this.hideJoinRoomLayer();
+            })
+        }
     },
 
     // 展示用户详细
