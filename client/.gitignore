@@ -66,3 +66,8 @@ quick_gen_project_*_autogen.sh.meta
 #//////////////////////////
 
 .vscode/
+
+#//////////////////////////
+# VS Code
+#//////////////////////////
+client/packages/plugin-matchvs/matchvs/matchvsnative/
