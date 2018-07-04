@@ -185,7 +185,8 @@ cc.Class({
                 let node = nodes[i];
                 let label = node.getChildByName('username').getComponent(cc.Label);
                 if (i < j) {
-                    label.string = players[i].userId;
+                    // label.string = players[i].userId;
+                    label.string = players[i].userName;
                 } else {
                     label.string = '--';
                 }
@@ -264,7 +265,8 @@ cc.Class({
                     let node = nodes[i];
                     let label = node.getChildByName('username').getComponent(cc.Label);
                     if (i < j) {
-                        label.string = players[i].userId;
+                        // label.string = players[i].userId;
+                        label.string = players[i].userName;
                     } else {
                         label.string = '--';
                     }
@@ -1342,14 +1344,16 @@ cc.Class({
             for (let i = 0; i < j; i++) {
                 let node = nodes[i];
                 let label = node.getChildByName('username').getComponent(cc.Label);
-                label.string = players[i].userId;
+                // label.string = players[i].userId;
+                label.string = players[i].userName;
             }
         }
 
         else if (GameData.isCreateRoomBtnClick === true && GameData.isOwner === true) {
             let node = nodes[0];
             let label = node.getChildByName('username').getComponent(cc.Label);
-            label.string = Const.userId
+            // label.string = Const.userId
+            label.string = Const.userName
         }
     },
 
@@ -1802,7 +1806,8 @@ cc.Class({
                 let node = nodes[i];
                 let label = node.getChildByName('username').getComponent(cc.Label);
                 if (i < j) {
-                    label.string = players[i].userId;
+                    // label.string = players[i].userId;
+                    label.string = players[i].userName;
                 } else {
                     label.string = '--';
                 }

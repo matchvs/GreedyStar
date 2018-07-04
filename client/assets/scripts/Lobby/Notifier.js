@@ -19,7 +19,7 @@ cc.Class({
     mvsJoinRoomNotify(userInfo) {
         // TODO: 合并
 
-
+        
         if (GameData.isQuickJoinBtnClick === true) {
             for (let i = 0, l = GameData.players.length; i < l; i++) {
                 if (userInfo.userId === GameData.players[i].userId) {
@@ -40,7 +40,8 @@ cc.Class({
                 let l = GameData.players.length;
                 let nodes = cc.find('Canvas/stage2/boxRoom/playerList').children;
                 let label = nodes[l - 1].getChildByName('username').getComponent(cc.Label);
-                label.string = GameData.players[l - 1].userId;
+                // label.string = GameData.players[l - 1].userId;
+                label.string = GameData.players[l - 1].userName;
             }
 
             else if (GameData.isGameStart === true) {
@@ -189,7 +190,8 @@ cc.Class({
                 let l = GameData.players.length;
                 let nodes = cc.find('Canvas/stage2/boxRoom/playerList').children;
                 let label = nodes[l - 1].getChildByName('username').getComponent(cc.Label);
-                label.string = GameData.players[l - 1].userId
+                // label.string = GameData.players[l - 1].userId
+                label.string = GameData.players[l - 1].userName
             }
 
             else if (GameData.isGameStart === true) {
@@ -397,7 +399,8 @@ cc.Class({
                     let node = nodes[i];
                     let label = node.getChildByName('username').getComponent(cc.Label);
                     if (i < j) {
-                        label.string = GameData.players[i].userId;
+                        // label.string = GameData.players[i].userId;
+                        label.string = GameData.players[i].userName;
                     } else {
                         label.string = '--';
                     }
@@ -435,7 +438,8 @@ cc.Class({
                     let node = nodes[i];
                     let label = node.getChildByName('username').getComponent(cc.Label);
                     if (i < j) {
-                        label.string = players[i].userId;
+                        // label.string = players[i].userId;
+                        label.string = players[i].userName;
                     } else {
                         label.string = '--';
                     }
