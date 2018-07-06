@@ -358,7 +358,8 @@ cc.Class({
                 let node = nodes[i];
                 let label = node.getChildByName('username').getComponent(cc.Label);
                 if (i < j) {
-                    label.string = players[i].userId;
+                    // label.string = players[i].userId;
+                    label.string = players[i].userName;
                 } else {
                     label.string = '--';
                 }
