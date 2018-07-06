@@ -69,15 +69,17 @@ cc.Class({
             if (GameData.gameTime <= 0) {
                 txtCountdown.string = '0s';
                 clearInterval(timer);
+                
+                // 延迟1ms自动退出房间
+                setTimeout(() => {
+                    if (GameData.isHalfLeaveRoomBtnClick === false) {
+                        GameData.leaveRoomStatus = 2;
+                        let cpProto = "";
+                        this.mvsLeaveRoom(cpProto);
 
-                // 直接退出
-                if (GameData.isHalfLeaveRoomBtnClick === false) {
-                    GameData.leaveRoomStatus = 2;
-                    let cpProto = "";
-                    this.mvsLeaveRoom(cpProto);
-
-                    // this.gameOver();
-                }
+                        // this.gameOver();
+                    }
+                }, 1000);
             }
 
             if (GameData.gameTime === 120) {
