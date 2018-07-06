@@ -47,7 +47,8 @@ cc.Class({
         }
 
         let userNameNode = this.node.getChildByName('username').getComponent(cc.Label);
-        userNameNode.string = Const.userId;
+        // userNameNode.string = Const.userId;
+        userNameNode.string = Const.userName;
 
         this.onEvents();
 

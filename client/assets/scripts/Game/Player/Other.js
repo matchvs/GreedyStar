@@ -106,7 +106,8 @@ cc.Class({
     _otherBirth(data, toggleInvin) {
         let node
             , index
-            , userId = data.userId;
+            , userId = data.userId
+            , userName = '';
 
         try {
             let foo = this.parent
@@ -126,6 +127,7 @@ cc.Class({
             let player = GameData.players[i];
 
             if (player.userId === userId) {
+                userName = player.userName
                 index = i;
                 break;
             }
@@ -142,6 +144,7 @@ cc.Class({
         }
 
         node.userId = userId;
+        node.userName = userName;
 
         // 不好的处理方式
         // TODO 应该在loadRes中有错误处理
@@ -161,7 +164,8 @@ cc.Class({
             png.spriteFrame = new cc.SpriteFrame(res);
 
             let username = node.getChildByName('username').getComponent(cc.Label);
-            username.string = userId;
+            // username.string = userId;
+            username.string = userName;
 
             this.changeOtherStatus({
                 x: data.x,
@@ -195,7 +199,8 @@ cc.Class({
     otherMove(data) {
         let node = undefined
             , index = 0
-            , userId = data.userId;
+            , userId = data.userId
+            , userName = '';
 
         try {
             let foo = this.parent;
@@ -208,6 +213,7 @@ cc.Class({
             let _node = children[i];
             if (_node.userId === userId) {
                 node = _node;
+                userName = _node.userName;
                 break;
             }
         }
@@ -219,7 +225,8 @@ cc.Class({
         }
 
         let username = node.getChildByName('username').getComponent(cc.Label);
-        username.string = userId;
+        // username.string = userId;
+        username.string = userName;
 
         for (let i = 0, l = GameData.players.length; i < l; i++) {
             let player = GameData.players[i];
@@ -372,12 +379,14 @@ cc.Class({
     _otherVivid(data) {
         let node
             , index
-            , userId = data.userId;
+            , userId = data.userId
+            , userName = '';
 
         for (let i = 0, l = GameData.players.length; i < l; i++) {
             let player = GameData.players[i];
             if (player.userId === userId) {
                 index = i;
+                userName = player.userName;
                 break;
             }
         }
@@ -399,7 +408,8 @@ cc.Class({
         }
 
         let username = node.getChildByName('username').getComponent(cc.Label);
-        username.string = userId;
+        // username.string = userId;
+        username.string = userName;
 
         this.changeOtherStatus({
             x: data.x,
