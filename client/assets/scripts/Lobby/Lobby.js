@@ -1671,12 +1671,23 @@ cc.Class({
 
         let nodes = cc.find('Canvas/stage2/boxRoom/playerList').children;
         // userName
-        let userId = nodes[i].getChildByName('username').getComponent(cc.Label).string;
+        let userName = nodes[i].getChildByName('username').getComponent(cc.Label).string;
 
-        if (userId === '--') {
+        if (userName === '--') {
             return;
         }
 
+        let userId = -1
+        for (let i = 0, len = GameData.players.length; i < len; i++) {
+            if (GameData.players[i].userName === userName) {
+                userId = GameData.players[i].userId
+                break
+            }
+        }
+    
+        if (userId === -1) {
+            return
+        }
 
         // 踢人不应该对kickPlayerStatus处理
         let cpProto = '';
@@ -1732,7 +1743,8 @@ cc.Class({
             let label = node.getChildByName('username').getComponent(cc.Label);
 
             if (i < l) {
-                label.string = GameData.players[i].userId;
+                // label.string = GameData.players[i].userId;
+                label.string = GameData.players[i].userName;
             } else {
                 label.string = '--';
             }
