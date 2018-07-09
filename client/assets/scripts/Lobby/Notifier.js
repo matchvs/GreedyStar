@@ -159,7 +159,7 @@ cc.Class({
                         isGameStart: true,
                     });
 
-
+                    
                     let result = Mvs.engine.sendEvent(data);
                     if (result.result === 0) {
                         console.log('sdk sendEvent "OTHERS_BIRTH_EVENT"(game is start) ok', result);

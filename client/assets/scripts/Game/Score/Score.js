@@ -244,7 +244,7 @@ cc.Class({
     changePlayerScore(data, isReset) {
         let userId = data.userId
             , score = data.score
-            , userScore = data.userScore;
+            , userScore = data.userScore || null;
 
         // TODO 这个状态不要在这里修改
         for (let i = 0; i < GameData.players.length; i++) {
@@ -257,10 +257,12 @@ cc.Class({
                     GameData.players[i].score = 0
                 } else {
                     GameData.players[i].score += score;
-
+                    
                     // 如果个人总分 > 本地个人增加的值
-                    if (userScore > GameData.players[i].score) {
-                        GameData.players[i].score = userScore;
+                    if (userScore) {
+                        if (userScore > GameData.players[i].score) {
+                            GameData.players[i].score = userScore;
+                        }
                     }
                 }
 

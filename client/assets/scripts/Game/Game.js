@@ -69,7 +69,7 @@ cc.Class({
             if (GameData.gameTime <= 0) {
                 txtCountdown.string = '0s';
                 clearInterval(timer);
-                
+
                 // 延迟1ms自动退出房间
                 setTimeout(() => {
                     if (GameData.isHalfLeaveRoomBtnClick === false) {
@@ -478,6 +478,14 @@ cc.Class({
 
         if (data.isGameStart === true && data.toUserId === Const.userId) {
             if (data.event === Const.OTHERS_BIRTH_EVENT) {
+
+                // 分数同步
+                let _data = data.data;
+                cc.director.GlobalEvent.emit('playerScoreChange', {
+                    userId: _data.userId,
+                    score: _data.score
+                })
+
                 cc.director.GlobalEvent.emit('othersBirth', data);
             }
 
