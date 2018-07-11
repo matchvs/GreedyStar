@@ -15,7 +15,8 @@ cc.Class({
 
         // 断线之后需要重新init
         // if (GameData.initStatus !== 6) {
-            this.init();
+        this.isCoverHide = false
+        this.init();
         // }
     },
 
@@ -25,6 +26,16 @@ cc.Class({
     },
 
     init() {
+        cc.game.on(cc.game.EVENT_HIDE, () => {
+            if (this.isCoverHide) {
+                return;
+            }
+            this.isCoverHide = true;
+            // TODO: 后期修改该名字
+            GameData.isServerErrorCode1000 = true;
+            this.showPromptOfError('目前不支持切入后台 请刷新 重开');
+        });
+
         if (GameData.initStatus === 6) {
             return;
         }
@@ -72,7 +83,7 @@ cc.Class({
 
     mvsErrorResponse(code, errMsg) {
         console.error('mvsErrorResponse', arguments);
-    
+
         // 目前只能处理code = 1001 的情况
         // ??? code = 1001 && errMsg === "gateway disconnect"
         if (code === 1001) {
@@ -85,15 +96,20 @@ cc.Class({
         let promptNode = cc.find('Canvas/prompt');
         let promptTxt = promptNode.getChildByName('label').getComponent(cc.Label);
         promptTxt.string = str;
-    
+
         promptNode.active = true;
     },
 
     play() {
+        if (GameData.isServerErrorCode1000) {
+            return;
+        }
         if (GameData.initStatus === 6) {
-            cc.director.loadScene('lobby');
             GameData.isInCoverView = false;
-        }else {
+            
+            cc.game.off(cc.game.EVENT_HIDE);
+            cc.director.loadScene('lobby');
+        } else {
             console.warn('please wait matchvs init');
         }
     }

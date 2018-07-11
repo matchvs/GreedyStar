@@ -4600,7 +4600,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 144,
+      "width": 246.11,
       "height": 24
     },
     "_rotationX": 0,
@@ -4635,7 +4635,7 @@
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
-    "_N$string": "等待开始游戏",
+    "_N$string": "等待开始游戏(至少3人)",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",

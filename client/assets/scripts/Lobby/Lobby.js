@@ -16,6 +16,17 @@ cc.Class({
         this.promptSetTimeout = null;
         this.promptAction = null;
         this.timer = null;
+
+        this.isLobbyHide = false
+        cc.game.on(cc.game.EVENT_HIDE, () => {
+            if (this.isLobbyHide) {
+                return;
+            }
+            this.isLobbyHide = true;
+            // TODO: 后期修改该名字
+            GameData.isServerErrorCode1000 = true;
+            this.showPromptOfError('目前不支持切入后台 请刷新 重开');
+        });
     },
 
     start() {
@@ -97,6 +108,10 @@ cc.Class({
     },
 
     mvsNetworkStateNotify(notifyData) {
+        if (GameData.isServerErrorCode1000) {
+            return
+        }
+        
         let data = {
             userId: notifyData.userID,
             state: notifyData.state,
@@ -597,6 +612,7 @@ cc.Class({
         GameData.isInCoverView = true;
         this.resetSomeGameData();
 
+        cc.game.off(cc.game.EVENT_HIDE);
         cc.director.loadScene('cover');
     },
 
@@ -1437,6 +1453,10 @@ cc.Class({
     },
 
     mvsSendEventNotify(eventInfo) {
+        if (GameData.isServerErrorCode1000) {
+            return;
+        }
+
         let cpProto = eventInfo.cpProto;
         let data = JSON.parse(cpProto);
         if (data.isClient === true) {
@@ -1524,8 +1544,13 @@ cc.Class({
     },
 
     mvsGameServerNotify(eventInfo) {
+        if (GameData.isServerErrorCode1000) {
+            return
+        }
+
         let cpProto = eventInfo.cpProto;
         let data = JSON.parse(cpProto);
+
 
         if (data.isServer === true) {
             // 本地GameData.isGameStart为false,
@@ -1655,6 +1680,7 @@ cc.Class({
 
         GameData.isGameStart = true;
         // console.log("loadScene game");
+        cc.game.off(cc.game.EVENT_HIDE);
         cc.director.loadScene('game');
     },
 
@@ -1684,7 +1710,7 @@ cc.Class({
                 break
             }
         }
-    
+
         if (userId === -1) {
             return
         }
@@ -1752,6 +1778,10 @@ cc.Class({
     },
 
     mvsKickPlayerNotify(data) {
+        if (GameData.isServerErrorCode1000) {
+            return;
+        }
+
         if (data) {
             console.warn('notify kickPlayer ok', data);
         } else {

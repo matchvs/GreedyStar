@@ -27,6 +27,17 @@ cc.Class({
 
         this.onEvent();
         this.mvsBind();
+
+        this.isGameHide = false
+        cc.game.on(cc.game.EVENT_HIDE, () => {
+            if (this.isGameHide) {
+                return;
+            }
+            this.isGameHide = true;
+            // TODO: 后期修改该名字
+            GameData.isServerErrorCode1000 = true;
+            this.showPromptOfError('目前不支持切入后台 请刷新 重开');
+        })
     },
 
     start() {
@@ -54,6 +65,10 @@ cc.Class({
         // TODO: 可以直接在结束是clearInterval
         // TODO: 改写定时器的逻辑
         let timer = setInterval(() => {
+            if (GameData.isServerErrorCode1000) {
+                return;
+            }
+
             GameData.gameTime--;
 
             if (GameData.isInCoverView === true) {
@@ -438,6 +453,10 @@ cc.Class({
     },
 
     mvsNetworkStateNotify(notifyData) {
+        // if (GameData.isServerErrorCode1000) {
+        //     return;
+        // }
+
         let data = {
             userId: notifyData.userID,
             state: notifyData.state,
@@ -469,6 +488,10 @@ cc.Class({
     },
 
     mvsSentEventNotify(info) {
+        // if (GameData.isServerErrorCode1000) {
+        //     return;
+        // }
+
         if (!info || !info.cpProto) {
             console.error('sendEventNotify info and info.cpProto require', info);
             return;
@@ -713,6 +736,7 @@ cc.Class({
         this.cleanBgAllChildren();
         this.resetSomeGameData();
 
+        cc.game.off(cc.game.EVENT_HIDE);
         cc.director.loadScene('lobby');
     },
 
@@ -789,6 +813,7 @@ cc.Class({
         this.cleanBgAllChildren();
         this.resetSomeGameData();
 
+        cc.game.off(cc.game.EVENT_HIDE);
         cc.director.loadScene('lobby');
         // GameData.leaveRoomStatus = 2;
         // this.mvsLeaveRoom();
@@ -910,6 +935,10 @@ cc.Class({
 
     // 其他玩家中途退出游戏
     mvsLeaveRoomNotify(roomInfo) {
+        // if (GameData.isServerErrorCode1000) {
+        //     return;
+        // }
+
         if (roomInfo.cpProto === Const.OTHER_HALF_LEAVE_EVENT) {
             this.removePlayer(roomInfo);
         }
