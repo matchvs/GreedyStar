@@ -22,6 +22,7 @@ cc.Class({
             if (this.isLobbyHide) {
                 return;
             }
+            console.error('lobby hide')
             this.isLobbyHide = true;
             // TODO: 后期修改该名字
             GameData.isServerErrorCode1000 = true;

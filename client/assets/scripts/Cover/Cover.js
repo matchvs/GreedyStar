@@ -30,6 +30,7 @@ cc.Class({
             if (this.isCoverHide) {
                 return;
             }
+            console.error('cover hide')
             this.isCoverHide = true;
             // TODO: 后期修改该名字
             GameData.isServerErrorCode1000 = true;
