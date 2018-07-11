@@ -29,16 +29,22 @@ cc.Class({
         this.mvsBind();
 
         this.isGameHide = false
-        cc.game.on(cc.game.EVENT_HIDE, () => {
-            if (this.isGameHide) {
-                return;
-            }
-            console.error('game hide')
-            this.isGameHide = true;
-            // TODO: 后期修改该名字
-            GameData.isServerErrorCode1000 = true;
-            this.showPromptOfError('目前不支持切入后台 请刷新 重开');
-        })
+        try {
+            wx.onHide(this.onHideHandler.bind(this))
+        } catch (e) {
+            cc.game.on(cc.game.EVENT_HIDE, this.onHideHandler.bind(this))
+        }
+    },
+
+    onHideHandler() {
+        if (this.isGameHide) {
+            return;
+        }
+        console.error('game hide')
+        this.isGameHide = true;
+        // TODO: 后期修改该名字
+        GameData.isServerErrorCode1000 = true;
+        this.showPromptOfError('目前不支持切入后台 请刷新 重开');
     },
 
     start() {
@@ -737,7 +743,12 @@ cc.Class({
         this.cleanBgAllChildren();
         this.resetSomeGameData();
 
-        cc.game.off(cc.game.EVENT_HIDE);
+        try {
+            wx.offHide(this.onHideHandler.bind(this))
+        } catch (e) {
+            cc.game.off(cc.game.EVENT_HIDE);
+        }
+
         cc.director.loadScene('lobby');
     },
 
@@ -814,7 +825,11 @@ cc.Class({
         this.cleanBgAllChildren();
         this.resetSomeGameData();
 
-        cc.game.off(cc.game.EVENT_HIDE);
+        try {
+            wx.offHide(this.onHideHandler.bind(this))
+        } catch (e) {
+            cc.game.off(cc.game.EVENT_HIDE);
+        }
         cc.director.loadScene('lobby');
         // GameData.leaveRoomStatus = 2;
         // this.mvsLeaveRoom();

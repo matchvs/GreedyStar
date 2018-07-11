@@ -18,16 +18,23 @@ cc.Class({
         this.timer = null;
 
         this.isLobbyHide = false
-        cc.game.on(cc.game.EVENT_HIDE, () => {
-            if (this.isLobbyHide) {
-                return;
-            }
-            console.error('lobby hide')
-            this.isLobbyHide = true;
-            // TODO: 后期修改该名字
-            GameData.isServerErrorCode1000 = true;
-            this.showPromptOfError('目前不支持切入后台 请刷新 重开');
-        });
+
+        try {
+            wx.onHide(this.onHideHandler.bind(this))
+        } catch (e) {
+            cc.game.on(cc.game.EVENT_HIDE, this.onHideHandler.bind(this));
+        }
+    },
+
+    onHideHandler() {
+        if (this.isLobbyHide) {
+            return;
+        }
+        console.error('lobby hide')
+        this.isLobbyHide = true;
+        // TODO: 后期修改该名字
+        GameData.isServerErrorCode1000 = true;
+        this.showPromptOfError('目前不支持切入后台 请刷新 重开');
     },
 
     start() {
@@ -112,7 +119,7 @@ cc.Class({
         if (GameData.isServerErrorCode1000) {
             return
         }
-        
+
         let data = {
             userId: notifyData.userID,
             state: notifyData.state,
@@ -613,7 +620,12 @@ cc.Class({
         GameData.isInCoverView = true;
         this.resetSomeGameData();
 
-        cc.game.off(cc.game.EVENT_HIDE);
+        try {
+            wx.offHide(this.onHideHandler.bind(this))
+        } catch(e) {
+            cc.game.off(cc.game.EVENT_HIDE);
+        }
+
         cc.director.loadScene('cover');
     },
 
@@ -1681,7 +1693,12 @@ cc.Class({
 
         GameData.isGameStart = true;
         // console.log("loadScene game");
-        cc.game.off(cc.game.EVENT_HIDE);
+        try {
+            wx.offHide(this.onHideHandler.bind(this))
+        } catch(e) {
+            cc.game.off(cc.game.EVENT_HIDE);
+        }
+
         cc.director.loadScene('game');
     },
 

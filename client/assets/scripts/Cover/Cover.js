@@ -25,17 +25,23 @@ cc.Class({
         Mvs.response.errorResponse = this.mvsErrorResponse.bind(this);
     },
 
+    onHideHandler() {
+        if (this.isCoverHide) {
+            return;
+        }
+        console.error('cover hide')
+        this.isCoverHide = true;
+        // TODO: 后期修改该名字
+        GameData.isServerErrorCode1000 = true;
+        this.showPromptOfError('目前不支持切入后台 请刷新 重开');
+    },
+
     init() {
-        cc.game.on(cc.game.EVENT_HIDE, () => {
-            if (this.isCoverHide) {
-                return;
-            }
-            console.error('cover hide')
-            this.isCoverHide = true;
-            // TODO: 后期修改该名字
-            GameData.isServerErrorCode1000 = true;
-            this.showPromptOfError('目前不支持切入后台 请刷新 重开');
-        });
+        try {
+            wx.onHide(this.onHideHandler.bind(this))
+        } catch (e) {
+            cc.game.on(cc.game.EVENT_HIDE, this.onHideHandler.bind(this));
+        }
 
         if (GameData.initStatus === 6) {
             return;
@@ -107,8 +113,13 @@ cc.Class({
         }
         if (GameData.initStatus === 6) {
             GameData.isInCoverView = false;
-            
-            cc.game.off(cc.game.EVENT_HIDE);
+
+            try {
+                wx.offHide(this.onHideHandler.bind(this))
+            } catch (e) {
+                cc.game.off(cc.game.EVENT_HIDE);
+            }
+
             cc.director.loadScene('lobby');
         } else {
             console.warn('please wait matchvs init');
