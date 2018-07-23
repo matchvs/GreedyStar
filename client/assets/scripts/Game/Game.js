@@ -28,7 +28,7 @@ cc.Class({
         this.onEvent();
         this.mvsBind();
 
-        this.isGameHide = false
+        this.isGameHide = false;
         try {
             wx.onHide(this.onHideHandler.bind(this))
         } catch (e) {
@@ -40,7 +40,7 @@ cc.Class({
         if (this.isGameHide) {
             return;
         }
-        console.error('game hide')
+        console.error('game hide');
         this.isGameHide = true;
         // TODO: 后期修改该名字
         GameData.isServerErrorCode1000 = true;
@@ -163,7 +163,7 @@ cc.Class({
                         return true;
                     }
                 }
-            })
+            });
             // 更新Gamedata.foodArr
             // utils.combineInto(foodArr, GameData.foodArr);
             GameData.foodArr = GameData.foodArr.concat(tempArr);
@@ -378,7 +378,7 @@ cc.Class({
                     , x = pos.x
                     , y = pos.y;
 
-                this.emitPlayerVivid({ x, y });
+                this.emitPlayerVivid({x, y});
 
                 let data2 = {
                     event: Const.OTHER_VIVID_EVENT,
@@ -749,7 +749,10 @@ cc.Class({
             cc.game.off(cc.game.EVENT_HIDE);
         }
 
-        cc.director.loadScene('lobby');
+        this.showPromptOfError('正在加载 请稍后');
+        cc.director.loadScene('lobby', () => {
+            this && this.hidePromptError && this.hidePromptError();
+        });
     },
 
     getRandomPosition() {
@@ -762,7 +765,7 @@ cc.Class({
         let x = utils.getRandom(minX, maxX)
             , y = utils.getRandom(minY, maxY);
 
-        return { x, y }
+        return {x, y}
     },
 
     showDeathWaitDisplayer() {
@@ -830,7 +833,11 @@ cc.Class({
         } catch (e) {
             cc.game.off(cc.game.EVENT_HIDE);
         }
-        cc.director.loadScene('lobby');
+
+        this.hidePromptError();
+        cc.director.loadScene('lobby', () => {
+            this && this.hidePromptError && this.hidePromptError();
+        });
         // GameData.leaveRoomStatus = 2;
         // this.mvsLeaveRoom();
     },
@@ -966,6 +973,11 @@ cc.Class({
         promptTxt.string = str;
 
         promptNode.active = true;
+    },
+
+    hidePromptError() {
+        let promptNode = cc.find('Canvas/prompt');
+        promptNode.active = false;
     },
 
     showPrompt(str) {

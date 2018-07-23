@@ -107,6 +107,11 @@ cc.Class({
         promptNode.active = true;
     },
 
+    hidePromptOfError() {
+        let promptNode = cc.find('Canvas/prompt');
+        promptNode.active = false;
+    },
+
     play() {
         if (GameData.isServerErrorCode1000) {
             return;
@@ -119,8 +124,10 @@ cc.Class({
             } catch (e) {
                 cc.game.off(cc.game.EVENT_HIDE);
             }
-
-            cc.director.loadScene('lobby');
+            this.showPromptOfError("正在登陆 请稍等");
+            cc.director.loadScene('lobby', () => {
+                this && this.hidePromptOfError && this.hidePromptOfError();
+            });
         } else {
             console.warn('please wait matchvs init');
         }

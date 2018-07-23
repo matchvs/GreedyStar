@@ -363,6 +363,11 @@ cc.Class({
         promptNode.active = true;
     },
 
+    hidePromptOfError() {
+        let promptNode = cc.find('Canvas/prompt');
+        promptNode.active = false;
+    },
+
     initProfileData() {
         let userNameNode = cc.find('Canvas/profile/username').getComponent(cc.Label);
         // userNameNode.string = Const.userId;
@@ -622,11 +627,15 @@ cc.Class({
 
         try {
             wx.offHide(this.onHideHandler.bind(this))
-        } catch(e) {
+        } catch (e) {
             cc.game.off(cc.game.EVENT_HIDE);
         }
 
-        cc.director.loadScene('cover');
+        this.showPromptOfError("正在加载 请稍等");
+
+        cc.director.loadScene('cover', () => {
+            this && this.hidePromptOfError && this.hidePromptOfError()
+        });
     },
 
     // 用户头像被点击
@@ -1082,7 +1091,7 @@ cc.Class({
          *     time: 5
          * }
          */
-        // 的时候, 因数据传输延迟,用户还是可以退出房间
+            // 的时候, 因数据传输延迟,用户还是可以退出房间
         let countdownTxt = cc.find('Canvas/stage2/boxRoom/txtCountdown/countdown').getComponent(cc.Label);
         countdownTxt.string = '';
 
@@ -1695,11 +1704,15 @@ cc.Class({
         // console.log("loadScene game");
         try {
             wx.offHide(this.onHideHandler.bind(this))
-        } catch(e) {
+        } catch (e) {
             cc.game.off(cc.game.EVENT_HIDE);
         }
 
-        cc.director.loadScene('game');
+        this.showPromptOfError("正在加载 请稍等");
+
+        cc.director.loadScene('game', () => {
+            this && this.hidePromptOfError && this.hidePromptOfError();
+        });
     },
 
     // 踢人
