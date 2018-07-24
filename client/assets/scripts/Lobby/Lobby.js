@@ -409,6 +409,7 @@ cc.Class({
         } else {
             GameData.registerStatus = 4;
             console.error('sdk registerUser error', result);
+            this.showPromptOfError('注册[sdk]失败 请刷新 重试');
             return;
         }
 
@@ -422,6 +423,7 @@ cc.Class({
         } else {
             GameData.registerStatus = 7;
             console.error('response register user error', userInfo);
+            this.showPromptOfError('注册失败 请刷新 重试');
             return;
         }
 
@@ -512,6 +514,7 @@ cc.Class({
         } else {
             GameData.loginStatus = 4;
             console.error('sdk login error', result);
+            this.showPromptOfError('登录[sdk]失败 请刷新 重试');
             return;
         }
 
@@ -525,6 +528,7 @@ cc.Class({
         } else {
             GameData.loginStatus = 7;
             console.error('response login error', loginRsp);
+            this.showPromptOfError('登陆失败');
             return;
         }
 
@@ -607,6 +611,7 @@ cc.Class({
         } else {
             GameData.logoutStatus = 4;
             console.error('sdk logout error', result);
+            this.showPromptOfError('注销[sdk]失败 请刷新 重试');
             return;
         }
 
@@ -620,6 +625,7 @@ cc.Class({
         } else {
             GameData.logoutStatus = 7;
             console.log('response logout error', status);
+            this.showPromptOfError('注销失败 请重试');
             return;
         }
         GameData.isInCoverView = true;
@@ -752,6 +758,7 @@ cc.Class({
         } else {
             GameData.getRoomListStatus = 4;
             console.error('sdk getRoomList error', result);
+            // this.showPromptOfError('获取房间列表[sdk]失败 请刷新 重试');
             return;
         }
 
@@ -765,6 +772,7 @@ cc.Class({
         } else {
             GameData.getRoomListStatus = 7;
             console.error('response getRoomList error', status);
+            // this.showPromptOfError('获取房间列表失败 请刷新 重试');
             return;
         }
 
@@ -876,6 +884,7 @@ cc.Class({
         } else {
             GameData.joinRandomRoomStatus = 4;
             console.error('sdk joinRandomRoom error', result);
+            this.showPromptOfError('随机加入房间[sdk]失败 请刷新 重试');
             return;
         }
 
@@ -941,6 +950,7 @@ cc.Class({
         } else {
             GameData.createRoomStatus = 4;
             console.warn('sdk createRoom error', result);
+            this.showPromptOfError('创建房间[sdk]失败 请刷新 重试');
             return;
         }
 
@@ -1064,6 +1074,7 @@ cc.Class({
         } else {
             GameData.joinRoomStatus = 4;
             console.error('sdk joinRoom error', result);
+            this.showPromptOfError('加入房间[sdk]失败 请刷新 重试');
             return;
         }
 
@@ -1119,6 +1130,7 @@ cc.Class({
         } else {
             GameData.leaveRoomStatus = 4;
             console.error('sdk leaveRoom error', result);
+            this.showPromptOfError('离开房间[sdk]失败 请刷新 重试');
             return;
         }
 
@@ -1132,6 +1144,7 @@ cc.Class({
         } else {
             GameData.leaveRoomStatus = 7;
             console.error('response leaveRoom error', rsp);
+            this.showPromptOfError('离开房间失败');
             return;
         }
 
@@ -1302,6 +1315,7 @@ cc.Class({
             GameData.createRoomStatus = 6;
         } else {
             console.error('response createRoom error', rsp);
+            this.showPromptOfError('创建房间失败 请重试');
             GameData.createRoomStatus = 7;
             return;
         }
@@ -1435,6 +1449,7 @@ cc.Class({
             console.log('sdk sendEventEx "GAME_START_EVENT" ok', result);
         } else {
             console.error('sdk sendEventEx "GAME_START_EVENT" error', result);
+            // this.showPromptOfError('发送事件[sdk]失败 请刷新 重试');            
             return;
         }
 
@@ -1465,6 +1480,7 @@ cc.Class({
                 console.log('response sentEvent ok', rsp);
             } else {
                 console.error('response sentEvent error', rsp);
+                // this.showPromptOfError('发送事件失败 请刷新 重试');
                 return;
             }
 
@@ -1668,6 +1684,7 @@ cc.Class({
                 console.log('sdk leave room ok', result);
             } else {
                 console.error('sdk leave room error', result);
+                this.showPromptOfError('离开房间[sdk]失败 请刷新 重试');
             }
 
 
@@ -1679,6 +1696,7 @@ cc.Class({
             console.log('sdk join over ok', result);
         } else {
             console.error('sdk join over error', result);
+            this.showPromptOfError('发送joinOver标志[sdk]失败 请刷新 重试');
         }
     },
 
@@ -1760,6 +1778,7 @@ cc.Class({
         } else {
             GameData.kickPlayerStatus = 4;
             console.error('sdk kickPlayer error', result);
+            this.showPromptOfError('踢人[sdk]失败 请刷新 重试');
             // 不return
         }
 
@@ -1773,6 +1792,7 @@ cc.Class({
         } else {
             GameData.kickPlayerStatus = 7;
             console.error('response kickPlayer error', rsp);
+            this.showPromptOfError('踢人失败 请重试');
             return;
         }
 

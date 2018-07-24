@@ -861,6 +861,7 @@ cc.Class({
             } else {
                 GameData.halfLeaveRoomStatus = 4;
                 console.error('sdk half leaveRoom error', result);
+                this.showPromptOfError('离开房间[sdk]失败');
                 return;
             }
 
@@ -874,6 +875,7 @@ cc.Class({
             } else {
                 GameData.leaveRoomStatus = 4;
                 console.error('sdk leaveRoom error', result);
+                this.showPromptOfError('离开房间[sdk]失败');
                 return;
             }
 
@@ -891,6 +893,7 @@ cc.Class({
             else {
                 GameData.halfLeaveRoomStatus = 7;
                 console.error('response half leaveRoom error', rsp);
+                this.showPromptOfError('离开房间失败');
                 return;
             }
 
@@ -906,6 +909,7 @@ cc.Class({
             } else {
                 GameData.leaveRoomStatus = 7;
                 console.error('response leaveRoom error', rsp);
+                this.showPromptOfError('离开房间失败');
                 return;
             }
 

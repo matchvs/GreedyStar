@@ -72,6 +72,7 @@ cc.Class({
         } else {
             GameData.initStatus = 4;
             console.error('sdk init error', result);
+            this.showPromptOfError('初始化[sdk]失败 请刷新 重试');
             return;
         }
 
@@ -85,6 +86,7 @@ cc.Class({
         } else {
             GameData.initStatus = 7;
             console.error('response init error', status);
+            this.showPromptOfError('初始化失败 请刷新 重试');
         }
     },
 

@@ -85,6 +85,7 @@ cc.Class({
             GameData.joinRoomStatus = 3;
         } else {
             console.error('sdk joinRoom error', result);
+            cc.find('Canvas').getComponent('Lobby').showPromptOfError('加入房间[sdk]失败 请刷新 重试');
             GameData.joinRoomStatus = 4;
         }
     },
