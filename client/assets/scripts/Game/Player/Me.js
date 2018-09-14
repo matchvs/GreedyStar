@@ -6,6 +6,12 @@ let GameData = require('../../Global/GameData');
 cc.Class({
     extends: cc.Component,
 
+
+    properties: {
+        userName:cc.Label,
+        sendInterval:0,
+    },
+
     onLoad() {
         this.scaleAction = null;
 
@@ -46,9 +52,9 @@ cc.Class({
             this.node = cc.find('Canvas/bg/player');
         }
 
-        let userNameNode = this.node.getChildByName('username').getComponent(cc.Label);
+        // let userNameNode = this.node.getChildByName('username').getComponent(cc.Label);
         // userNameNode.string = Const.userId;
-        userNameNode.string = Const.userName;
+        this.userName.string = Const.userName;
 
         this.onEvents();
 
@@ -99,6 +105,8 @@ cc.Class({
 
         this.emitPlayerBirth(data);
         this.changePlayerStatus(data);
+        this.robotBirth();
+
     },
 
     playerMove(dt) {
@@ -140,6 +148,8 @@ cc.Class({
             }
         }
 
+
+
         let data = {
             userId: GameData.players[0].userId,
             x,
@@ -147,9 +157,11 @@ cc.Class({
             scale,
             isLive: 1,
         };
-
-        this.emitPlayerMove(data);
-
+        this.sendInterval ++;
+        if (this.sendInterval == 6) {
+            this.emitPlayerMove(data);
+            this.sendInterval = 0;
+        }
         delete data.scale;
         this.changePlayerStatus(data)
     },
@@ -294,7 +306,7 @@ cc.Class({
         }
 
         let score = data.score
-            , addWidth = score / 5
+            , addWidth = score / 30
             , lastWidth = GameData.players[0].lastWidth
             , scaleAdd = (lastWidth + addWidth) / lastWidth;
 
@@ -369,6 +381,13 @@ cc.Class({
                 this.node = cc.find('Canvas/bg/player');
             }
 
+            // if  (data.y != undefined && data.x != undefined) {
+            //     if (Math.abs(data.x-this.node.x) < 10) {
+            //          this.action = cc.moveTo(0.3,data.x,data.y);
+            //          this.node.runAction(this.action);
+            //     }
+            // }
+
             if (undefined !== data.x) {
                 GameData.players[0].x = this.node.x = data.x;
             }
@@ -404,6 +423,48 @@ cc.Class({
         }
     },
 
+    /**
+     * 机器人出生
+     */
+    robotBirth() {
+        for(var i = 0; i < GameData.players.length;i++) {
+            if (GameData.players[i].isRobot) {
+                let position = this.getRandomPosition();
+                let data = {
+                    userId: GameData.players[i].userId,
+                    x: position.x,
+                    y: position.y,
+                    scale: 1,
+                    opacity: 255,
+                    isLive: 1,
+                    isInvin: 0,
+                };
+                GameData.players[i].x = position.x;
+                GameData.players[i].y = position.y;
+                console.log('发送创建了');
+                cc.director.GlobalEvent.emit('othersBirth', {data});
+            }
+        }
+    },
+
+    robotMove() {
+        if (GameData.players[i].isRobot) {
+            let data = {
+                userId: GameData.players[i].userId,
+                x: GameData.players[i].x,
+                y: GameData.players[i].x,
+                scale: 1,
+                opacity: 255,
+                isLive: 1,
+                isInvin: 0,
+            };
+
+            console.log('发送创建了');
+            cc.director.GlobalEvent.emit('othersBirth', {data});
+        }
+        cc.director.GlobalEvent.emit('otherChangeSize', data)
+    },
+
     emitPlayerBirth(data) {
         cc.director.GlobalEvent.emit('playerBirth', data)
     },
@@ -420,6 +481,10 @@ cc.Class({
         cc.director.GlobalEvent.emit('playerNoGold', data)
     },
 
+    /**
+     * 返回一个出生的位置
+     * @returns {{x: *, y: *}}
+     */
     getRandomPosition() {
         let pad = 20
             , minX = -this.gameWidth / 2 + pad

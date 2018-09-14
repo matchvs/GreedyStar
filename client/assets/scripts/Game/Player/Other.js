@@ -134,7 +134,7 @@ cc.Class({
         }
 
         if (!(this.otherPool && this.otherPool && this.otherPool.size())) {
-            this.otherPool = new cc.NodePool()
+            this.otherPool = new cc.NodePool();
         }
 
         if (this.otherPool.size() > 0) {
@@ -497,12 +497,24 @@ cc.Class({
 
             let index = data.index
                 , node = data.node;
-
+            if  (data.y != undefined && data.x != undefined) {
+                if (Math.abs(data.x - node.x) < 30) {
+                     this.action = cc.moveTo(0.1,cc.v2(data.x,data.y));
+                    node.runAction(this.action);
+                } else {
+                    if (undefined !== data.x) {
+                        GameData.players[index].x = node.x = data.x
+                    }
+                    if (undefined !== data.y) {
+                        GameData.players[index].y = node.y = data.y
+                    }
+                }
+            }
             if (undefined !== data.x) {
-                GameData.players[index].x = node.x = data.x
+                GameData.players[index].x = data.x
             }
             if (undefined !== data.y) {
-                GameData.players[index].y = node.y = data.y
+                GameData.players[index].y = data.y
             }
             if (undefined !== data.gold) {
                 GameData.players[index].gold = node.gold = data.gold
@@ -521,9 +533,7 @@ cc.Class({
                     }
 
 
-                }
-
-                else {
+                } else {
                     GameData.players[index].scale = data.scale;
                     // node.scale
                     if (!!GameData.players[index].hasScaleAction) {

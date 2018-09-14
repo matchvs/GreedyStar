@@ -102,7 +102,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 63.37,
+      "width": 40,
       "height": 20
     },
     "_rotationX": 0,
@@ -130,10 +130,10 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_actualFontSize": 8,
+    "_fontSize": 8,
     "_lineHeight": 20,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -141,7 +141,7 @@
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 0
+    "_N$overflow": 2
   },
   {
     "__type__": "cc.PrefabInfo",

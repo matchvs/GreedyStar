@@ -11,7 +11,9 @@ cc.Class({
         this.ringRadius = this.node.width / 2;
 
         // this.joyStickPoint = this.node.getPosition();
+        //操纵杆X坐标
         this.joyStickX = this.node.getPosition().x;
+        //操纵杆Y坐标
         this.joyStickY = this.node.getPosition().y;
 
         this.initTouchEvent()
@@ -64,7 +66,7 @@ cc.Class({
         }
 
         GameData.angle = this.getAngle(cc.p(posX, posY));
-        GameData.speed1 = 200;
+        GameData.speed1 = 180;
     },
 
     touchEndEventHandle() {

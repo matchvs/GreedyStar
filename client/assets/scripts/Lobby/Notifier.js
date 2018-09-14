@@ -33,7 +33,8 @@ cc.Class({
             GameData.players.push({
                 userId: userInfo.userId,
                 userName: userInfo.userProfile,
-                score: 0
+                score: 0,
+                isRobot:false
             });
 
             if (GameData.isGameStart === false) {
@@ -183,7 +184,8 @@ cc.Class({
             GameData.players.push({
                 userId: userInfo.userId,
                 userName: userInfo.userProfile,
-                score: 0
+                score: 0,
+                isRobot:false
             });
 
             if (GameData.isGameStart === false) {

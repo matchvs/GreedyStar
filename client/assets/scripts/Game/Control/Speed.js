@@ -70,7 +70,7 @@ cc.Class({
             return;
         }
 
-        GameData.speed2 = 400;
+        GameData.speed2 = 180;
     },
 
     touchEndEventHandle() {

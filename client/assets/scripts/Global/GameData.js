@@ -5,7 +5,9 @@ module.exports = {
     winValue: 0,
 
     angle: 0,
+    //正常的速度
     speed1: 0,
+    //加速按钮的速度
     speed2: 0,
     foodCounter: 0,
     foodIdCounter: 0,
@@ -85,4 +87,9 @@ module.exports = {
 
     //
     dieDataBuffer: null,
+
+
+    //5秒时间房间无真人就加入机器人。
+    isRoomNumTime :5000,
+    robotIDs:[99999,88888]
 };

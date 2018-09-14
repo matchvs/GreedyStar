@@ -9,6 +9,9 @@ let wxshare = require('../Util/wxshare');
 cc.Class({
     extends: cc.Component,
 
+
+
+
     onLoad() {
         cc.director.setDisplayStats(false);
 
@@ -90,7 +93,7 @@ cc.Class({
         Mvs.response.registerUserResponse = this.mvsRegisterUserResponse.bind(this);
         Mvs.response.loginResponse = this.mvsLoginResponse.bind(this);
         Mvs.response.logoutResponse = this.mvsLogoutResponse.bind(this);
-
+        Mvs.response.getRoomDetailResponse = this.mvsGetRoomDetailResponse.bind(this);
         Mvs.response.getRoomListResponse = this.mvsGetRoomListResponse.bind(this);
 
         Mvs.response.joinRoomResponse = this.mvsJoinRoomResponse.bind(this);
@@ -1222,9 +1225,7 @@ cc.Class({
                 GameData.joinRoomStatus = 6;
                 console.log('response joinRoom ok', userInfoList, roomInfo);
             }
-        }
-
-        else {
+        } else {
             if (GameData.isQuickJoinBtnClick === true) {
                 GameData.joinRandomRoomStatus = 7;
                 console.error('response joinRandomRoom error', userInfoList, roomInfo);
@@ -1236,7 +1237,9 @@ cc.Class({
             }
             return;
         }
-
+        setTimeout(function () {
+            Mvs.engine.getRoomDetail(roomInfo.roomID);
+        },GameData.isRoomNumTime);
         if (GameData.isQuickJoinBtnClick === true) {
             for (let i = 0, l = userInfoList.length; i < l; i++) {
                 let userId = userInfoList[i].userId;
@@ -1304,6 +1307,35 @@ cc.Class({
 
             this.updateRoomView();
             this.showRoomView();
+        }
+    },
+
+    /**
+     * 获取房间详情的回调接口
+     * @param rsp
+     */
+    mvsGetRoomDetailResponse(rsp) {
+        if (rsp.status === 200) {
+            if (rsp.userInfos.length <= 1) {
+                //关闭房间
+                Mvs.engine.joinOver();
+
+                var  robotUserNames = ['小蜻蜓','小蜜蜂'];
+                for(var i = 0; i < GameData.robotIDs.length; i++) {
+                    GameData.players.push({
+                        userId: GameData.robotIDs[i],
+                        userName: robotUserNames[i],
+                        score: 0,
+                        isRobot:true
+                    });
+                }
+                console.log('GameData.players',GameData.players);
+                this.shouldStartGame();
+            } else {
+            }
+
+        } else {
+            console.error('获取房间详情失败');
         }
     },
 
@@ -1950,7 +1982,7 @@ cc.Class({
         Mvs.response.logoutResponse = null;
 
         Mvs.response.getRoomListResponse = null;
-
+        Mvs.response.getRoomDetailResponse = null;
         Mvs.response.joinRoomResponse = null;
         Mvs.response.createRoomResponse = null;
         Mvs.response.leaveRoomResponse = null;

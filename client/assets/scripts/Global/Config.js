@@ -15,8 +15,8 @@ let colorList = [
 let scoreList = [20, 40, 60];
 
 module.exports = {
-    ADD_FOOD_DT: 3, // 3秒
-    MAX_FOOD_COUNT: 5,
+    ADD_FOOD_DT: 2, // 3秒
+    MAX_FOOD_COUNT: 100,
     // gameTime: 3 * 60,
 
     // game
