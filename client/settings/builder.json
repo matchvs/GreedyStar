@@ -3,6 +3,7 @@
   "appSecret": "",
   "encryptJs": true,
   "excludeScenes": [],
+  "fb-instant-games": {},
   "includeAnySDK": false,
   "includeSDKBox": false,
   "inlineSpriteFrames": true,
@@ -20,6 +21,10 @@
   },
   "packageName": "org.cocos2d.multiPlayerGreedyBox",
   "privateKey": "",
+  "qqplay": {
+    "REMOTE_SERVER_ROOT": "",
+    "orientation": "portrait"
+  },
   "renderMode": "0",
   "startScene": "e15b5033-bc1e-48d8-8178-27e37ae25a28",
   "title": "multiPlayerGreedyBox",
@@ -29,10 +34,5 @@
     "orientation": "landscape"
   },
   "xxteaKey": "65177f09-506e-41",
-  "zipCompressJs": true,
-  "qqplay": {
-    "orientation": "portrait",
-    "REMOTE_SERVER_ROOT": ""
-  },
-  "fb-instant-games": {}
+  "zipCompressJs": true
 }

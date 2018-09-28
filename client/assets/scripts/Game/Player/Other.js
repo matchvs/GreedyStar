@@ -108,7 +108,6 @@ cc.Class({
             , index
             , userId = data.userId
             , userName = '';
-
         try {
             let foo = this.parent
         } catch (e) {
@@ -122,27 +121,22 @@ cc.Class({
                 return;
             }
         }
-
         for (let i = 0, l = GameData.players.length; i < l; i++) {
             let player = GameData.players[i];
-
             if (player.userId === userId) {
                 userName = player.userName
                 index = i;
                 break;
             }
         }
-
         if (!(this.otherPool && this.otherPool && this.otherPool.size())) {
             this.otherPool = new cc.NodePool();
         }
-
         if (this.otherPool.size() > 0) {
             node = this.otherPool.get()
         } else {
             node = cc.instantiate(this.otherPrefab)
         }
-
         node.userId = userId;
         node.userName = userName;
 
@@ -153,20 +147,16 @@ cc.Class({
         // 改变贴图
         let spIndex = Number(index + 1)
             , url = 'image/game/player/' + spIndex + '.png';
-
         cc.loader.loadRes(url, (err, res) => {
             if (err) {
                 console.error('load res image/game/player/x.png error', err);
                 return;
             }
-
             let png = node.getComponent(cc.Sprite);
             png.spriteFrame = new cc.SpriteFrame(res);
-
             let username = node.getChildByName('username').getComponent(cc.Label);
             // username.string = userId;
             username.string = userName;
-
             this.changeOtherStatus({
                 x: data.x,
                 y: data.y,
@@ -174,12 +164,11 @@ cc.Class({
                 opacity: data.opacity,
                 isLive: data.isLive,
                 isInvin: data.isInvin,
+                isRobot:data.isRobot,
                 index,
                 node,
             });
-
             if (toggleInvin && toggleInvin === true) {
-
                 setTimeout(() => {
                     if (node.isLive) {
                         this.changeOtherStatus({
@@ -223,7 +212,6 @@ cc.Class({
             this.otherBirth(data);
             return;
         }
-
         let username = node.getChildByName('username').getComponent(cc.Label);
         // username.string = userId;
         username.string = userName;
@@ -494,12 +482,11 @@ cc.Class({
             if (GameData.isGameOver) {
                 return
             }
-
             let index = data.index
                 , node = data.node;
             if  (data.y != undefined && data.x != undefined) {
                 if (Math.abs(data.x - node.x) < 30) {
-                     this.action = cc.moveTo(0.1,cc.v2(data.x,data.y));
+                 this.action = cc.moveTo(0.1,cc.v2(data.x,data.y));
                     node.runAction(this.action);
                 } else {
                     if (undefined !== data.x) {
@@ -551,7 +538,7 @@ cc.Class({
                             GameData.players[index].hasScaleAction = false;
                         })
                     );
-
+                    console.log(GameData.players[index].userId+":"+data.scale);
                     node.runAction(GameData.players[index].scaleAction);
                 }
             }

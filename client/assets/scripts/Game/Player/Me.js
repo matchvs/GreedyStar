@@ -10,6 +10,9 @@ cc.Class({
     properties: {
         userName:cc.Label,
         sendInterval:0,
+        robotMoveToDistance : 9, // 机器人靠近主角时的移动速度
+        robotMoveDistance :9, // 机器人四处随机移动时主角时的移动速度
+        robotMoveSyncTime: 0
     },
 
     onLoad() {
@@ -52,8 +55,6 @@ cc.Class({
             this.node = cc.find('Canvas/bg/player');
         }
 
-        // let userNameNode = this.node.getChildByName('username').getComponent(cc.Label);
-        // userNameNode.string = Const.userId;
         this.userName.string = Const.userName;
 
         this.onEvents();
@@ -70,6 +71,16 @@ cc.Class({
         }
         this.playerMove(dt);
         this.judgeIsEdge();
+
+        this.robotMoveSyncTime++;
+        if (this.robotMoveSyncTime === 6) {
+            /**
+             * 刷新机器人位置
+             */
+            this.robotMove();
+            this.robotMoveSyncTime = 0;
+        }
+
     },
 
     onEvents() {
@@ -88,7 +99,6 @@ cc.Class({
     },
 
     playerBirth() {
-        // GameData.players[0].userId
         this.node.userId = Const.userId;
 
         let position = this.getRandomPosition();
@@ -101,55 +111,46 @@ cc.Class({
             opacity: 255,
             isLive: 1,
             isInvin: 0,
+            isRobot:false
         };
 
         this.emitPlayerBirth(data);
         this.changePlayerStatus(data);
-        this.robotBirth();
-
+        for(var i = 0; i < GameData.players.length;i++) {
+            this.robotBirth(GameData.players[i],i);
+        }
     },
 
     playerMove(dt) {
         if (!GameData.players[0].isLive) {
             return
         }
-
         let angle = GameData.angle
             , speed1 = GameData.speed1
             , speed2 = GameData.speed2;
-
-        if (!angle) {
+        if (angle === null) {
             return
         }
-
         if (GameData.gold === 0) {
             speed2 = 0
         }
-
         let x = this.node.x
             , y = this.node.y
             , scale = this.node.scale;
-
-        if (angle && (speed1 || speed2)) {
+        if (angle !== null && (speed1 || speed2)) {
             let speed = speed2 ? speed2 : speed1;
             x += Math.cos(angle * (Math.PI / 180)) * speed * dt;
             y += Math.sin(angle * (Math.PI / 180)) * speed * dt;
         }
-
-
         // 如果还是无敌,碰到地图,就不移动
         if (this.node.isInvin) {
             let r = GameData.players[0].lastWidth / 2
                 , newX = x === 0 ? x : (x > 0 ? x + r : x - r)
                 , newY = y === 0 ? y : (y > 0 ? y + r : y - r);
-
             if (!this.isContainsPoint(newX, newY, this.gameRect)) {
                 return
             }
         }
-
-
-
         let data = {
             userId: GameData.players[0].userId,
             x,
@@ -160,6 +161,7 @@ cc.Class({
         this.sendInterval ++;
         if (this.sendInterval == 6) {
             this.emitPlayerMove(data);
+
             this.sendInterval = 0;
         }
         delete data.scale;
@@ -188,14 +190,17 @@ cc.Class({
                 isLive: 0,
                 isInvin: 0,
             };
-
             this.emitPlayerDie(data);
-
             data.score = 0;
             this.changePlayerStatus(data)
         }
     },
 
+    /**
+     * 与玩家的碰撞检测
+     * @param other 其他玩家 包括机器人
+     * @param self   自己
+     */
     onCollisionEnter(other, self) {
         if (other.tag === 1 && self.tag === 1) {
             if (!other.node.isLive || !self.node.isLive) {
@@ -206,11 +211,17 @@ cc.Class({
                 return
             }
 
+            /**
+             * 如果碰撞单位是机器人就另外一个逻辑
+             */
+            if (other.node.userId === GameData.robotIDs[0] || other.node.userId == GameData.robotIDs[1]) {
+                this.robotCollision(other,self);
+                return;
+            }
             if (other.node.scale > self.node.scale) {
                 if (GameData.dieDataBuffer !== undefined || GameData.dieDataBuffer !== null) {
                     GameData.dieDataBuffer = null;
                 }
-
                 GameData.dieDataBuffer = {
                     data: {
                         userId: self.node.userId, // die userId
@@ -337,19 +348,18 @@ cc.Class({
             lastWidth: GameData.players[0].lastWidth
         });
         let result = Mvs.engine.sendEvent(_data);
-
-
         // 后动画
         this.scaleAction = cc.sequence(
             // BUG: 不能把预处理放在这里
-            cc.scaleTo(0.5, scale).easing(cc.easeElasticInOut(0.5)),
+            cc.scaleTo(0.5, Number(scale)).easing(cc.easeElasticInOut(0.5)),
+        // this.scaleAction = cc.scaleTo(0.5, scale);
             cc.callFunc(() => {
                 this.scaleAction = null;
                 GameData.players[0].hasScaleAction = false;
             }),
         );
 
-        this.node.runAction(this.scaleAction);
+        this.node.runAction( this.scaleAction);
     },
 
     playerGoldMinus(data) {
@@ -418,6 +428,8 @@ cc.Class({
             if (undefined !== data.score) {
                 GameData.players[0].score = this.node.score = data.score;
             }
+
+
         } catch (e) {
 
         }
@@ -426,43 +438,103 @@ cc.Class({
     /**
      * 机器人出生
      */
-    robotBirth() {
-        for(var i = 0; i < GameData.players.length;i++) {
-            if (GameData.players[i].isRobot) {
-                let position = this.getRandomPosition();
-                let data = {
-                    userId: GameData.players[i].userId,
-                    x: position.x,
-                    y: position.y,
-                    scale: 1,
-                    opacity: 255,
-                    isLive: 1,
-                    isInvin: 0,
-                };
-                GameData.players[i].x = position.x;
-                GameData.players[i].y = position.y;
-                console.log('发送创建了');
-                cc.director.GlobalEvent.emit('othersBirth', {data});
-            }
-        }
-    },
-
-    robotMove() {
-        if (GameData.players[i].isRobot) {
+    robotBirth(datas,i) {
+        if (datas.isRobot) {
+            let position = this.getRandomPosition();
             let data = {
-                userId: GameData.players[i].userId,
-                x: GameData.players[i].x,
-                y: GameData.players[i].x,
+                userId: datas.userId,
+                x: position.x,
+                y: position.y,
                 scale: 1,
                 opacity: 255,
                 isLive: 1,
                 isInvin: 0,
+                moveTimerNum:0,
+                moveDistance: i == 1 ? this.robotMoveToDistance : this.robotMoveDistance
             };
-
-            console.log('发送创建了');
+            GameData.players[i].x = position.x;
+            GameData.players[i].y = position.y;
+            GameData.players[i].lastWidth = 40;
+            GameData.players[i].scale = 1;
+            GameData.players[i].moveTimerNum = data.moveTimerNum;
+            GameData.players[i].moveDistance = data.moveDistance;
             cc.director.GlobalEvent.emit('othersBirth', {data});
         }
-        cc.director.GlobalEvent.emit('otherChangeSize', data)
+    },
+
+    /**
+     * 机器人移动
+     */
+    robotMove() {
+     // var  x =   [GameData.players[i].x + GameData.players[i].moveDistance,GameData.players[i].x - GameData.players[i].moveDistance];
+        for(var i = 0; i < GameData.players.length;i++) {
+            if (GameData.players[i].isRobot) {
+                GameData.players[i].moveTimerNum ++;
+                if (GameData.players[i].moveTimerNum < 40) {
+                    GameData.players[i].x =  GameData.players[i].x + GameData.players[i].moveDistance;
+                    GameData.players[i].y = GameData.players[i].y + GameData.players[i].moveDistance;
+                }
+                if (GameData.players[i].moveTimerNum <80 && GameData.players[i].moveTimerNum >40) {
+                    GameData.players[i].x =  GameData.players[i].x - GameData.players[i].moveDistance;
+                    GameData.players[i].y =  GameData.players[i].y - GameData.players[i].moveDistance;
+                }
+                if (GameData.players[i].moveTimerNum > 80) {
+                    GameData.players[i].moveTimerNum = 0;
+                }
+                let data = { userId: GameData.players[i].userId, x: GameData.players[i].x, y: GameData.players[i].y, isLive: 1 };
+                // 每次更新位置判断边界碰撞
+                if (!this.isContainsPoint(data.x,data.y,this.gameRect)) {
+                    let position = this.getRandomPosition();
+                    data.x = position.x;
+                    data.y = position.y;
+                    GameData.players[i].score = 0;
+                    GameData.players[i].scale = 1;
+                    var scoreData = {userId:data.userId,score:GameData.players[i].score};
+                    cc.director.GlobalEvent.emit('playerScoreReset', scoreData);
+                }
+                cc.director.GlobalEvent.emit('otherMove', data);
+            }
+
+        }
+    },
+
+    /**
+     * 机器人碰撞检测
+     * @param other 机器人
+     * @param self
+     */
+    robotCollision (other,self) {
+        var index;
+        var score;
+        var otherUserID = other.node.userId;
+        for(var i = 0; i < GameData.players.length;i++) {
+            if (otherUserID === GameData.players[i].userId) {
+                score = GameData.players[i].score;
+                console.log("score", score);
+                index = i;
+            }
+        }
+        if (other.node.scale > self.node.scale) {
+            //自己重生，给机器人变大加分
+            this.playerBirth();
+            var otherScript = cc.find('Canvas/bg').getComponent('Other');
+            console.log("score1", score+GameData.players[0].score);
+            otherScript.otherAddSize(otherUserID, score+GameData.players[0].score, index, other);
+        } else {
+            // 给自己加分变大，机器人重生
+            let position = this.getRandomPosition();
+            GameData.players[index].x = position.x;
+            GameData.players[index].y = position.y;
+            GameData.players[index].score = 0;
+            GameData.players[index].scale = 1;
+            var scoreData = {userId:GameData.players[index].userId,score:GameData.players[index].score}
+            cc.director.GlobalEvent.emit('playerScoreReset', scoreData);
+            GameData.players[0].score = GameData.players[0].score + score;
+            console.log("score2",  GameData.players[0].score);
+            this.playerAddSize( GameData.players[0].score );
+            var selfscoreData = {userId:GameData.players[0],score:GameData.players[0].score}
+            cc.director.GlobalEvent.emit('playerScoreChange', selfscoreData);
+        }
     },
 
     emitPlayerBirth(data) {
@@ -498,7 +570,23 @@ cc.Class({
         return {x, y}
     },
 
+    /**
+     * 判断是否碰撞边界
+     * @param x
+     * @param y
+     * @param rect
+     * @returns {boolean}
+     */
     isContainsPoint(x, y, rect) {
         return cc.rectContainsPoint(rect, cc.p(x, y))
+    },
+    /**
+     * 生成一个范围内的随机整数
+     * @param min
+     * @param max
+     * @returns {*}
+     */
+    random(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
     }
 });

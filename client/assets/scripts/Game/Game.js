@@ -10,7 +10,7 @@ cc.Class({
     onLoad() {
         let manager = cc.director.getCollisionManager();
         manager.enabled = true;
-
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown,this);
         if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
             cc.renderer.enableDirtyRegion(false);
         }
@@ -34,6 +34,16 @@ cc.Class({
         } catch (e) {
             cc.game.on(cc.game.EVENT_HIDE, this.onHideHandler.bind(this))
         }
+    },
+
+    onKeyDown(event) {
+        console.warn('按下keyCode'+event.keyCode+"XXX");
+        switch (event.keyCode) {
+            case 6:
+                    this.halfOver()
+                break;
+        }
+
     },
 
     onHideHandler() {

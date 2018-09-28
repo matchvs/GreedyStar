@@ -274,7 +274,7 @@
     },
     "_fillStart": 0,
     "_fillRange": 0,
-    "_isTrimmedMode": true,
+    "_isTrimmedMode": false,
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_atlas": null
@@ -361,9 +361,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 0,
+      "g": 0,
+      "b": 0,
       "a": 255
     },
     "_cascadeOpacityEnabled": true,
@@ -468,7 +468,10 @@
     "userName": {
       "__id__": 8
     },
-    "sendInterval": 0
+    "sendInterval": 0,
+    "robotMoveToDistance": 10,
+    "robotMoveDistance": 12,
+    "robotMoveSyncTime": 0
   },
   {
     "__type__": "cc.Sprite",
@@ -1721,7 +1724,13 @@
     "_enabled": true,
     "dot": {
       "__id__": 47
-    }
+    },
+    "left_Down": false,
+    "right_Down": false,
+    "up_Down": false,
+    "down_Down": false,
+    "posY": 0,
+    "posX": 0
   },
   {
     "__type__": "cc.Node",

@@ -5,11 +5,18 @@ cc.Class({
 
     properties: {
         dot: cc.Node,
+        left_Down:false,
+        right_Down:false,
+        up_Down:false,
+        down_Down:false,     //四个方向键是否被按下的状态
+        posY : 0,
+        posX: 0
     },
 
     onLoad() {
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown,this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
         this.ringRadius = this.node.width / 2;
-
         // this.joyStickPoint = this.node.getPosition();
         //操纵杆X坐标
         this.joyStickX = this.node.getPosition().x;
@@ -25,6 +32,68 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_END, this.touchEndEventHandle, this);
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchCancelEventHandle, this);
     },
+
+    onKeyDown(event) {
+        switch (event.keyCode) {
+            case 1003:
+                this.up_Down = true;
+                break;
+            case 1004:
+                this.down_Down = true;
+                break;
+            case 1000:
+                this.left_Down = true;
+                break;
+            case 1001:
+                this.right_Down = true;
+                break;
+        }
+        this.gamepad();
+    },
+
+    onKeyUp(event) {
+        switch (event.keyCode) {
+            case 1003:
+                this.up_Down = false;
+                break;
+            case 1004:
+                this.down_Down = false;
+                break;
+            case 1000:
+                this.left_Down = false;
+                break;
+            case 1001:
+                this.right_Down = false;
+                break;
+        }
+        this.gamepad();
+    },
+
+
+    gamepad() {
+        this.posX = this.joyStickX;
+        this.posY = this.joyStickY;
+        if(!this.up_Down&&!this.down_Down&&!this.left_Down&&!this.right_Down) {
+           this.touchEndEventHandle();
+           return;
+        }
+        if (this.right_Down) {
+            this.posX = this.joyStickX + (this.ringRadius/2);
+        }
+        if (this.up_Down) {
+            this.posY = this.joyStickY + (this.ringRadius/2);
+        }
+        if (this.down_Down) {
+            this.posY = this.joyStickY - (this.ringRadius/2);
+        }
+        if (this.left_Down) {
+            this.posX = this.joyStickX -  (this.ringRadius/2);
+        }
+        this.dot.setPosition(cc.p(this.posX, this.posY));
+        GameData.angle = this.getAngle(cc.p(this.posX, this.posY));
+        GameData.speed1 = 180;
+    },
+
 
     touchStartEventHandle(event) {
         if (GameData.isServerErrorCode1000) {
@@ -69,14 +138,14 @@ cc.Class({
         GameData.speed1 = 180;
     },
 
-    touchEndEventHandle() {
+    touchEndEventHandle: function () {
         if (GameData.isServerErrorCode1000) {
             return;
         }
 
         this.dot.setPosition(this.node.getPosition());
 
-        GameData.angle = 0;
+        GameData.angle = null;
         GameData.speed1 = 0;
     },
 

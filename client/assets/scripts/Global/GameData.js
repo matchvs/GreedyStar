@@ -4,7 +4,7 @@ module.exports = {
     allValue: 0,
     winValue: 0,
 
-    angle: 0,
+    angle: null,
     //正常的速度
     speed1: 0,
     //加速按钮的速度
@@ -90,6 +90,9 @@ module.exports = {
 
 
     //5秒时间房间无真人就加入机器人。
-    isRoomNumTime :5000,
-    robotIDs:[99999,88888]
+    isRoomNumTime :30000,
+    robotIDs:[99999,88888],
+
+    //是否是独立部署
+    isPremiseInit:false,
 };

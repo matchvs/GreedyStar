@@ -7,8 +7,10 @@ let GameData = require('../Global/GameData');
 cc.Class({
     extends: cc.Component,
 
+
     onLoad() {
         cc.director.setDisplayStats(false);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown,this);
         LocalStore_Clear();
 
         this.mvsBind();
@@ -16,7 +18,11 @@ cc.Class({
         // 断线之后需要重新init
         // if (GameData.initStatus !== 6) {
         this.isCoverHide = false
-        this.init();
+        if (GameData.isPremiseInit) {
+            this.premiseInit();
+        } else {
+            this.init();
+        }
         // }
     },
 
@@ -63,6 +69,14 @@ cc.Class({
         this.mvsInit(response, channel, platform, gameId);
     },
 
+    premiseInit() {
+        var endport = "172.25.119.77";
+        var gameID = 201226 ;
+        let response = Mvs.response;
+        var result = Mvs.engine.premiseInit(response, endport, gameID);
+        console.log("独立部署初始化返回值"+result);
+    },
+
     mvsInit(response, channel, platform, gameId) {
         let result = Mvs.engine.init(response, channel, platform, gameId);
 
@@ -80,7 +94,7 @@ cc.Class({
     },
 
     mvsInitResponse(status) {
-        if (status === 200) {
+        if (status == 200) {
             GameData.initStatus = 6;
             console.log('response init ok', status);
         } else {
@@ -133,5 +147,14 @@ cc.Class({
         } else {
             console.warn('please wait matchvs init');
         }
+    },
+
+    onKeyDown:function(event) {
+        console.warn('keyCode',event.keyCode);
+        switch (event.keyCode) {
+            case 1005:
+                this.play();
+                break;
+        }
     }
-});
+ });

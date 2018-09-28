@@ -21,7 +21,10 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_MOVE, this.touchMoveEventHandle, this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.touchEndEventHandle, this);
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchCancelEventHandle, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown,this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     },
+
 
     initOnEvent() {
         cc.director.GlobalEvent.off('playerNoGold').on('playerNoGold', (data) => {

@@ -9,11 +9,15 @@ let wxshare = require('../Util/wxshare');
 cc.Class({
     extends: cc.Component,
 
+    properties: {
+        getRoomDetailTimer:null,
+    },
 
 
 
     onLoad() {
         cc.director.setDisplayStats(false);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown,this);
 
         // TODO: 全用cocos的方法
         this.promptSetTimeout = null;
@@ -26,6 +30,19 @@ cc.Class({
             wx.onHide(this.onHideHandler.bind(this))
         } catch (e) {
             cc.game.on(cc.game.EVENT_HIDE, this.onHideHandler.bind(this));
+        }
+    },
+
+    onKeyDown:function(event){
+        console.warn('keyCode',event.keyCode);
+        switch (event.keyCode) {
+            case 1005:
+                console.log('开始随机匹配');
+                this.quickJoinBtnHandler();
+                break;
+            case 6:
+                this.backBtnHandler();
+                break;
         }
     },
 
@@ -52,9 +69,21 @@ cc.Class({
             this.initProfileData();
 
             this.initPlayersData()
-        }
-        else {
-            this.registerUser();
+        } else {
+            if (GameData.isPremiseInit) {
+                console.log("独立部署独立赋值");
+                Const.userId = 259862;
+                Const.token = "xxxxxxx1586213355";
+                Const.userName = "星球达人";
+                Const.avatarUrl ="http://k2.jsqq.net/uploads/allimg/1707/17_170717143637_14.jpg";
+                Const.gameId = 201226;
+                Const.appKey = "b90b138ab59f4e289fbd58182d4187bb";
+                Const.secretKey = "bf53a5a8b29c4198abe0e71c9e05d465";
+                GameData.registerStatus = 6;
+                this.mvsLogin(Const.userId, Const.token, Const.gameId, Const.gameVersion, Const.appKey, Const.secretKey, Const.deviceId, Const.gatewayId);
+            } else {
+                this.registerUser();
+            }
         }
 
         let timer = setInterval(() => {
@@ -420,6 +449,7 @@ cc.Class({
     },
 
     mvsRegisterUserResponse(userInfo) {
+        console.log("mvsRegisterUserResponse",userInfo);
         if (userInfo) {
             GameData.registerStatus = 6;
             console.log('response register user ok', userInfo);
@@ -430,10 +460,10 @@ cc.Class({
             return;
         }
 
-        Const.userId = userInfo.id;
-        Const.token = userInfo.token;
-        Const.userName = userInfo.name;
-        Const.avatarUrl = userInfo.avatar;
+            Const.userId = userInfo.id;
+            Const.token = userInfo.token;
+            Const.userName = userInfo.name;
+            Const.avatarUrl = userInfo.avatar;
 
         this.loadAvatarImage();
         this.login();
@@ -510,7 +540,8 @@ cc.Class({
     },
 
     mvsLogin(userId, token, gameId, gameVersion, appKey, secretKey, deviceId, gatewayId) {
-        let result = Mvs.engine.login(userId, token, gameId, gameVersion, appKey, secretKey, deviceId, gatewayId);
+        var result = Mvs.engine.login(userId, token, gameId, gameVersion, appKey, secretKey,deviceId, gatewayId);
+        console.log("登录result："+result);
         if (result === 0) {
             GameData.loginStatus = 3;
             console.log('sdk login ok', result);
@@ -584,6 +615,7 @@ cc.Class({
     },
 
     backBtnHandler() {
+
         if (GameData.isServerErrorCode1000) {
             return;
         }
@@ -1127,6 +1159,8 @@ cc.Class({
     mvsLeaveRoom(cpProto) {
         let result = Mvs.engine.leaveRoom(cpProto);
 
+        clearInterval(this.getRoomDetailTimer);
+
         if (result === 0) {
             GameData.leaveRoomStatus = 3;
             console.log('sdk leaveRoom ok', result);
@@ -1237,7 +1271,7 @@ cc.Class({
             }
             return;
         }
-        setTimeout(function () {
+        this.getRoomDetailTimer =  setTimeout(function () {
             Mvs.engine.getRoomDetail(roomInfo.roomID);
         },GameData.isRoomNumTime);
         if (GameData.isQuickJoinBtnClick === true) {
@@ -1318,7 +1352,7 @@ cc.Class({
         if (rsp.status === 200) {
             if (rsp.userInfos.length <= 1) {
                 //关闭房间
-                Mvs.engine.joinOver();
+                Mvs.engine.joinOver("Matchvs");
 
                 var  robotUserNames = ['小蜻蜓','小蜜蜂'];
                 for(var i = 0; i < GameData.robotIDs.length; i++) {
@@ -1329,7 +1363,6 @@ cc.Class({
                         isRobot:true
                     });
                 }
-                console.log('GameData.players',GameData.players);
                 this.shouldStartGame();
             } else {
             }
@@ -2000,4 +2033,5 @@ cc.Class({
         // gameserver
         Mvs.response.gameServerNotify = null;
     },
+
 });
