@@ -22,7 +22,7 @@
       "rawHeight": 30,
       "borderTop": 0,
       "borderBottom": 0,
-      "borderLeft": 0,
+      "borderLeft": 0.2,
       "borderRight": 0,
       "subMetas": {}
     }

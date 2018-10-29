@@ -159,7 +159,7 @@ cc.Class({
             isLive: 1,
         };
         this.sendInterval ++;
-        if (this.sendInterval == 6) {
+        if (this.sendInterval == 4) {
             this.emitPlayerMove(data);
 
             this.sendInterval = 0;

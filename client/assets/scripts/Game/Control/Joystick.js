@@ -91,7 +91,7 @@ cc.Class({
         }
         this.dot.setPosition(cc.p(this.posX, this.posY));
         GameData.angle = this.getAngle(cc.p(this.posX, this.posY));
-        GameData.speed1 = 180;
+        GameData.speed1 = 120;
     },
 
 
@@ -135,7 +135,7 @@ cc.Class({
         }
 
         GameData.angle = this.getAngle(cc.p(posX, posY));
-        GameData.speed1 = 180;
+        GameData.speed1 = 120;
     },
 
     touchEndEventHandle: function () {

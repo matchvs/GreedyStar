@@ -132,7 +132,7 @@ cc.Class({
         }, 1000);
 
         // for fix bug
-        this.timer = timer;
+doc        this.timer = timer;
     },
 
     loadFoodPrefab(callback) {

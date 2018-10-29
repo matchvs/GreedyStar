@@ -478,16 +478,16 @@ cc.Class({
     },
 
     changeOtherStatus(data) {
+        let index = data.index, node = data.node;
         try {
             if (GameData.isGameOver) {
                 return
             }
-            let index = data.index
-                , node = data.node;
             if  (data.y != undefined && data.x != undefined) {
-                if (Math.abs(data.x - node.x) < 30) {
-                 this.action = cc.moveTo(0.1,cc.v2(data.x,data.y));
-                    node.runAction(this.action);
+                if (Math.abs(data.x - node.x) < 50) {
+                this.action = cc.moveTo(0.30,cc.v2(data.x,data.y));
+                node.stopAllActions();
+                node.runAction(this.action);
                 } else {
                     if (undefined !== data.x) {
                         GameData.players[index].x = node.x = data.x

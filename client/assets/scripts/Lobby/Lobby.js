@@ -261,9 +261,7 @@ cc.Class({
                     }
                 }
             }
-        }
-
-        else {
+        } else {
             let k = 0;
             for (let i = 0, l = GameData.players.length; i < l; i++) {
                 if (exitUserId === GameData.players[i].userId) {
@@ -288,9 +286,7 @@ cc.Class({
                     }
 
                 }
-            }
-
-            else {
+            } else {
                 let players = [];
 
                 for (let i = 0, l = GameData.players.length; i < l; i++) {
