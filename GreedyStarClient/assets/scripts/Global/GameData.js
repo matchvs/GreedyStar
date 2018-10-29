@@ -32,7 +32,7 @@ module.exports = {
 
     // for response
     gameStartEventSequence: 0,
-
+    isInCoverView: true,
 
     //
     isInRoomView: false,

@@ -117,8 +117,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1280,
-      "height": 720
+      "width": 960,
+      "height": 640
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -126,8 +126,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 640,
-      "y": 360
+      "x": 480,
+      "y": 320
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -556,8 +556,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 52,
-      "height": 52
+      "width": 48,
+      "height": 48
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -565,8 +565,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -570,
-      "y": 314
+      "x": -410,
+      "y": 270
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -677,9 +677,9 @@
     "isAlignOnce": true,
     "_target": null,
     "_alignFlags": 9,
-    "_left": 44,
+    "_left": 46,
     "_right": 601.5,
-    "_top": 20,
+    "_top": 26,
     "_bottom": 0,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
@@ -728,8 +728,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 43,
-      "height": 32
+      "width": 38,
+      "height": 28
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -737,8 +737,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -458.17500000000007,
-      "y": 307
+      "x": -298.17500000000007,
+      "y": 270
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -756,9 +756,9 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 32,
-    "_fontSize": 32,
-    "_lineHeight": 32,
+    "_actualFontSize": 28,
+    "_fontSize": 28,
+    "_lineHeight": 28,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -780,9 +780,9 @@
     "isAlignOnce": true,
     "_target": null,
     "_alignFlags": 9,
-    "_left": 160.32499999999993,
+    "_left": 162.82499999999993,
     "_right": 0,
-    "_top": 37,
+    "_top": 36,
     "_bottom": 0,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
@@ -837,8 +837,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 206,
-      "y": 317
+      "x": 50,
+      "y": 270
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -887,7 +887,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 260,
+      "width": 200,
       "height": 48
     },
     "_rotationX": 0,
@@ -1136,8 +1136,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 492,
-      "y": 318
+      "x": 332,
+      "y": 278
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -1183,7 +1183,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 260,
+      "width": 200,
       "height": 48
     },
     "_rotationX": 0,
@@ -1339,7 +1339,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 260,
+      "width": 200,
       "height": 46
     },
     "_rotationX": 0,
@@ -1623,8 +1623,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -484,
-      "y": -204
+      "x": -324,
+      "y": -164
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -1669,8 +1669,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 216,
-      "height": 216
+      "width": 186,
+      "height": 186
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -1885,8 +1885,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 538,
-      "y": -208
+      "x": 378,
+      "y": -168
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -1928,8 +1928,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 140,
-      "height": 140
+      "width": 110,
+      "height": 110
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -3964,8 +3964,8 @@
     "_enabled": true,
     "_designResolution": {
       "__type__": "cc.Size",
-      "width": 1280,
-      "height": 720
+      "width": 960,
+      "height": 640
     },
     "_fitWidth": false,
     "_fitHeight": true

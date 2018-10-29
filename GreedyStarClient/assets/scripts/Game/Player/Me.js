@@ -38,10 +38,8 @@ cc.Class({
         followAction.setTag(100);
         mapBgNode.stopActionByTag(100);
         mapBgNode.runAction(followAction);
-
         this.originWidth = this.node.width;
         GameData.players[0].lastWidth = this.originWidth || 40;
-
         try {
             let node = this.node;
             let foo = node.x;
@@ -88,11 +86,14 @@ cc.Class({
         cc.director.GlobalEvent.off('iCanBeEaten', this);
     },
 
+    /**
+     * 玩家出生
+     */
     playerBirth() {
         this.node.userID = Const.userID;
         let position = this.getRandomPosition();
         let data = { userID: Const.userID, x: position.x, y: position.y, scale: 1, opacity: 255, isLive: 1, isInvin: 0, isRobot:false };
-        this.emitPlayerBirth(data);
+        cc.director.GlobalEvent.emit('playerBirth', data)
         this.changePlayerStatus(data);
         for(var i = 0; i < GameData.players.length;i++) {
             this.robotBirth(GameData.players[i],i);
@@ -325,49 +326,19 @@ cc.Class({
     },
 
     changePlayerStatus(data) {
-        try {
-            try {
-                let node = this.node;
-                let foo = node.x;
-            } catch (e) {
-                this.node = cc.find('Canvas/bg/player');
-            }
-
-            if (undefined !== data.x) {
-                GameData.players[0].x = this.node.x = data.x;
-            }
-            if (undefined !== data.y) {
-                GameData.players[0].y = this.node.y = data.y;
-            }
-            if (undefined !== data.gold) {
-                GameData.gold = this.node.gold = data.gold;
-            }
-            if (undefined !== data.scale) {
-                GameData.players[0].scale = this.node.scale = data.scale;
-            }
-            if (undefined !== data.opacity) {
-                GameData.players[0].opacity = this.node.opacity = data.opacity;
-            }
-            if (undefined !== data.isLive) {
-                GameData.players[0].isLive = this.node.isLive = data.isLive;
-            }
-            if (undefined !== data.isInvin) {
-                GameData.players[0].isInvin = this.node.isInvin = data.isInvin;
-            }
-            if (undefined !== data.invinTime) {
-                GameData.players[0].invinTime = this.node.invinTime = data.invinTime;
-            }
-            if (undefined !== data.lastWidth) {
-                GameData.players[0].lastWidth = this.node.lastWidth = data.lastWidth;
-            }
-            if (undefined !== data.score) {
-                GameData.players[0].score = this.node.score = data.score;
-            }
-
-
-        } catch (e) {
-
+        if (this.node === undefined) {
+            this.node = cc.find('Canvas/bg/player');
         }
+            GameData.players[0].x = this.node.x = data.x;
+            GameData.players[0].y = this.node.y = data.y;
+            GameData.gold = this.node.gold = data.gold;
+            GameData.players[0].scale = this.node.scale = data.scale;
+            GameData.players[0].opacity = this.node.opacity = data.opacity;
+            GameData.players[0].isLive = this.node.isLive = data.isLive;
+            GameData.players[0].isInvin = this.node.isInvin = data.isInvin;
+            GameData.players[0].invinTime = this.node.invinTime = data.invinTime;
+            GameData.players[0].lastWidth = this.node.lastWidth = data.lastWidth;
+            GameData.players[0].score = this.node.score = data.score;
     },
 
     /**
@@ -473,7 +444,7 @@ cc.Class({
     },
 
     emitPlayerBirth(data) {
-        cc.director.GlobalEvent.emit('playerBirth', data)
+
     },
 
     emitPlayerMove(data) {

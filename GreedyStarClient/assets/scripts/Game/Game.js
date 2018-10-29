@@ -14,17 +14,12 @@ cc.Class({
         if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
             cc.renderer.enableDirtyRegion(false);
         }
-
         this.ADD_FOOD_DT = config.ADD_FOOD_DT;
         this.MAX_FOOD_COUNT = config.MAX_FOOD_COUNT;
-
         this.width = this.node.width;
         this.height = this.node.height;
-
         this.foodPool = new cc.NodePool();
-
         this.foodPrefab = undefined;
-
         this.onEvent();
         this.mvsBind();
     },
@@ -36,8 +31,6 @@ cc.Class({
             break;
         }
     },
-
-
 
     start() {
         let goldNode = cc.find('Canvas/disGold/head/label').getComponent(cc.Label);
@@ -69,15 +62,12 @@ cc.Class({
             if (GameData.gameTime <= 0) {
                 txtCountdown.string = '0s';
                 clearInterval(timer);
-
                 // 延迟1ms自动退出房间
                 setTimeout(() => {
                     if (GameData.isHalfLeaveRoomBtnClick === false) {
                         GameData.leaveRoomStatus = 2;
                         let cpProto = "";
                         this.mvsLeaveRoom(cpProto);
-
-                        // this.gameOver();
                     }
                 }, 1000);
             }
@@ -117,16 +107,8 @@ cc.Class({
 
     onEvent() {
         cc.director.GlobalEvent.off("otherAddFood").on('otherAddFood', (data) => {
-            let x = data.x
-                , y = data.y
-                , foodID = data.foodID
-                // , color = data.color
-                , color = new cc.Color(data.colorArr[0], data.colorArr[1], data.colorArr[2])
-                , score = data.score
-                , scale = data.scale // food scale
-                , colorArr = data.colorArr;
-            this.addFood(x, y, foodID, color, score, scale, colorArr); }, this);
-
+            this.addFood(data.x, data.y, data.foodID, new cc.Color(data.colorArr[0], data.colorArr[1], data.colorArr[2]),
+                data.score, data.scale, data.colorArr); }, this);
         cc.director.GlobalEvent.off('othersAddFoods').on('othersAddFoods', (data) => {
             // return;
             let tempArr = data.foodArr;
@@ -147,10 +129,8 @@ cc.Class({
             // 最多只有50个
             for (let i = 0, l = tempArr.length; i < l; i++) {
                 let foodArrItem = tempArr[i];
-                let x = foodArrItem[0], y = foodArrItem[1], foodID = foodArrItem[2]
-                    , color = cc.color(foodArrItem[3][0], foodArrItem[3][1], foodArrItem[3][2])
-                    , score = foodArrItem[4], scale = foodArrItem[5];
-                this.addFood(x, y, foodID, color, score, scale);
+                this.addFood(foodArrItem[0], foodArrItem[1], foodArrItem[2], cc.color(foodArrItem[3][0], foodArrItem[3][1], foodArrItem[3][2]),
+                    foodArrItem[4], foodArrItem[5]);
             }
         }, this);
 
@@ -247,9 +227,7 @@ cc.Class({
         Mvs.response.leaveRoomResponse = this.mvsLeaveRoomResponse.bind(this);
         Mvs.response.joinOverResponse = this.mvsJoinOverResponse.bind(this);
         Mvs.response.leaveRoomNotify = this.mvsLeaveRoomNotify.bind(this);
-
         Mvs.response.sendEventResponse = this.mvsSendEventResponse.bind(this);
-
         Mvs.response.errorResponse = this.mvsErrorResponse.bind(this);
         Mvs.response.networkStateNotify = this.mvsNetworkStateNotify.bind(this);
 
@@ -260,9 +238,7 @@ cc.Class({
         Mvs.response.leaveRoomResponse = null;
         Mvs.response.joinOverResponse = null;
         Mvs.response.leaveRoomNotify = null;
-
         Mvs.response.sendEventResponse = null;
-
         Mvs.response.errorResponse = null;
         Mvs.response.networkStateNotify = null;
     },
@@ -305,34 +281,16 @@ cc.Class({
     },
 
     mvsNetworkStateNotify(notifyData) {
-        // if (GameData.isServerErrorCode1000) {
-        //     return;
-        // }
-
         let data = {
             userID: notifyData.userID,
             state: notifyData.state,
             roomId: notifyData.roomID,
             ownerId: notifyData.owner,
         };
-
-        // console.log('mvsNetworkStateNotify', data);
-
-        // 在游戏中,如果出现异常,不踢人,该玩家应该会自动离开
         if (data.state === 1) {
-            // 有玩家掉线 正在重连
-            // this.showPrompt('有玩家掉线 正在重连');
             this.showPrompt('有玩家掉线 自动踢掉');
-
-            // this.hidePlayer(data);
             this.removePlayer(data);
         }
-
-        // else if (data.state === 3) {
-        //     // 有玩家掉线 重连失败 已退出游戏
-        //     this.showPrompt('有玩家掉线 重连失败 已退出游戏');
-        //     this.removePlayer(data);
-        // }
     },
 
     mvsJoinOverResponse(rsp) {
@@ -340,30 +298,20 @@ cc.Class({
     },
 
     mvsSentEventNotify(info) {
-        // if (GameData.isServerErrorCode1000) {
-        //     return;
-        // }
-
         if (!info || !info.cpProto) {
             console.error('sendEventNotify info and info.cpProto require', info);
             return;
         }
-
         let data = JSON.parse(info.cpProto);
-
-        if (data.isGameStart === true && data.toUserId === Const.userID) {
+        if (data.toUserId === Const.userID) {
             if (data.event === Const.OTHERS_BIRTH_EVENT) {
-
                 // 分数同步
-                let _data = data.data;
                 cc.director.GlobalEvent.emit('playerScoreChange', {
-                    userID: _data.userID,
-                    score: _data.score
+                    userID: data.data.userID,
+                    score: data.data.score
                 })
-
                 cc.director.GlobalEvent.emit('othersBirth', data);
             }
-
             if (data.event === Const.OTHERS_ADD_FOODS_EVENT) {
                 cc.director.GlobalEvent.emit('othersAddFoods', data);
             }
@@ -383,9 +331,6 @@ cc.Class({
         }
 
         if (data.event === Const.OTHER_NEW_FOOD_EVENT) {
-            // data.color在传输过程中,可能会被处理
-            // 详细细节查看下,传输前后
-            // data.color = new cc.Color(data.colorArr[0], data.colorArr[1], data.colorArr[2]);
             cc.director.GlobalEvent.emit('otherAddFood', data);
         }
 
@@ -503,13 +448,8 @@ cc.Class({
     gameOver() {
         let disDeathWait = cc.find('Canvas/disDeathWait');
         disDeathWait.active = false;
-
         this.foodPool.clear();
         this.node.stopAllActions();
-
-        GameData.isGameStart = false;
-        GameData.isGameOver = true;
-
         let score = GameData.players[0].score , gold = score / 2 , rank = 0;
         let nodes = cc.find('Canvas/disScore/scoreList').children;
         for (let i = 0, l = nodes.length; i < l; i++) {
@@ -518,7 +458,6 @@ cc.Class({
                 break
             }
         }
-
         if (rank === 0) {
             console.warn('rank error, rank = 0');
             return;
@@ -535,7 +474,6 @@ cc.Class({
         this.mvsUnBind();
         this.cleanBgAllChildren();
         this.resetSomeGameData();
-
         try {
             wx.offHide(this.onHideHandler.bind(this))
         } catch (e) {
@@ -556,12 +494,9 @@ cc.Class({
     showDeathWaitDisplayer() {
         let disDeathWait = cc.find('Canvas/disDeathWait');
         disDeathWait.active = true;
-
         let counter = 3;
-
         let txtTime = disDeathWait.getChildByName('txtTime').getComponent(cc.Label);
         txtTime.string = '复活倒计时:' + counter + 's';
-
         let timer = setInterval(() => {
             if (counter === 0) {
                 disDeathWait.active = false;
@@ -579,15 +514,12 @@ cc.Class({
         let disGOver = cc.find('Canvas/disGOver');
         disGOver.zIndex = 999;
         disGOver.active = true;
-
         let boxScoreValue = cc.find('Canvas/disGOver/boxScore/value')
             , scoreLabel = boxScoreValue.getComponent(cc.Label);
         scoreLabel.string = score;
-
         let boxScoreGold = cc.find('Canvas/disGOver/boxGold/value')
             , goldLabel = boxScoreGold.getComponent(cc.Label);
         goldLabel.string = gold;
-
         let boxScoreRank = cc.find('Canvas/disGOver/boxRank/value')
             , rankLabel = boxScoreRank.getComponent(cc.Label);
         rankLabel.string = rank;
@@ -602,17 +534,9 @@ cc.Class({
     },
 
     backBtnHandler() {
-        // bug
-        /*if (GameData.leaveRoomStatus === 2 || GameData.leaveRoomStatus === 5) {
-            console.warn('sdk leaveRooming or waiting response');
-            console.warn('GameData.leaveRoomStatus', GameData.leaveRoomStatus);
-            return;
-        }*/
-
         this.mvsUnBind();
         this.cleanBgAllChildren();
         this.resetSomeGameData();
-
         try {
             wx.offHide(this.onHideHandler.bind(this))
         } catch (e) {
@@ -637,83 +561,29 @@ cc.Class({
     },
 
     mvsLeaveRoom(cpProto) {
-        if (GameData.isHalfLeaveRoomBtnClick === true) {
-            let result = Mvs.engine.leaveRoom(cpProto);
-
-            if (result === 0) {
-                GameData.halfLeaveRoomStatus = 3;
-                console.log('sdk half leaveRoom ok', result);
-            } else {
-                GameData.halfLeaveRoomStatus = 4;
-                console.error('sdk half leaveRoom error', result);
-                this.showPromptOfError('离开房间[sdk]失败');
-                return;
-            }
-
-            GameData.halfLeaveRoomStatus = 5;
+        let result = Mvs.engine.leaveRoom(cpProto);
+        if (result === 0) {
+            console.log('sdk half leaveRoom ok', result);
         } else {
-            let result = Mvs.engine.leaveRoom(cpProto);
-
-            if (result === 0) {
-                GameData.leaveRoomStatus = 3;
-                console.log('sdk leaveRoom ok', result);
-            } else {
-                GameData.leaveRoomStatus = 4;
-                console.error('sdk leaveRoom error', result);
-                this.showPromptOfError('离开房间[sdk]失败');
-                return;
-            }
-
-            GameData.leaveRoomStatus = 5;
+            console.error('sdk half leaveRoom error', result);
+            this.showPromptOfError('离开房间[sdk]失败');
+            return;
         }
-
     },
 
     mvsLeaveRoomResponse(rsp) {
-        if (GameData.isHalfLeaveRoomBtnClick === true) {
-            if (rsp.status === 200) {
-                GameData.halfLeaveRoomStatus = 6;
-                console.log('response half leaveRoom ok', rsp);
-            }
-            else {
-                GameData.halfLeaveRoomStatus = 7;
-                console.error('response half leaveRoom error', rsp);
-                this.showPromptOfError('离开房间失败');
-                return;
-            }
-
-            clearInterval(this.timer);
-
-            this.halfOver();
-        }
-
-        else {
-            if (rsp.status === 200) {
-                GameData.leaveRoomStatus = 6;
-                console.log('response leaveRoom ok', rsp);
-            } else {
-                GameData.leaveRoomStatus = 7;
-                console.error('response leaveRoom error', rsp);
-                this.showPromptOfError('离开房间失败');
-                return;
-            }
-
+        if (rsp.status === 200) {
             this.gameOver();
+        } else {
+            console.error('response half leaveRoom error', rsp);
+            this.showPromptOfError('离开房间失败');
+            return;
         }
-
-        // this.resetSomeGameData();
-        // cc.director.loadScene('lobby');
+        clearInterval(this.timer);
+        this.halfOver();
     },
 
     settingBtnHandler() {
-        if (GameData.isServerErrorCode1000) {
-            return;
-        }
-
-        this.showHalfLeaveBtn();
-    },
-
-    showHalfLeaveBtn() {
         let halfLeaveBtn = cc.find('Canvas/btnHalfLeave');
         halfLeaveBtn.active = true;
 
@@ -723,34 +593,19 @@ cc.Class({
         }, 1000)
     },
 
+
     hideHalfLeaveBtn() {
         let halfLeaveBtn = cc.find('Canvas/btnHalfLeave');
         halfLeaveBtn.active = false;
     },
 
     halfLeaveBtnHandler() {
-        if (GameData.isHalfLeaveRoomBtnClick === true) {
-            return;
-        }
-
-        GameData.isHalfLeaveRoomBtnClick = true;
-
-        if (GameData.halfLeaveRoomStatus === 2 || GameData.halfLeaveRoomStatus === 5) {
-            console.warn('sdk half leaveRooming or waiting response');
-        }
-
-        GameData.halfLeaveRoomStatus = 2;
-
         let cpProto = Const.OTHER_HALF_LEAVE_EVENT;
         this.mvsLeaveRoom(cpProto);
     },
 
     // 其他玩家中途退出游戏
     mvsLeaveRoomNotify(roomInfo) {
-        // if (GameData.isServerErrorCode1000) {
-        //     return;
-        // }
-
         if (roomInfo.cpProto === Const.OTHER_HALF_LEAVE_EVENT) {
             this.removePlayer(roomInfo);
         }
@@ -760,7 +615,6 @@ cc.Class({
         let promptNode = cc.find('Canvas/prompt');
         let promptTxt = promptNode.getChildByName('label').getComponent(cc.Label);
         promptTxt.string = str;
-
         promptNode.active = true;
     },
 
@@ -770,49 +624,29 @@ cc.Class({
     },
 
     showPrompt(str) {
-        if (GameData.isGameStart === true && GameData.isGameOver === false) {
-            let promptNode = cc.find('Canvas/prompt');
-            let promptTxt = promptNode.getChildByName('label').getComponent(cc.Label);
-            promptTxt.string = str;
+        let promptNode = cc.find('Canvas/prompt');
+        let promptTxt = promptNode.getChildByName('label').getComponent(cc.Label);
+        promptTxt.string = str;
+        promptNode.active = true;
+        promptNode.opacity = 255;
 
-            promptNode.active = true;
-            promptNode.opacity = 255;
-
-            setTimeout(() => {
-                if (GameData.isGameStart === true && GameData.isGameOver === false) {
-                    let action = cc.fadeOut(5.0);
-                    promptNode.runAction(action);
-                    promptNode.active = false;
-                }
-            }, 1000);
-        }
+        setTimeout(() => {
+            if (GameData.isGameStart === true && GameData.isGameOver === false) {
+                let action = cc.fadeOut(5.0);
+                promptNode.runAction(action);
+                promptNode.active = false;
+            }
+        }, 1000);
     },
 
-    cleanBgAllChildren() {
-        // try {
-        //     let foo = this.node.x;
-        // } catch(e) {
-        //     this.node = cc.find('Canvas/bg');
-        // }
-
-        // this.node.removeAllChildren(false);
-    },
 
     hidePlayer(data) {
-        let hideUserId = data.userID;
-
-        let _data = {
-            userID: hideUserId
-        };
-
-        cc.director.GlobalEvent.emit('hideOther', _data);
+        cc.director.GlobalEvent.emit('hideOther', { userID: data.userID});
     },
 
     removePlayer(data) {
         let leaveUserId = data.userID; // 离开者id
-
         let k = 0;
-
         for (let i = 0, l = GameData.players.length; i < l; i++) {
             if (leaveUserId === GameData.players[i].userID) {
                 k = i;
@@ -820,7 +654,6 @@ cc.Class({
             }
         }
         GameData.players.splice(k, 1);
-
         let _data = {
             userID: leaveUserId
         };
@@ -828,49 +661,32 @@ cc.Class({
         cc.director.GlobalEvent.emit('otherDieOfLeaveRoom', _data);
         cc.director.GlobalEvent.emit('removeScoreItemOfLeaveRoom', _data);
     },
-
-    // user重连
-
-    // user重连成功
-
-    // user重连失败
-
     resetSomeGameData() {
         GameData.foodCounter = 0;
         GameData.foodIdCounter = 0;
         GameData.foodArr = [];
-
         GameData.players.splice(1);
-
         GameData.roomId = 0;
         GameData.ownerId = 0;
         GameData.isOwner = false;
-
         GameData.isGameStart = false;
         GameData.isGameOver = false;
         GameData.isGameWin = false;
         GameData.gameTime = 180;
-
         GameData.gameStartEventSequence = 0;
-
         GameData.isInRoomView = false;
         GameData.isQuickJoinBtnClick = false;
         GameData.isCreateRoomBtnClick = false;
         GameData.isJoinRoomBtn1Click = false;
         GameData.isJoinRoomBtn2Click = false;
         GameData.isRoomItemClick = false;
-
         GameData.canLeaveRoom = true;
         GameData.gameStartCountdownValue = 10;
         GameData.isGameStartCountdowning = false;
         GameData.isHasChangeOtherScore = false;
-
         GameData.isLeaveRoomBtn2Click = false;
         GameData.isHalfLeaveRoomBtnClick = false;
-
         GameData.halfLeaveRoomStatus = 1;
-
-        // for僵尸进程
         GameData.isUserInTheRoom = false;
     },
 });

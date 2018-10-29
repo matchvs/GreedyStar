@@ -874,13 +874,12 @@ cc.Class({
         this.node.off(msg.MATCHVS_SEND_EVENT_NOTIFY, this.onEvent, this);
         this.node.off(msg.MATCHVS_SEND_EVENT_RSP, this.onEvent, this);
         this.node.off(msg.MATCHVS_NETWORK_STATE_NOTIFY, this.onEvent, this);
-        //todo 新增
         this.node.off(msg.MATCHVS_GAME_SERVER_NOTIFY, this.onEvent, this);
     },
 
     onDestroy() {
-        console.log("页面销毁");
         this.removeEvent();
+        console.log("页面销毁");
     },
 
 });
