@@ -36,10 +36,6 @@ cc.Class({
     },
 
     touchStartEventHandle(event) {
-        if (GameData.isServerErrorCode1000) {
-            return;
-        }
-
         if (!GameData.angle) {
             return;
         }
@@ -63,10 +59,6 @@ cc.Class({
     },
 
     touchMoveEventHandle(event) {
-        if (GameData.isServerErrorCode1000) {
-            return;
-        }
-
         if (!GameData.gold || this.canSpeedUp === false) {
             GameData.speed2 = 0;
             this.canSpeedUp = false;
@@ -77,10 +69,6 @@ cc.Class({
     },
 
     touchEndEventHandle() {
-        if (GameData.isServerErrorCode1000) {
-            return;
-        }
-
         GameData.speed2 = 0;
         this.canSpeedUp = false;
 

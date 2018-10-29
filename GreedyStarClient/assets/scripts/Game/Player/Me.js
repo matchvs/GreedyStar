@@ -17,20 +17,14 @@ cc.Class({
 
     onLoad() {
         this.scaleAction = null;
-
         this.gameWidth = 2560;
         this.gameHeight = 1440;
         this.gameRect = cc.rect(-this.gameWidth / 2 - 5, -this.gameHeight / 2 - 5, this.gameWidth + 10, this.gameHeight + 10);
-
         this.originWidth = 0;
         this.isEdge = false;
     },
 
     start() {
-        if (GameData.isGameStart === false) {
-            return;
-        }
-
         try {
             let node = this.node;
             let foo = node.x;
@@ -66,12 +60,8 @@ cc.Class({
     },
 
     update(dt) {
-        if (GameData.isGameStart === false) {
-            return
-        }
         this.playerMove(dt);
         this.judgeIsEdge();
-
         this.robotMoveSyncTime++;
         if (this.robotMoveSyncTime === 6) {
             /**
@@ -99,21 +89,9 @@ cc.Class({
     },
 
     playerBirth() {
-        this.node.userId = Const.userId;
-
+        this.node.userID = Const.userID;
         let position = this.getRandomPosition();
-
-        let data = {
-            userId: Const.userId,
-            x: position.x,
-            y: position.y,
-            scale: 1,
-            opacity: 255,
-            isLive: 1,
-            isInvin: 0,
-            isRobot:false
-        };
-
+        let data = { userID: Const.userID, x: position.x, y: position.y, scale: 1, opacity: 255, isLive: 1, isInvin: 0, isRobot:false };
         this.emitPlayerBirth(data);
         this.changePlayerStatus(data);
         for(var i = 0; i < GameData.players.length;i++) {
@@ -152,16 +130,11 @@ cc.Class({
             }
         }
         let data = {
-            userId: GameData.players[0].userId,
-            x,
-            y,
-            scale,
-            isLive: 1,
+            userID: GameData.players[0].userID, x, y, scale, isLive: 1,
         };
         this.sendInterval ++;
         if (this.sendInterval == 6) {
             this.emitPlayerMove(data);
-
             this.sendInterval = 0;
         }
         delete data.scale;
@@ -172,24 +145,12 @@ cc.Class({
         if (this.isEdge === true) {
             return;
         }
-
-        let x = this.node.x
-            , y = this.node.y
-            , r = GameData.players[0].lastWidth / 2;
-
+        let x = this.node.x, y = this.node.y, r = GameData.players[0].lastWidth / 2;
         x = x === 0 ? x : (x > 0 ? x + r : x - r);
         y = y === 0 ? y : (y > 0 ? y + r : y - r);
-
         if (!this.isContainsPoint(x, y, this.gameRect) && !this.node.isInvin) {
             this.isEdge = true;
-
-            let data = {
-                userId: this.node.userId,
-                scale: 1,
-                opacity: 0,
-                isLive: 0,
-                isInvin: 0,
-            };
+            let data = {userID: this.node.userID, scale: 1, opacity: 0, isLive: 0, isInvin: 0,};
             this.emitPlayerDie(data);
             data.score = 0;
             this.changePlayerStatus(data)
@@ -206,15 +167,13 @@ cc.Class({
             if (!other.node.isLive || !self.node.isLive) {
                 return
             }
-
             if (other.node.isInvin || self.node.isInvin) {
                 return
             }
-
             /**
              * 如果碰撞单位是机器人就另外一个逻辑
              */
-            if (other.node.userId === GameData.robotIDs[0] || other.node.userId == GameData.robotIDs[1]) {
+            if (other.node.userID === GameData.robotIDs[0] || other.node.userID == GameData.robotIDs[1]) {
                 this.robotCollision(other,self);
                 return;
             }
@@ -224,25 +183,24 @@ cc.Class({
                 }
                 GameData.dieDataBuffer = {
                     data: {
-                        userId: self.node.userId, // die userId
+                        userID: self.node.userID, // die userId
                         scale: 1,
                         opacity: 0,
                         isLive: 0,
                         isInvin: 0,
                         score: GameData.players[0].score, // die user score
-                        oUserId: other.node.userId, // other userId
+                        oUserID: other.node.userID, // other userId
                         oeo: true // 'other eat other'
                     },
                     oNode: other.node,
                 };
 
                 let data = JSON.stringify({
-                    beEatUserId: self.node.userId,
-                    eatUserId: other.node.userId,
+                    beEatUserID: self.node.userID,
+                    eatUserID: other.node.userID,
                     event: Const.CAN_I_BE_EATEN
                 });
                 let result = Mvs.engine.sendEvent(data);
-
                 let action = cc.blink(0.2, 5);
                 self.node.runAction(action);
             }
@@ -251,41 +209,29 @@ cc.Class({
 
     iCanBeEaten() {
         let data = GameData.dieDataBuffer.data;
-
         this.emitPlayerDie(data);
-
         data.score = 0;
         this.changePlayerStatus(data);
-
-        let oUserId = data.oUserId
-            , oScore = data.score
-            , oIndex
-            , oNode = data.oNode;
-
+        let oUserID = data.oUserID, oScore = data.score, oIndex, oNode = data.oNode;
         for (let i = 0, l = GameData.players.length; i < l; i++) {
             let players = GameData.players[i];
-            if (oUserId === players.userId) {
+            if (oUserID === players.userID) {
                 oIndex = i;
                 break;
             }
         }
-
         let otherScript = cc.find('Canvas/bg').getComponent('Other');
-        otherScript.otherAddSize(oUserId, oScore, oIndex, oNode);
+        otherScript.otherAddSize(oUserID, oScore, oIndex, oNode);
     },
 
     playerRevive(data) {
         this.isEdge = false;
-
         // bug
         if (GameData.players[0].isLive) {
             return;
         }
-
         GameData.players[0].lastWidth = this.originWidth;
-
-        console.log('me revive', Const.userId);
-
+        console.log('me revive', Const.userID);
         this.changePlayerStatus({
             x: data.x,
             y: data.y,
@@ -380,23 +326,12 @@ cc.Class({
 
     changePlayerStatus(data) {
         try {
-            if (!GameData.isGameStart|| GameData.isGameOver) {
-                return;
-            }
-
             try {
                 let node = this.node;
                 let foo = node.x;
             } catch (e) {
                 this.node = cc.find('Canvas/bg/player');
             }
-
-            // if  (data.y != undefined && data.x != undefined) {
-            //     if (Math.abs(data.x-this.node.x) < 10) {
-            //          this.action = cc.moveTo(0.3,data.x,data.y);
-            //          this.node.runAction(this.action);
-            //     }
-            // }
 
             if (undefined !== data.x) {
                 GameData.players[0].x = this.node.x = data.x;

@@ -96,17 +96,10 @@ cc.Class({
 
 
     touchStartEventHandle(event) {
-        if (GameData.isServerErrorCode1000) {
-            return;
-        }
-
         let touchPos = this.node.convertToNodeSpaceAR(event.getLocation());
-
         let posX = this.joyStickX + touchPos.x;
         let posY = this.joyStickY + touchPos.y;
-
         let distance = this.getDistance(touchPos, cc.p(0, 0));
-
         if (this.ringRadius > distance) {
             this.dot.setPosition(cc.p(posX, posY));
             return true;
@@ -115,17 +108,10 @@ cc.Class({
     },
 
     touchMoveEventHandle(event) {
-        if (GameData.isServerErrorCode1000) {
-            return;
-        }
-
         let touchPos = this.node.convertToNodeSpaceAR(event.getLocation());
-
         let posX = this.joyStickX + touchPos.x;
         let posY = this.joyStickY + touchPos.y;
-
         let distance = this.getDistance(touchPos, cc.p(0, 0));
-
         if (this.ringRadius > distance) {
             this.dot.setPosition(cc.p(posX, posY))
         } else {
@@ -133,7 +119,6 @@ cc.Class({
             let bPosY = this.node.getPosition().y + Math.sin(this.getRadian(cc.p(posX, posY))) * this.ringRadius;
             this.dot.setPosition(cc.p(bPosX, bPosY))
         }
-
         GameData.angle = this.getAngle(cc.p(posX, posY));
         GameData.speed1 = 180;
     },
@@ -142,9 +127,7 @@ cc.Class({
         if (GameData.isServerErrorCode1000) {
             return;
         }
-
         this.dot.setPosition(this.node.getPosition());
-
         GameData.angle = null;
         GameData.speed1 = 0;
     },

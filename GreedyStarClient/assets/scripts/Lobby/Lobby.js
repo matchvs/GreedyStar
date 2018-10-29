@@ -37,6 +37,8 @@ cc.Class({
         // let timer = setInterval(() => {this.getRoomList();}, 10000);
     },
 
+
+
     onKeyDown: function (event) {
         console.warn('keyCode', event.keyCode);
         switch (event.keyCode) {
@@ -106,14 +108,17 @@ cc.Class({
             case msg.MATCHVS_JOIN_ROOM_RSP:
                 GameData.ownerID = eventData.userInfoList.ownerID;
                 GameData.roomID = eventData.userInfoList.roomID;
-                let label = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
-                label.string = '房间ID: ' + GameData.roomID;
                 for (var i = 0; i < eventData.userInfoList.length; i++) {
                     if (eventData.userInfoList[i] !== Const.userID) {
-                        this.mvsJoinRoom(eventData.userInfoList[i], GameData.roomID);
+                        GameData.players.push({
+                            userID: eventData.userInfoList[i].userID,
+                            userName: eventData.userInfoList[i].userName,
+                            score: 0,
+                            isRobot: false
+                        });
                     }
                 }
-                this.updateRoomView(GameData.players[0]);
+                this.shouldStartGame();
                 break;
             case msg.MATCHVS_JOIN_ROOM_NOTIFY:
                 this.mvsJoinRoom(eventData.roomUserInfo);
@@ -320,7 +325,7 @@ cc.Class({
     loadAvatarImage(avatarUrl) {
         let avatarNode = cc.find('Canvas/profile/avator');
         let sprite = avatarNode.getComponent(cc.Sprite);
-        if (typeof(wx)) {
+        if (typeof(wx) !== "undefined") {
             let image = wx.createImage();
             image.onload = () => {
                 try {
@@ -427,7 +432,7 @@ cc.Class({
         let userProfile = Const.userName;
         let result = engine.prototype.joinRandomRoom(maxPlayer, userProfile);
         if (result !== 0) {
-            this.showPromptOfError('随机加入房间[sdk]失败 请刷新 重试', true);
+            this.showPromptOfError("随机加入房间[sdk]失败 请刷新 重试", true);
             return;
         }
     },
@@ -809,6 +814,9 @@ cc.Class({
         }
     },
 
+    /**
+     *
+     */
     shouldStartGame() {
         if (GameData.isGameStartCountdowning === true) {
             let data = JSON.stringify({
@@ -821,8 +829,8 @@ cc.Class({
                 console.error('sdk sendEvent "GAME_START_EVENT"(GameData.isGameStartCountdowning === true) error', result);
             }
         }
-        this.mvsUnBind();
-        GameData.isGameStart = true;
+        // this.removeEvent();
+        // GameData.isGameStart = true;
         try {
             wx.offHide(this.onHideHandler.bind(this))
         } catch (e) {
@@ -852,7 +860,7 @@ cc.Class({
             }
         }
     },
-    mvsUnBind() {
+    removeEvent() {
         this.node.off(msg.MATCHVS_LOGOUT, this.onEvent, this);
         this.node.off(msg.MATCHVS_ROOM_DETAIL, this.onEvent, this);
         this.node.off(msg.MATCHVS_ROOM_LIST_EX, this.onEvent, this);
@@ -868,6 +876,11 @@ cc.Class({
         this.node.off(msg.MATCHVS_NETWORK_STATE_NOTIFY, this.onEvent, this);
         //todo 新增
         this.node.off(msg.MATCHVS_GAME_SERVER_NOTIFY, this.onEvent, this);
+    },
+
+    onDestroy() {
+        console.log("页面销毁");
+        this.removeEvent();
     },
 
 });

@@ -10,7 +10,7 @@ module.exports = {
     //加速按钮的速度
     speed2: 0,
     foodCounter: 0,
-    foodIdCounter: 0,
+    foodIDCounter: 0,
     foodArr: [],
 
     // room

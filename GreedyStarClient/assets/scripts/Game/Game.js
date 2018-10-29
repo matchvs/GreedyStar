@@ -27,44 +27,21 @@ cc.Class({
 
         this.onEvent();
         this.mvsBind();
-
-        this.isGameHide = false;
-        try {
-            wx.onHide(this.onHideHandler.bind(this))
-        } catch (e) {
-            cc.game.on(cc.game.EVENT_HIDE, this.onHideHandler.bind(this))
-        }
     },
 
     onKeyDown(event) {
-        console.warn('按下keyCode'+event.keyCode+"XXX");
         switch (event.keyCode) {
             case 6:
-                    this.halfOver()
-                break;
+                this.halfOver()
+            break;
         }
-
     },
 
-    onHideHandler() {
-        if (this.isGameHide) {
-            return;
-        }
-        console.error('game hide');
-        this.isGameHide = true;
-        // TODO: 后期修改该名字
-        GameData.isServerErrorCode1000 = true;
-        this.showPromptOfError('目前不支持切入后台 请刷新 重开');
-    },
+
 
     start() {
-        if (GameData.isGameStart === false) {
-            return;
-        }
-
         let goldNode = cc.find('Canvas/disGold/head/label').getComponent(cc.Label);
         goldNode.string = GameData.gold;
-
         let time = 500;
         if (GameData.isHasChangeOtherScore) {
             time = 2000;
@@ -76,28 +53,19 @@ cc.Class({
         this.countDown()
     },
 
+    /**
+     * 游戏倒计时定时器
+     */
     countDown() {
         let txtCountdown = cc.find('Canvas/txtCountdown').getComponent(cc.Label);
-
         // TODO: 可以直接在结束是clearInterval
         // TODO: 改写定时器的逻辑
         let timer = setInterval(() => {
-            if (GameData.isServerErrorCode1000) {
-                return;
-            }
-
             GameData.gameTime--;
-
             if (GameData.isInCoverView === true) {
                 clearInterval(timer);
                 return;
             }
-
-            // if (GameData.halfLeaveRoomStatus === 6) {
-            //     clearInterval(timer);
-            //     return;
-            // }
-
             if (GameData.gameTime <= 0) {
                 txtCountdown.string = '0s';
                 clearInterval(timer);
@@ -116,14 +84,14 @@ cc.Class({
 
             if (GameData.gameTime === 120) {
                 // if (GameData.gameTime === 170) {
-                let userId = GameData.players[0].userId;
+                let userID = GameData.players[0].userID;
                 for (let i = 0, l = GameData.players.length; i < l; i++) {
-                    if (userId > GameData.players[i].userId) {
-                        userId = GameData.players[i].userId;
+                    if (userID > GameData.players[i].userID) {
+                        userID = GameData.players[i].userID;
                     }
                 }
-                // if (userId === Const.userId) {
-                // console.error('userId ' + Const.userId + ': joinOver');
+                // if (userID === Const.userID) {
+                // console.error('userID ' + Const.userID + ': joinOver');
                 this.mvsJoinOver();
                 // }
             }
@@ -151,15 +119,13 @@ cc.Class({
         cc.director.GlobalEvent.off("otherAddFood").on('otherAddFood', (data) => {
             let x = data.x
                 , y = data.y
-                , foodId = data.foodId
+                , foodID = data.foodID
                 // , color = data.color
                 , color = new cc.Color(data.colorArr[0], data.colorArr[1], data.colorArr[2])
                 , score = data.score
                 , scale = data.scale // food scale
                 , colorArr = data.colorArr;
-
-            this.addFood(x, y, foodId, color, score, scale, colorArr);
-        }, this);
+            this.addFood(x, y, foodID, color, score, scale, colorArr); }, this);
 
         cc.director.GlobalEvent.off('othersAddFoods').on('othersAddFoods', (data) => {
             // return;
@@ -181,35 +147,21 @@ cc.Class({
             // 最多只有50个
             for (let i = 0, l = tempArr.length; i < l; i++) {
                 let foodArrItem = tempArr[i];
-                // console.error('foodArrItem.colorArr', foodArrItem.colorArr);
-                // let x = foodArrItem.x
-                //     , y = foodArrItem.y
-                //     , foodId = foodArrItem.foodId
-                //     , color = cc.color(foodArrItem.colorArr[0], foodArrItem.colorArr[1], foodArrItem.colorArr[2])
-                //     , score = foodArrItem.score
-                //     , scale = foodArrItem.scale;
-                let x = foodArrItem[0]
-                    , y = foodArrItem[1]
-                    , foodId = foodArrItem[2]
+                let x = foodArrItem[0], y = foodArrItem[1], foodID = foodArrItem[2]
                     , color = cc.color(foodArrItem[3][0], foodArrItem[3][1], foodArrItem[3][2])
-                    , score = foodArrItem[4]
-                    , scale = foodArrItem[5];
-
-                this.addFood(x, y, foodId, color, score, scale);
+                    , score = foodArrItem[4], scale = foodArrItem[5];
+                this.addFood(x, y, foodID, color, score, scale);
             }
         }, this);
 
         cc.director.GlobalEvent.off('otherEatAFood').on('otherEatAFood', (data) => {
-            let node = undefined
-                , foodId = data.foodId;
-
+            let node = undefined, foodID = data.foodID;
             let children = cc.find('Canvas/bg').children;
-
             for (let i = 0, l = children.length; i < l; i++) {
                 let child = children[i];
-                if (child.foodId && child.foodId === foodId) {
+                if (child.foodID && child.foodID === foodID) {
                     node = child;
-                    break
+                    break;
                 }
             }
 
@@ -219,76 +171,22 @@ cc.Class({
              */
             if (node === undefined) {
                 console.error('-------');
-                console.error('foodId', foodId);
+                console.error('foodID', foodID);
                 console.error('node === undefined', node);
                 console.error('-------');
                 return;
             }
-
-            // console.warn('----------');
-            // console.warn('other eat a food');
-            // console.warn('foodId', foodId);
-            // console.warn('----------');
-            // console.warn('');
-
-            let foodIdArr = foodId.split('f');
-            if (foodIdArr[0] === String(Const.userId)) {
+            let foodIDArr = foodID.split('f');
+            if (foodIDArr[0] === String(Const.userID)) {
                 GameData.foodCounter--;
             }
-
-
-            // function foodIdArrFilter(arr, foodId) {
-            //     for (let i = 0, l = arr.length; i < l; i++) {
-            //         if (arr[i].foodId === foodId) {
-            //             return {result: true, i: i};
-            //         }
-            //         if (i === l - 1) {
-            //             return {result: false};
-            //         }
-            //     }
-            // }
-            //
-            // function foodIdArrSplice(arr, i) {
-            //     arr.splice(i, 1);
-            // }
-
-            // for (let i = 0, l = GameData.foodArr.length; i < l; i++) {
-            //     if (GameData.foodArr[i].foodId === foodId) {
-            //         return {result: true, i: i};
-            //     }
-            //     if (i === l - 1) {
-            //         return {result: false};
-            //     }
-            // }
-
-            // if (GameData.foodArr.includes(String(foodId))) {
-            //     this.foodPool.put(node);
-            //     GameData.foodArr.splice(GameData.foodArr.indexOf(String(foodId)), 1);
-            //     this.emitPlayerScoreChange(data);
-            // } else {
-            //     console.warn('setTimeout eat the food,foodId:', foodId);
-            //
-            //     setTimeout(() => {
-            //         this.foodPool.put(node);
-            //         GameData.foodArr.splice(GameData.foodArr.indexOf(String(foodId)), 1);
-            //         this.emitPlayerScoreChange(data);
-            //     }, 200)
-            // }
-
-            let foodArrFilterResult = utils.foodArrFilter(GameData.foodArr, String(foodId));
-
+            let foodArrFilterResult = utils.foodArrFilter(GameData.foodArr, String(foodID));
             if (foodArrFilterResult.result) {
                 this.foodPool.put(node);
                 utils.foodArrSplice(GameData.foodArr, foodArrFilterResult.i);
                 this.emitPlayerScoreChange(data);
             } else {
-                console.warn('setTimeout eat the food,foodId:', foodId);
-
-                // setTimeout(() => {
-                //     this.foodPool.put(node);
-                //     foodIdArrSplice(GameData.foodArr, foodIdArrFilterResult.i);
-                //     this.emitPlayerScoreChange(data);
-                // }, 200)
+                console.warn('setTimeout eat the food,foodID:', foodID);
             }
 
         }, this);
@@ -305,57 +203,22 @@ cc.Class({
 
         cc.director.GlobalEvent.off('playerEatAFood').on('playerEatAFood', (data) => {
             let node = data.food;
-            let foodId = data.foodId;
-            let foodIdArr = foodId.split('f');
+            let foodID = data.foodID;
+            let foodIDArr = foodID.split('f');
 
-            if (foodIdArr[0] === String(Const.userId)) {
+            if (foodIDArr[0] === String(Const.userID)) {
                 GameData.foodCounter--;
             }
-
-            // function foodIdArrFilter(arr, foodId) {
-            //     for (let i = 0, l = arr.length; i < l; i++) {
-            //         if (arr[i].foodId === foodId) {
-            //             return {result: true, i: i};
-            //         }
-            //         if (i === l - 1) {
-            //             return {result: false};
-            //         }
-            //     }
-            // }
-            //
-            // function foodIdArrSplice(arr, i) {
-            //     console.log('foodIdArrSplice', arr[i]);
-            //     arr.splice(i, 1);
-            // }
-
-            // if (GameData.foodArr.includes(String(foodId))) {
-            //     // this.foodPool.resize(200);
-            //     this.foodPool.put(node);
-            //     GameData.foodArr.splice(GameData.foodArr.indexOf(String(foodId)), 1);
-            //
-            //     this.emitPlayerScoreChange(data);
-            //
-            //     // 这个操作必须做,理由: JSON.stringify
-            //     data.food = null;
-            //     data.event = Const.OTHER_EAT_A_FOOD_EVENT;
-            //     let result = Mvs.engine.sendEvent(JSON.stringify(data));
-            //
-            // } else {
-            //     console.error('i can not eat the food, foodId:' + foodId);
-            //     console.error('GameData.foodArr', GameData.foodArr);
-            // }
-            let foodArrFilterResult = utils.foodArrFilter(GameData.foodArr, String(foodId));
-
+            let foodArrFilterResult = utils.foodArrFilter(GameData.foodArr, String(foodID));
             if (foodArrFilterResult.result) {
                 this.foodPool.put(node);
                 utils.foodArrSplice(GameData.foodArr, foodArrFilterResult.i);
-
                 this.emitPlayerScoreChange(data);
                 data.food = null;
                 data.event = Const.OTHER_EAT_A_FOOD_EVENT;
                 let result = Mvs.engine.sendEvent(JSON.stringify(data));
             } else {
-                console.error('i can not eat the food, foodId:' + foodId);
+                console.error('i can not eat the food, foodID:' + foodID);
                 console.error('GameData.foodArr', GameData.foodArr);
             }
         }, this);
@@ -363,46 +226,18 @@ cc.Class({
         cc.director.GlobalEvent.off('playerDie').on('playerDie', (data) => {
             data.event = Const.OTHER_DIE_EVENT;
             let result = Mvs.engine.sendEvent(JSON.stringify(data));
-
-            let data1 = {
-                userId: data.userId,
-                score: 0
-            };
-            this.emitPlayerScoreReset(data1);
-
-            let data2 = {
-                userId: data.oUserId,// other player userid
-                score: data.score
-            };
-            this.emitPlayerScoreChange(data2);
-
+            this.emitPlayerScoreReset({ userID: data.userID, score: 0  });
+            this.emitPlayerScoreChange({ userID: data.oUserID , score: data.score });
             this.showDeathWaitDisplayer();
-
             let timer = setTimeout(() => {
                 if (GameData.isGameOver) {
                     clearTimeout(timer);
                     return;
                 }
-
-                let pos = this.getRandomPosition()
-                    , x = pos.x
-                    , y = pos.y;
-
+                let pos = this.getRandomPosition(), x = pos.x, y = pos.y;
                 this.emitPlayerVivid({x, y});
-
-                let data2 = {
-                    event: Const.OTHER_VIVID_EVENT,
-                    userId: data.userId,
-                    x,
-                    y,
-                    scale: 1,
-                    // opacity: 255,
-                    opacity: 178,
-                    isLive: 1,
-                    isInvin: 1
-                };
-
-                let result = Mvs.engine.sendEvent(JSON.stringify(data2))
+                let result = Mvs.engine.sendEvent(JSON.stringify({event: Const.OTHER_VIVID_EVENT, userID: data.userID,
+                    x, y, scale: 1, opacity: 178, isLive: 1, isInvin: 1}))
             }, 3000);
         }, this)
     },
@@ -475,7 +310,7 @@ cc.Class({
         // }
 
         let data = {
-            userId: notifyData.userID,
+            userID: notifyData.userID,
             state: notifyData.state,
             roomId: notifyData.roomID,
             ownerId: notifyData.owner,
@@ -516,13 +351,13 @@ cc.Class({
 
         let data = JSON.parse(info.cpProto);
 
-        if (data.isGameStart === true && data.toUserId === Const.userId) {
+        if (data.isGameStart === true && data.toUserId === Const.userID) {
             if (data.event === Const.OTHERS_BIRTH_EVENT) {
 
                 // 分数同步
                 let _data = data.data;
                 cc.director.GlobalEvent.emit('playerScoreChange', {
-                    userId: _data.userId,
+                    userID: _data.userID,
                     score: _data.score
                 })
 
@@ -536,13 +371,13 @@ cc.Class({
 
 
         if (data.event === Const.CAN_I_BE_EATEN) {
-            if (data.eatUserId === Const.userId) {
+            if (data.eatUserID === Const.userID) {
                 cc.director.GlobalEvent.emit('canYouBeEaten', data);
             }
         }
 
         if (data.event === Const.YOU_CAN_BE_EATEN) {
-            if (data.beEatUserId === Const.userId) {
+            if (data.beEatUserID === Const.userID) {
                 cc.director.GlobalEvent.emit('iCanBeEaten', data);
             }
         }
@@ -588,45 +423,29 @@ cc.Class({
                 if (GameData.foodCounter >= this.MAX_FOOD_COUNT) {
                     return
                 }
-                let foodId = Const.userId + 'f' + GameData.foodIdCounter;
+                let foodID = Const.userID + 'f' + GameData.foodIDCounter;
                 GameData.foodCounter++;
-                GameData.foodIdCounter++;
+                GameData.foodIDCounter++;
 
-                let pos = this.getRandomPosition()
-                    , x = pos.x
-                    , y = pos.y;
+                let pos = this.getRandomPosition(), x = pos.x , y = pos.y;
 
                 let colorArr = utils.getRandomColor()
                     , color = new cc.Color(colorArr[0], colorArr[1], colorArr[2])
                     , score = utils.getRandomScore();
-
                 let scale = Math.random().toFixed(2);
                 if (scale < 0.5) {
                     scale = 0.5
                 }
-
-                this.addFood(x, y, foodId, color, score, scale, colorArr);
-
-                let data = {
-                    event: Const.OTHER_NEW_FOOD_EVENT,
-                    x,
-                    y,
-                    foodId,
-                    color,
-                    colorArr,
-                    score,
-                    scale
-                };
-                let result = Mvs.engine.sendEvent(JSON.stringify(data));
-
+                this.addFood(x, y, foodID, color, score, scale, colorArr);
+                let result = Mvs.engine.sendEvent(JSON.stringify({ event: Const.OTHER_NEW_FOOD_EVENT, x, y,
+                    foodID, color, colorArr, score, scale}));
             }, this),
             cc.delayTime(this.ADD_FOOD_DT)
         ));
-
         this.node.runAction(action)
     },
 
-    addFood(x, y, foodId, color, score, scale, colorArr) {
+    addFood(x, y, foodID, color, score, scale, colorArr) {
         if (this.foodPrefab === undefined) {
             cc.loader.loadRes("prefab/food", (err, res) => {
                 if (err) {
@@ -634,39 +453,20 @@ cc.Class({
                     return;
                 }
                 this.foodPrefab = res;
-
-                this._addFood(x, y, foodId, color, score, scale, colorArr);
+                this._addFood(x, y, foodID, color, score, scale, colorArr);
             });
         }
-
         else {
-            this._addFood(x, y, foodId, color, score, scale, colorArr);
+            this._addFood(x, y, foodID, color, score, scale, colorArr);
         }
 
         // 在othersAddFoods的时候不需要
         if (!!colorArr) {
-            // GameData.foodArr.push({
-            //     x: x,
-            //     y: y,
-            //     foodId: String(foodId),
-            //     colorArr: colorArr,
-            //     score: score,
-            //     scale: scale
-            // });
-            GameData.foodArr.push([x, y, foodId, colorArr, score, scale])
-            // console.log('GameData.foodArr', GameData.foodArr);
-            // console.error("_addFood", {
-            //     x: x,
-            //     y: y,
-            //     foodId: String(foodId),
-            //     colorArr: colorArr,
-            //     score: score,
-            //     scale: scale
-            // });
+            GameData.foodArr.push([x, y, foodID, colorArr, score, scale])
         }
     },
 
-    _addFood(x, y, foodId, color, score, scale, colorArr) {
+    _addFood(x, y, foodID, color, score, scale, colorArr) {
         let node;
 
         if (this.foodPool.size() > 0) {
@@ -675,22 +475,13 @@ cc.Class({
         } else {
             node = cc.instantiate(this.foodPrefab)
         }
-
-        try {
-            node.x = x;
-            node.y = y;
-            node.foodId = foodId;
-            node.color = color;
-            node.score = score;
-            node.scale = scale;
-
-            node.parent = this.node;
-
-            // 更新foodIdArr
-            // GameData.foodArr.push(String(foodId));
-
-        } catch (e) {
-        }
+        node.x = x;
+        node.y = y;
+        node.foodID = foodID;
+        node.color = color;
+        node.score = score;
+        node.scale = scale;
+        node.parent = this.node;
     },
 
 
@@ -719,15 +510,10 @@ cc.Class({
         GameData.isGameStart = false;
         GameData.isGameOver = true;
 
-        let score = GameData.players[0].score
-            , gold = score / 2
-            , rank = 0;
-
-
+        let score = GameData.players[0].score , gold = score / 2 , rank = 0;
         let nodes = cc.find('Canvas/disScore/scoreList').children;
-
         for (let i = 0, l = nodes.length; i < l; i++) {
-            if (GameData.players[0].userId === nodes[i].userId) {
+            if (GameData.players[0].userID === nodes[i].userID) {
                 rank = i + 1;
                 break
             }
@@ -737,7 +523,6 @@ cc.Class({
             console.warn('rank error, rank = 0');
             return;
         }
-
         this.showDisGOver(score, gold, rank);
         this.updateDatabase(gold, rank)
     },
@@ -745,10 +530,8 @@ cc.Class({
     halfOver() {
         this.foodPool.clear();
         this.node.stopAllActions();
-
         GameData.isGameStart = false;
         GameData.isGameOver = true;
-
         this.mvsUnBind();
         this.cleanBgAllChildren();
         this.resetSomeGameData();
@@ -758,7 +541,6 @@ cc.Class({
         } catch (e) {
             cc.game.off(cc.game.EVENT_HIDE);
         }
-
         this.showPromptOfError('正在加载 请稍后');
         cc.director.loadScene('lobby', () => {
             this && this.hidePromptError && this.hidePromptError();
@@ -766,15 +548,8 @@ cc.Class({
     },
 
     getRandomPosition() {
-        let pad = 40
-            , minX = -this.width / 2 + pad
-            , minY = -this.height / 2 + pad
-            , maxX = this.width / 2 - pad
-            , maxY = this.height / 2 - pad;
-
-        let x = utils.getRandom(minX, maxX)
-            , y = utils.getRandom(minY, maxY);
-
+        let pad = 40 , minX = -this.width / 2 + pad , minY = -this.height / 2 + pad ,maxX = this.width / 2 - pad ,maxY = this.height / 2 - pad;
+        let x = utils.getRandom(minX, maxX) , y = utils.getRandom(minY, maxY);
         return {x, y}
     },
 
@@ -1024,22 +799,22 @@ cc.Class({
     },
 
     hidePlayer(data) {
-        let hideUserId = data.userId;
+        let hideUserId = data.userID;
 
         let _data = {
-            userId: hideUserId
+            userID: hideUserId
         };
 
         cc.director.GlobalEvent.emit('hideOther', _data);
     },
 
     removePlayer(data) {
-        let leaveUserId = data.userId; // 离开者id
+        let leaveUserId = data.userID; // 离开者id
 
         let k = 0;
 
         for (let i = 0, l = GameData.players.length; i < l; i++) {
-            if (leaveUserId === GameData.players[i].userId) {
+            if (leaveUserId === GameData.players[i].userID) {
                 k = i;
                 break
             }
@@ -1047,7 +822,7 @@ cc.Class({
         GameData.players.splice(k, 1);
 
         let _data = {
-            userId: leaveUserId
+            userID: leaveUserId
         };
         // 删除节点, 去掉分数排行
         cc.director.GlobalEvent.emit('otherDieOfLeaveRoom', _data);
