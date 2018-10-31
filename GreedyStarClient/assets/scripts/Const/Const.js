@@ -14,7 +14,7 @@ module.exports = {
     // secretKey: "b55d351ad6f44b018e40e134c878e649",
     gameVersion: 1,
     channel: "Matchvs",
-    platform: "release",
+    platform: "alpha",
     // TEST:
     // platform: "alpha",
     deviceId: "123456789",
@@ -22,9 +22,9 @@ module.exports = {
     token: "",
 
     // test
-    gameID: 201091,
-    appKey: 'c519a0ad1ab34744b79ceeedc21540a2',
-    secretKey: '4ec3547291da4677a374eb85ccd43503',
+    gameID: 202326,
+    appKey: '495cf9da60df4fae854ef9e595176d4e#M',
+    secretKey: '170313f9147a4fdf9b9b56a082630369',
 
     // client room event
     GAME_TIME_EVENT: 'game_time_event',

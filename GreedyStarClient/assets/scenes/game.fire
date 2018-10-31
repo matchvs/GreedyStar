@@ -506,7 +506,11 @@
     "node": {
       "__id__": 3
     },
-    "_enabled": true
+    "_enabled": true,
+    "starFoodList": [],
+    "starPrefab": {
+      "__uuid__": "09bbe9f1-4437-4b0b-ac61-8f3696affa89"
+    }
   },
   {
     "__type__": "ec407ALO2VDVIK+YtZLm5tb",
@@ -2250,8 +2254,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 260,
-      "height": 80
+      "width": 200,
+      "height": 60
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -2259,8 +2263,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -466,
-      "y": 230
+      "x": -310,
+      "y": 220
     },
     "_skewX": 0,
     "_skewY": 0,

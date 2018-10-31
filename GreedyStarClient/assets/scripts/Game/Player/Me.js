@@ -1,4 +1,4 @@
-let Mvs = require('../../Lib/Mvs');
+var engine = require("../../Lib/MatchvsEngine");
 let utils = require('../../Util/index');
 let Const = require('../../Const/Const');
 let GameData = require('../../Global/GameData');
@@ -25,13 +25,9 @@ cc.Class({
     },
 
     start() {
-        try {
-            let node = this.node;
-            let foo = node.x;
-        } catch (e) {
+        if (this.node === undefined) {
             this.node = cc.find('Canvas/bg/player');
         }
-
         // 镜头跟随
         let mapBgNode = cc.find('Canvas/bg');
         let followAction = cc.follow(this.node);
@@ -40,17 +36,8 @@ cc.Class({
         mapBgNode.runAction(followAction);
         this.originWidth = this.node.width;
         GameData.players[0].lastWidth = this.originWidth || 40;
-        try {
-            let node = this.node;
-            let foo = node.x;
-        } catch (e) {
-            this.node = cc.find('Canvas/bg/player');
-        }
-
         this.userName.string = Const.userName;
-
         this.onEvents();
-
         // 延迟200ms出生
         setTimeout(() => {
             this.playerBirth();
@@ -93,29 +80,24 @@ cc.Class({
         this.node.userID = Const.userID;
         let position = this.getRandomPosition();
         let data = { userID: Const.userID, x: position.x, y: position.y, scale: 1, opacity: 255, isLive: 1, isInvin: 0, isRobot:false };
-        cc.director.GlobalEvent.emit('playerBirth', data)
         this.changePlayerStatus(data);
-        for(var i = 0; i < GameData.players.length;i++) {
+        for(let i = 0; i < GameData.players.length;i++) {
             this.robotBirth(GameData.players[i],i);
         }
     },
 
     playerMove(dt) {
         if (!GameData.players[0].isLive) {
-            return
+            return;
         }
-        let angle = GameData.angle
-            , speed1 = GameData.speed1
-            , speed2 = GameData.speed2;
+        let angle = GameData.angle ,speed1 = GameData.speed1 ,speed2 = GameData.speed2;
         if (angle === null) {
-            return
+            return;
         }
         if (GameData.gold === 0) {
             speed2 = 0
         }
-        let x = this.node.x
-            , y = this.node.y
-            , scale = this.node.scale;
+        let x = this.node.x, y = this.node.y;
         if (angle !== null && (speed1 || speed2)) {
             let speed = speed2 ? speed2 : speed1;
             x += Math.cos(angle * (Math.PI / 180)) * speed * dt;
@@ -130,11 +112,9 @@ cc.Class({
                 return
             }
         }
-        let data = {
-            userID: GameData.players[0].userID, x, y, scale, isLive: 1,
-        };
+        let data = { userID: GameData.players[0].userID, x, y, scale:this.node.scale, isLive: 1};
         this.sendInterval ++;
-        if (this.sendInterval == 6) {
+        if (this.sendInterval === 6) {
             this.emitPlayerMove(data);
             this.sendInterval = 0;
         }
@@ -174,7 +154,7 @@ cc.Class({
             /**
              * 如果碰撞单位是机器人就另外一个逻辑
              */
-            if (other.node.userID === GameData.robotIDs[0] || other.node.userID == GameData.robotIDs[1]) {
+            if (other.node.userID === GameData.robotIDs[0] || other.node.userID === GameData.robotIDs[1]) {
                 this.robotCollision(other,self);
                 return;
             }
@@ -183,16 +163,8 @@ cc.Class({
                     GameData.dieDataBuffer = null;
                 }
                 GameData.dieDataBuffer = {
-                    data: {
-                        userID: self.node.userID, // die userId
-                        scale: 1,
-                        opacity: 0,
-                        isLive: 0,
-                        isInvin: 0,
-                        score: GameData.players[0].score, // die user score
-                        oUserID: other.node.userID, // other userId
-                        oeo: true // 'other eat other'
-                    },
+                    data: { userID: self.node.userID, scale: 1, opacity: 0, isLive: 0, isInvin: 0,
+                        score: GameData.players[0].score, oUserID: other.node.userID, oeo: true },
                     oNode: other.node,
                 };
 
@@ -201,7 +173,7 @@ cc.Class({
                     eatUserID: other.node.userID,
                     event: Const.CAN_I_BE_EATEN
                 });
-                let result = Mvs.engine.sendEvent(data);
+                Mvs.engine.sendEvent(data);
                 let action = cc.blink(0.2, 5);
                 self.node.runAction(action);
             }
@@ -259,7 +231,7 @@ cc.Class({
     },
 
     playerAddSize(data) {
-        if (data.userId !== GameData.players[0].userId) {
+        if (data.userID !== GameData.players[0].userID) {
             return;
         }
 
@@ -267,7 +239,6 @@ cc.Class({
             , addWidth = score / 30
             , lastWidth = GameData.players[0].lastWidth
             , scaleAdd = (lastWidth + addWidth) / lastWidth;
-
         let scale;
 
         if (!!GameData.players[0].hasScaleAction) {
@@ -283,14 +254,11 @@ cc.Class({
         GameData.players[0].lastScale = scale; // 上一次应该放大的值
         GameData.players[0].hasScaleAction = true;
         GameData.players[0].lastWidth = lastWidth + addWidth;
-
-
         // 先发送事件
-        let userId = GameData.players[0].userId;
-
+        let userID = GameData.players[0].userID;
         let _data = JSON.stringify({
             event: Const.OTHER_CHANGE_SIZE_EVENT,
-            userId: userId,
+            userID: userID,
             scale: scale,
             lastWidth: GameData.players[0].lastWidth
         });
@@ -347,16 +315,8 @@ cc.Class({
     robotBirth(datas,i) {
         if (datas.isRobot) {
             let position = this.getRandomPosition();
-            let data = {
-                userId: datas.userId,
-                x: position.x,
-                y: position.y,
-                scale: 1,
-                opacity: 255,
-                isLive: 1,
-                isInvin: 0,
-                moveTimerNum:0,
-                moveDistance: i == 1 ? this.robotMoveToDistance : this.robotMoveDistance
+            let data = { userID: datas.userID, x: position.x, y: position.y, scale: 1, opacity: 255,
+                isLive: 1, isInvin: 0, moveTimerNum:0, moveDistance: i == 1 ? this.robotMoveToDistance : this.robotMoveDistance
             };
             GameData.players[i].x = position.x;
             GameData.players[i].y = position.y;
@@ -372,7 +332,6 @@ cc.Class({
      * 机器人移动
      */
     robotMove() {
-     // var  x =   [GameData.players[i].x + GameData.players[i].moveDistance,GameData.players[i].x - GameData.players[i].moveDistance];
         for(var i = 0; i < GameData.players.length;i++) {
             if (GameData.players[i].isRobot) {
                 GameData.players[i].moveTimerNum ++;
@@ -380,14 +339,14 @@ cc.Class({
                     GameData.players[i].x =  GameData.players[i].x + GameData.players[i].moveDistance;
                     GameData.players[i].y = GameData.players[i].y + GameData.players[i].moveDistance;
                 }
-                if (GameData.players[i].moveTimerNum <80 && GameData.players[i].moveTimerNum >40) {
+                if (GameData.players[i].moveTimerNum < 80 && GameData.players[i].moveTimerNum > 40 ) {
                     GameData.players[i].x =  GameData.players[i].x - GameData.players[i].moveDistance;
                     GameData.players[i].y =  GameData.players[i].y - GameData.players[i].moveDistance;
                 }
                 if (GameData.players[i].moveTimerNum > 80) {
                     GameData.players[i].moveTimerNum = 0;
                 }
-                let data = { userId: GameData.players[i].userId, x: GameData.players[i].x, y: GameData.players[i].y, isLive: 1 };
+                let data = { userID: GameData.players[i].userID, x: GameData.players[i].x, y: GameData.players[i].y, isLive: 1 };
                 // 每次更新位置判断边界碰撞
                 if (!this.isContainsPoint(data.x,data.y,this.gameRect)) {
                     let position = this.getRandomPosition();
@@ -395,7 +354,7 @@ cc.Class({
                     data.y = position.y;
                     GameData.players[i].score = 0;
                     GameData.players[i].scale = 1;
-                    var scoreData = {userId:data.userId,score:GameData.players[i].score};
+                    var scoreData = {userID:data.userID,score:GameData.players[i].score};
                     cc.director.GlobalEvent.emit('playerScoreReset', scoreData);
                 }
                 cc.director.GlobalEvent.emit('otherMove', data);
@@ -412,9 +371,9 @@ cc.Class({
     robotCollision (other,self) {
         var index;
         var score;
-        var otherUserID = other.node.userId;
+        var otherUserID = other.node.userID;
         for(var i = 0; i < GameData.players.length;i++) {
-            if (otherUserID === GameData.players[i].userId) {
+            if (otherUserID === GameData.players[i].userID) {
                 score = GameData.players[i].score;
                 console.log("score", score);
                 index = i;
@@ -433,28 +392,46 @@ cc.Class({
             GameData.players[index].y = position.y;
             GameData.players[index].score = 0;
             GameData.players[index].scale = 1;
-            var scoreData = {userId:GameData.players[index].userId,score:GameData.players[index].score}
+            var scoreData = {userID:GameData.players[index].userID,score:GameData.players[index].score}
             cc.director.GlobalEvent.emit('playerScoreReset', scoreData);
             GameData.players[0].score = GameData.players[0].score + score;
             console.log("score2",  GameData.players[0].score);
             this.playerAddSize( GameData.players[0].score );
-            var selfscoreData = {userId:GameData.players[0],score:GameData.players[0].score}
+            var selfscoreData = {userID:GameData.players[0],score:GameData.players[0].score}
             cc.director.GlobalEvent.emit('playerScoreChange', selfscoreData);
         }
     },
 
+    /**
+     * 发送自己出生消息
+     * @param data
+     */
     emitPlayerBirth(data) {
-
+        data.event = Const.OTHER_BIRTH_EVENT;
+        engine.prototype.sendEvent(JSON.stringify(data));
     },
 
+    /**
+     * 发送自己移动的位置
+     * @param data
+     */
     emitPlayerMove(data) {
-        cc.director.GlobalEvent.emit('playerMove', data)
+        data.event = Const.OTHER_MOVE_EVENT;
+        engine.prototype.sendFrameEvent(JSON.stringify(data));
     },
 
+    /**
+     * 自己死亡的消息
+     * @param data
+     */
     emitPlayerDie(data) {
         cc.director.GlobalEvent.emit('playerDie', data)
     },
 
+    /**
+     *
+     * @param data
+     */
     emitPlayerNoGold(data) {
         cc.director.GlobalEvent.emit('playerNoGold', data)
     },

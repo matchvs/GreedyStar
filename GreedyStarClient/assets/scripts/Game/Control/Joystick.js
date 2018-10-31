@@ -124,9 +124,6 @@ cc.Class({
     },
 
     touchEndEventHandle: function () {
-        if (GameData.isServerErrorCode1000) {
-            return;
-        }
         this.dot.setPosition(this.node.getPosition());
         GameData.angle = null;
         GameData.speed1 = 0;

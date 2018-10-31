@@ -40,6 +40,7 @@ MatchvsDemoResponse.prototype.bind = function () {
     mvs.response.networkStateNotify = this.networkStateNotify.bind(this);
     mvs.response.setFrameSyncResponse = this.setFrameSyncResponse.bind(this);
     mvs.response.logoutResponse = this.logoutResponse.bind(this);
+    mvs.response.gameServerNotify = this.gameServerNotify.bind(this);
 };
 
 /**
@@ -334,6 +335,11 @@ MatchvsDemoResponse.prototype.frameUpdate = function (data) {
 MatchvsDemoResponse.prototype.networkStateNotify = function (netNotify) {
     console.log("netNotify.owner:" + netNotify.owner);
     this.context.node.emit(msg.MATCHVS_NETWORK_STATE_NOTIFY,{netNotify:netNotify,type:msg.MATCHVS_NETWORK_STATE_NOTIFY});
+};
+
+MatchvsDemoResponse.prototype.gameServerNotify = function (eventInfo) {
+    console.log("推送的消息内容:" + eventInfo.cpProto);
+    this.context.node.emit(msg.MATCHVS_GAME_SERVER_NOTIFY,{eventInfo:eventInfo,ty:msg.MATCHVS_GAME_SERVER_NOTIFY});
 };
 
 MatchvsDemoResponse.prototype.onMsg = function (buf) {

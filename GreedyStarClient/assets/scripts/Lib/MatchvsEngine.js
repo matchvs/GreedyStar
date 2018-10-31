@@ -211,9 +211,14 @@ MatchvsDemoEngine.prototype.sendEvent = function (msg) {
     // console.log("发送信息 result"+ data.result);
     return data.result;
 };
-
-MatchvsDemoEngine.prototype.sendEventEx = function (msg) {
-    var data = mvs.engine.sendEventEx(0,msg,1,[]);
+/**
+ * 发送消息扩展
+ * @param type 消息类型。0表示转发给房间成员；1表示转发给game server；2表示转发给房间成员及game server
+ * @param msg 消息内容
+ * @returns {*}
+ */
+MatchvsDemoEngine.prototype.sendEventEx = function (type,msg) {
+    var data = mvs.engine.sendEventEx(type,msg,1,[]);
     return data.result;
 };
 /**

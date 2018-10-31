@@ -601,12 +601,8 @@ cc.Class({
             if (GameData.players[i].userID === userInfo.userID) {
                 break;
             }
-            GameData.players.push({
-                userID: userInfo.userID,
-                userName: userInfo.userName,
-                score: 0,
-                isRobot: false
-            });
+            GameData.players.push({userID: userInfo.userID, userName: userInfo.userName,
+                score: 0, isRobot: false });
         }
     },
 
