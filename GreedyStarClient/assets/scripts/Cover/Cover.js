@@ -81,7 +81,6 @@ cc.Class({
                 console.log("get wx.userinfo success ", userinfo);
                 Const.userName = userinfo.nickName;
                 Const.avatarUrl = userinfo.avatarUrl;
-                Const.isWX = true;
             });
         } catch (error) {
             console.log("get wx.userinfo is fail" + error);

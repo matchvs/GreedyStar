@@ -30,6 +30,7 @@ cc.Class({
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         //Matchvs事件监听
         this.mvsBind(this);
+        this.node.removeChild();
         // 展示头像
         this.loadAvatarImage(Const.avatarUrl);
         this.initProfileData();
@@ -58,7 +59,7 @@ cc.Class({
         this.node.on(msg.MATCHVS_LOGOUT, this.onEvent, this);
         this.node.on(msg.MATCHVS_ROOM_DETAIL, this.onEvent, this);
         this.node.on(msg.MATCHVS_ROOM_LIST_EX, this.onEvent, this);
-        this.node.on(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent, this);
+        // this.node.on(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent, this);
         this.node.on(msg.MATCHVS_JOIN_ROOM_NOTIFY, this.onEvent, this);
         this.node.on(msg.MATCHVS_CREATE_ROOM, this.onEvent, this);
         this.node.on(msg.MATCHVS_LEAVE_ROOM, this.onEvent, this);
@@ -105,21 +106,22 @@ cc.Class({
                     console.log('获取房间列表失败 请刷新 重试');
                 }
                 break;
-            case msg.MATCHVS_JOIN_ROOM_RSP:
-                GameData.ownerID = eventData.userInfoList.ownerID;
-                GameData.roomID = eventData.userInfoList.roomID;
-                for (var i = 0; i < eventData.userInfoList.length; i++) {
-                    if (eventData.userInfoList[i] !== Const.userID) {
-                        GameData.players.push({
-                            userID: eventData.userInfoList[i].userID,
-                            userName: eventData.userInfoList[i].userName,
-                            score: 0,
-                            isRobot: false
-                        });
-                    }
-                }
-                this.shouldStartGame();
-                break;
+            // case msg.MATCHVS_JOIN_ROOM_RSP:
+            //     GameData.ownerID = eventData.userInfoList.ownerID;
+            //     GameData.roomID = eventData.userInfoList.roomID;
+            //     for (var i = 0; i < eventData.userInfoList.length; i++) {
+            //         if (eventData.userInfoList[i] !== Const.userID) {
+            //             GameData.players.push({
+            //                 userID: eventData.userInfoList[i].userID,
+            //                 userName: eventData.userInfoList[i].userName,
+            //                 score: 0,
+            //                 isRobot: false
+            //             });
+            //         }
+            //     }
+            //     this.shouldStartGame();
+            //     // this.updateRoomView(GameData.players[0]);
+            //     break;
             case msg.MATCHVS_JOIN_ROOM_NOTIFY:
                 this.mvsJoinRoom(eventData.roomUserInfo);
                 break;
@@ -434,6 +436,8 @@ cc.Class({
         if (result !== 0) {
             this.showPromptOfError("随机加入房间[sdk]失败 请刷新 重试", true);
             return;
+        } else {
+            this.shouldStartGame();
         }
     },
 
@@ -860,7 +864,7 @@ cc.Class({
         this.node.off(msg.MATCHVS_LOGOUT, this.onEvent, this);
         this.node.off(msg.MATCHVS_ROOM_DETAIL, this.onEvent, this);
         this.node.off(msg.MATCHVS_ROOM_LIST_EX, this.onEvent, this);
-        this.node.off(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent, this);
+        // this.node.off(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent, this);
         this.node.off(msg.MATCHVS_JOIN_ROOM_NOTIFY, this.onEvent, this);
         this.node.off(msg.MATCHVS_CREATE_ROOM, this.onEvent, this);
         this.node.off(msg.MATCHVS_LEAVE_ROOM, this.onEvent, this);

@@ -1,6 +1,5 @@
 let Mvs = require('../Lib/Mvs');
 let Const = require('../Const/Const');
-let GameData = require('../Global/GameData');
 
 cc.Class({
     extends: cc.Component,

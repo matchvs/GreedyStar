@@ -3,7 +3,6 @@ module.exports = {
     userID : 0,
     userName: "",
     avatarUrl: "",
-    isWX:false,
     // game
     SCENT_WIDTH: 0,
     SCENT_HEIGHT: 0,

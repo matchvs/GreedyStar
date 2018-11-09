@@ -1,147 +1,136 @@
-let GameData = require('../../Global/GameData');
+let engine = require('../../Lib/MatchvsEngine');
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
         dot: cc.Node,
-        left_Down:false,
-        right_Down:false,
-        up_Down:false,
-        down_Down:false,     //四个方向键是否被按下的状态
-        posY : 0,
-        posX: 0
+        speed:cc.Button,
     },
 
+
+
     onLoad() {
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown,this);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        this.input = {l: 0, r: 0, u: 0, d: 0};
         this.ringRadius = this.node.width / 2;
-        // this.joyStickPoint = this.node.getPosition();
         //操纵杆X坐标
         this.joyStickX = this.node.getPosition().x;
         //操纵杆Y坐标
         this.joyStickY = this.node.getPosition().y;
-
-        this.initTouchEvent()
+        this.initInput(this);
     },
 
-    initTouchEvent() {
-        this.node.on(cc.Node.EventType.TOUCH_START, this.touchStartEventHandle, this);
-        this.node.on(cc.Node.EventType.TOUCH_MOVE, this.touchMoveEventHandle, this);
-        this.node.on(cc.Node.EventType.TOUCH_END, this.touchEndEventHandle, this);
-        this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchCancelEventHandle, this);
-    },
 
-    onKeyDown(event) {
-        switch (event.keyCode) {
-            case 1003:
-                this.up_Down = true;
-                break;
-            case 1004:
-                this.down_Down = true;
-                break;
-            case 1000:
-                this.left_Down = true;
-                break;
-            case 1001:
-                this.right_Down = true;
-                break;
+
+    initInput(self) {
+       var keycode = {37: 0, 38: 0, 39: 0, 40: 0, 32:0, 1000:0, 1001:0, 1003:0, 1004:0};
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, function (event) {
+            if ((event.keyCode >31 && event.keyCode < 42) || (event.keyCode > 999 && event.keyCode < 1005) || keycode[event.keyCode] != 1) {
+                keycode[event.keyCode] = 1;
+                syncKeyCode2Input();
+            }
+        }.bind(this));
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, function (event) {
+            if ((event.keyCode > 31 && event.keyCode < 42) || (event.keyCode > 999 && event.keyCode < 1005) || keycode[event.keyCode] != 1) {
+                keycode[event.keyCode] = 0;
+                syncKeyCode2Input();
+            }
+        }.bind(this));
+        
+        this.node.on(cc.Node.EventType.TOUCH_START,function (event) {
+                let touchPos = this.convertToNodeSpaceAR(event.getLocation());
+                let posX = self.joyStickX + touchPos.x;
+                let posY = self.joyStickY + touchPos.y;
+                let distance = cc.pDistance(touchPos, cc.p(0, 0));
+                var rad = Math.atan2(touchPos.y, touchPos.x);
+                isDirection(rad,8);
+                if (self.ringRadius > distance) {
+                    self.dot.setPosition(cc.p(posX, posY));
+                    return true;
+                }
+                return false;
+        });
+
+        this.node.on(cc.Node.EventType.TOUCH_MOVE, function (event) {
+            let touchPos = this.convertToNodeSpaceAR(event.getLocation());
+            let posX = self.joyStickX + touchPos.x;
+            let posY = self.joyStickY + touchPos.y;
+            let distance =  cc.pDistance(touchPos, cc.p(0, 0));
+            var rad = Math.atan2(touchPos.y, touchPos.x);// [-PI, PI]
+            isDirection(rad,8);
+            if (self.ringRadius > distance) {
+                self.dot.setPosition(cc.p(posX, posY))
+            } else {
+                let bPosX = self.node.getPosition().x + Math.cos(getRadian(cc.p(posX, posY))) * self.ringRadius;
+                let bPosY = self.node.getPosition().y + Math.sin(getRadian(cc.p(posX, posY))) * self.ringRadius;
+                self.dot.setPosition(cc.p(bPosX, bPosY))
+            }
+            syncKeyCode2Input();
+
+        });
+
+        this.node.on(cc.Node.EventType.TOUCH_END, function (event) {
+            self.dot.setPosition(self.node.getPosition());
+            keycode = {37: 0, 38: 0, 39: 0, 40: 0, 32:0, 1000:0, 1001:0, 1003:0, 1004:0};
+            syncKeyCode2Input();
+        });
+
+        this.node.on(cc.Node.EventType.TOUCH_CANCEL,function(){
+
+        });
+        
+        function syncKeyCode2Input() {
+            if (self.input == null) {
+                self.input = {l: 0, r: 0, u: 0, d: 0};
+            }
+            self.input.l = keycode["37"] == 1 || keycode["1000"] == 1 ? 1 : 0;
+            self.input.u = keycode["38"] == 1 || keycode["1003"] == 1 ? 1 : 0;
+            self.input.r = keycode["39"] == 1 || keycode["1001"] == 1 ? 1 : 0;
+            self.input.d = keycode["40"] == 1 || keycode["1004"] == 1 ? 1 : 0;
+            self.input.p = keycode["32"];
+            engine.prototype.sendEventEx(1,JSON.stringify({type: "input", data: self.input}))
         }
-        this.gamepad();
-    },
 
-    onKeyUp(event) {
-        switch (event.keyCode) {
-            case 1003:
-                this.up_Down = false;
-                break;
-            case 1004:
-                this.down_Down = false;
-                break;
-            case 1000:
-                this.left_Down = false;
-                break;
-            case 1001:
-                this.right_Down = false;
-                break;
+        function isDirection (rad,count) {
+            keycode = {37: 0, 38: 0, 39: 0, 40: 0, 32:0, 1000:0, 1001:0, 1003:0, 1004:0};
+            if ((rad >= -Math.PI / count && rad < 0) || (rad >= 0 && rad < Math.PI / count)) {
+                keycode["39"] = 1; //右
+                // console.log("右");
+            } else if (rad >= Math.PI / count && rad < 3 * Math.PI / count) {
+                keycode["39"] = 1; //右上
+                keycode["38"] = 1;
+                // console.log("右上");
+            } else if (rad >= 3 * Math.PI / count && rad < 5 * Math.PI / count) {
+                keycode["38"] = 1; // 上
+                // console.log("上");
+            } else if (rad >= 5 * Math.PI / count && rad < 7 * Math.PI / count) {
+                keycode["37"] = 1;// 左上
+                keycode["38"] = 1;
+                // console.log("左上");
+            } else if ((rad >= 7 * Math.PI / count && rad < Math.PI) || (rad >= -Math.PI && rad < -7 * Math.PI / count)) {
+                keycode["37"] = 1;// 左
+                // console.log("左");
+            } else if (rad >= -7 * Math.PI / count && rad < -5 * Math.PI / count) {
+                keycode["37"] = 1;// 左下
+                keycode["40"] = 1;
+                // console.log("左下");
+            } else if (rad >= -5 * Math.PI / count && rad < -3 * Math.PI / count) {
+                keycode["40"] = 1;// 下
+                // console.log("下");
+            } else {
+                keycode["39"] = 1;// 右下
+                keycode["40"] = 1;
+                // console.log("右下");
+            }
+            syncKeyCode2Input();
         }
-        this.gamepad();
-    },
 
-
-    gamepad() {
-        this.posX = this.joyStickX;
-        this.posY = this.joyStickY;
-        if(!this.up_Down&&!this.down_Down&&!this.left_Down&&!this.right_Down) {
-           this.touchEndEventHandle();
-           return;
+        function getRadian(point) {
+            return self.radian = Math.PI / 180 * getAngle(point);
         }
-        if (this.right_Down) {
-            this.posX = this.joyStickX + (this.ringRadius/2);
+
+        function  getAngle(point) {
+            return Math.atan2(point.y - self.joyStickY, point.x - self.joyStickX) * (180 / Math.PI);
         }
-        if (this.up_Down) {
-            this.posY = this.joyStickY + (this.ringRadius/2);
-        }
-        if (this.down_Down) {
-            this.posY = this.joyStickY - (this.ringRadius/2);
-        }
-        if (this.left_Down) {
-            this.posX = this.joyStickX -  (this.ringRadius/2);
-        }
-        this.dot.setPosition(cc.p(this.posX, this.posY));
-        GameData.angle = this.getAngle(cc.p(this.posX, this.posY));
-        GameData.speed1 = 180;
     },
-
-
-    touchStartEventHandle(event) {
-        let touchPos = this.node.convertToNodeSpaceAR(event.getLocation());
-        let posX = this.joyStickX + touchPos.x;
-        let posY = this.joyStickY + touchPos.y;
-        let distance = this.getDistance(touchPos, cc.p(0, 0));
-        if (this.ringRadius > distance) {
-            this.dot.setPosition(cc.p(posX, posY));
-            return true;
-        }
-        return false;
-    },
-
-    touchMoveEventHandle(event) {
-        let touchPos = this.node.convertToNodeSpaceAR(event.getLocation());
-        let posX = this.joyStickX + touchPos.x;
-        let posY = this.joyStickY + touchPos.y;
-        let distance = this.getDistance(touchPos, cc.p(0, 0));
-        if (this.ringRadius > distance) {
-            this.dot.setPosition(cc.p(posX, posY))
-        } else {
-            let bPosX = this.node.getPosition().x + Math.cos(this.getRadian(cc.p(posX, posY))) * this.ringRadius;
-            let bPosY = this.node.getPosition().y + Math.sin(this.getRadian(cc.p(posX, posY))) * this.ringRadius;
-            this.dot.setPosition(cc.p(bPosX, bPosY))
-        }
-        GameData.angle = this.getAngle(cc.p(posX, posY));
-        GameData.speed1 = 180;
-    },
-
-    touchEndEventHandle: function () {
-        this.dot.setPosition(this.node.getPosition());
-        GameData.angle = null;
-        GameData.speed1 = 0;
-    },
-
-    touchCancelEventHandle() {
-        this.touchEndEventHandle();
-    },
-
-    getDistance(point1, point2) {
-        return cc.pDistance(point1, point2);
-    },
-
-    getAngle(point) {
-        return Math.atan2(point.y - this.joyStickY, point.x - this.joyStickX) * (180 / Math.PI);
-    },
-
-    getRadian(point) {
-        return this.radian = Math.PI / 180 * this.getAngle(point);
-    }
 });

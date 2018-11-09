@@ -338,7 +338,7 @@ MatchvsDemoResponse.prototype.networkStateNotify = function (netNotify) {
 };
 
 MatchvsDemoResponse.prototype.gameServerNotify = function (eventInfo) {
-    console.log("推送的消息内容:" + eventInfo.cpProto);
+    // console.log("推送的消息内容:" + eventInfo.cpProto);
     this.context.node.emit(msg.MATCHVS_GAME_SERVER_NOTIFY,{eventInfo:eventInfo,ty:msg.MATCHVS_GAME_SERVER_NOTIFY});
 };
 
