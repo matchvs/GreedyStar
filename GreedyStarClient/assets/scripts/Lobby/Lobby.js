@@ -22,6 +22,7 @@ cc.Class({
         userNameNode2: cc.Label,
         allValueNode: cc.Label,
         winValueNode: cc.Label,
+        isAddDesignatedRooms:false,
     },
 
 
@@ -35,10 +36,7 @@ cc.Class({
         this.loadAvatarImage(Const.avatarUrl);
         this.initProfileData();
         this.initPlayersData();
-        // let timer = setInterval(() => {this.getRoomList();}, 10000);
     },
-
-
 
     onKeyDown: function (event) {
         console.warn('keyCode', event.keyCode);
@@ -59,7 +57,7 @@ cc.Class({
         this.node.on(msg.MATCHVS_LOGOUT, this.onEvent, this);
         this.node.on(msg.MATCHVS_ROOM_DETAIL, this.onEvent, this);
         this.node.on(msg.MATCHVS_ROOM_LIST_EX, this.onEvent, this);
-        // this.node.on(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent, this);
+        this.node.on(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent ,this);
         this.node.on(msg.MATCHVS_JOIN_ROOM_NOTIFY, this.onEvent, this);
         this.node.on(msg.MATCHVS_CREATE_ROOM, this.onEvent, this);
         this.node.on(msg.MATCHVS_LEAVE_ROOM, this.onEvent, this);
@@ -69,6 +67,7 @@ cc.Class({
         this.node.on(msg.MATCHVS_SEND_EVENT_NOTIFY, this.onEvent, this);
         this.node.on(msg.MATCHVS_SEND_EVENT_RSP, this.onEvent, this);
         this.node.on(msg.MATCHVS_NETWORK_STATE_NOTIFY, this.onEvent, this);
+
         //todo 新增
         this.node.on(msg.MATCHVS_GAME_SERVER_NOTIFY, this.onEvent, this);
     },
@@ -106,24 +105,30 @@ cc.Class({
                     console.log('获取房间列表失败 请刷新 重试');
                 }
                 break;
-            // case msg.MATCHVS_JOIN_ROOM_RSP:
-            //     GameData.ownerID = eventData.userInfoList.ownerID;
-            //     GameData.roomID = eventData.userInfoList.roomID;
-            //     for (var i = 0; i < eventData.userInfoList.length; i++) {
-            //         if (eventData.userInfoList[i] !== Const.userID) {
-            //             GameData.players.push({
-            //                 userID: eventData.userInfoList[i].userID,
-            //                 userName: eventData.userInfoList[i].userName,
-            //                 score: 0,
-            //                 isRobot: false
-            //             });
-            //         }
-            //     }
-            //     this.shouldStartGame();
-            //     // this.updateRoomView(GameData.players[0]);
-            //     break;
             case msg.MATCHVS_JOIN_ROOM_NOTIFY:
                 this.mvsJoinRoom(eventData.roomUserInfo);
+                break;
+            case msg.MATCHVS_JOIN_ROOM_RSP:
+                if (this.isAddDesignatedRooms) {
+                    GameData.ownerID = eventData.userInfoList.ownerID;
+                    GameData.roomID = eventData.userInfoList.roomID;
+                    let label = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
+                    label.string = '房间ID: ' + GameData.roomID;
+                    for (var i = 0; i < eventData.userInfoList.length; i++) {
+                        if (eventData.userInfoList[i] !== Const.userID) {
+                            this.mvsJoinRoom(eventData.userInfoList[i], GameData.roomID);
+                            GameData.players.push({
+                                userID: eventData.userInfoList[i].userID,
+                                userName: eventData.userInfoList[i].userName,
+                                score: 0,
+                                isRobot: false
+                            });
+                        }
+                    }
+                    this.isOwner(GameData.ownerID);
+                    this.updateRoomView(GameData.players[0]);
+                }
+
                 break;
             case msg.MATCHVS_CREATE_ROOM:
                 GameData.ownerID = eventData.rsp.owner;
@@ -142,6 +147,7 @@ cc.Class({
                 if (eventData.leaveRoomRsp.status !== 200) {
                     this.showPromptOfError('离开房间失败', true);
                 } else {
+                    this.isAddDesignatedRooms = false;
                     this.mvsLeaveRoom(eventData.leaveRoomRsp)
                 }
                 break;
@@ -153,6 +159,11 @@ cc.Class({
                 break;
             case msg.MATCHVS_KICK_PLAYER_NOTIFY:
                 this.mvsLeaveRoom(eventData.kickPlayerNotify);
+                break;
+            case msg.MATCHVS_SEND_EVENT_NOTIFY:
+                if (JSON.parse(eventData.eventInfo.cpProto).event === Const.GAME_START_EVENT) {
+                    this.shouldStartGame();
+                }
                 break;
         }
     },
@@ -185,6 +196,8 @@ cc.Class({
         let result = engine.prototype.joinRoom(roomID, userProfile);
         if (result !== 0) {
             this.showPromptOfError('加入房间[sdk]失败 请刷新 重试', true);
+        } else {
+            this.isAddDesignatedRooms = true;
         }
     },
 
@@ -205,14 +218,12 @@ cc.Class({
         if (result !== 0) {
             console.error('sdk logout error', result);
             this.showPromptOfError('注销[sdk]失败 请刷新 重试', true);
-            return;
         }
     },
 
     mvsLogoutResponse(status) {
         if (status !== 200) {
             this.showPromptOfError('注销失败 请重试', true);
-            return;
         } else {
             this.showPromptOfError("", false);
             cc.director.loadScene('cover');
@@ -224,7 +235,7 @@ cc.Class({
         if (notifyData.state === 1) {
             if (GameData.isOwner) {
                 this.showPrompt('有玩家掉线 自动踢掉');
-                var result = engine.prototype.kickPlayer(userID, "")
+                let result = engine.prototype.kickPlayer(userID, "")
                 if (result !== 0) {
                     this.showPromptOfError('踢人[sdk]失败 请刷新 重试', true);
                 }
@@ -435,7 +446,6 @@ cc.Class({
         let result = engine.prototype.joinRandomRoom(maxPlayer, userProfile);
         if (result !== 0) {
             this.showPromptOfError("随机加入房间[sdk]失败 请刷新 重试", true);
-            return;
         } else {
             this.shouldStartGame();
         }
@@ -476,7 +486,7 @@ cc.Class({
             this.clearRoomList();
             this.hideRoomView();
         } else {
-            var playerList = cc.find('Canvas/stage2/boxRoom/playerList');
+            const playerList = cc.find('Canvas/stage2/boxRoom/playerList');
             var nodes = playerList.children;
             for (var i = 0; i < GameData.players.length; i++) {
                 if (rsp.userID === GameData.players[i].userID) {
@@ -549,30 +559,12 @@ cc.Class({
                     });
                 }
                 this.shouldStartGame();
-            } else {
-
             }
         } else {
             console.error('获取房间详情失败');
         }
     },
 
-
-    // 创建房间回调
-    mvsCreateRoomResponse(rsp) {
-        if (rsp.status !== 200) {
-            this.showPromptOfError('创建房间失败 请重试', true);
-            return;
-        }
-        GameData.roomID = rsp.roomID;
-        GameData.ownerID = rsp.owner;
-        GameData.isOwner = true;
-        GameData.isInRoomView = true;
-        for (var i = 0; i < rsp.length; i++) {
-            this.updateRoomView(rsp[i], i);
-        }
-        this.showRoomView();
-    },
 
     // 展示stage2,隐藏stage1
     showRoomView() {
@@ -601,7 +593,7 @@ cc.Class({
                 break;
             }
         }
-        for (var i = 0; i < GameData.players.length; i++) {
+        for (let i = 0; i < GameData.players.length; i++) {
             if (GameData.players[i].userID === userInfo.userID) {
                 break;
             }
@@ -631,6 +623,7 @@ cc.Class({
     },
 
     startGameBtnHandler() {
+
         if (GameData.isOwner === false) {
             console.warn('你不是房主');
             return;
@@ -640,208 +633,25 @@ cc.Class({
             console.warn('房间人数少于' + Config.CUSTOM_ROOM_MIN_PLAYER_COUNT + '人, 请等候');
             return;
         }
-        let data = JSON.stringify({
-            event: Const.GAME_START_EVENT,
-            isClient: true,
-        });
-        let result = Mvs.engine.sendEventEx(1, data, 0, []);
-        if (result.result === 0) {
-            console.log('sdk sendEventEx "GAME_START_EVENT" ok', result);
-        } else {
+        let result = engine.prototype.sendEventEx(0,JSON.stringify({event: Const.GAME_START_EVENT}));
+        if (result !== 0) {
             console.error('sdk sendEventEx "GAME_START_EVENT" error', result);
-            // this.showPromptOfError('发送事件[sdk]失败 请刷新 重试');            
-            return;
-        }
-
-        this.sendGameStartEvent();
-    },
-
-    sendGameStartEvent() {
-        let data = JSON.stringify({
-            event: Const.GAME_START_EVENT,
-            isClient: true,
-            isGameStart: false,
-        });
-
-        let result = Mvs.engine.sendEvent(data);
-        if (result.result === 0) {
-            // 用于 sdk sendEventResponse
-            GameData.gameStartEventSequence = result.sequence;
-            console.log('sdk sendEvent "GAME_START_EVENT" ok', result);
-        } else {
-            console.error('sdk sendEvent "GAME_START_EVENT" error', result);
         }
     },
 
-    mvsSendEventResponse(rsp) {
-        if (GameData.isGameStart === false) {
-            if (rsp.status === 200) {
-                console.log('response sentEvent ok', rsp);
-            } else {
-                console.error('response sentEvent error', rsp);
-                // this.showPromptOfError('发送事件失败 请刷新 重试');
-                return;
-            }
-            if (GameData.gameStartEventSequence === rsp.sequence) {
-                this.shouldStartGame();
-            }
-        }
-    },
-
-    mvsSendEventNotify(eventInfo) {
-        let cpProto = eventInfo.cpProto;
-        let data = JSON.parse(cpProto);
-        if (data.isClient === true) {
-            if (data.isGameStart === false) {
-                if (data.event === Const.GAME_START_EVENT) {
-                    this.shouldStartGame();
-                }
-            }
-                if (data.event === Const.GAME_START_EVENT) {
-                    this.shouldStartGame();
-                }
-        } else if (data.isGameStart === true && data.toUserId === Const.userID) {
-            if (data.event === Const.USER_IN_THE_ROOM) {
-                GameData.isUserInTheRoom = true;
-                if (!!this.timer) {
-                    clearTimeout(this.timer);
-                }
-            }
-            if (data.event === Const.GAME_START_EVENT_BY_HALF) {
-                GameData.gameTime = data.time;
-                this.shouldStartGame();
-            }
-        }
-    },
-
-    mvsGameServerNotify(eventInfo) {
-        if (GameData.isServerErrorCode1000) {
-            return
-        }
-        let cpProto = eventInfo.cpProto;
-        let data = JSON.parse(cpProto);
-        if (data.isServer === true) {
-            // 本地GameData.isGameStart为false,
-            // 当启动游戏的时候,会修改为true
-            if (GameData.isGameStart === false) {
-                let countdownTxt = cc.find('Canvas/stage2/boxRoom/txtCountdown/countdown').getComponent(cc.Label);
-                countdownTxt.string = '';
-
-                let txt = cc.find('Canvas/stage2/boxRoom/txtCountdown/txt').getComponent(cc.Label);
-                txt.string = '秒后开始游戏';
-
-                if (data.event === Const.READY_TO_GAME_START_EVENT) {
-
-                }
-                if (data.event === Const.READY_GAME_TIME_EVENT) {
-                    countdownTxt.string = data.time;
-                }
-                if (data.event === Const.CLOSE_READY_TO_GAME_START_EVENT) {
-                    countdownTxt.string = '';
-                    txt.string = '等待开始游戏(至少3人)';
-                    GameData.canLeaveRoom = true;
-                }
-                if (data.event === Const.CANNOT_LEAVE_ROOM_EVENT) {
-                    GameData.canLeaveRoom = false;
-                }
-                if (data.event === Const.GAME_START_EVENT) {
-                    this.shouldStartGame();
-                }
-                // 僵尸房间的处理
-                if (data.event === Const.GAME_HAS_START_EVENT) {
-                    // 5秒内(或在此之前)没有收到其他玩家还存活的情况
-                    // 就joinOver,然后离开房间
-                    this.timer = setTimeout(() => {
-
-                        // TODO:
-                        if (GameData.isUserInTheRoom === true) {
-                            if (!!this.timer) {
-                                clearTimeout(this.timer);
-                                return;
-                            }
-                        }
-                        console.log('房间内其他玩家异常了,我们需要调用joinOver,然后离开房间');
-                        this.zombieRoomHandler();
-                    }, 5000);
-                }
-            }
-        }
-    },
-
-    // 僵尸房间
-    // 如果房间中其他成员都已经与服务器断开或异常了, 我们就认为是一个僵尸房间
-    // 对于僵尸房间的处理是, joinOver, leaveRoom
-    zombieRoomHandler() {
-        // TODO: mvsUnBind
-        Mvs.response.joinOverResponse = (rsp) => {
-            if (rsp.status === 200) {
-                console.log('response join over ok', rsp);
-            } else {
-                console.error('response join over error', rsp);
-                return;
-            }
-            // 离开房间
-            Mvs.response.leaveRoomResponse = (rsp) => {
-                if (rsp.status === 200) {
-                    // TODO:
-                    // 没有去修改GameData.leaveRoomStatus的值
-                    // 如果这里出现问题
-                    console.log('response leave room ok', rsp);
-                } else {
-                    console.error('response leave room error', rsp);
-                    return;
-                }
-                this.showPrompt('房间异常 自动退出');
-                this.resetSomeGameData();
-                this.consoleGameData();
-                this.clearRoomList();
-                this.hideRoomView();
-            };
-            let result = Mvs.engine.leaveRoom('');
-            if (result === 0) {
-                console.log('sdk leave room ok', result);
-            } else {
-                console.error('sdk leave room error', result);
-                this.showPromptOfError('离开房间[sdk]失败 请刷新 重试', true);
-            }
-        };
-        let result = Mvs.engine.joinOver('');
-        if (result === 0) {
-            console.log('sdk join over ok', result);
-        } else {
-            console.error('sdk join over error', result);
-            this.showPromptOfError('发送joinOver标志[sdk]失败 请刷新 重试', true);
-        }
-    },
 
     /**
      *
      */
     shouldStartGame() {
-        if (GameData.isGameStartCountdowning === true) {
-            let data = JSON.stringify({
-                event: Const.GAME_START_EVENT,
-                isClient: true,
-                isGameStart: false,
-            });
-            let result = Mvs.engine.sendEvent(data);
-            if (result.result !== 0) {
-                console.error('sdk sendEvent "GAME_START_EVENT"(GameData.isGameStartCountdowning === true) error', result);
-            }
-        }
-        // this.removeEvent();
-        // GameData.isGameStart = true;
-        try {
-            wx.offHide(this.onHideHandler.bind(this))
-        } catch (e) {
-            cc.game.off(cc.game.EVENT_HIDE);
-        }
-
         this.showPromptOfError("正在加载 请稍等", true);
-
+        if (GameData.isOwner) {
+            engine.prototype.sendEventEx(1,JSON.stringify({type: "startGame"}))
+        }
         cc.director.loadScene('game', () => {
             this && this.hidePromptOfError && this.hidePromptOfError();
         });
+
     },
 
     // 踢人
@@ -864,7 +674,7 @@ cc.Class({
         this.node.off(msg.MATCHVS_LOGOUT, this.onEvent, this);
         this.node.off(msg.MATCHVS_ROOM_DETAIL, this.onEvent, this);
         this.node.off(msg.MATCHVS_ROOM_LIST_EX, this.onEvent, this);
-        // this.node.off(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent, this);
+        this.node.off(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent, this);
         this.node.off(msg.MATCHVS_JOIN_ROOM_NOTIFY, this.onEvent, this);
         this.node.off(msg.MATCHVS_CREATE_ROOM, this.onEvent, this);
         this.node.off(msg.MATCHVS_LEAVE_ROOM, this.onEvent, this);

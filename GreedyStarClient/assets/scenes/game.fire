@@ -324,7 +324,11 @@
     "userScore": 0,
     "scoreLable": {
       "__id__": 61
-    }
+    },
+    "rankLable": {
+      "__id__": 73
+    },
+    "rank": 0
   },
   {
     "__type__": "cc.Node",
@@ -480,7 +484,7 @@
     },
     "_children": [],
     "_tag": -1,
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 12
@@ -1270,7 +1274,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 260,
+      "width": 200,
       "height": 0
     },
     "_rotationX": 0,
@@ -3873,7 +3877,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 260,
+      "width": 180,
       "height": 25
     },
     "_rotationX": 0,
@@ -3901,15 +3905,15 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 14,
-    "_fontSize": 14,
+    "_actualFontSize": 18,
+    "_fontSize": 18,
     "_lineHeight": 25,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
-    "_N$string": "",
-    "_N$horizontalAlign": 1,
+    "_N$string": "11",
+    "_N$horizontalAlign": 0,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 2

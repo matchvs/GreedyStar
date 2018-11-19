@@ -18,6 +18,7 @@ public class GreedStarUser extends IGameServerRoomHandler.User {
     public int y;
     public int speed;
     public transient Input input;
+    public int rank = 0; //排名
 
     public GreedStarUser(int userID, int status, int score, int size, int x, int y,int speed,Input input) {
         this.userID = userID;

@@ -1026,7 +1026,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 58,
+      "width": 56,
       "height": 56
     },
     "_rotationX": 0,
@@ -1481,7 +1481,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 114,
+      "width": 112,
       "height": 64
     },
     "_rotationX": 0,
@@ -1891,7 +1891,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 198,
+      "width": 196,
       "height": 64
     },
     "_rotationX": 0,
@@ -2145,7 +2145,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 198,
+      "width": 196,
       "height": 64
     },
     "_rotationX": 0,
@@ -3644,7 +3644,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 56,
+      "width": 58,
       "height": 40
     },
     "_rotationX": 0,
@@ -7754,6 +7754,7 @@
     },
     "winValueNode": {
       "__id__": 77
-    }
+    },
+    "isAddDesignatedRooms": false
   }
 ]

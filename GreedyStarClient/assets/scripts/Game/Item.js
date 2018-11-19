@@ -11,7 +11,7 @@ cc.Class({
     },
 
     updateItem: function(obj) {
-        this.scoreLable.string = obj.userID+":"+obj.score;
+        this.scoreLable.string = obj.userID+"："+obj.score;
     }
 
 });

@@ -40,7 +40,11 @@ cc.Class({
             default: null,
             type: cc.Label
         },
-
+        rankLable:{
+            default: null,
+            type: cc.Label
+        },
+        rank:0,
     },
 
     onLoad() {
@@ -104,21 +108,10 @@ cc.Class({
     onUIEvent(event) {
         var particleSystem ;
         var color;
-        var colorArr = utils.getRandomColor();
+        let colorArr = utils.getRandomColor();
         switch (event.type) {
             case "addFood":
-                var stars = event.data;
-                for (var i = 0; i < stars.length; i++) {
-                    color = new cc.Color(colorArr[0], colorArr[1], colorArr[2])
-                    let node = cc.instantiate(this.starPrefab);
-                    particleSystem = node.getComponent(cc.ParticleSystem);
-                    particleSystem.startSize = stars[i].size;
-                    particleSystem.startColor = color
-                    node.x = stars[i].x;
-                    node.y = stars[i].y;
-                    node.name = "" + stars[i].ID;
-                    this.starLayer.addChild(node);
-                }
+                this.addFood(event.data);
                 break;
             case "removeFood":
                 for (var j = 0; j < this.starLayer.children.length; j++) {
@@ -145,18 +138,7 @@ cc.Class({
                 break;
             case "otherPlayer":
                 console.log("otherPlayer");
-                color = new cc.Color(colorArr[0], colorArr[1], colorArr[2]);
-                var tempPlayer1 = event.data;
-                for (var m = 0; m < tempPlayer1.length; m++) {
-                    let node2 = cc.instantiate(this.playPrefab);
-                    node2.x = tempPlayer1[m].x;
-                    node2.y = tempPlayer1[m].y;
-                    particleSystem = node2.getComponent(cc.ParticleSystem);
-                    particleSystem.startSize = tempPlayer1[m].size;
-                    particleSystem.startColor = color;
-                    node2.name = tempPlayer1[m].userID + "";
-                    this.starLayer.addChild(node2);
-                }
+                this.addPlayers();
                 break;
             case "removePlayer":
                 var tempPlayer3 = event.data;
@@ -172,6 +154,7 @@ cc.Class({
                 var players = event.data;
                 this.showScoreList(players);
                 for (var n = 0; n < players.length; n++) {
+                    this.rank = n;
                     var player = players[n];
                     var child = this.starLayer.getChildByName(player.userID + "");
                     if (child !== null ) {
@@ -183,16 +166,52 @@ cc.Class({
                     }
                 }
                 break;
-
             case "GameOver":
                 engine.prototype.leaveRoom();
                 break;
+            case "startGame":
+                console.log("收到startGame消息");
+                let room = event.data;
+                this.addPlayers(room);
+                break;
+
+        }
+    },
+
+    addFood(data) {
+        let colorArr = utils.getRandomColor(),color,particleSystem;
+        for (var i = 0; i < data.length; i++) {
+            color = new cc.Color(colorArr[0], colorArr[1], colorArr[2])
+            let node = cc.instantiate(this.starPrefab);
+            particleSystem = node.getComponent(cc.ParticleSystem);
+            particleSystem.startSize = data[i].size;
+            particleSystem.startColor = color
+            node.x = data[i].x;
+            node.y = data[i].y;
+            node.name = "" + data[i].ID;
+            this.starLayer.addChild(node);
+        }
+    },
+
+    addPlayers(userList) {
+        let colorArr = utils.getRandomColor(),color,particleSystem;
+        for (var c = 0; c < userList.length; c++) {
+            color = new cc.Color(colorArr[0], colorArr[1], colorArr[2]);
+            let node2 = cc.instantiate(this.playPrefab);
+            node2.x = userList[c].x;
+            node2.y = userList[c].y;
+            particleSystem = node2.getComponent(cc.ParticleSystem);
+            particleSystem.startSize = userList[c].size;
+            particleSystem.startColor = color;
+            node2.name = userList[c].userID + "";
+            this.starLayer.addChild(node2);
         }
     },
 
     showClose () {
         this.disGameOver.active = true;
         this.scoreLable.string = this.userScore;
+        this.rankLable.string = this.rank;
     },
 
     halfOver() {
@@ -209,17 +228,17 @@ cc.Class({
     },
 
     showScoreList: function (infoData) {
+        let spacing = 5;
         this.scoreList = infoData;
         this.totalCount  = this.scoreList.length;
-        this.scoreListView.height = this.totalCount*(this.scoreItem.height + this.spacing) + this.spacing;
+        this.scoreListView.height = this.totalCount*(this.scoreItem.height + spacing) + spacing;
         this.scoreListView.removeAllChildren(true);
         for(var i = 0; i < this.scoreList.length;i++) {
             var item = cc.instantiate(this.scoreItem);
             this.scoreListView.addChild(item);
-            item.setPosition(0, -item.height * (0.5 + i) - this.spacing * (i + 1));
+            item.setPosition(0, -item.height * (0.5 + i) - spacing * (i + 1));
             item.getComponent('Item').updateItem(this.scoreList[i]);
         }
-
     },
 
 

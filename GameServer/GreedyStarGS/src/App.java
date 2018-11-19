@@ -1,16 +1,12 @@
-import com.google.gson.Gson;
-import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import io.grpc.stub.StreamObserver;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import stream.Gsdirectory;
 import stream.Simple;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +35,6 @@ public class App extends GameServerRoomEventHandler {
         }
     }
 
-
     @Override
     public boolean onGameClientEvent(Simple.Package.Frame clientEvent, StreamObserver<Simple.Package.Frame> clientChannel) throws InvalidProtocolBufferException {
         super.onGameClientEvent(clientEvent, clientChannel);
@@ -55,32 +50,34 @@ public class App extends GameServerRoomEventHandler {
                 }
                 break;
             case Gsmvs.MvsGsCmdID.MvsCreateRoomReq_VALUE:
-                log.info("创建房间成功: 房间ID："+ request.getRoomID());
+                log.info("请求创建房间: 房间ID："+ request.getRoomID());
                 break;
             //删除房间
             case Gshotel.HotelGsCmdID.HotelCloseConnet_VALUE:
-                log.info("删除房间: 房间ID："+ request.getRoomID());
+                log.info("接到 Hotel Close Connet 消息: status："+ Gshotel.CloseConnectAck.parseFrom(clientEvent.getMessage()).getStatus());
                 break;
             // 玩家checkin
             case Gshotel.HotelGsCmdID.HotelPlayerCheckin_VALUE:
-                log.info("玩家checkin:  userID:"+request.getUserID());
+                log.info("玩家进入房间成功(CheckIn):  userID:"+request.getUserID());
                 JoinRoom(request,clientChannel);
+                log.info("加入房间的通道【hotel】 channel "+Utils.getChannel(clientChannel));
                 break;
             case Gsmvs.MvsGsCmdID.MvsJoinRoomReq_VALUE:
-                log.info("进入房间成功  玩家"+request.getUserID()+"进入房间，房间ID为："+request.getRoomID());
+                log.info("请求进入房间(JoinRoom)  玩家"+request.getUserID()+"进入房间，房间ID为："+request.getRoomID());
+                log.info("请求进入房间  【 mvs 】 channel "+Utils.getChannel(clientChannel));
                 break;
             case Gsmvs.MvsGsCmdID.MvsKickPlayerReq_VALUE:
-                log.info("踢人成功: 房间："+request.getRoomID()+"玩家："+request.getUserID()+"被踢出");
+                log.info("请求踢人: 房间："+request.getRoomID()+"玩家："+request.getUserID()+"被踢出");
                 break;
             case Gsmvs.MvsGsCmdID.MvsLeaveRoomReq_VALUE:
                 leaveRoom(request);
-                log.info("离开房间成功： 玩家"+request.getUserID()+"离开房间，房间ID为："+request.getRoomID());
+                log.info("请求离开房间成功： 玩家"+request.getUserID()+"离开房间，房间ID为："+request.getRoomID());
                 break;
             case Gsmvs.MvsGsCmdID.MvsJoinOpenReq_VALUE:
-                log.info("房间打开成功:  roomID："+ request.getRoomID());
+                log.info("请求房间打开:  roomID："+ request.getRoomID());
                 break;
             case Gsmvs.MvsGsCmdID.MvsJoinOverReq_VALUE:
-                log.info("房间关闭成功: roomID："+ request.getRoomID());
+                log.info("请求房间关闭: roomID："+ request.getRoomID());
                 break;
             case Gsmvs.MvsGsCmdID.MvsSetRoomPropertyReq_VALUE:
                 Gsmvs.SetRoomPropertyReq roomPropertyReq = Gsmvs.SetRoomPropertyReq.parseFrom(clientEvent.getMessage());
@@ -107,9 +104,15 @@ public class App extends GameServerRoomEventHandler {
                 log.info("帧同步通知");
                 log.info(frameSyncNotify+"");
                 break;
+            case Gsmvs.MvsGsCmdID.MvsNetworkStateReq_VALUE:
+                log.info("NetworkStateReq channel "+Utils.getChannel(clientChannel));
+                break;
+
         }
         return false;
     }
+
+
 
 
     /**
@@ -131,15 +134,7 @@ public class App extends GameServerRoomEventHandler {
             }
         }
         roomAddUser1(room,request.getUserID());
-        List<Food> foods_one = room.foodList.subList(0,19);
-        List<Food> foods_two = room.foodList.subList(20,39);
-        List<Food> foods_three = room.foodList.subList(40,59);
-        List[] foods= new List[]{foods_one, foods_two, foods_three};
-        for (int j = 0; j < foods.length ; j++) {
-            msg = new GameServerMsg("addFood",foods[j]);
-            sendMsgToOtherUserInRoom(roomID, JsonUtil.toString(msg).getBytes(),new int[]{request.getUserID()});
-        }
-
+        sendFoodMsg(room.foodList,roomID,request.getUserID());
         //给后进入的玩家同步前面的玩家的信息
         ArrayList<GreedStarUser> arrayList = new ArrayList<>();
         for (int i = 0; i < room.userList.size(); i++) {
@@ -159,7 +154,7 @@ public class App extends GameServerRoomEventHandler {
      * 玩家离开房间
      * @param request
      */
-    public void leaveRoom(Gsmvs.Request request) {
+    private void leaveRoom(Gsmvs.Request request) {
         long roomID = request.getRoomID();
         if (roomMap.containsKey(roomID)) {
             if (!roomRemoveUser1(roomMap.get(roomID),request.getUserID())) {
@@ -175,19 +170,41 @@ public class App extends GameServerRoomEventHandler {
         }
     }
 
-
-
     /**
-     * 添加星星
-     * @param foodArrayList 存放星星的ArrayList
-     * @return 放回
+     * 发送初始创建食物的信息
+     * @param foodArrayList 食物列表
+     * @param roomID 房间ID
+     * @param userID 用户ID 用户ID为0，就给房间中全部用户发送消息
      */
-    private ArrayList<Food> addFood(ArrayList<Food> foodArrayList) {
-        Food food = Food.addFood(room.foodNum);
-        log.info("addFood ID :"+ food.ID);
-        foodArrayList.add(food);
-        return foodArrayList;
+    private void sendFoodMsg(ArrayList<Food> foodArrayList,long roomID,int userID) {
+        List<Food> foods_one = foodArrayList.subList(0,19);
+        List<Food> foods_two = foodArrayList.subList(20,39);
+        List<Food> foods_three = foodArrayList.subList(40,59);
+        List[] foods= new List[]{foods_one, foods_two, foods_three};
+        for (List food : foods) {
+            GameServerMsg msg = new GameServerMsg("addFood", food);
+            if (userID == 0) {
+                sendMsgToOtherUserInRoom(roomID, JsonUtil.toString(msg).getBytes());
+            } else {
+                sendMsgToOtherUserInRoom(roomID, JsonUtil.toString(msg).getBytes(), new int[]{userID});
+            }
+        }
     }
+
+
+
+
+//    /**
+//     * 添加星星
+//     * @param foodArrayList 存放星星的ArrayList
+//     * @return 放回
+//     */
+//    private ArrayList<Food> addFood(ArrayList<Food> foodArrayList) {
+//        Food food = Food.addFood(room.foodNum);
+//        log.info("addFood ID :"+ food.ID);
+//        foodArrayList.add(food);
+//        return foodArrayList;
+//    }
 
 
     /**
@@ -246,8 +263,6 @@ public class App extends GameServerRoomEventHandler {
 
     @Override
     public boolean onRoomEvent(Room room, Simple.Package.Frame receivedFrame, StreamObserver<Simple.Package.Frame> clientChannel) {
-        switch (receivedFrame.getCmdId()) {
-        }
         return false;
     }
 
@@ -257,11 +272,8 @@ public class App extends GameServerRoomEventHandler {
      * API使用示例
      * @param msg
      */
-    public void examplePush(long roomID,int userID, String msg) throws JSONException {
-        String[]  strArray = msg.split(":");
+    private void examplePush(long roomID, int userID, String msg) throws JSONException {
         JSONObject jsonObject = new JSONObject(msg);
-        jsonObject.getString("type");
-        GreedStarUser user;
         switch ( jsonObject.getString("type")) {
             case "input":
                 room = roomMap.get(roomID);
@@ -273,6 +285,16 @@ public class App extends GameServerRoomEventHandler {
                             break;
                         }
                     }
+                }
+            break;
+            //主动创建房间
+            case "startGame":
+                room = roomMap.get(roomID);
+                if (room != null && room.userList != null) {
+                    GameServerMsg gameServerMsg = new GameServerMsg("startGame",room.userList);
+                    logger.info("发送主动创建房间开始游戏的消息");
+                    sendMsgToOtherUserInRoom(roomID, JsonUtil.toString(gameServerMsg).getBytes());
+                    sendFoodMsg(room.foodList,roomID,0);
                 }
             break;
         }

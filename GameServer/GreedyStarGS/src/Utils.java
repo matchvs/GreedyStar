@@ -1,13 +1,16 @@
+import io.grpc.netty.shaded.io.netty.channel.socket.nio.NioSocketChannel;
+import io.grpc.stub.StreamObserver;
+import stream.Simple;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class Utils {
-
-
 
 
     /**
@@ -101,7 +104,7 @@ public class Utils {
      * @param r2
      * @return
      */
-    public static boolean isCollisionWithCircle(int x1, int y1,int r1,int x2, int y2, int r2) {
+    public static boolean isCollisionWithCircle(int x1, int y1, int r1, int x2, int y2, int r2) {
         //Math.pow(double x, double y): X的Y次方
         if (Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) <= r1 + r2) {
             //如果两圆的圆心距小于或等于两圆半径则认为发生碰撞
@@ -110,7 +113,7 @@ public class Utils {
         return false;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 //        int speed = 2;
 //        int a;
 //        a =  speed > Const.USER_MIN_SPEED ? speed : Const.USER_MIN_SPEED;
@@ -118,4 +121,16 @@ public class Utils {
     }
 
 
+    public static NioSocketChannel getChannel(StreamObserver<Simple.Package.Frame> clientChannel) {
+        try {
+            Object call = ReflectUtil.getMemberValue(clientChannel, "call");
+            Object delegate = ReflectUtil.getMemberValue(call, "delegate");
+            Object steam = ReflectUtil.getMemberValue(delegate, "stream");
+            NioSocketChannel channel = (NioSocketChannel) ReflectUtil.getMemberValue(steam, "channel");
+            return channel;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
