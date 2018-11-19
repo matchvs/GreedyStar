@@ -28,6 +28,7 @@ MatchvsDemoResponse.prototype.bind = function () {
     mvs.response.joinOverResponse = this.joinOverResponse.bind(this);
     mvs.response.joinOverNotify = this.joinOverNotify.bind(this);
     mvs.response.getRoomListExResponse = this.getRoomListExResponse.bind(this);
+    mvs.response.getRoomListResponse = this.getRoomListResponse.bind(this);
     mvs.response.createRoomResponse = this.createRoomResponse.bind(this);
     mvs.response.kickPlayerResponse = this.kickPlayerResponse.bind(this);
     mvs.response.kickPlayerNotify = this.kickPlayerNotify.bind(this);
@@ -212,6 +213,19 @@ MatchvsDemoResponse.prototype.leaveRoomNotify = function (leaveRoomInfo) {
  * 获取房间列表扩展接口
  * @param rep
  */
+MatchvsDemoResponse.prototype.getRoomListResponse = function (status,roomInfos) {
+    if (status == 200) {
+        console.log("获取房间列表扩展接口成功");
+        this.context.node.emit(msg.MATCHVS_ROOM_LIST,{rsp:roomInfos,type:msg.MATCHVS_ROOM_LIST});
+    } else {
+        console.log("获取房间列表扩展接口失败 status" + rsp.status);
+    }
+};
+
+/**
+ * 获取房间列表扩展接口
+ * @param rep
+ */
 MatchvsDemoResponse.prototype.getRoomListExResponse = function (rsp) {
     if (rsp.status == 200) {
         console.log("获取房间列表扩展接口成功");
@@ -219,7 +233,6 @@ MatchvsDemoResponse.prototype.getRoomListExResponse = function (rsp) {
     } else {
         console.log("获取房间列表扩展接口失败 status" + rsp.status);
     }
-
 };
 
 /**

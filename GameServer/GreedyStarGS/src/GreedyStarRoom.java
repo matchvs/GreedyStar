@@ -46,11 +46,11 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
 //                destroy();
 //
 //            } else {
+            if (userList != null) {
                 isUserContain();
                 isPersonContain();
                 isFoodListFull();
                 isBorderContain();
-
                 if (personMove()) {
                     GameServerMsg msg = new GameServerMsg("move", userList);
                     boolean sendResult = app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
@@ -61,6 +61,8 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
 
                 }
             }
+
+        }
 //        }
     };
 

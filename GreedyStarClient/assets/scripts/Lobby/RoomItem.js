@@ -1,6 +1,5 @@
-let Mvs = require('../Lib/Mvs');
 let Const = require('../Const/Const');
-
+let msg = require("../Lib/MatvhvsMessage");
 cc.Class({
     extends: cc.Component,
 
@@ -27,13 +26,16 @@ cc.Class({
         label.string = '房间ID: ' + this.node.roomId
     },
 
-    mvsJoinRoom(roomId, userProfile) {
-        let result = Mvs.engine.joinRoom(roomId, userProfile);
-        if (result === 0) {
-            console.log('sdk joinRoom ok', result);
-        } else {
-            console.error('sdk joinRoom error', result);
-            cc.find('Canvas').getComponent('Lobby').showPromptOfError('加入房间[sdk]失败 请刷新 重试');
-        }
+    mvsJoinRoom(roomID, userProfile) {
+        // let result = Mvs.engine.joinRoom(roomID, userProfile);
+        let event = new cc.Event(msg.ADD_DESIGNATED_ROOMS,true);
+        event['roomID'] = roomID;
+        cc.systemEvent.dispatchEvent(event)
+        // if (result === 0) {
+        //     console.log('sdk joinRoom ok', result);
+        // } else {
+        //     console.error('sdk joinRoom error', result);
+        //     cc.find('Canvas').getComponent('Lobby').showPromptOfError('加入房间[sdk]失败 请刷新 重试');
+        // }
     },
 });

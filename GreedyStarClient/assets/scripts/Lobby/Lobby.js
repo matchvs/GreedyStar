@@ -2,9 +2,9 @@ let Mvs = require('../Lib/Mvs');
 let Const = require('../Const/Const');
 let Config = require('../Global/Config');
 let GameData = require('../Global/GameData');
-var msg = require("../Lib/MatvhvsMessage");
-var engine = require("../Lib/MatchvsEngine");
-var response = require("../Lib/MatchvsDemoResponse");
+let msg = require("../Lib/MatvhvsMessage");
+let engine = require("../Lib/MatchvsEngine");
+let response = require("../Lib/MatchvsDemoResponse");
 
 
 cc.Class({
@@ -23,6 +23,7 @@ cc.Class({
         allValueNode: cc.Label,
         winValueNode: cc.Label,
         isAddDesignatedRooms:false,
+        getRoomListTimer:undefined,
     },
 
 
@@ -36,10 +37,12 @@ cc.Class({
         this.loadAvatarImage(Const.avatarUrl);
         this.initProfileData();
         this.initPlayersData();
+        this.getRoomList();
+
+
     },
 
     onKeyDown: function (event) {
-        console.warn('keyCode', event.keyCode);
         switch (event.keyCode) {
             case 1005:
                 console.log('开始随机匹配');
@@ -56,7 +59,7 @@ cc.Class({
         response.prototype.init(self);
         this.node.on(msg.MATCHVS_LOGOUT, this.onEvent, this);
         this.node.on(msg.MATCHVS_ROOM_DETAIL, this.onEvent, this);
-        this.node.on(msg.MATCHVS_ROOM_LIST_EX, this.onEvent, this);
+        this.node.on(msg.MATCHVS_ROOM_LIST, this.onEvent, this);
         this.node.on(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent ,this);
         this.node.on(msg.MATCHVS_JOIN_ROOM_NOTIFY, this.onEvent, this);
         this.node.on(msg.MATCHVS_CREATE_ROOM, this.onEvent, this);
@@ -67,7 +70,7 @@ cc.Class({
         this.node.on(msg.MATCHVS_SEND_EVENT_NOTIFY, this.onEvent, this);
         this.node.on(msg.MATCHVS_SEND_EVENT_RSP, this.onEvent, this);
         this.node.on(msg.MATCHVS_NETWORK_STATE_NOTIFY, this.onEvent, this);
-
+        cc.systemEvent.on(msg.ADD_DESIGNATED_ROOMS,this.onEvent.bind(this));
         //todo 新增
         this.node.on(msg.MATCHVS_GAME_SERVER_NOTIFY, this.onEvent, this);
     },
@@ -98,12 +101,8 @@ cc.Class({
             case msg.MATCHVS_NETWORK_STATE_NOTIFY:
                 this.mvsNetworkStateNotify(eventData.netNotify);
                 break;
-            case msg.MATCHVS_ROOM_LIST_EX:
-                if (eventData.rsp.status === 200) {
-                    this.updateRoomItem(eventData.rsp.roomAttrs);
-                } else {
-                    console.log('获取房间列表失败 请刷新 重试');
-                }
+            case msg.MATCHVS_ROOM_LIST:
+                this.updateRoomItem(eventData.rsp);
                 break;
             case msg.MATCHVS_JOIN_ROOM_NOTIFY:
                 this.mvsJoinRoom(eventData.roomUserInfo);
@@ -165,6 +164,15 @@ cc.Class({
                     this.shouldStartGame();
                 }
                 break;
+            case msg.ADD_DESIGNATED_ROOMS:
+                let userProfile = Const.userName;
+                let result = engine.prototype.joinRoom(event.roomID, userProfile);
+                if (result !== 0) {
+                    this.showPromptOfError('加入房间[sdk]失败 请刷新 重试', true);
+                } else {
+                    this.isAddDesignatedRooms = true;
+                }
+                break
         }
     },
 
@@ -421,8 +429,12 @@ cc.Class({
 
     // 获取房间列表
     getRoomList() {
-        let filter = new MsRoomFilter(0, 0, 0, null);
-        engine.prototype.getRoomListEx(filter);
+        if (this.getRoomListTimer === undefined) {
+            this.getRoomListTimer = setInterval(() => {
+                let filter = new MsRoomFilter(0, 0, 0, null);
+                engine.prototype.getRoomList(filter);
+            }, 5000);
+        }
     },
 
 
@@ -568,6 +580,8 @@ cc.Class({
 
     // 展示stage2,隐藏stage1
     showRoomView() {
+        clearInterval(this.getRoomListTimer);
+        this.getRoomListTimer = undefined;
         let stage1 = cc.find('Canvas/stage1');
         stage1.active = false;
         let stage2 = cc.find('Canvas/stage2');
@@ -604,6 +618,7 @@ cc.Class({
 
     // 隐藏stage2,展示stage1
     hideRoomView() {
+        this.getRoomList();
         let stage2 = cc.find('Canvas/stage2');
         stage2.active = false;
         let stage1 = cc.find('Canvas/stage1');
@@ -623,7 +638,6 @@ cc.Class({
     },
 
     startGameBtnHandler() {
-
         if (GameData.isOwner === false) {
             console.warn('你不是房主');
             return;
@@ -673,7 +687,7 @@ cc.Class({
     removeEvent() {
         this.node.off(msg.MATCHVS_LOGOUT, this.onEvent, this);
         this.node.off(msg.MATCHVS_ROOM_DETAIL, this.onEvent, this);
-        this.node.off(msg.MATCHVS_ROOM_LIST_EX, this.onEvent, this);
+        this.node.off(msg.MATCHVS_ROOM_LIST, this.onEvent, this);
         this.node.off(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent, this);
         this.node.off(msg.MATCHVS_JOIN_ROOM_NOTIFY, this.onEvent, this);
         this.node.off(msg.MATCHVS_CREATE_ROOM, this.onEvent, this);
@@ -685,10 +699,13 @@ cc.Class({
         this.node.off(msg.MATCHVS_SEND_EVENT_RSP, this.onEvent, this);
         this.node.off(msg.MATCHVS_NETWORK_STATE_NOTIFY, this.onEvent, this);
         this.node.off(msg.MATCHVS_GAME_SERVER_NOTIFY, this.onEvent, this);
+        cc.systemEvent.off(msg.ADD_DESIGNATED_ROOMS,this.onEvent.bind(this));
+
     },
 
     onDestroy() {
         this.removeEvent();
+        clearInterval(this.getRoomListTimer)
         console.log("页面销毁");
     },
 

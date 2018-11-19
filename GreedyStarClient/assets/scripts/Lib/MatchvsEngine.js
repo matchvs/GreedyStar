@@ -137,6 +137,18 @@ MatchvsDemoEngine.prototype.joinOpen = function(){
 };
 
 /**
+ * 获取房间列表接口
+ * @param roomFilter
+ * @returns {*|number}
+ */
+MatchvsDemoEngine.prototype.getRoomList = function (roomFilter) {
+    var result = mvs.engine.getRoomList(roomFilter);
+    console.log("加载房间列表接口 result"+result);
+    return result;
+}
+
+
+/**
  * 获取房间列表扩展接口
  * @param roomFilter
  * @returns {*|number}
