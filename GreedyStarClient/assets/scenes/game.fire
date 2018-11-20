@@ -328,7 +328,11 @@
     "rankLable": {
       "__id__": 73
     },
-    "rank": 0
+    "countDownLable": {
+      "__id__": 12
+    },
+    "rank": 0,
+    "countDown": 0
   },
   {
     "__type__": "cc.Node",
@@ -484,7 +488,7 @@
     },
     "_children": [],
     "_tag": -1,
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 12
@@ -511,7 +515,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 38,
+      "width": 0,
       "height": 28
     },
     "_rotationX": 0,
@@ -546,7 +550,7 @@
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
-    "_N$string": "   s",
+    "_N$string": "",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
@@ -563,7 +567,7 @@
     "isAlignOnce": true,
     "_target": null,
     "_alignFlags": 9,
-    "_left": 162.82499999999993,
+    "_left": 181.82499999999993,
     "_right": 0,
     "_top": 36,
     "_bottom": 0,

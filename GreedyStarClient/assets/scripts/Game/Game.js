@@ -44,7 +44,13 @@ cc.Class({
             default: null,
             type: cc.Label
         },
+        countDownLable:{
+            default: null,
+            type: cc.Label
+        },
         rank:0,
+        countDown:0,
+        countDownTime:undefined
     },
 
     onLoad() {
@@ -138,7 +144,7 @@ cc.Class({
                 break;
             case "otherPlayer":
                 console.log("otherPlayer");
-                this.addPlayers();
+                this.addPlayers(event.data);
                 break;
             case "removePlayer":
                 var tempPlayer3 = event.data;
@@ -174,8 +180,24 @@ cc.Class({
                 let room = event.data;
                 this.addPlayers(room);
                 break;
+            case "countDown":
+                this.countDown = event.data;
+                this.textCountDown();
+                break;
 
         }
+    },
+
+    textCountDown() {
+        if ( this.countDownTime === undefined) {
+            this.countDownTime = setInterval(() => {
+                this.countDown --;
+            }, 1000);
+            if(this.countDown > 0) {
+                this.countDownLable.string  = this.countDown+"  s";
+            }
+        }
+
     },
 
     addFood(data) {

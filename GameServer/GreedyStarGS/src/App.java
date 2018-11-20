@@ -50,62 +50,62 @@ public class App extends GameServerRoomEventHandler {
                 }
                 break;
             case Gsmvs.MvsGsCmdID.MvsCreateRoomReq_VALUE:
-                log.info("请求创建房间: 房间ID："+ request.getRoomID());
+                log.debug("请求创建房间: 房间ID："+ request.getRoomID());
                 break;
             //删除房间
             case Gshotel.HotelGsCmdID.HotelCloseConnet_VALUE:
-                log.info("接到 Hotel Close Connet 消息: status："+ Gshotel.CloseConnectAck.parseFrom(clientEvent.getMessage()).getStatus());
+                log.debug("接到 Hotel Close Connet 消息: status："+ Gshotel.CloseConnectAck.parseFrom(clientEvent.getMessage()).getStatus());
                 break;
             // 玩家checkin
             case Gshotel.HotelGsCmdID.HotelPlayerCheckin_VALUE:
-                log.info("玩家进入房间成功(CheckIn):  userID:"+request.getUserID());
+                log.debug("玩家进入房间成功(CheckIn):  userID:"+request.getUserID());
                 JoinRoom(request,clientChannel);
-                log.info("加入房间的通道【hotel】 channel "+Utils.getChannel(clientChannel));
+                log.debug("加入房间的通道【hotel】 channel "+Utils.getChannel(clientChannel));
                 break;
             case Gsmvs.MvsGsCmdID.MvsJoinRoomReq_VALUE:
-                log.info("请求进入房间(JoinRoom)  玩家"+request.getUserID()+"进入房间，房间ID为："+request.getRoomID());
-                log.info("请求进入房间  【 mvs 】 channel "+Utils.getChannel(clientChannel));
+                log.debug("请求进入房间(JoinRoom)  玩家"+request.getUserID()+"进入房间，房间ID为："+request.getRoomID());
+                log.debug("请求进入房间  【 mvs 】 channel "+Utils.getChannel(clientChannel));
                 break;
             case Gsmvs.MvsGsCmdID.MvsKickPlayerReq_VALUE:
-                log.info("请求踢人: 房间："+request.getRoomID()+"玩家："+request.getUserID()+"被踢出");
+                log.debug("请求踢人: 房间："+request.getRoomID()+"玩家："+request.getUserID()+"被踢出");
                 break;
             case Gsmvs.MvsGsCmdID.MvsLeaveRoomReq_VALUE:
                 leaveRoom(request);
-                log.info("请求离开房间成功： 玩家"+request.getUserID()+"离开房间，房间ID为："+request.getRoomID());
+                log.debug("请求离开房间成功： 玩家"+request.getUserID()+"离开房间，房间ID为："+request.getRoomID());
                 break;
             case Gsmvs.MvsGsCmdID.MvsJoinOpenReq_VALUE:
-                log.info("请求房间打开:  roomID："+ request.getRoomID());
+                log.debug("请求房间打开:  roomID："+ request.getRoomID());
                 break;
             case Gsmvs.MvsGsCmdID.MvsJoinOverReq_VALUE:
-                log.info("请求房间关闭: roomID："+ request.getRoomID());
+                log.debug("请求房间关闭: roomID："+ request.getRoomID());
                 break;
             case Gsmvs.MvsGsCmdID.MvsSetRoomPropertyReq_VALUE:
                 Gsmvs.SetRoomPropertyReq roomPropertyReq = Gsmvs.SetRoomPropertyReq.parseFrom(clientEvent.getMessage());
-                log.info("修改房间属性: ");
-                log.info(roomPropertyReq+"");
+                log.debug("修改房间属性: ");
+                log.debug(roomPropertyReq+"");
                 break;
             case Gsmvs.MvsGsCmdID.MvsGetRoomDetailPush_VALUE:
                 Gsmvs.RoomDetail roomDetail = Gsmvs.RoomDetail.parseFrom(clientEvent.getMessage());
-                log.info("主动获取房间回调:");
-                log.info(roomDetail+"");
+                log.debug("主动获取房间回调:");
+                log.debug(roomDetail+"");
                 break;
             case Gshotel.HotelGsCmdID.GSSetFrameSyncRateNotifyCMDID_VALUE:
                 Gshotel.GSSetFrameSyncRateNotify setFrameSyncRateNotify = Gshotel.GSSetFrameSyncRateNotify.parseFrom(clientEvent.getMessage());
-                log.info("帧率通知");
-                log.info(setFrameSyncRateNotify+"");
+                log.debug("帧率通知");
+                log.debug(setFrameSyncRateNotify+"");
                 break;
             case Gshotel.HotelGsCmdID.GSFrameDataNotifyCMDID_VALUE:
                 Gshotel.GSFrameDataNotify frameDataNotify = Gshotel.GSFrameDataNotify.parseFrom(clientEvent.getMessage());
-                log.info("帧数据通知");
-                log.info(frameDataNotify+"");
+                log.debug("帧数据通知");
+                log.debug(frameDataNotify+"");
                 break;
             case Gshotel.HotelGsCmdID.GSFrameSyncNotifyCMDID_VALUE:
                 Gshotel.GSFrameSyncNotify frameSyncNotify = Gshotel.GSFrameSyncNotify.parseFrom(clientEvent.getMessage());
-                log.info("帧同步通知");
-                log.info(frameSyncNotify+"");
+                log.debug("帧同步通知");
+                log.debug(frameSyncNotify+"");
                 break;
             case Gsmvs.MvsGsCmdID.MvsNetworkStateReq_VALUE:
-                log.info("NetworkStateReq channel "+Utils.getChannel(clientChannel));
+                log.debug("NetworkStateReq channel "+Utils.getChannel(clientChannel));
                 break;
 
         }
@@ -230,6 +230,9 @@ public class App extends GameServerRoomEventHandler {
         GameServerMsg msg = new GameServerMsg("addPlayer",user);
         log.info("addPlayer:"+JsonUtil.toString(msg));
         sendMsgToOtherUserInRoom(room.ID,(JsonUtil.toString(msg)).getBytes());
+        msg.type = "countDown";
+        msg.data = room.countDown;
+        sendMsgToAllUserInRoom(room.ID,(JsonUtil.toString(msg)).getBytes());
     }
 
     /**

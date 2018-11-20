@@ -20,20 +20,41 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     private Logger log = LoggerFactory.getLogger("GreedyStarRoom");
     private App app;
     public int foodNum;
-    private int countDown = 5400;
+    public int countDown = 5400;
 
-    private int status = 0;
-    private static int GameOver = 1;
-    private static int TOTAL_TIME = 5 * 60 * 1000;
-    private long currentTime = 0;
-    private long createTime = 0;
+//    private int status = 0;
+//    private static int GameOver = 1;
+//    private static int TOTAL_TIME = 5 * 60 * 1000;
+//    private long currentTime = 0;
+//    private long createTime = 0;
 //30*180
 
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
+            countDown--;
+            if (countDown <=0) {
+                destroy();
+                GameServerMsg msg = new GameServerMsg("GameOver", "");
+                app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
+            } else {
+                if (userList != null) {
+                    isUserContain();
+                    isPersonContain();
+                    isFoodListFull();
+                    isBorderContain();
+                    if (personMove()) {
+                        GameServerMsg msg = new GameServerMsg("move", userList);
+                        boolean sendResult = app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
+                        if (!sendResult) {
+                            log.info("send fail destroy room");
+                            destroy();
+                        }
 
-            GreedyStarRoom.this.currentTime = System.currentTimeMillis();
+                    }
+                }
+            }
+//            GreedyStarRoom.this.currentTime = System.currentTimeMillis();
 //            if (currentTime - createTime > TOTAL_TIME) {
 //
 //                GreedyStarRoom.this.status = GreedyStarRoom.GameOver;
@@ -44,33 +65,15 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
 //                GameServerMsg msg = new GameServerMsg("GameOver", "");
 //                app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
 //                destroy();
-//
 //            } else {
-            if (userList != null) {
-                isUserContain();
-                isPersonContain();
-                isFoodListFull();
-                isBorderContain();
-                if (personMove()) {
-                    GameServerMsg msg = new GameServerMsg("move", userList);
-                    boolean sendResult = app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
-                    if (!sendResult) {
-                        log.info("send fail destroy room");
-                        destroy();
-                    }
-
-                }
-            }
-
         }
-//        }
     };
 
 
     private void init() {
         log.info("roomID :" + ID + "初始定时器");
-        GreedyStarRoom.this.createTime = System.currentTimeMillis();
-        foodNum = 0;
+//        GreedyStarRoom.this.createTime = System.currentTimeMillis();
+//        foodNum = 0;
         Main.gameServer.setInterval(runnable, 33);
     }
 

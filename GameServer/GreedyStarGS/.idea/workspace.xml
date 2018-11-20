@@ -180,39 +180,39 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CLASS" value="1" />
-          <entry key="JAVA" value="1220" />
+          <entry key="JAVA" value="1304" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CLASS" value="43" />
-          <entry key="JAVA" value="9" />
+          <entry key="CLASS" value="45" />
+          <entry key="JAVA" value="10" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="class" value="43" />
-          <entry key="java" value="9" />
+          <entry key="class" value="45" />
+          <entry key="java" value="10" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="class" value="1" />
-          <entry key="java" value="1220" />
+          <entry key="java" value="1304" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4290">
-              <caret line="195" selection-start-line="195" selection-end-line="206" selection-end-column="7" />
+            <state relative-caret-position="558">
+              <caret line="234" column="76" selection-start-line="234" selection-start-column="76" selection-end-line="234" selection-end-column="76" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -232,7 +232,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2794">
+            <state relative-caret-position="583">
               <caret line="129" column="27" selection-start-line="129" selection-start-column="27" selection-end-line="129" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -241,11 +241,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GreedyStarRoom.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="48" selection-start-line="48" selection-end-line="62" selection-end-column="13" />
+            <state relative-caret-position="629">
+              <caret line="58" column="2" lean-forward="true" selection-start-line="58" selection-start-column="2" selection-end-line="58" selection-end-column="2" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -296,9 +296,7 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>fondMap</find>
       <find>JoinRoom</find>
-      <find>sendMsgToOtherUserInRoom</find>
       <find>log</find>
       <find>HotelBroadcastCMDID</find>
       <find>离开房间成功</find>
@@ -326,6 +324,8 @@
       <find>userList</find>
       <find>GameServiceServerModel</find>
       <find>addFood</find>
+      <find>加入房间的通道【hotel】</find>
+      <find>sendMsgToOtherUserInRoom</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -351,13 +351,13 @@
         <option value="$PROJECT_DIR$/src/Test.java" />
         <option value="$PROJECT_DIR$/src/ReflectUtil.java" />
         <option value="$PROJECT_DIR$/src/Utils.java" />
-        <option value="$PROJECT_DIR$/src/App.java" />
         <option value="$PROJECT_DIR$/src/GreedStarUser.java" />
         <option value="$PROJECT_DIR$/src/GreedyStarRoom.java" />
+        <option value="$PROJECT_DIR$/src/App.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
@@ -423,15 +423,15 @@
     <property name="project.structure.side.proportion" value="0.24974824" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\project\GreedyStar\GameServer\GreedyStarGS\libs" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\project\GreedyStar\GameServer\GreedyStarGS\libs" />
       <recent name="E:\project\GreedyStar\GameServer\GreedyStarGS\out\production\java" />
       <recent name="E:\project\GreedyStar1\GameServer\demo\libs" />
       <recent name="E:\project\GreedyStar1\GameServer\demo\src" />
       <recent name="D:\project_work\GameServer-Java-gitHub\demo\libs" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\project\GreedyStar\GameServer\GreedyStarGS\libs" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -522,9 +522,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20842217" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20842217" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -533,7 +534,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32968238" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.43275487" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.0" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.5075922" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -632,13 +633,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$PROJECT_DIR$/libs/GameServer-Java.jar!/GameServerData.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="24" column="22" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://D:/tool/Java/jdk1.8.0_161/src.zip!/java/util/Random.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="63">
@@ -873,13 +867,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/GameServer-Java.jar!/GameServerBase.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="134" selection-start-line="134" selection-end-line="134" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/libs/GameServer-Java.jar!/io/grpc/netty/shaded/io/netty/util/concurrent/FastThreadLocalRunnable.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
@@ -907,13 +894,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/GameServer-Java.jar!/GameServerRoomEventHandler.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="138" lean-forward="true" selection-start-line="138" selection-end-line="138" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/libs/GameServer-Java.jar!/Gsmvs.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="381">
@@ -921,33 +901,6 @@
           <folding>
             <element signature="e#257125#257126#0" expanded="true" />
             <element signature="e#257168#257169#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4290">
-          <caret line="195" selection-start-line="195" selection-end-line="206" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameServerMsg.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2794">
-          <caret line="129" column="27" selection-start-line="129" selection-start-column="27" selection-end-line="129" selection-end-column="27" />
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -978,10 +931,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$PROJECT_DIR$/libs/GameServer-Java.jar!/GameServerRoomEventHandler.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="126" column="87" lean-forward="true" selection-start-line="126" selection-start-column="70" selection-end-line="126" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/tool/Java/jdk1.8.0_161/src.zip!/java/lang/Runnable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="453">
+          <caret line="55" column="25" selection-start-line="55" selection-start-column="17" selection-end-line="55" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/libs/GameServer-Java.jar!/GameServerBase.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="107">
+          <caret line="31" column="16" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="583">
+          <caret line="129" column="27" selection-start-line="129" selection-start-column="27" selection-end-line="129" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GreedyStarRoom.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="48" selection-start-line="48" selection-end-line="62" selection-end-column="13" />
+        <state relative-caret-position="629">
+          <caret line="58" column="2" lean-forward="true" selection-start-line="58" selection-start-column="2" selection-end-line="58" selection-end-column="2" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameServerMsg.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="234" column="76" selection-start-line="234" selection-start-column="76" selection-end-line="234" selection-end-column="76" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
