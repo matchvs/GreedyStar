@@ -184,7 +184,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
         Collections.sort(userList, new Comparator<GreedStarUser>() {
             @Override
             public int compare(GreedStarUser o1, GreedStarUser o2) {
-                if (o1.score > o2.score) {
+                if (o1.score < o2.score) {
                     return 1;
                 } else {
                     return -1;
