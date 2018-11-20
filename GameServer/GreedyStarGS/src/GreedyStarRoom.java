@@ -41,8 +41,9 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                 if (userList != null) {
                     isUserContain();
                     isPersonContain();
-                    isFoodListFull();
                     isBorderContain();
+                    isFoodListFull();
+                    roomUserRank();
                     if (personMove()) {
                         GameServerMsg msg = new GameServerMsg("move", userList);
                         boolean sendResult = app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
@@ -54,18 +55,6 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                     }
                 }
             }
-//            GreedyStarRoom.this.currentTime = System.currentTimeMillis();
-//            if (currentTime - createTime > TOTAL_TIME) {
-//
-//                GreedyStarRoom.this.status = GreedyStarRoom.GameOver;
-//                Gsmvs.JoinOverReq.Builder joinOverReq = Gsmvs.JoinOverReq.newBuilder();
-//                joinOverReq.setGameID(GameServerData.gameID);
-//                joinOverReq.setRoomID(ID);
-//                GameServerData.ResponseObserver.onNext(GameSeverUtil.PushToMvsBuild(Gsmvs.MvsGsCmdID.MvsJoinOverReq_VALUE, joinOverReq.build().toByteString()));
-//                GameServerMsg msg = new GameServerMsg("GameOver", "");
-//                app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
-//                destroy();
-//            } else {
         }
     };
 

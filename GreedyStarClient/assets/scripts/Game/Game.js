@@ -181,7 +181,7 @@ cc.Class({
                 this.addPlayers(room);
                 break;
             case "countDown":
-                this.countDown = event.data;
+                this.countDown = Math.floor(event.data/30);
                 this.textCountDown();
                 break;
 
@@ -192,12 +192,11 @@ cc.Class({
         if ( this.countDownTime === undefined) {
             this.countDownTime = setInterval(() => {
                 this.countDown --;
+                if(this.countDown > 0) {
+                    this.countDownLable.string  = this.countDown+"  s";
+                }
             }, 1000);
-            if(this.countDown > 0) {
-                this.countDownLable.string  = this.countDown+"  s";
-            }
         }
-
     },
 
     addFood(data) {
@@ -262,49 +261,9 @@ cc.Class({
             item.getComponent('Item').updateItem(this.scoreList[i]);
         }
     },
-
-
-    /**
-     * 游戏倒计时定时器
-     */
-    // countDown() {
-    //     let txtCountdown = cc.find('Canvas/txtCountdown').getComponent(cc.Label);
-    //     // TODO: 可以直接在结束是clearInterval
-    //     // TODO: 改写定时器的逻辑
-    //     let timer = setInterval(() => {
-    //         GameData.gameTime--;
-    //         if (GameData.isInCoverView === true) {
-    //             clearInterval(timer);
-    //             return;
-    //         }
-    //         if (GameData.gameTime <= 0) {
-    //             txtCountdown.string = '0s';
-    //             clearInterval(timer);
-    //             // 延迟1ms自动退出房间
-    //             setTimeout(() => {
-    //                 if (GameData.isHalfLeaveRoomBtnClick === false) {
-    //                     GameData.leaveRoomStatus = 2;
-    //                     let cpProto = "";
-    //                     this.mvsLeaveRoom(cpProto);
-    //                 }
-    //             }, 1000);
-    //         }
-    //
-    //         // if (GameData.gameTime === 120) {
-    //             // if (GameData.gameTime === 170) {
-    //             let userID = GameData.players[0].userID;
-    //             for (let i = 0, l = GameData.players.length; i < l; i++) {
-    //                 if (userID > GameData.players[i].userID) {
-    //                     userID = GameData.players[i].userID;
-    //                 }
-    //             }
-    //             this.mvsJoinOver();
-    //         // }
-    //         txtCountdown.string = GameData.gameTime + 's';
-    //     }, 1000);
-    //
-    //     this.timer = timer;
-    // },
-
+    
+    onDestroy() {
+        clearInterval(this.countDownTime);
+    }
 
 });
