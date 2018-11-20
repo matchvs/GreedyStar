@@ -193,20 +193,6 @@ public class App extends GameServerRoomEventHandler {
 
 
 
-
-//    /**
-//     * 添加星星
-//     * @param foodArrayList 存放星星的ArrayList
-//     * @return 放回
-//     */
-//    private ArrayList<Food> addFood(ArrayList<Food> foodArrayList) {
-//        Food food = Food.addFood(room.foodNum);
-//        log.info("addFood ID :"+ food.ID);
-//        foodArrayList.add(food);
-//        return foodArrayList;
-//    }
-
-
     /**
      * 房间加入玩家
      * @param room 玩家

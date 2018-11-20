@@ -108,26 +108,23 @@ cc.Class({
                 this.mvsJoinRoom(eventData.roomUserInfo);
                 break;
             case msg.MATCHVS_JOIN_ROOM_RSP:
-                if (this.isAddDesignatedRooms) {
-                    GameData.ownerID = eventData.userInfoList.ownerID;
-                    GameData.roomID = eventData.userInfoList.roomID;
-                    let label = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
-                    label.string = '房间ID: ' + GameData.roomID;
-                    for (var i = 0; i < eventData.userInfoList.length; i++) {
-                        if (eventData.userInfoList[i] !== Const.userID) {
-                            this.mvsJoinRoom(eventData.userInfoList[i], GameData.roomID);
-                            GameData.players.push({
-                                userID: eventData.userInfoList[i].userID,
-                                userName: eventData.userInfoList[i].userName,
-                                score: 0,
-                                isRobot: false
-                            });
-                        }
+                GameData.ownerID = eventData.userInfoList.ownerID;
+                GameData.roomID = eventData.userInfoList.roomID;
+                let label = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
+                label.string = '房间ID: ' + GameData.roomID;
+                for (var i = 0; i < eventData.userInfoList.length; i++) {
+                    if (eventData.userInfoList[i] !== Const.userID) {
+                        this.mvsJoinRoom(eventData.userInfoList[i], GameData.roomID);
+                        GameData.players.push({
+                            userID: eventData.userInfoList[i].userID,
+                            userName: eventData.userInfoList[i].userName,
+                            score: 0,
+                            isRobot: false
+                        });
                     }
-                    this.isOwner(GameData.ownerID);
-                    this.updateRoomView(GameData.players[0]);
                 }
-
+                this.isOwner(GameData.ownerID);
+                this.updateRoomView(GameData.players[0]);
                 break;
             case msg.MATCHVS_CREATE_ROOM:
                 GameData.ownerID = eventData.rsp.owner;
@@ -146,7 +143,6 @@ cc.Class({
                 if (eventData.leaveRoomRsp.status !== 200) {
                     this.showPromptOfError('离开房间失败', true);
                 } else {
-                    this.isAddDesignatedRooms = false;
                     this.mvsLeaveRoom(eventData.leaveRoomRsp)
                 }
                 break;
@@ -169,8 +165,6 @@ cc.Class({
                 let result = engine.prototype.joinRoom(event.roomID, userProfile);
                 if (result !== 0) {
                     this.showPromptOfError('加入房间[sdk]失败 请刷新 重试', true);
-                } else {
-                    this.isAddDesignatedRooms = true;
                 }
                 break
         }
@@ -204,8 +198,6 @@ cc.Class({
         let result = engine.prototype.joinRoom(roomID, userProfile);
         if (result !== 0) {
             this.showPromptOfError('加入房间[sdk]失败 请刷新 重试', true);
-        } else {
-            this.isAddDesignatedRooms = true;
         }
     },
 
@@ -500,6 +492,19 @@ cc.Class({
         } else {
             const playerList = cc.find('Canvas/stage2/boxRoom/playerList');
             var nodes = playerList.children;
+            for(var a = 0; a < GameData.players.length;a++) {
+                if (rsp.owner === GameData.players[a].userID) {
+                    for (let b = 0; b < nodes.length; b++) {
+                        let node = nodes[b];
+                        let label = node.getChildByName('username').getComponent(cc.Label);
+                        if (label.string === Const.userName) {
+                            label.string = "--";
+                            nodes[0].getChildByName('username').getComponent(cc.Label).string = Const.userName;
+                        }
+                    }
+                    this.isOwner(rsp.owner);
+                }
+            }
             for (var i = 0; i < GameData.players.length; i++) {
                 if (rsp.userID === GameData.players[i].userID) {
                     for (let j = 0; j < nodes.length; j++) {
@@ -515,17 +520,9 @@ cc.Class({
             }
         }
         //如果自己是新的房主,就把自己的名字放到第一栏子里 自己为房主
-        if (rsp.owner === Const.userID) {
-            for (let j = 0; j < nodes.length; j++) {
-                let node = nodes[j];
-                let label = node.getChildByName('username').getComponent(cc.Label);
-                if (label.string === Const.userName) {
-                    label.string = "--";
-                    nodes[0].getChildByName('username').getComponent(cc.Label).string = Const.userName;
-                }
-            }
-            this.isOwner(rsp.owner);
-        }
+        // if (rsp.owner === Const.userID) {
+        //
+        // }
     },
 
 
@@ -642,9 +639,9 @@ cc.Class({
             console.warn('你不是房主');
             return;
         }
-        if (GameData.players.length < Config.CUSTOM_ROOM_MIN_PLAYER_COUNT) {
-            this.showPrompt('房间人数少于' + Config.CUSTOM_ROOM_MIN_PLAYER_COUNT + '人, 请等候');
-            console.warn('房间人数少于' + Config.CUSTOM_ROOM_MIN_PLAYER_COUNT + '人, 请等候');
+        if (GameData.players.length < Config.SYSTEM_ROOM_MIN_PLAYER_COUNT) {
+            this.showPrompt('房间人数少于' + Config.SYSTEM_ROOM_MIN_PLAYER_COUNT + '人, 请等候');
+            console.warn('房间人数少于' + Config.SYSTEM_ROOM_MIN_PLAYER_COUNT + '人, 请等候');
             return;
         }
         let result = engine.prototype.sendEventEx(0,JSON.stringify({event: Const.GAME_START_EVENT}));

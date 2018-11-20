@@ -160,8 +160,11 @@ cc.Class({
                 var players = event.data;
                 this.showScoreList(players);
                 for (var n = 0; n < players.length; n++) {
-                    this.rank = n;
+
                     var player = players[n];
+                    if (player.userID  === Const.userID) {
+                        this.rank = n + 1;
+                    }
                     var child = this.starLayer.getChildByName(player.userID + "");
                     if (child !== null ) {
                         child.x = player.x;
@@ -192,7 +195,7 @@ cc.Class({
         if ( this.countDownTime === undefined) {
             this.countDownTime = setInterval(() => {
                 this.countDown --;
-                if(this.countDown > 0) {
+                if(this.countDown >= 0) {
                     this.countDownLable.string  = this.countDown+"  s";
                 }
             }, 1000);
@@ -261,7 +264,7 @@ cc.Class({
             item.getComponent('Item').updateItem(this.scoreList[i]);
         }
     },
-    
+
     onDestroy() {
         clearInterval(this.countDownTime);
     }
