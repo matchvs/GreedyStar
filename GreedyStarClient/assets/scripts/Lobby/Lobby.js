@@ -59,7 +59,7 @@ cc.Class({
         response.prototype.init(self);
         this.node.on(msg.MATCHVS_LOGOUT, this.onEvent, this);
         this.node.on(msg.MATCHVS_ROOM_DETAIL, this.onEvent, this);
-        this.node.on(msg.MATCHVS_ROOM_LIST, this.onEvent, this);
+        this.node.on(msg.MATCHVS_ROOM_LIST_EX, this.onEvent, this);
         this.node.on(msg.MATCHVS_JOIN_ROOM_RSP, this.onEvent ,this);
         this.node.on(msg.MATCHVS_JOIN_ROOM_NOTIFY, this.onEvent, this);
         this.node.on(msg.MATCHVS_CREATE_ROOM, this.onEvent, this);
@@ -101,8 +101,8 @@ cc.Class({
             case msg.MATCHVS_NETWORK_STATE_NOTIFY:
                 this.mvsNetworkStateNotify(eventData.netNotify);
                 break;
-            case msg.MATCHVS_ROOM_LIST:
-                this.updateRoomItem(eventData.rsp);
+            case msg.MATCHVS_ROOM_LIST_EX:
+                this.updateRoomItem(eventData.rsp.roomAttrs);
                 break;
             case msg.MATCHVS_JOIN_ROOM_NOTIFY:
                 this.mvsJoinRoom(eventData.roomUserInfo);
@@ -176,7 +176,7 @@ cc.Class({
      */
     createRoomBtnHandler() {
         this.hideUserProfileLayer();
-        let create = new MsCreateRoomInfo('roomName', 6, 0, 0, 0, 'roomProperty');
+        let create = new MsCreateRoomInfo('', 6, 0, 0, 1, '');
         let userProfile = Const.userName;
         let result = engine.prototype.createRoom(create, userProfile);
         if (result !== 0) {
@@ -423,8 +423,8 @@ cc.Class({
     getRoomList() {
         if (this.getRoomListTimer === undefined) {
             this.getRoomListTimer = setInterval(() => {
-                let filter = new MsRoomFilter(0, 0, 0, null);
-                engine.prototype.getRoomList(filter);
+                let filter = new MsRoomFilterEx(6, 0, 0, null,0,1,2);
+                engine.prototype.getRoomListEx(filter);
             }, 5000);
         }
     },
@@ -445,7 +445,7 @@ cc.Class({
      */
     quickJoinBtnHandler() {
         this.hideUserProfileLayer();
-        let maxPlayer = Config.MAX_PLAYER_COUNT;
+        let maxPlayer = 10;
         let userProfile = Const.userName;
         let result = engine.prototype.joinRandomRoom(maxPlayer, userProfile);
         if (result !== 0) {
