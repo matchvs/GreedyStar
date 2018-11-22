@@ -1026,8 +1026,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 56,
-      "height": 56
+      "width": 50,
+      "height": 50
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -1054,9 +1054,9 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 28,
-    "_fontSize": 28,
-    "_lineHeight": 56,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
+    "_lineHeight": 50,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -1184,7 +1184,7 @@
       "__id__": 2
     },
     "component": "Lobby",
-    "handler": "mvsLogout",
+    "handler": "mvsLogoutBtn",
     "customEventData": ""
   },
   {
@@ -1481,8 +1481,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 112,
-      "height": 64
+      "width": 98,
+      "height": 52
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -1509,9 +1509,9 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 28,
-    "_fontSize": 28,
-    "_lineHeight": 64,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
+    "_lineHeight": 52,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -1891,8 +1891,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 196,
-      "height": 64
+      "width": 170,
+      "height": 52
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -1919,9 +1919,9 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 28,
-    "_fontSize": 28,
-    "_lineHeight": 64,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
+    "_lineHeight": 52,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -2145,8 +2145,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 196,
-      "height": 64
+      "width": 170,
+      "height": 52
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -2173,9 +2173,9 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 28,
-    "_fontSize": 28,
-    "_lineHeight": 64,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
+    "_lineHeight": 52,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -7732,11 +7732,8 @@
       "__id__": 2
     },
     "_enabled": true,
-    "getRoomDetailTimer": null,
     "promptSetTimeout": null,
     "promptAction": null,
-    "timer": null,
-    "isLobbyHide": false,
     "userNameNode": {
       "__id__": 15
     },
@@ -7755,6 +7752,7 @@
     "winValueNode": {
       "__id__": 77
     },
-    "isAddDesignatedRooms": false
+    "isAddDesignatedRooms": false,
+    "players": []
   }
 ]

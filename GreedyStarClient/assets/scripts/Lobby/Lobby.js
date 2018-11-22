@@ -11,11 +11,8 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        getRoomDetailTimer: null, // 获取房间详情定时器，在固定时间中发现房间中没有其他玩家加入，就加入机器人一起游戏
         promptSetTimeout: null,
         promptAction: null,
-        timer: null,
-        isLobbyHide: false,
         userNameNode: cc.Label,
         goldNode: cc.Label,
         userIDNode: cc.Label,
@@ -24,6 +21,7 @@ cc.Class({
         winValueNode: cc.Label,
         isAddDesignatedRooms:false,
         getRoomListTimer:undefined,
+        players: [],
     },
 
 
@@ -36,10 +34,7 @@ cc.Class({
         // 展示头像
         this.loadAvatarImage(Const.avatarUrl);
         this.initProfileData();
-        this.initPlayersData();
         this.getRoomList();
-
-
     },
 
     onKeyDown: function (event) {
@@ -70,14 +65,16 @@ cc.Class({
         this.node.on(msg.MATCHVS_SEND_EVENT_NOTIFY, this.onEvent, this);
         this.node.on(msg.MATCHVS_SEND_EVENT_RSP, this.onEvent, this);
         this.node.on(msg.MATCHVS_NETWORK_STATE_NOTIFY, this.onEvent, this);
-        cc.systemEvent.on(msg.ADD_DESIGNATED_ROOMS,this.onEvent.bind(this));
+        cc.systemEvent.on(msg.ADD_DESIGNATED_ROOMS,this.onEvent,this);
         //todo 新增
         this.node.on(msg.MATCHVS_GAME_SERVER_NOTIFY, this.onEvent, this);
     },
 
+    /**
+     * 判断自己是否是房主
+     * @param ownerID
+     */
     isOwner(ownerID) {
-        this.showRoomView();
-        // 判断自己是不是房主
         if (ownerID === Const.userID) {
             GameData.isOwner = true;
             this.showSomeRoomViewBtn();
@@ -87,14 +84,24 @@ cc.Class({
         }
     },
 
+    /**
+     * 接收MatchvsSdk事件
+     * @param event
+     */
     onEvent(event) {
+        let ownerID;
         var eventData = event.detail;
         if (eventData == undefined) {
             eventData = event;
         }
         switch (event.type) {
             case msg.MATCHVS_LOGOUT:
-                this.mvsLogoutResponse(eventData.status);
+                if (eventData.status !== 200) {
+                    this.showPromptOfError('注销失败 请重试', true);
+                } else {
+                    this.showPromptOfError("", false);
+                    cc.director.loadScene('cover');
+                }
                 break;
             case msg.MATCHVS_ROOM_DETAIL:
                 break;
@@ -105,55 +112,74 @@ cc.Class({
                 this.updateRoomItem(eventData.rsp.roomAttrs);
                 break;
             case msg.MATCHVS_JOIN_ROOM_NOTIFY:
-                this.mvsJoinRoom(eventData.roomUserInfo);
+                this.players.push({
+                    userID: eventData.roomUserInfo.userID,
+                    userName: JSON.parse(eventData.roomUserInfo.userProfile).profile,
+                });
+                //joinRoomNotify 不涉及房主变更，房主ID传0。
+                this.roomUserListChangeNotify(this.players, 0);
                 break;
             case msg.MATCHVS_JOIN_ROOM_RSP:
-                GameData.ownerID = eventData.userInfoList.ownerID;
-                GameData.roomID = eventData.userInfoList.roomID;
                 let label = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
-                label.string = '房间ID: ' + GameData.roomID;
-                for (var i = 0; i < eventData.userInfoList.length; i++) {
-                    if (eventData.userInfoList[i] !== Const.userID) {
-                        this.mvsJoinRoom(eventData.userInfoList[i], GameData.roomID);
-                        GameData.players.push({
-                            userID: eventData.userInfoList[i].userID,
-                            userName: eventData.userInfoList[i].userName,
-                            score: 0,
-                            isRobot: false
-                        });
-                    }
+                ownerID = eventData.userInfoList.owner;
+                label.string = '房间ID: ' + eventData.userInfoList.roomID;
+                for(var i = 0; i < eventData.userInfoList.length;i++) {
+                    this.players.push({
+                        userID: eventData.userInfoList[i].userID,
+                        userName: JSON.parse(eventData.userInfoList[i].userProfile).profile,
+                    });
                 }
-                this.isOwner(GameData.ownerID);
-                this.updateRoomView(GameData.players[0]);
+                this.players.push({
+                    userID: Const.userID,
+                    userName: Const.userName,
+                });
+                this.showRoomView();
+                this.roomUserListChangeNotify(this.players, ownerID);
                 break;
             case msg.MATCHVS_CREATE_ROOM:
-                GameData.ownerID = eventData.rsp.owner;
-                GameData.roomID = eventData.rsp.roomID;
                 let label1 = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
-                label1.string = '房间ID: ' + GameData.roomID;
-                for (var i = 0; i < eventData.rsp.length; i++) {
-                    if (eventData.rsp[i] !== Const.userID) {
-                        this.mvsJoinRoom(eventData.rsp[i], GameData.roomID);
-                    }
-                }
-                this.isOwner(GameData.ownerID);
-                this.updateRoomView(GameData.players[0]);
+                label1.string = '房间ID: ' + eventData.rsp.roomID;
+                ownerID = eventData.rsp.owner;
+                this.players.push({
+                    userID: Const.userID,
+                    userName: Const.userName,
+                });
+                this.showRoomView();
+                this.roomUserListChangeNotify(this.players, ownerID);
                 break;
             case msg.MATCHVS_LEAVE_ROOM:
                 if (eventData.leaveRoomRsp.status !== 200) {
                     this.showPromptOfError('离开房间失败', true);
                 } else {
-                    this.mvsLeaveRoom(eventData.leaveRoomRsp)
+                    this.players.length = 0;
+                    this.hideRoomView();
+                    let roomListNode = cc.find('Canvas/stage1/scrollview/view/roomList');
+                    roomListNode.removeAllChildren(true);
                 }
                 break;
             case msg.MATCHVS_LEAVE_ROOM_NOTIFY:
-                this.mvsLeaveRoom(eventData.leaveRoomInfo)
+                ownerID = eventData.leaveRoomInfo.owner;
+                for(var i = 0; i < this.players.length;i++) {
+                    if (this.players[i].userID === eventData.leaveRoomInfo.userID) {
+                        this.players.splice(i,1);
+                    }
+                }
+                this.roomUserListChangeNotify(this.players, ownerID);
                 break;
             case msg.MATCHVS_KICK_PLAYER:
-                this.mvsLeaveRoom(eventData.kickPlayerRsp);
+                if (eventData.kickPlayerRsp.status === 200) {
+                    this.players.length = 0;
+                    this.hideRoomView();
+                }
                 break;
             case msg.MATCHVS_KICK_PLAYER_NOTIFY:
-                this.mvsLeaveRoom(eventData.kickPlayerNotify);
+                ownerID = eventData.KickPlayerNotify.owner;
+                for(var i = 0; i < this.players.length;i++) {
+                    if (this.players[i].userID === eventData.kickPlayerNotify.userID) {
+                        this.players.splice(i,1);
+                    }
+                }
+                this.roomUserListChangeNotify(this.players,ownerID);
                 break;
             case msg.MATCHVS_SEND_EVENT_NOTIFY:
                 if (JSON.parse(eventData.eventInfo.cpProto).event === Const.GAME_START_EVENT) {
@@ -162,6 +188,7 @@ cc.Class({
                 break;
             case msg.ADD_DESIGNATED_ROOMS:
                 let userProfile = Const.userName;
+                GameData.GameMode = true;
                 let result = engine.prototype.joinRoom(event.roomID, userProfile);
                 if (result !== 0) {
                     this.showPromptOfError('加入房间[sdk]失败 请刷新 重试', true);
@@ -172,10 +199,10 @@ cc.Class({
 
 
     /**
-     * 创建房间
+     * 创建房间按钮点击事件
      */
     createRoomBtnHandler() {
-        this.hideUserProfileLayer();
+        this.isshowUserProfileLayer(false);
         let create = new MsCreateRoomInfo('', 6, 0, 0, 1, '');
         let userProfile = Const.userName;
         let result = engine.prototype.createRoom(create, userProfile);
@@ -184,7 +211,9 @@ cc.Class({
         }
     },
 
-    // 加入按钮被点击
+    /**
+     * 加入按钮 点击事件
+     */
     joinRoomBtn2Hanlder() {
         let editBox = cc.find('Canvas/stage1/layerJoin/editbox');
         let editBoxString = editBox.getComponent(cc.EditBox).string;
@@ -201,32 +230,14 @@ cc.Class({
         }
     },
 
-
     /**
-     * 回调
+     * 非房间页面退出点击事件
      */
-    mvsJoinRoom(userInfo) {
-        this.getRoomDetailTimer = setTimeout(function () {
-            engine.prototype.getRoomDetail(GameData.roomID);
-        }, GameData.isRoomNumTime);
-        this.updateRoomView(userInfo);
-    },
-
-
-    mvsLogout() {
+    mvsLogoutBtn() {
         let result = engine.prototype.logout();
         if (result !== 0) {
             console.error('sdk logout error', result);
             this.showPromptOfError('注销[sdk]失败 请刷新 重试', true);
-        }
-    },
-
-    mvsLogoutResponse(status) {
-        if (status !== 200) {
-            this.showPromptOfError('注销失败 请重试', true);
-        } else {
-            this.showPromptOfError("", false);
-            cc.director.loadScene('cover');
         }
     },
 
@@ -251,11 +262,15 @@ cc.Class({
         }
     },
 
+    /**
+     * 首页展示房间列表
+     * @param roomInfo
+     */
     updateRoomItem(roomInfo) {
         let roomListNode;
         try {
             roomListNode = cc.find('Canvas/stage1/scrollview/view/roomList');
-            roomListNode.removeAllChildren();
+            roomListNode.removeAllChildren(true);
         } catch (error) {
             console.error('roomList node removeAllChildren error', error);
             return;
@@ -380,7 +395,7 @@ cc.Class({
                 } catch (e) {
                     console.log('wx onload image error');
                 } finally {
-                    this.showUserProfileLayer();
+                    this.isshowUserProfileLayer(true);
                     this.hideJoinRoomLayer();
                 }
             }
@@ -394,29 +409,22 @@ cc.Class({
                 }
                 // let png = avatarNode.getComponent(cc.Sprite);
                 sprite.spriteFrame = new cc.SpriteFrame(res);
-                this.showUserProfileLayer();
+                this.isshowUserProfileLayer(true);
                 this.hideJoinRoomLayer();
             })
         }
     },
 
-    // 展示用户详细
-    showUserProfileLayer() {
+    // 是否展示用户详细
+    isshowUserProfileLayer(isShow) {
         let layerProfile = cc.find('Canvas/stage1/layerProfile');
-        layerProfile.active = true;
-        GameData.isShowUserProfileLayer = true;
+        layerProfile.active = isShow;
     },
 
-    // 隐藏用户详细
-    hideUserProfileLayer() {
-        let layerProfile = cc.find('Canvas/stage1/layerProfile');
-        layerProfile.active = false;
-        GameData.isShowUserProfileLayer = false;
-    },
 
     // 返回按钮,隐藏用户信息
     closeUserProfileLayer() {
-        this.hideUserProfileLayer();
+        this.isshowUserProfileLayer(false);
     },
 
     // 获取房间列表
@@ -430,21 +438,12 @@ cc.Class({
     },
 
 
-    initPlayersData() {
-        if (GameData.players.length !== 0) {
-            GameData.players = [];
-        }
-        GameData.players[0] = {};
-        GameData.players[0].userID = Const.userID;
-        GameData.players[0].userName = Const.userName;
-        GameData.players[0].score = 0;
-    },
-
     /**
      * 随机加入,快速加入
      */
     quickJoinBtnHandler() {
-        this.hideUserProfileLayer();
+        GameData.GameMode = false;
+        this.isshowUserProfileLayer(false);
         let maxPlayer = 10;
         let userProfile = Const.userName;
         let result = engine.prototype.joinRandomRoom(maxPlayer, userProfile);
@@ -459,7 +458,7 @@ cc.Class({
      * 加入房间
      */
     joinRoomBtn1Hanlder() {
-        this.hideUserProfileLayer();
+        this.isshowUserProfileLayer(false);
         this.showJoinRoomLayer(true);
     },
 
@@ -485,47 +484,6 @@ cc.Class({
         }
     },
 
-    mvsLeaveRoom(rsp) {
-        if (rsp.userID === Const.userID) {
-            this.clearRoomList();
-            this.hideRoomView();
-        } else {
-            const playerList = cc.find('Canvas/stage2/boxRoom/playerList');
-            var nodes = playerList.children;
-            for(var a = 0; a < GameData.players.length;a++) {
-                if (rsp.owner === GameData.players[a].userID) {
-                    for (let b = 0; b < nodes.length; b++) {
-                        let node = nodes[b];
-                        let label = node.getChildByName('username').getComponent(cc.Label);
-                        if (label.string === Const.userName) {
-                            label.string = "--";
-                            nodes[0].getChildByName('username').getComponent(cc.Label).string = Const.userName;
-                        }
-                    }
-                    this.isOwner(rsp.owner);
-                }
-            }
-            for (var i = 0; i < GameData.players.length; i++) {
-                if (rsp.userID === GameData.players[i].userID) {
-                    for (let j = 0; j < nodes.length; j++) {
-                        let node = nodes[j];
-                        let label = node.getChildByName('username').getComponent(cc.Label);
-                        if (label.string === GameData.players[i].userName) {
-                            label.string = "--";
-                            GameData.players.splice(i, 1);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        //如果自己是新的房主,就把自己的名字放到第一栏子里 自己为房主
-        // if (rsp.owner === Const.userID) {
-        //
-        // }
-    },
-
-
     showSomeRoomViewBtn() {
         let startBtn = cc.find('Canvas/stage2/boxRoom/btnStartGame');
         startBtn.active = true;
@@ -549,31 +507,6 @@ cc.Class({
     },
 
 
-    /**
-     * 获取房间详情的回调接口
-     * @param rsp
-     */
-    mvsGetRoomDetailResponse(rsp) {
-        if (rsp.status === 200) {
-            if (rsp.userInfos.length <= 1) {
-                //关闭房间
-                Mvs.engine.joinOver("Matchvs");
-                var robotUserNames = ['小蜻蜓', '小蜜蜂'];
-                for (var i = 0; i < GameData.robotIDs.length; i++) {
-                    GameData.players.push({
-                        userId: GameData.robotIDs[i],
-                        userName: robotUserNames[i],
-                        score: 0,
-                        isRobot: true
-                    });
-                }
-                this.shouldStartGame();
-            }
-        } else {
-            console.error('获取房间详情失败');
-        }
-    },
-
 
     // 展示stage2,隐藏stage1
     showRoomView() {
@@ -586,30 +519,69 @@ cc.Class({
     },
 
     /**
-     * 刷新
-     * @param userInfo
-     * @param i
+     * 房间内玩家数组变化排序
+     * @param userInfos
+     * @param owner 0  过滤，不判断
      */
-    updateRoomView(userInfo) {
-        let playerList = cc.find('Canvas/stage2/boxRoom/playerList');
-        let nodes = playerList.children;
-        for (let i = 0; i < nodes.length; i++) {
-            let node = nodes[i];
-            let label = node.getChildByName('username').getComponent(cc.Label);
-            if (label.string === "--") {
-                if (userInfo.userName === undefined) {
-                    userInfo.userName = JSON.parse(userInfo.userProfile).profile;
-                }
-                label.string = userInfo.userName;
-                break;
+    roomUserListChangeNotify(userInfos,owner) {
+        if (owner !== 0 ) {
+            this.isOwner(owner);
+        }
+        userInfos.sort(this.sortNumber);
+        for(var i = 0; i < userInfos.length;i++) {
+            if (owner === userInfos[i].userID) {
+               this.swapArray(userInfos,i,0);
             }
         }
-        for (let i = 0; i < GameData.players.length; i++) {
-            if (GameData.players[i].userID === userInfo.userID) {
-                break;
-            }
-            GameData.players.push({userID: userInfo.userID, userName: userInfo.userName,
-                score: 0, isRobot: false });
+        this.updateRoomView(userInfos);
+    },
+
+    /**
+     * 排序
+     * @param obj1
+     * @param obj2
+     * @returns {number}
+     */
+    sortNumber(obj1,obj2) {
+        var userID1 = obj1.userID;
+        var userID2 = obj2.userID;
+        if (userID1 < userID2) {
+            return -1;
+        } else if (userID1 > userID2) {
+            return 1;
+        } else {
+            return 0;
+        }
+    },
+
+    /**
+     * 交换位置，把房主放到第一位
+     * @param arr
+     * @param index1
+     * @param index2
+     * @returns {*}
+     */
+    swapArray(arr, index1, index2) {
+        arr[index1] = arr.splice(index2, 1, arr[index1])[0];
+        return arr;
+    },
+
+    /**
+     * 刷新
+     * @param userInfo
+     */
+    updateRoomView(userInfos) {
+        let playerList = cc.find('Canvas/stage2/boxRoom/playerList');
+        let nodes = playerList.children;
+        for(var i = 0; i < nodes.length;i++) {
+            let node = nodes[i];
+            let label = node.getChildByName('username').getComponent(cc.Label);
+            label.string = "--";
+        }
+        for (let i = 0; i < userInfos.length; i++) {
+            let node = nodes[i];
+            let label = node.getChildByName('username').getComponent(cc.Label);
+            label.string = userInfos[i].userName;
         }
     },
 
@@ -622,28 +594,18 @@ cc.Class({
         stage1.active = true;
     },
 
-    // 清除房间列表和房间Id
-    clearRoomList() {
-        let label = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
-        label.string = '';
-        let playerList = cc.find('Canvas/stage2/boxRoom/playerList');
-        for (let i = 0, l = playerList.children.length; i < l; i++) {
-            let node = playerList.children[i];
-            let userNameNode = node.getChildByName('username').getComponent(cc.Label);
-            userNameNode.string = '--';
-        }
-    },
 
     startGameBtnHandler() {
         if (GameData.isOwner === false) {
             console.warn('你不是房主');
             return;
         }
-        if (GameData.players.length < Config.SYSTEM_ROOM_MIN_PLAYER_COUNT) {
+        if (this.players.length < Config.SYSTEM_ROOM_MIN_PLAYER_COUNT) {
             this.showPrompt('房间人数少于' + Config.SYSTEM_ROOM_MIN_PLAYER_COUNT + '人, 请等候');
             console.warn('房间人数少于' + Config.SYSTEM_ROOM_MIN_PLAYER_COUNT + '人, 请等候');
             return;
         }
+        GameData.GameMode = true;
         let result = engine.prototype.sendEventEx(0,JSON.stringify({event: Const.GAME_START_EVENT}));
         if (result !== 0) {
             console.error('sdk sendEventEx "GAME_START_EVENT" error', result);
@@ -657,7 +619,7 @@ cc.Class({
     shouldStartGame() {
         this.showPromptOfError("正在加载 请稍等", true);
         if (GameData.isOwner) {
-            engine.prototype.sendEventEx(1,JSON.stringify({type: "startGame"}))
+            engine.prototype.joinOver();
         }
         cc.director.loadScene('game', () => {
             this && this.hidePromptOfError && this.hidePromptOfError();
@@ -696,7 +658,7 @@ cc.Class({
         this.node.off(msg.MATCHVS_SEND_EVENT_RSP, this.onEvent, this);
         this.node.off(msg.MATCHVS_NETWORK_STATE_NOTIFY, this.onEvent, this);
         this.node.off(msg.MATCHVS_GAME_SERVER_NOTIFY, this.onEvent, this);
-        cc.systemEvent.off(msg.ADD_DESIGNATED_ROOMS,this.onEvent.bind(this));
+        cc.systemEvent.off(msg.ADD_DESIGNATED_ROOMS,this.onEvent,this);
 
     },
 

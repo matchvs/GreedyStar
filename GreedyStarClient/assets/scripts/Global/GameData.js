@@ -29,54 +29,12 @@ module.exports = {
     roomID: 0,
     ownerID: 0,
     isOwner: false,
-
+    // false 为随机匹配模式，true 为好友匹配模式。
+    GameMode:false,
     // game status
     isGameStart: false,
     isGameOver: false,
-    isGameWin: false,
-    gameTime: 180,
 
-
-    leaveRoomStatus: 1,
-    halfLeaveRoomStatus: 1,
-
-    // for response
-    gameStartEventSequence: 0,
-    isInCoverView: true,
-
-    //
-    isInRoomView: false,
-    isQuickJoinBtnClick: false,
-    isCreateRoomBtnClick: false,
-    isJoinRoomBtn1Click: false,
-    isJoinRoomBtn2Click: false,
-    isRoomItemClick: false,
-
-    canLeaveRoom: true,
-    gameStartCountdownValue: 10,
-    isGameStartCountdowning: false,
-    isHasChangeOtherScore: false,
-    isHasOthersAddFoods: false,
-
-    // isLeaveRoomBtn2Click: false,
-    isHalfLeaveRoomBtnClick: false,
-    isShowUserProfileLayer: false,
-    isShowJoinRoomLayer: false,
-
-    // server error
-    isServerErrorCode1000: false, // errorResponse code: 1000 断线
-
-    // 僵尸进程的处理
-    isUserInTheRoom: false,
-
-
-    //
-    dieDataBuffer: null,
-
-
-    //5秒时间房间无真人就加入机器人。
-    isRoomNumTime :30000,
-    robotIDs:[99999,88888],
 
     //是否是独立部署
     isPremiseInit : false,

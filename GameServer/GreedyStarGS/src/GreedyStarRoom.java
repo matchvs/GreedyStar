@@ -20,7 +20,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     private Logger log = LoggerFactory.getLogger("GreedyStarRoom");
     private App app;
     public int foodNum;
-    public int countDown = 5400;
+    public int countDown = Const.GAME_TIME;
 
 //    private int status = 0;
 //    private static int GameOver = 1;
@@ -184,6 +184,9 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
         Collections.sort(userList, new Comparator<GreedStarUser>() {
             @Override
             public int compare(GreedStarUser o1, GreedStarUser o2) {
+                if (o1.score == o2.score) {
+                    return 0;
+                }
                 if (o1.score < o2.score) {
                     return 1;
                 } else {

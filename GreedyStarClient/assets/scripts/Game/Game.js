@@ -56,7 +56,10 @@ cc.Class({
     onLoad() {
         var  self = this;
         this.scoreList = new  Array();
-        this.mvsBind(this);
+        this.mvsBind(self);
+        if (GameData.GameMode) {
+            engine.prototype.sendEventEx(1,JSON.stringify({type: "startGame"}));
+        }
         this.settingBtn.on(cc.Node.EventType.TOUCH_END, function (event) {
             self.halfLeaveBtn.active = self.halfLeaveBtn.active? false:true;
         });
@@ -164,12 +167,12 @@ cc.Class({
                     var player = players[n];
                     if (player.userID  === Const.userID) {
                         this.rank = n + 1;
+                        this.userScore = player.score;
                     }
                     var child = this.starLayer.getChildByName(player.userID + "");
                     if (child !== null ) {
                         child.x = player.x;
                         child.y = player.y;
-                        this.userScore = player.score;
                         particleSystem = child.getComponent(cc.ParticleSystem);
                         particleSystem.startSize = player.size;
                     }
@@ -179,9 +182,11 @@ cc.Class({
                 engine.prototype.leaveRoom();
                 break;
             case "startGame":
-                console.log("收到startGame消息");
                 let room = event.data;
                 this.addPlayers(room);
+                if (GameData.GameMode) {
+                    this.textCountDown();
+                }
                 break;
             case "countDown":
                 this.countDown = Math.floor(event.data/30);

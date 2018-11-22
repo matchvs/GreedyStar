@@ -322,7 +322,7 @@ MatchvsDemoResponse.prototype.sendEventResponse = function (sendEventRsp) {
  * @param eventInfo
  */
 MatchvsDemoResponse.prototype.sendEventNotify = function (eventInfo) {
-    //console.log('ID为'+eventInfo.srcUserID+'通知了'+eventInfo.cpProto);
+
     this.context.node.emit(msg.MATCHVS_SEND_EVENT_NOTIFY,{eventInfo:eventInfo,type:msg.MATCHVS_SEND_EVENT_NOTIFY});
 };
 
@@ -363,6 +363,10 @@ MatchvsDemoResponse.prototype.onMsg = function (buf) {
 
     }
 };
+
+
+
+
 
 
 module.exports = MatchvsDemoResponse;

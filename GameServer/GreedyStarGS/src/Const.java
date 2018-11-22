@@ -44,4 +44,7 @@ public class Const {
     // 玩家每个加速指令消耗分数
     public static int SPEED_DISSIPATION_SCORE = 3;
 
+    //美秒计算30次玩家位置， 当局游戏事件为 GAME_TIME/30  秒
+    public static int GAME_TIME = 5400;
+
 }

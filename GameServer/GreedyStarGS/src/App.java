@@ -150,7 +150,7 @@ public class App extends GameServerRoomEventHandler {
 
     }
 
-    /**
+    /**game server exit
      * 玩家离开房间
      * @param request
      */
@@ -280,10 +280,12 @@ public class App extends GameServerRoomEventHandler {
             case "startGame":
                 room = roomMap.get(roomID);
                 if (room != null && room.userList != null) {
-                    GameServerMsg gameServerMsg = new GameServerMsg("startGame",room.userList);
                     logger.info("发送主动创建房间开始游戏的消息");
-                    sendMsgToOtherUserInRoom(roomID, JsonUtil.toString(gameServerMsg).getBytes());
-                    sendFoodMsg(room.foodList,roomID,0);
+                    room.countDown = Const.GAME_TIME;
+                    GameServerMsg gameServerMsg = new GameServerMsg("startGame",room.userList);
+                    gameServerMsg.profile = room.countDown;
+                    sendMsgToOtherUserInRoom(roomID, JsonUtil.toString(gameServerMsg).getBytes(),new int[]{userID});
+                    sendFoodMsg(room.foodList,roomID,userID);
                 }
             break;
         }
