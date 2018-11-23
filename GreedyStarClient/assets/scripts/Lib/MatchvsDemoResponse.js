@@ -124,7 +124,7 @@ MatchvsDemoResponse.prototype.joinRoomResponse = function (status, userInfoList,
     if (status == 200) {
         console.log("进入房间成功");
         userInfoList.roomID = roomInfo.roomID;
-        userInfoList.ownerID = roomInfo.owner;
+        userInfoList.owner = roomInfo.owner;
         this.context.node.emit(msg.MATCHVS_JOIN_ROOM_RSP,{userInfoList:userInfoList,type:msg.MATCHVS_JOIN_ROOM_RSP});
     } else {
         console.log("进入房间失败"+status);

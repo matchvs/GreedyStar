@@ -22,6 +22,7 @@ cc.Class({
         isAddDesignatedRooms:false,
         getRoomListTimer:undefined,
         players: [],
+        ownereID:0,
     },
 
 
@@ -117,11 +118,11 @@ cc.Class({
                     userName: JSON.parse(eventData.roomUserInfo.userProfile).profile,
                 });
                 //joinRoomNotify 不涉及房主变更，房主ID传0。
-                this.roomUserListChangeNotify(this.players, 0);
+                this.roomUserListChangeNotify(this.players, this.ownerID);
                 break;
             case msg.MATCHVS_JOIN_ROOM_RSP:
                 let label = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
-                ownerID = eventData.userInfoList.owner;
+                this.ownerID = eventData.userInfoList.owner;
                 label.string = '房间ID: ' + eventData.userInfoList.roomID;
                 for(var i = 0; i < eventData.userInfoList.length;i++) {
                     this.players.push({
@@ -134,18 +135,18 @@ cc.Class({
                     userName: Const.userName,
                 });
                 this.showRoomView();
-                this.roomUserListChangeNotify(this.players, ownerID);
+                this.roomUserListChangeNotify(this.players, this.ownerID);
                 break;
             case msg.MATCHVS_CREATE_ROOM:
                 let label1 = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
                 label1.string = '房间ID: ' + eventData.rsp.roomID;
-                ownerID = eventData.rsp.owner;
+                this.ownerID = eventData.rsp.owner
                 this.players.push({
                     userID: Const.userID,
                     userName: Const.userName,
                 });
                 this.showRoomView();
-                this.roomUserListChangeNotify(this.players, ownerID);
+                this.roomUserListChangeNotify(this.players,this.ownerID);
                 break;
             case msg.MATCHVS_LEAVE_ROOM:
                 if (eventData.leaveRoomRsp.status !== 200) {
@@ -158,13 +159,13 @@ cc.Class({
                 }
                 break;
             case msg.MATCHVS_LEAVE_ROOM_NOTIFY:
-                ownerID = eventData.leaveRoomInfo.owner;
+                this.ownerID = eventData.leaveRoomInfo.owner;
                 for(var i = 0; i < this.players.length;i++) {
                     if (this.players[i].userID === eventData.leaveRoomInfo.userID) {
                         this.players.splice(i,1);
                     }
                 }
-                this.roomUserListChangeNotify(this.players, ownerID);
+                this.roomUserListChangeNotify(this.players, this.ownerID);
                 break;
             case msg.MATCHVS_KICK_PLAYER:
                 if (eventData.kickPlayerRsp.status === 200) {
@@ -173,13 +174,13 @@ cc.Class({
                 }
                 break;
             case msg.MATCHVS_KICK_PLAYER_NOTIFY:
-                ownerID = eventData.KickPlayerNotify.owner;
+                this.ownerID = eventData.KickPlayerNotify.owner;
                 for(var i = 0; i < this.players.length;i++) {
                     if (this.players[i].userID === eventData.kickPlayerNotify.userID) {
                         this.players.splice(i,1);
                     }
                 }
-                this.roomUserListChangeNotify(this.players,ownerID);
+                this.roomUserListChangeNotify(this.players,this.ownerID);
                 break;
             case msg.MATCHVS_SEND_EVENT_NOTIFY:
                 if (JSON.parse(eventData.eventInfo.cpProto).event === Const.GAME_START_EVENT) {
@@ -521,12 +522,10 @@ cc.Class({
     /**
      * 房间内玩家数组变化排序
      * @param userInfos
-     * @param owner 0  过滤，不判断
+     * @param owner
      */
     roomUserListChangeNotify(userInfos,owner) {
-        if (owner !== 0 ) {
-            this.isOwner(owner);
-        }
+        this.isOwner(owner);
         userInfos.sort(this.sortNumber);
         for(var i = 0; i < userInfos.length;i++) {
             if (owner === userInfos[i].userID) {
