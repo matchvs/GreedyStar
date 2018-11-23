@@ -163,7 +163,6 @@ cc.Class({
                 var players = event.data;
                 this.showScoreList(players);
                 for (var n = 0; n < players.length; n++) {
-
                     var player = players[n];
                     if (player.userID  === Const.userID) {
                         this.rank = n + 1;
@@ -185,6 +184,7 @@ cc.Class({
                 let room = event.data;
                 this.addPlayers(room);
                 if (GameData.GameMode) {
+                    this.countDown = Math.floor(event.profile/30);
                     this.textCountDown();
                 }
                 break;

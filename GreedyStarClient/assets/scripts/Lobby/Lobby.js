@@ -90,7 +90,6 @@ cc.Class({
      * @param event
      */
     onEvent(event) {
-        let ownerID;
         var eventData = event.detail;
         if (eventData == undefined) {
             eventData = event;
