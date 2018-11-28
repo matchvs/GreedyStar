@@ -27,7 +27,7 @@ cc.Class({
 
 
     onLoad() {
-        cc.director.setDisplayStats(false);
+        // cc.director.setDisplayStats(false);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         //Matchvs事件监听
         this.mvsBind(this);

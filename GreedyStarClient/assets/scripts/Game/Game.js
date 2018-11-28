@@ -60,10 +60,10 @@ cc.Class({
         if (GameData.GameMode) {
             engine.prototype.sendEventEx(1,JSON.stringify({type: "startGame"}));
         }
-        this.settingBtn.on(cc.Node.EventType.TOUCH_END, function (event) {
+        this.settingBtn.on(cc.Node.EventType.TOUCH_END, function () {
             self.halfLeaveBtn.active = self.halfLeaveBtn.active? false:true;
         });
-        this.halfLeaveBtn.on(cc.Node.EventType.TOUCH_END,function(event) {
+        this.halfLeaveBtn.on(cc.Node.EventType.TOUCH_END,function() {
             engine.prototype.leaveRoom();
             self.halfOver();
         });

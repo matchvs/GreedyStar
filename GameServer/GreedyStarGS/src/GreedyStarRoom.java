@@ -32,7 +32,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            countDown--;
+//            countDown--;
             if (countDown <=0) {
                 destroy();
                 GameServerMsg msg = new GameServerMsg("GameOver", "");

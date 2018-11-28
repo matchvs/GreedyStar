@@ -323,6 +323,8 @@ MatchvsDemoResponse.prototype.sendEventResponse = function (sendEventRsp) {
  */
 MatchvsDemoResponse.prototype.sendEventNotify = function (eventInfo) {
 
+
+
     this.context.node.emit(msg.MATCHVS_SEND_EVENT_NOTIFY,{eventInfo:eventInfo,type:msg.MATCHVS_SEND_EVENT_NOTIFY});
 };
 
@@ -350,9 +352,17 @@ MatchvsDemoResponse.prototype.networkStateNotify = function (netNotify) {
     this.context.node.emit(msg.MATCHVS_NETWORK_STATE_NOTIFY,{netNotify:netNotify,type:msg.MATCHVS_NETWORK_STATE_NOTIFY});
 };
 
+var Seconds = 0;
+var receiveMsgNum = 0;
+
 MatchvsDemoResponse.prototype.gameServerNotify = function (eventInfo) {
-    // console.log("推送的消息内容:" + eventInfo.cpProto);
-    this.context.node.emit(msg.MATCHVS_GAME_SERVER_NOTIFY,{eventInfo:eventInfo,ty:msg.MATCHVS_GAME_SERVER_NOTIFY});
+    receiveMsgNum++;
+    if (Seconds !== new Date().getSeconds()) {
+        console.log(receiveMsgNum);
+        receiveMsgNum =0;
+        Seconds = new Date().getSeconds();
+    }
+    this.context.node.emit(msg.MATCHVS_GAME_SERVER_NOTIFY,{eventInfo:eventInfo,type:msg.MATCHVS_GAME_SERVER_NOTIFY});
 };
 
 MatchvsDemoResponse.prototype.onMsg = function (buf) {

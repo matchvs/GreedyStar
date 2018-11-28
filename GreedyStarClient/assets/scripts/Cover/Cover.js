@@ -10,7 +10,7 @@ cc.Class({
 
     onLoad() {
         //不展示FSP信息
-        cc.director.setDisplayStats(false);
+        // cc.director.setDisplayStats(false);
         // 监听键盘
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown,this);
         LocalStore_Clear();
