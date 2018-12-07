@@ -11,7 +11,8 @@ public class Const {
     public static int USER_SIZE = 20;
 
     //初始移动速度
-    public static int SPEED = 5;
+    public static int SPEED = 4;
+    public static int FPS = 1000/20;
 
 
     public static int  USER_MIN_SPEED = 1;
@@ -46,5 +47,6 @@ public class Const {
 
     //美秒计算30次玩家位置， 当局游戏事件为 GAME_TIME/30  秒
     public static int GAME_TIME = 5400;
+
 
 }

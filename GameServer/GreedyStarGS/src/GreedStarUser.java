@@ -75,7 +75,7 @@ public class GreedStarUser extends IGameServerRoomHandler.User {
     public void resetState() {
         int[] position = Utils.getRandomPosition();
         this.score = 0;
-        this.size = 1;
+        this.size = Const.USER_SIZE;
         this.x= position[0];
         this.y = position[1];
         this.speed = Const.SPEED;

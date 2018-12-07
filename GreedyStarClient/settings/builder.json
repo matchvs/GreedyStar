@@ -1,7 +1,7 @@
 {
   "appKey": "",
   "appSecret": "",
-  "encryptJs": true,
+  "encryptJs": false,
   "excludeScenes": [],
   "fb-instant-games": {},
   "includeAnySDK": false,
@@ -9,7 +9,7 @@
   "inlineSpriteFrames": true,
   "inlineSpriteFrames_native": true,
   "jailbreakPlatform": false,
-  "md5Cache": false,
+  "md5Cache": true,
   "mergeStartScene": false,
   "oauthLoginServer": "",
   "optimizeHotUpdate": false,
@@ -25,12 +25,12 @@
     "REMOTE_SERVER_ROOT": "",
     "orientation": "portrait"
   },
-  "renderMode": "0",
+  "renderMode": "2",
   "startScene": "e15b5033-bc1e-48d8-8178-27e37ae25a28",
-  "title": "multiPlayerGreedyBox",
+  "title": "2",
   "webOrientation": "auto",
   "wechatgame": {
-    "appid": "wx589c6d9cd508f176",
+    "appid": "wx0054f551abb6241c",
     "orientation": "landscape"
   },
   "xxteaKey": "65177f09-506e-41",

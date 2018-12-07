@@ -356,12 +356,12 @@ var Seconds = 0;
 var receiveMsgNum = 0;
 
 MatchvsDemoResponse.prototype.gameServerNotify = function (eventInfo) {
-    receiveMsgNum++;
-    if (Seconds !== new Date().getSeconds()) {
-        console.log(receiveMsgNum);
-        receiveMsgNum =0;
-        Seconds = new Date().getSeconds();
-    }
+    // receiveMsgNum++;
+    // if (Seconds !== new Date().getSeconds()) {
+    //     console.log(receiveMsgNum);
+    //     receiveMsgNum =0;
+    //     Seconds = new Date().getSeconds();
+    // }
     this.context.node.emit(msg.MATCHVS_GAME_SERVER_NOTIFY,{eventInfo:eventInfo,type:msg.MATCHVS_GAME_SERVER_NOTIFY});
 };
 

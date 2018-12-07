@@ -444,7 +444,7 @@ cc.Class({
     quickJoinBtnHandler() {
         GameData.GameMode = false;
         this.isshowUserProfileLayer(false);
-        let maxPlayer = 10;
+        let maxPlayer = 6;
         let userProfile = Const.userName;
         let result = engine.prototype.joinRandomRoom(maxPlayer, userProfile);
         if (result !== 0) {

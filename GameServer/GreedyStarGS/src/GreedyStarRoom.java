@@ -63,7 +63,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
         log.info("roomID :" + ID + "初始定时器");
 //        GreedyStarRoom.this.createTime = System.currentTimeMillis();
 //        foodNum = 0;
-        Main.gameServer.setInterval(runnable, 33);
+        Main.gameServer.setInterval(runnable, Const.FPS);
     }
 
     public void destroy() {
@@ -128,7 +128,6 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                     int speed = Const.SPEED - user.score / Const.SPEED_MULTIPLE;
                     user.speed = speed > Const.USER_MIN_SPEED ? speed : Const.USER_MIN_SPEED;
                     GameServerMsg msg = new GameServerMsg("removeFood", foodList.get(j).ID);
-                    msg.data = foodList.get(j).ID;
                     foodList.remove(j);
                     app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
                 }

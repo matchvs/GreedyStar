@@ -130,13 +130,13 @@ public class App extends GameServerRoomEventHandler {
         long roomID = request.getRoomID();
 //        room.fondList = new ArrayList<>();
         if (!roomMap.containsKey(roomID)) {
-            roomMap.put(roomID, new GreedyStarRoom(roomID, clientChannel, this));
-            room = roomMap.get(roomID);
-            for (int i = room.foodList.size(); i < Const.FOOD_INITIAL_NUB; i++) {
-                Food food = Food.addFood(room.foodNum);
+            room = new GreedyStarRoom(roomID, clientChannel,this);
+            roomMap.put(roomID, room);
+            for (int i = 0; i < Const.FOOD_INITIAL_NUB; i++) {
+                Food food = Food.addFood(i);
                 room.foodList.add(food);
-                room.foodNum = room.foodList.size();
             }
+            room.foodNum = room.foodList.size();
         }
         roomAddUser1(room, request.getUserID());
         sendFoodMsg(room.foodList, roomID, request.getUserID());
@@ -221,12 +221,14 @@ public class App extends GameServerRoomEventHandler {
             room.userList = new ArrayList<>();
         }
         room.userList.add(user);
+
         GameServerMsg msg = new GameServerMsg("addPlayer", user);
         log.info("addPlayer:" + JsonUtil.toString(msg));
         sendMsgToOtherUserInRoom(room.channel,room.ID, (JsonUtil.toString(msg)).getBytes());
+
         msg.type = "countDown";
         msg.data = room.countDown;
-        sendMsgToOtherUserInRoom(room.ID, (JsonUtil.toString(msg)).getBytes(),null);
+        sendMsgToOtherUserInRoom(room.ID, (JsonUtil.toString(msg)).getBytes());
     }
 
     /**

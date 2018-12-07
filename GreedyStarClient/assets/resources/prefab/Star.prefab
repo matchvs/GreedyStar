@@ -76,9 +76,9 @@
     "_dstBlendFactor": 771,
     "playOnLoad": true,
     "_autoRemoveOnFinish": false,
-    "_totalParticles": 150,
+    "_totalParticles": 10,
     "_duration": -1,
-    "_emissionRate": 10,
+    "_emissionRate": 4,
     "_life": 1,
     "_lifeVar": 0,
     "_startColor": {

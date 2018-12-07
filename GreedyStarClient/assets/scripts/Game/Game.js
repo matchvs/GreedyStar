@@ -1,15 +1,17 @@
-var response = require("../Lib/MatchvsDemoResponse");
-var msg = require("../Lib/MatvhvsMessage");
+let response = require("../Lib/MatchvsDemoResponse");
+let msg = require("../Lib/MatvhvsMessage");
 let GameData = require('../Global/GameData');
 let utils = require('../Util/index');
-var engine = require("../Lib/MatchvsEngine");
+let engine = require("../Lib/MatchvsEngine");
 let Const = require('../Const/Const');
+let MoveSync = require('MoveSync');
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        starFoodList:[],
+        vanishStarFoodList:[],
+        vanishPeopleList:[],
         // 引用星星预支资源
         starPrefab: {
             default: null,
@@ -48,13 +50,20 @@ cc.Class({
             default: null,
             type: cc.Label
         },
+
         rank:0,
         countDown:0,
-        countDownTime:undefined
+        countDownTime:undefined,
+        Seconds :0,
+        receiveMsgNum:0,
+        netDelayLable:{
+            default: null,
+            type: cc.Label
+        }
     },
 
     onLoad() {
-        var  self = this;
+        var self = this;
         this.scoreList = new  Array();
         this.mvsBind(self);
         if (GameData.GameMode) {
@@ -67,20 +76,74 @@ cc.Class({
             engine.prototype.leaveRoom();
             self.halfOver();
         });
+
+        self.sync = new MoveSync(function (players) {
+            self.showScoreList(players);
+            for (var n = 0; n < players.length; n++) {
+                var player = players[n];
+                if (player.userID === Const.userID) {
+                    self.rank = n + 1;
+                    self.userScore = player.score;
+                }
+                var child = self.starLayer.getChildByName(player.userID + "");
+                if (child !== null) {
+                    self.action = cc.moveTo(0.05, cc.v2(player.x, player.y));
+                    child.stopAllActions();
+                    child.runAction(self.action);
+                }
+            }
+        });
     },
 
 
     lateUpdate:function() {
+        var targetPos = this.getUserTargetPos();
+        if (targetPos !== undefined) {
+            if (Math.abs(targetPos.x - this.node.x) >= 500 ||
+                Math.abs(targetPos.y - this.node.y) >= 500) {
+                this.node.position =this.node.parent.convertToNodeSpaceAR(targetPos);
+            } else {
+                if (Math.abs(targetPos.x - this.node.x) >= 120 ||
+                    Math.abs(targetPos.y - this.node.y) >= 120) {//when camera and target distance is larger than max distance
+                    this.startFollow = true;
+                }
+                if (this.startFollow) {
+                    this.node.position = this.node.position.lerp(this.node.parent.convertToNodeSpaceAR(targetPos),0.05);
+                    if (cc.pDistance(targetPos, this.node.position) <= 30) {
+                        this.startFollow = false;
+                    }
+                }
+            }
+            let camerRectInMap = cc.rect(this.node.position.x - 480, this.node.position.y - 320, 1100 , 780);
+            var m_pViewEntitys = this.starLayer.children;
+            for(var i = 2; i < m_pViewEntitys.length;i++) {
+                var pEntity = m_pViewEntitys[i];
+                if (pEntity) {
+                    var targetPos1 = pEntity.getPosition();
+                    if (camerRectInMap.contains(targetPos1)) {
+                        pEntity.active = true;
+                    } else {
+                        pEntity.active = false;
+                    }
+                }
+            }
+        }
+    },
+
+    getUserTargetPos() {
         let targetPos;
         for (var k = 0; k < this.starLayer.children.length; k++) {
             if (this.starLayer.children[k].name == Const.userID) {
                 targetPos = this.starLayer.children[k].parent.convertToWorldSpaceAR(this.starLayer.children[k].position);
+                if (targetPos !== undefined) {
+                    return targetPos;
+                }
             }
         }
-        if (targetPos !== undefined) {
-            this.node.position = this.node.parent.convertToNodeSpaceAR(targetPos);
-        }
+        return undefined;
     },
+
+
 
     onKeyDown(event) {
         switch (event.keyCode) {
@@ -89,6 +152,8 @@ cc.Class({
                 break;
         }
     },
+
+
 
 
     mvsBind(self) {
@@ -125,57 +190,49 @@ cc.Class({
             case "removeFood":
                 for (var j = 0; j < this.starLayer.children.length; j++) {
                     if (this.starLayer.children[j].name == event.data) {
-                        var star = this.starLayer.children[j];
-                        this.starLayer.removeChild(star, true);
+                        let star = this.starLayer.children[j];
+                        star.active = false;
+                        this.vanishStarFoodList.push(star);
                         break;
                     }
                 }
                 break;
             case "addPlayer":
-                console.log("addPlayer");
                 color = new cc.Color(colorArr[0], colorArr[1], colorArr[2])
                 var tempPlayer = event.data;
                 let node1 = cc.instantiate(this.playPrefab);
                 node1.x = tempPlayer.x;
                 node1.y = tempPlayer.y;
                 particleSystem = node1.getComponent(cc.ParticleSystem);
-                particleSystem.startSize = tempPlayer.size;
+                // particleSystem.startSize = tempPlayer.size;
                 particleSystem.startColor = color;
                 particleSystem.positionType = 0;
                 node1.name = tempPlayer.userID + "";
                 this.starLayer.addChild(node1);
+                var targetPos = this.getUserTargetPos();
+                if (targetPos !== undefined) {
+                    this.node.position = this.node.parent.convertToNodeSpaceAR(targetPos);
+                }
                 break;
             case "otherPlayer":
-                console.log("otherPlayer");
                 this.addPlayers(event.data);
                 break;
             case "removePlayer":
                 var tempPlayer3 = event.data;
-                console.log("[INFO] removePlayer user:" + tempPlayer3);
                 for (var k = 0; k < this.starLayer.children.length; k++) {
-                    console.log("[INFO] removePlayer.node.name " + this.starLayer.children[k].name);
                     if (this.starLayer.children[k].name == tempPlayer3.userID) {
                         this.starLayer.removeChild(this.starLayer.children[k]);
                     }
                 }
                 break;
             case "move":
-                var players = event.data;
-                this.showScoreList(players);
-                for (var n = 0; n < players.length; n++) {
-                    var player = players[n];
-                    if (player.userID  === Const.userID) {
-                        this.rank = n + 1;
-                        this.userScore = player.score;
-                    }
-                    var child = this.starLayer.getChildByName(player.userID + "");
-                    if (child !== null ) {
-                        child.x = player.x;
-                        child.y = player.y;
-                        particleSystem = child.getComponent(cc.ParticleSystem);
-                        particleSystem.startSize = player.size;
-                    }
-                }
+                // this.receiveMsgNum++;
+                // if (this.Seconds !== new Date().getSeconds()) {
+                //     this.netDelayLable.string = "每秒收到移动包的数量：" + this.receiveMsgNum;
+                //     this.receiveMsgNum = 0;
+                //     this.Seconds = new Date().getSeconds();
+                // }
+                this.sync.update(event.data);
                 break;
             case "GameOver":
                 engine.prototype.leaveRoom();
@@ -196,29 +253,44 @@ cc.Class({
         }
     },
 
+
+
     textCountDown() {
         if ( this.countDownTime === undefined) {
             this.countDownTime = setInterval(() => {
                 this.countDown --;
                 if(this.countDown >= 0) {
-                    this.countDownLable.string  = this.countDown+"  s";
+                    this.countDownLable.string = this.countDown+"  s";
                 }
             }, 1000);
         }
     },
 
+    // 优化食物加载逻辑
     addFood(data) {
         let colorArr = utils.getRandomColor(),color,particleSystem;
+        color = new cc.Color(colorArr[0], colorArr[1], colorArr[2])
         for (var i = 0; i < data.length; i++) {
-            color = new cc.Color(colorArr[0], colorArr[1], colorArr[2])
-            let node = cc.instantiate(this.starPrefab);
-            particleSystem = node.getComponent(cc.ParticleSystem);
-            particleSystem.startSize = data[i].size;
-            particleSystem.startColor = color
-            node.x = data[i].x;
-            node.y = data[i].y;
-            node.name = "" + data[i].ID;
-            this.starLayer.addChild(node);
+            let node = this.vanishStarFoodList[i];
+            if (node) {
+                particleSystem = node.getComponent(cc.ParticleSystem);
+                particleSystem.startSize = data[i].size;
+                particleSystem.startColor = color
+                node.x = data[i].x;
+                node.y = data[i].y;
+                node.name = "" + data[i].ID;
+                node.active = true;
+                this.vanishStarFoodList.splice(i,1);
+            } else {
+                node = cc.instantiate(this.starPrefab);
+                particleSystem = node.getComponent(cc.ParticleSystem);
+                particleSystem.startSize = data[i].size;
+                particleSystem.startColor = color
+                node.x = data[i].x;
+                node.y = data[i].y;
+                node.name = "" + data[i].ID;
+                this.starLayer.addChild(node);
+            }
         }
     },
 
@@ -230,7 +302,7 @@ cc.Class({
             node2.x = userList[c].x;
             node2.y = userList[c].y;
             particleSystem = node2.getComponent(cc.ParticleSystem);
-            particleSystem.startSize = userList[c].size;
+            // particleSystem.startSize = userList[c].size;
             particleSystem.startColor = color;
             node2.name = userList[c].userID + "";
             this.starLayer.addChild(node2);
@@ -272,6 +344,7 @@ cc.Class({
 
     onDestroy() {
         clearInterval(this.countDownTime);
-    }
+    },
+
 
 });
