@@ -68,6 +68,7 @@ public class App extends GameServerRoomEventHandler {
                     log.debug("请求进入房间  【 mvs 】 channel " + Utils.getChannel(clientChannel));
                     break;
                 case Gsmvs.MvsGsCmdID.MvsKickPlayerReq_VALUE:
+                    leaveRoom(request);
                     log.debug("请求踢人: 房间：" + request.getRoomID() + "玩家：" + request.getUserID() + "被踢出");
                     break;
                 case Gsmvs.MvsGsCmdID.MvsLeaveRoomReq_VALUE:
