@@ -5,13 +5,13 @@ cc.Class({
 
     properties: {
         dot: cc.Node,
-        speed:cc.Button,
+        speed:cc.Node,
     },
 
 
 
     onLoad() {
-        this.input = {l: 0, r: 0, u: 0, d: 0};
+        this.input = {l: 0, r: 0, u: 0, d: 0,p:0};
         this.ringRadius = this.node.width / 2;
         //操纵杆X坐标
         this.joyStickX = this.node.getPosition().x;
@@ -74,13 +74,19 @@ cc.Class({
             syncKeyCode2Input();
         });
 
-        this.node.on(cc.Node.EventType.TOUCH_CANCEL,function(){
 
+
+        this.speed.on(cc.Node.EventType.TOUCH_START,function () {
+            self.input.p = 1;
         });
-        
+
+        this.speed.on(cc.Node.EventType.TOUCH_END,function () {
+            self.input.p  = 0;
+        });
+
         function syncKeyCode2Input() {
             if (self.input == null) {
-                self.input = {l: 0, r: 0, u: 0, d: 0};
+                self.input = {l: 0, r: 0, u: 0, d: 0,p:0};
             }
             self.input.l = keycode["37"] == 1 || keycode["1000"] == 1 ? 1 : 0;
             self.input.u = keycode["38"] == 1 || keycode["1003"] == 1 ? 1 : 0;

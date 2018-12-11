@@ -17,7 +17,7 @@
       <file leaf-file-name="MoveSync.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/scripts/Game/MoveSync.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
+            <state relative-caret-position="1230">
               <caret line="41" column="22" lean-forward="false" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
               <folding />
             </state>
@@ -34,11 +34,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Game.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Game.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="434">
-              <caret line="341" column="83" lean-forward="true" selection-start-line="341" selection-start-column="83" selection-end-line="341" selection-end-column="83" />
+            <state relative-caret-position="10230">
+              <caret line="341" column="83" lean-forward="false" selection-start-line="341" selection-start-column="83" selection-end-line="341" selection-end-column="83" />
               <folding />
             </state>
           </provider>
@@ -47,7 +47,7 @@
       <file leaf-file-name="creator.d.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/creator.d.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
+            <state relative-caret-position="203970">
               <caret line="6799" column="25" lean-forward="false" selection-start-line="6799" selection-start-column="23" selection-end-line="6799" selection-end-column="25" />
               <folding />
             </state>
@@ -57,7 +57,7 @@
       <file leaf-file-name="Const.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/scripts/Const/Const.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
+            <state relative-caret-position="510">
               <caret line="17" column="11" lean-forward="false" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
               <folding />
             </state>
@@ -77,18 +77,18 @@
       <file leaf-file-name="Lobby.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/scripts/Lobby/Lobby.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="572" column="0" lean-forward="false" selection-start-line="572" selection-start-column="0" selection-end-line="573" selection-end-column="0" />
+            <state relative-caret-position="191">
+              <caret line="177" column="0" lean-forward="false" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Joystick.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Joystick.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Control/Joystick.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2040">
-              <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+            <state relative-caret-position="671">
+              <caret line="92" column="78" lean-forward="true" selection-start-line="92" selection-start-column="78" selection-end-line="92" selection-end-column="78" />
               <folding />
             </state>
           </provider>
@@ -125,10 +125,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>clearRoomList</find>
-      <find>clearUserList</find>
-      <find>收到startGame消息</find>
-      <find>players</find>
       <find>this.userScore</find>
       <find>GameData.isOwner</find>
       <find>isOwner</find>
@@ -144,7 +140,6 @@
       <find>hidePromptError</find>
       <find>netDelay</find>
       <find>Vec2</find>
-      <find>speed</find>
       <find>MoveSyne</find>
       <find>cacheQueue</find>
       <find>context</find>
@@ -155,6 +150,11 @@
       <find>roomUserListChangeNotify</find>
       <find>backBtnHandler</find>
       <find>节点</find>
+      <find>userInfoList</find>
+      <find>踢人</find>
+      <find>kickPlayerBtnHanlder</find>
+      <find>speed</find>
+      <find>p</find>
     </findStrings>
     <replaceStrings>
       <replace>Const</replace>
@@ -190,12 +190,12 @@
         <option value="$PROJECT_DIR$/library/imports/d9/d9079975-8c53-4a51-9548-1d4ff7d8ac49.js" />
         <option value="$PROJECT_DIR$/assets/scripts/Cover/Cover.js" />
         <option value="$PROJECT_DIR$/assets/scripts/Lib/MatchvsDemoResponse.js" />
-        <option value="$PROJECT_DIR$/assets/scripts/Game/Control/Joystick.js" />
         <option value="$PROJECT_DIR$/packages/plugin-matchvs/matchvs/matchvsjssdk/matchvs.all.js" />
-        <option value="$PROJECT_DIR$/assets/scripts/Lobby/Lobby.js" />
         <option value="$PROJECT_DIR$/assets/scripts/Const/Const.js" />
         <option value="$PROJECT_DIR$/assets/scripts/Game/MoveSync.js" />
         <option value="$PROJECT_DIR$/assets/scripts/Game/Game.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Lobby/Lobby.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/Control/Joystick.js" />
       </list>
     </option>
   </component>
@@ -208,7 +208,7 @@
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/packages/plugin-matchvs/node_modules" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
@@ -254,8 +254,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -341,6 +339,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -539,11 +539,14 @@
       <workItem from="1544405929225" duration="1422000" />
       <workItem from="1544409580863" duration="6750000" />
       <workItem from="1544435408248" duration="10040000" />
+      <workItem from="1544508483730" duration="11000" />
+      <workItem from="1544513416446" duration="834000" />
+      <workItem from="1544515226762" duration="2002000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="549364000" />
+    <option name="totallyTimeSpent" value="552211000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -555,10 +558,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3445652" sideWeight="0.49683878" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23182297" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -573,6 +575,7 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3445652" sideWeight="0.49683878" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5619565" sideWeight="0.49789253" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -687,49 +690,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Control/Joystick.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2040">
-          <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/packages/plugin-matchvs/matchvs/matchvsjssdk/matchvs.all.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="14" column="64" lean-forward="false" selection-start-line="14" selection-start-column="64" selection-end-line="14" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/scripts/Lobby/Lobby.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="572" column="0" lean-forward="false" selection-start-line="572" selection-start-column="0" selection-end-line="573" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/creator.d.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
+        <state relative-caret-position="203970">
           <caret line="6799" column="25" lean-forward="false" selection-start-line="6799" selection-start-column="23" selection-end-line="6799" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/MoveSync.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="41" column="22" lean-forward="false" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/scripts/Const/Const.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
+        <state relative-caret-position="510">
           <caret line="17" column="11" lean-forward="false" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
           <folding />
         </state>
@@ -743,10 +721,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/MoveSync.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1230">
+          <caret line="41" column="22" lean-forward="false" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="341" column="83" lean-forward="true" selection-start-line="341" selection-start-column="83" selection-end-line="341" selection-end-column="83" />
+        <state relative-caret-position="10230">
+          <caret line="341" column="83" lean-forward="false" selection-start-line="341" selection-start-column="83" selection-end-line="341" selection-end-column="83" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Lobby/Lobby.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="177" column="0" lean-forward="false" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Control/Joystick.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="671">
+          <caret line="92" column="78" lean-forward="true" selection-start-line="92" selection-start-column="78" selection-end-line="92" selection-end-column="78" />
           <folding />
         </state>
       </provider>

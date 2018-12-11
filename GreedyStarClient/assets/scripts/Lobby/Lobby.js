@@ -168,11 +168,21 @@ cc.Class({
                 break;
             case msg.MATCHVS_KICK_PLAYER:
                 if (eventData.kickPlayerRsp.status === 200) {
-                    this.players.length = 0;
-                    this.hideRoomView();
+                    this.ownerID = eventData.kickPlayerRsp.owner;
+                    for(var i = 0; i < this.players.length;i++) {
+                        if (this.players[i].userID === eventData.kickPlayerRsp.userID) {
+                            this.players.splice(i,1);
+                        }
+                    }
+                    this.roomUserListChangeNotify(this.players,this.ownerID);
                 }
                 break;
             case msg.MATCHVS_KICK_PLAYER_NOTIFY:
+                if (Const.userID === eventData.kickPlayerNotify.userID) {
+                    this.players.length = 0;
+                    this.hideRoomView();
+                    break;
+                }
                 this.ownerID = eventData.KickPlayerNotify.owner;
                 for(var i = 0; i < this.players.length;i++) {
                     if (this.players[i].userID === eventData.kickPlayerNotify.userID) {
@@ -628,7 +638,7 @@ cc.Class({
     // 踢人
     kickPlayerBtnHanlder(e, i) {
         let nodes = cc.find('Canvas/stage2/boxRoom/playerList').children;
-        let userName = nodes[i].getChildByName('username').getComponent(cc.Label).string;
+        let userName = nodes[parseInt(i)].getChildByName('username').getComponent(cc.Label).string;
         if (userName === '--') {
             this.showPrompt("该位置没有玩家，冷静一下");
             return;

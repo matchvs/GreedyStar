@@ -20,7 +20,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     private Logger log = LoggerFactory.getLogger("GreedyStarRoom");
     private App app;
     public int foodNum;
-    private int countDown = Const.GAME_TIME_NUM;
+    public int countDown = Const.GAME_TIME_NUM;
 
 //    private int status = 0;
 //    private static int GameOver = 1;
@@ -66,13 +66,13 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
         Main.gameServer.setInterval(runnable, Const.FPS);
     }
 
-    private void destroy() {
+    public void destroy() {
         log.info("销毁定时器");
         Main.gameServer.clearInterval(runnable);
     }
 
 
-    private GreedyStarRoom(long roomID, StreamObserver<Simple.Package.Frame> clientChannel, App app) {
+    public GreedyStarRoom(long roomID, StreamObserver<Simple.Package.Frame> clientChannel, App app) {
         super(roomID, clientChannel);
         this.app = app;
         init();
