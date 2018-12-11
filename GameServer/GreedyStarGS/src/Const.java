@@ -12,9 +12,8 @@ public class Const {
 
     //初始移动速度
     public static int SPEED = 5;
-    public static int FPS = 1000/Const.fps;
+    public static int FPS = 20;
 
-    public static int fps = 20;
 
 
     public static int  USER_MIN_SPEED = 1;
@@ -51,6 +50,6 @@ public class Const {
     public static int GAME_TIME = 120;
 
     //计算FPS次玩家位置， 当局游戏事件为 GAME_TIM秒
-    public static int GAME_TIME_NUM = fps*GAME_TIME;
+    public static int GAME_TIME_NUM = FPS*GAME_TIME;
 
 }

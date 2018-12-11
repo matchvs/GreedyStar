@@ -63,7 +63,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
         log.info("roomID :" + ID + "初始定时器");
 //        GreedyStarRoom.this.createTime = System.currentTimeMillis();
 //        foodNum = 0;
-        Main.gameServer.setInterval(runnable, Const.FPS);
+        Main.gameServer.setInterval(runnable, 1000/Const.FPS);
     }
 
     public void destroy() {
