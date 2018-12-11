@@ -9,7 +9,6 @@ cc.Class({
     },
 
 
-
     onLoad() {
         this.input = {l: 0, r: 0, u: 0, d: 0,p:0};
         this.ringRadius = this.node.width / 2;
@@ -19,8 +18,6 @@ cc.Class({
         this.joyStickY = this.node.getPosition().y;
         this.initInput(this);
     },
-
-
 
     initInput(self) {
        var keycode = {37: 0, 38: 0, 39: 0, 40: 0, 32:0, 1000:0, 1001:0, 1003:0, 1004:0};
@@ -55,7 +52,7 @@ cc.Class({
             let touchPos = self.node.convertToNodeSpaceAR(event.getLocation());
             let posX = self.joyStickX + touchPos.x;
             let posY = self.joyStickY + touchPos.y;
-            let distance =  touchPos.sub(cc.v2(0,0));
+            let distance = touchPos.sub(cc.v2(0,0));
             var rad = Math.atan2(touchPos.y, touchPos.x);// [-PI, PI]
             isDirection(rad,8);
             if (self.ringRadius > distance) {
@@ -73,8 +70,6 @@ cc.Class({
             keycode = {37: 0, 38: 0, 39: 0, 40: 0, 32:0, 1000:0, 1001:0, 1003:0, 1004:0};
             syncKeyCode2Input();
         });
-
-
 
         this.speed.on(cc.Node.EventType.TOUCH_START,function () {
             self.input.p = 1;
