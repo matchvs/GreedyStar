@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3e697102-9419-4583-9634-068d56452f9d" name="Default" comment="" />
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="MoveSync.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/scripts/Game/MoveSync.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="510">
+              <caret line="41" column="22" lean-forward="false" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Game.js.meta" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Game.js.meta">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Game.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Game.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="434">
+              <caret line="341" column="83" lean-forward="true" selection-start-line="341" selection-start-column="83" selection-end-line="341" selection-end-column="83" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="creator.d.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/creator.d.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="263">
+              <caret line="6799" column="25" lean-forward="false" selection-start-line="6799" selection-start-column="23" selection-end-line="6799" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Const.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/scripts/Const/Const.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="372">
+              <caret line="17" column="11" lean-forward="false" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Item.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Item.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Lobby.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/scripts/Lobby/Lobby.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="572" column="0" lean-forward="false" selection-start-line="572" selection-start-column="0" selection-end-line="573" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Joystick.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Control/Joystick.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2040">
+              <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Cover.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/scripts/Cover/Cover.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2370">
+              <caret line="79" column="26" lean-forward="false" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="wxshare.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/scripts/Util/wxshare.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="660">
+              <caret line="22" column="1" lean-forward="false" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>clearRoomList</find>
+      <find>clearUserList</find>
+      <find>收到startGame消息</find>
+      <find>players</find>
+      <find>this.userScore</find>
+      <find>GameData.isOwner</find>
+      <find>isOwner</find>
+      <find>MATCHVS_JOIN_ROOM_RSP</find>
+      <find>离开房间失败</find>
+      <find>addFood</find>
+      <find>quickJoinBtnHandler</find>
+      <find>lateUpdate</find>
+      <find>Camera</find>
+      <find>startSize</find>
+      <find>starLayer</find>
+      <find>starFoodList</find>
+      <find>hidePromptError</find>
+      <find>netDelay</find>
+      <find>Vec2</find>
+      <find>speed</find>
+      <find>MoveSyne</find>
+      <find>cacheQueue</find>
+      <find>context</find>
+      <find>isCacheing</find>
+      <find>this.node</find>
+      <find>cc.p</find>
+      <find>showScoreList</find>
+      <find>roomUserListChangeNotify</find>
+      <find>backBtnHandler</find>
+      <find>节点</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>Const</replace>
+      <replace>mvsJoinRoom</replace>
+      <replace>mvsLeaveRoom</replace>
+      <replace>foodID</replace>
+      <replace>userID</replace>
+      <replace>this.input</replace>
+      <replace>isshowUserProfileLayer</replace>
+      <replace>this.camera</replace>
+    </replaceStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/assets/scripts/Global/Config.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/Player/Robot.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Cover/Cover1.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Lib/Matchvs.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/Player/Other.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Lobby/Notifier.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/Control/Speed.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/Food/Food.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/Player/Me.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/MVS.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/GameController.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Lib/Mvs.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/Item.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Lib/MatchvsEngine.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Lib/MatvhvsMessage.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Lobby/RoomItem.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Global/GameData.js" />
+        <option value="$PROJECT_DIR$/library/imports/d9/d9079975-8c53-4a51-9548-1d4ff7d8ac49.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Cover/Cover.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Lib/MatchvsDemoResponse.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/Control/Joystick.js" />
+        <option value="$PROJECT_DIR$/packages/plugin-matchvs/matchvs/matchvsjssdk/matchvs.all.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Lobby/Lobby.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Const/Const.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/MoveSync.js" />
+        <option value="$PROJECT_DIR$/assets/scripts/Game/Game.js" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/packages/plugin-matchvs/node_modules" />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Android Lint</id>
+          </State>
+          <State>
+            <id>General</id>
+          </State>
+          <State>
+            <id>Maven</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>AndroidLintUseCompoundDrawables</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="Const" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="Game" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Control" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Food" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="Lobby" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="packages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="packages" type="462c0819:PsiDirectoryNode" />
+              <item name="plugin-matchvs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="packages" type="462c0819:PsiDirectoryNode" />
+              <item name="plugin-matchvs" type="462c0819:PsiDirectoryNode" />
+              <item name="matchvs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GreedyStarClient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GreedyStarClient" type="462c0819:PsiDirectoryNode" />
+              <item name="packages" type="462c0819:PsiDirectoryNode" />
+              <item name="plugin-matchvs" type="462c0819:PsiDirectoryNode" />
+              <item name="matchvs" type="462c0819:PsiDirectoryNode" />
+              <item name="matchvsjssdk" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="android.project.structure.last.selected" value="SDK Location" />
+    <property name="android.project.structure.proportion" value="0.15" />
+    <property name="android.sdk.path" value="$USER_HOME$/Downloads/adt-bundle-mac-x86_64-20140702/sdk" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/physics-example-next" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://E:/project/GreedyStar/client/assets/scripts/Lobby/Lobby.js&#10;game&#9;FILE&#9;file://E:/project/GreedyStar/client/assets/scripts/Global/GameData.js" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\project\GreedyStar\GreedyStarClient\assets\scripts\Game" />
+      <recent name="E:\project\GreedyStar1\GreedyStarClient\assets\scripts\Lib" />
+      <recent name="E:\project\GreedyStar\client\assets\scripts\Lib" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Node.js.Joystick.js">
+    <configuration name="GameController.js" type="NodeJSConfigurationType" factoryName="Node.js" path-to-js-file="GameController.js" working-dir="$PROJECT_DIR$/assets/scripts/Game" />
+    <configuration name="Joystick.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="Joystick.js" working-dir="$PROJECT_DIR$/assets/scripts/Game/Control" />
+    <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+    </configuration>
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="Node.js.GameController.js" />
+      <item index="1" class="java.lang.String" itemvalue="Node.js.Joystick.js" />
+    </list>
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="Node.js.Joystick.js" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration>$USER_HOME$/.subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3e697102-9419-4583-9634-068d56452f9d" name="Default" comment="" />
+      <created>1536667746232</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1536667746232</updated>
+      <workItem from="1536667747671" duration="41207000" />
+      <workItem from="1536889965710" duration="28840000" />
+      <workItem from="1537146621455" duration="22305000" />
+      <workItem from="1537176834297" duration="27827000" />
+      <workItem from="1537328910423" duration="32348000" />
+      <workItem from="1537414673419" duration="626000" />
+      <workItem from="1537428023848" duration="1052000" />
+      <workItem from="1537443033680" duration="2480000" />
+      <workItem from="1537513797449" duration="505000" />
+      <workItem from="1537515577218" duration="1295000" />
+      <workItem from="1537517350495" duration="47000" />
+      <workItem from="1537520935687" duration="6000" />
+      <workItem from="1537846902077" duration="630000" />
+      <workItem from="1537924605523" duration="2556000" />
+      <workItem from="1537927689804" duration="3247000" />
+      <workItem from="1538102238896" duration="2704000" />
+      <workItem from="1538106399009" duration="14000" />
+      <workItem from="1538205023527" duration="685000" />
+      <workItem from="1539160522528" duration="13259000" />
+      <workItem from="1539223268733" duration="27707000" />
+      <workItem from="1539603297293" duration="12496000" />
+      <workItem from="1539742099493" duration="3038000" />
+      <workItem from="1539760595351" duration="408000" />
+      <workItem from="1540297414624" duration="9768000" />
+      <workItem from="1540436927767" duration="5452000" />
+      <workItem from="1540451159646" duration="23341000" />
+      <workItem from="1540778362969" duration="954000" />
+      <workItem from="1540781991321" duration="41244000" />
+      <workItem from="1540903090028" duration="10370000" />
+      <workItem from="1540970742890" duration="4699000" />
+      <workItem from="1541060302308" duration="1074000" />
+      <workItem from="1541083096967" duration="42000" />
+      <workItem from="1541150932065" duration="4000" />
+      <workItem from="1541159159690" duration="890000" />
+      <workItem from="1541406745661" duration="19867000" />
+      <workItem from="1541494101948" duration="1743000" />
+      <workItem from="1541496872982" duration="29912000" />
+      <workItem from="1541589343910" duration="1407000" />
+      <workItem from="1541592531045" duration="11977000" />
+      <workItem from="1541680778934" duration="7270000" />
+      <workItem from="1541992851683" duration="2108000" />
+      <workItem from="1542110689725" duration="29242000" />
+      <workItem from="1542699196146" duration="4129000" />
+      <workItem from="1542781846222" duration="1330000" />
+      <workItem from="1542791111472" duration="2333000" />
+      <workItem from="1542868770179" duration="22126000" />
+      <workItem from="1542953575343" duration="5305000" />
+      <workItem from="1542966613722" duration="4322000" />
+      <workItem from="1542974607674" duration="39000" />
+      <workItem from="1543921166584" duration="48424000" />
+      <workItem from="1544147999718" duration="12416000" />
+      <workItem from="1544173007478" duration="4082000" />
+      <workItem from="1544405929225" duration="1422000" />
+      <workItem from="1544409580863" duration="6750000" />
+      <workItem from="1544435408248" duration="10040000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="549364000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="true" />
+    <layout>
+      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3445652" sideWeight="0.49683878" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23182297" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.50316125" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.019565217" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5619565" sideWeight="0.49789253" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.002173913" sideWeight="0.5021075" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.05426765" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.06521739" sideWeight="0.49789253" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="5" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Player/Robot.js" />
+    <entry file="file://$PROJECT_DIR$/build/web-desktop/src/project.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scenes/cover.fire" />
+    <entry file="file://$PROJECT_DIR$/library/imports/d9/d9079975-8c53-4a51-9548-1d4ff7d8ac49.js.map" />
+    <entry file="file://$PROJECT_DIR$/packages/plugin-matchvs/main.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Score/Score.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Lib/Matchvs.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Cover/Cover1.js" />
+    <entry file="file://$PROJECT_DIR$/packages/plugin-matchvs/panel/index.js" />
+    <entry file="file://$PROJECT_DIR$/library/imports/1e/1ed0f755-279c-4f9d-86b9-e6552d8acf57.js" />
+    <entry file="file://$PROJECT_DIR$/library/imports/f7/f772d4ee-8495-4ea8-874e-82335e1613d7.js" />
+    <entry file="file://$PROJECT_DIR$/build/web-mobile/cocos2d-js-min.js" />
+    <entry file="file://$PROJECT_DIR$/build/jsb-default/frameworks/cocos2d-x/cocos/scripting/js-bindings/script/debugger/actors/script.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Player/Other.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Global/GlobalEvent.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Food/Food.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Control/Joystick.js.meta" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Control/Speed.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/GameController.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/MVS.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Player/Me.js" />
+    <entry file="file://$PROJECT_DIR$/library/imports/41/4162b3ae-c321-4d63-9b43-1ccfc02f478d.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Util/index.js" />
+    <entry file="file://$PROJECT_DIR$/build/jsb-default/src/jsb_polyfill.js" />
+    <entry file="file://$PROJECT_DIR$/build/jsb-default/frameworks/runtime-src/proj.android-studio/app/build/intermediates/assets/debug/src/jsb_polyfill.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Cover/Cover.js.meta" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Lib/MatvhvsMessage.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Lib/MatchvsEngine.js.meta" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Lobby/Notifier.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Lobby/RoomItem.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Global/Config.js" />
+    <entry file="file://$PROJECT_DIR$/build/jsb-default/src/project.dev.js" />
+    <entry file="file://$PROJECT_DIR$/library/imports/d9/d9079975-8c53-4a51-9548-1d4ff7d8ac49.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Global/GameData.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Lib/Mvs.js" />
+    <entry file="file://$PROJECT_DIR$/build/jsb-default/frameworks/cocos2d-x/cocos/scripting/js-bindings/auto/api/jsb_cocos2dx_auto_api.js" />
+    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.dom.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="1771" column="40" lean-forward="false" selection-start-line="1771" selection-start-column="26" selection-end-line="1771" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Lib/MatchvsEngine.js" />
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Lib/MatchvsDemoResponse.js" />
+    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.es5.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="1167" column="54" lean-forward="true" selection-start-line="1167" selection-start-column="7" selection-end-line="1167" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Game.js.meta">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Cover/Cover.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2370">
+          <caret line="79" column="26" lean-forward="false" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Util/wxshare.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="22" column="1" lean-forward="false" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Control/Joystick.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2040">
+          <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/plugin-matchvs/matchvs/matchvsjssdk/matchvs.all.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="14" column="64" lean-forward="false" selection-start-line="14" selection-start-column="64" selection-end-line="14" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Lobby/Lobby.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="572" column="0" lean-forward="false" selection-start-line="572" selection-start-column="0" selection-end-line="573" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/creator.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="6799" column="25" lean-forward="false" selection-start-line="6799" selection-start-column="23" selection-end-line="6799" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/MoveSync.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="41" column="22" lean-forward="false" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Const/Const.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="17" column="11" lean-forward="false" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Item.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts/Game/Game.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="434">
+          <caret line="341" column="83" lean-forward="true" selection-start-line="341" selection-start-column="83" selection-end-line="341" selection-end-column="83" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

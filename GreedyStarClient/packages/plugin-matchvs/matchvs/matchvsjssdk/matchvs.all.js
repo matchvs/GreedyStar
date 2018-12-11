@@ -1,7 +1,16 @@
-var MVS = function (e) {
-    var t = {Game: {id: 0, appkey: "", secret: ""}};
-    return t
-}(), MatchvsLog = {
+var MVS = {
+    version: "--SDK_REL_V3.7.5.2",
+    Game: {id: 0, appkey: ""},
+    DEBUG: !0,
+    IsWss: !1,
+    getNowTimeStr: function () {
+        var e = new Date, t = e.getMonth() + 1, r = e.getDate();
+        return 1 <= t && t <= 9 && (t = "0" + t), 0 <= r && r <= 9 && (r = "0" + r), "[" + e.getFullYear() + "-" + t + "-" + r + " " + e.getHours() + ":" + e.getMinutes() + ":" + e.getSeconds() + "." + e.getMilliseconds() + "]"
+    },
+    LgFormat: function (e) {
+        return "[MatchvsSDK][" + this.getNowTimeStr() + "][" + e + "]"
+    }
+}, MatchvsLog = {
     toArray: function (e) {
         for (var t = [], r = 0; r < e.length; r++) t.push(e[r]);
         return t
@@ -37,8 +46,39 @@ MatchvsLog.openLog = function () {
     console.log("---- close log ----"), MatchvsLog.logI = function () {
     }, MatchvsLog.logE = function () {
     }
-}, MatchvsLog.openLog();
-var HEART_BEAT_INTERVAL = 3e3, ENGE_STATE = {
+}, MatchvsLog.openLog(), function (e) {
+    e.Config = {
+        HEART_BEAT_INTERVAL: 3e3,
+        MAXPLAYER_LIMIT: 100,
+        MINPLAYER_LIMIT: 2
+    }, e.Host = {
+        HOST_GATWAY_ADDR: "",
+        HOST_HOTEL_ADDR: "",
+        HOST_WATCH_ADDR: "",
+        GETHOSTLIST_URL: "http://sdk.matchvs.com",
+        REGISTER_USER_URL: "",
+        CMSNS_URL: "",
+        VS_OPEN_URL: "",
+        VS_PAY_URL: "",
+        VS_PRODUCT_URL: ""
+    }, e.TgRoomType = {NRoom: -1, PRoom: 0, WRoom: 1}, e.ENGE_STATE = {
+        NONE: 0,
+        INITING: 1,
+        HAVE_INIT: 2,
+        LOGINING: 4,
+        HAVE_LOGIN: 8,
+        IN_ROOM: 16,
+        CREATEROOM: 32,
+        JOIN_ROOMING: 64,
+        LEAVE_ROOMING: 128,
+        LOGOUTING: 256,
+        RECONNECTING: 512,
+        IN_WATCHING: 1024,
+        IN_WATCH: 2048,
+        LEAVE_WATCHING: 4096
+    }
+}(MVS || {});
+var ENGE_STATE = {
     NONE: 0,
     INITING: 1,
     HAVE_INIT: 2,
@@ -50,13 +90,10 @@ var HEART_BEAT_INTERVAL = 3e3, ENGE_STATE = {
     LEAVE_ROOMING: 128,
     LOGOUTING: 256,
     RECONNECTING: 512
-}, ENMU_MVS_PTF = {MVS_COMMON: 0, MVS_EGRET: 1, MVS_WX: 2}, MVSCONFIG = {
-    MAXPLAYER_LIMIT: 100,
-    MINPLAYER_LIMIT: 2,
-    MVS_PTF_ADATPER: ENMU_MVS_PTF.MVS_COMMON
 }, HttpConf = {
     HOST_GATWAY_ADDR: "",
     HOST_HOTEL_ADDR: "",
+    HOST_WATCH_ADDR: "",
     GETHOSTLIST_URL: "http://sdk.matchvs.com",
     REGISTER_USER_URL: "",
     CMSNS_URL: "",
@@ -95,9 +132,9 @@ function md5_vm_test() {
 
 function core_md5(e, t) {
     e[t >> 5] |= 128 << t % 32, e[14 + (t + 64 >>> 9 << 4)] = t;
-    for (var r = 1732584193, o = -271733879, s = -1732584194, i = 271733878, n = 0; n < e.length; n += 16) {
-        var a = r, p = o, g = s, u = i;
-        o = md5_ii(o = md5_ii(o = md5_ii(o = md5_ii(o = md5_hh(o = md5_hh(o = md5_hh(o = md5_hh(o = md5_gg(o = md5_gg(o = md5_gg(o = md5_gg(o = md5_ff(o = md5_ff(o = md5_ff(o = md5_ff(o, s = md5_ff(s, i = md5_ff(i, r = md5_ff(r, o, s, i, e[n + 0], 7, -680876936), o, s, e[n + 1], 12, -389564586), r, o, e[n + 2], 17, 606105819), i, r, e[n + 3], 22, -1044525330), s = md5_ff(s, i = md5_ff(i, r = md5_ff(r, o, s, i, e[n + 4], 7, -176418897), o, s, e[n + 5], 12, 1200080426), r, o, e[n + 6], 17, -1473231341), i, r, e[n + 7], 22, -45705983), s = md5_ff(s, i = md5_ff(i, r = md5_ff(r, o, s, i, e[n + 8], 7, 1770035416), o, s, e[n + 9], 12, -1958414417), r, o, e[n + 10], 17, -42063), i, r, e[n + 11], 22, -1990404162), s = md5_ff(s, i = md5_ff(i, r = md5_ff(r, o, s, i, e[n + 12], 7, 1804603682), o, s, e[n + 13], 12, -40341101), r, o, e[n + 14], 17, -1502002290), i, r, e[n + 15], 22, 1236535329), s = md5_gg(s, i = md5_gg(i, r = md5_gg(r, o, s, i, e[n + 1], 5, -165796510), o, s, e[n + 6], 9, -1069501632), r, o, e[n + 11], 14, 643717713), i, r, e[n + 0], 20, -373897302), s = md5_gg(s, i = md5_gg(i, r = md5_gg(r, o, s, i, e[n + 5], 5, -701558691), o, s, e[n + 10], 9, 38016083), r, o, e[n + 15], 14, -660478335), i, r, e[n + 4], 20, -405537848), s = md5_gg(s, i = md5_gg(i, r = md5_gg(r, o, s, i, e[n + 9], 5, 568446438), o, s, e[n + 14], 9, -1019803690), r, o, e[n + 3], 14, -187363961), i, r, e[n + 8], 20, 1163531501), s = md5_gg(s, i = md5_gg(i, r = md5_gg(r, o, s, i, e[n + 13], 5, -1444681467), o, s, e[n + 2], 9, -51403784), r, o, e[n + 7], 14, 1735328473), i, r, e[n + 12], 20, -1926607734), s = md5_hh(s, i = md5_hh(i, r = md5_hh(r, o, s, i, e[n + 5], 4, -378558), o, s, e[n + 8], 11, -2022574463), r, o, e[n + 11], 16, 1839030562), i, r, e[n + 14], 23, -35309556), s = md5_hh(s, i = md5_hh(i, r = md5_hh(r, o, s, i, e[n + 1], 4, -1530992060), o, s, e[n + 4], 11, 1272893353), r, o, e[n + 7], 16, -155497632), i, r, e[n + 10], 23, -1094730640), s = md5_hh(s, i = md5_hh(i, r = md5_hh(r, o, s, i, e[n + 13], 4, 681279174), o, s, e[n + 0], 11, -358537222), r, o, e[n + 3], 16, -722521979), i, r, e[n + 6], 23, 76029189), s = md5_hh(s, i = md5_hh(i, r = md5_hh(r, o, s, i, e[n + 9], 4, -640364487), o, s, e[n + 12], 11, -421815835), r, o, e[n + 15], 16, 530742520), i, r, e[n + 2], 23, -995338651), s = md5_ii(s, i = md5_ii(i, r = md5_ii(r, o, s, i, e[n + 0], 6, -198630844), o, s, e[n + 7], 10, 1126891415), r, o, e[n + 14], 15, -1416354905), i, r, e[n + 5], 21, -57434055), s = md5_ii(s, i = md5_ii(i, r = md5_ii(r, o, s, i, e[n + 12], 6, 1700485571), o, s, e[n + 3], 10, -1894986606), r, o, e[n + 10], 15, -1051523), i, r, e[n + 1], 21, -2054922799), s = md5_ii(s, i = md5_ii(i, r = md5_ii(r, o, s, i, e[n + 8], 6, 1873313359), o, s, e[n + 15], 10, -30611744), r, o, e[n + 6], 15, -1560198380), i, r, e[n + 13], 21, 1309151649), s = md5_ii(s, i = md5_ii(i, r = md5_ii(r, o, s, i, e[n + 4], 6, -145523070), o, s, e[n + 11], 10, -1120210379), r, o, e[n + 2], 15, 718787259), i, r, e[n + 9], 21, -343485551), r = safe_add(r, a), o = safe_add(o, p), s = safe_add(s, g), i = safe_add(i, u)
+    for (var r = 1732584193, o = -271733879, s = -1732584194, i = 271733878, a = 0; a < e.length; a += 16) {
+        var n = r, p = o, g = s, u = i;
+        o = md5_ii(o = md5_ii(o = md5_ii(o = md5_ii(o = md5_hh(o = md5_hh(o = md5_hh(o = md5_hh(o = md5_gg(o = md5_gg(o = md5_gg(o = md5_gg(o = md5_ff(o = md5_ff(o = md5_ff(o = md5_ff(o, s = md5_ff(s, i = md5_ff(i, r = md5_ff(r, o, s, i, e[a + 0], 7, -680876936), o, s, e[a + 1], 12, -389564586), r, o, e[a + 2], 17, 606105819), i, r, e[a + 3], 22, -1044525330), s = md5_ff(s, i = md5_ff(i, r = md5_ff(r, o, s, i, e[a + 4], 7, -176418897), o, s, e[a + 5], 12, 1200080426), r, o, e[a + 6], 17, -1473231341), i, r, e[a + 7], 22, -45705983), s = md5_ff(s, i = md5_ff(i, r = md5_ff(r, o, s, i, e[a + 8], 7, 1770035416), o, s, e[a + 9], 12, -1958414417), r, o, e[a + 10], 17, -42063), i, r, e[a + 11], 22, -1990404162), s = md5_ff(s, i = md5_ff(i, r = md5_ff(r, o, s, i, e[a + 12], 7, 1804603682), o, s, e[a + 13], 12, -40341101), r, o, e[a + 14], 17, -1502002290), i, r, e[a + 15], 22, 1236535329), s = md5_gg(s, i = md5_gg(i, r = md5_gg(r, o, s, i, e[a + 1], 5, -165796510), o, s, e[a + 6], 9, -1069501632), r, o, e[a + 11], 14, 643717713), i, r, e[a + 0], 20, -373897302), s = md5_gg(s, i = md5_gg(i, r = md5_gg(r, o, s, i, e[a + 5], 5, -701558691), o, s, e[a + 10], 9, 38016083), r, o, e[a + 15], 14, -660478335), i, r, e[a + 4], 20, -405537848), s = md5_gg(s, i = md5_gg(i, r = md5_gg(r, o, s, i, e[a + 9], 5, 568446438), o, s, e[a + 14], 9, -1019803690), r, o, e[a + 3], 14, -187363961), i, r, e[a + 8], 20, 1163531501), s = md5_gg(s, i = md5_gg(i, r = md5_gg(r, o, s, i, e[a + 13], 5, -1444681467), o, s, e[a + 2], 9, -51403784), r, o, e[a + 7], 14, 1735328473), i, r, e[a + 12], 20, -1926607734), s = md5_hh(s, i = md5_hh(i, r = md5_hh(r, o, s, i, e[a + 5], 4, -378558), o, s, e[a + 8], 11, -2022574463), r, o, e[a + 11], 16, 1839030562), i, r, e[a + 14], 23, -35309556), s = md5_hh(s, i = md5_hh(i, r = md5_hh(r, o, s, i, e[a + 1], 4, -1530992060), o, s, e[a + 4], 11, 1272893353), r, o, e[a + 7], 16, -155497632), i, r, e[a + 10], 23, -1094730640), s = md5_hh(s, i = md5_hh(i, r = md5_hh(r, o, s, i, e[a + 13], 4, 681279174), o, s, e[a + 0], 11, -358537222), r, o, e[a + 3], 16, -722521979), i, r, e[a + 6], 23, 76029189), s = md5_hh(s, i = md5_hh(i, r = md5_hh(r, o, s, i, e[a + 9], 4, -640364487), o, s, e[a + 12], 11, -421815835), r, o, e[a + 15], 16, 530742520), i, r, e[a + 2], 23, -995338651), s = md5_ii(s, i = md5_ii(i, r = md5_ii(r, o, s, i, e[a + 0], 6, -198630844), o, s, e[a + 7], 10, 1126891415), r, o, e[a + 14], 15, -1416354905), i, r, e[a + 5], 21, -57434055), s = md5_ii(s, i = md5_ii(i, r = md5_ii(r, o, s, i, e[a + 12], 6, 1700485571), o, s, e[a + 3], 10, -1894986606), r, o, e[a + 10], 15, -1051523), i, r, e[a + 1], 21, -2054922799), s = md5_ii(s, i = md5_ii(i, r = md5_ii(r, o, s, i, e[a + 8], 6, 1873313359), o, s, e[a + 15], 10, -30611744), r, o, e[a + 6], 15, -1560198380), i, r, e[a + 13], 21, 1309151649), s = md5_ii(s, i = md5_ii(i, r = md5_ii(r, o, s, i, e[a + 4], 6, -145523070), o, s, e[a + 11], 10, -1120210379), r, o, e[a + 2], 15, 718787259), i, r, e[a + 9], 21, -343485551), r = safe_add(r, n), o = safe_add(o, p), s = safe_add(s, g), i = safe_add(i, u)
     }
     return Array(r, o, s, i)
 }
@@ -106,28 +143,28 @@ function md5_cmn(e, t, r, o, s, i) {
     return safe_add(bit_rol(safe_add(safe_add(t, e), safe_add(o, i)), s), r)
 }
 
-function md5_ff(e, t, r, o, s, i, n) {
-    return md5_cmn(t & r | ~t & o, e, t, s, i, n)
+function md5_ff(e, t, r, o, s, i, a) {
+    return md5_cmn(t & r | ~t & o, e, t, s, i, a)
 }
 
-function md5_gg(e, t, r, o, s, i, n) {
-    return md5_cmn(t & o | r & ~o, e, t, s, i, n)
+function md5_gg(e, t, r, o, s, i, a) {
+    return md5_cmn(t & o | r & ~o, e, t, s, i, a)
 }
 
-function md5_hh(e, t, r, o, s, i, n) {
-    return md5_cmn(t ^ r ^ o, e, t, s, i, n)
+function md5_hh(e, t, r, o, s, i, a) {
+    return md5_cmn(t ^ r ^ o, e, t, s, i, a)
 }
 
-function md5_ii(e, t, r, o, s, i, n) {
-    return md5_cmn(r ^ (t | ~o), e, t, s, i, n)
+function md5_ii(e, t, r, o, s, i, a) {
+    return md5_cmn(r ^ (t | ~o), e, t, s, i, a)
 }
 
 function core_hmac_md5(e, t) {
     var r = str2binl(e);
     16 < r.length && (r = core_md5(r, e.length * chrsz));
     for (var o = Array(16), s = Array(16), i = 0; i < 16; i++) o[i] = 909522486 ^ r[i], s[i] = 1549556828 ^ r[i];
-    var n = core_md5(o.concat(str2binl(t)), 512 + t.length * chrsz);
-    return core_md5(s.concat(n), 640)
+    var a = core_md5(o.concat(str2binl(t)), 512 + t.length * chrsz);
+    return core_md5(s.concat(a), 640)
 }
 
 function safe_add(e, t) {
@@ -160,12 +197,12 @@ function binl2b64(e) {
 }
 
 var format = function (t) {
-    for (var r, e, o, s, i = 1, n = [].slice.call(arguments), a = 0, p = t.length, g = "", u = !1, l = !1, c = function () {
-        return n[i++]
+    for (var r, e, o, s, i = 1, a = [].slice.call(arguments), n = 0, p = t.length, g = "", u = !1, l = !1, c = function () {
+        return a[i++]
     }, m = function () {
-        for (var e = ""; /\d/.test(t[a]);) e += t[a++], r = t[a];
+        for (var e = ""; /\d/.test(t[n]);) e += t[n++], r = t[n];
         return 0 < e.length ? parseInt(e) : null
-    }; a < p; ++a) if (r = t[a], u) switch (u = !1, "." == r ? (l = !1, r = t[++a]) : "0" == r && "." == t[a + 1] ? (l = !0, r = t[a += 2]) : l = !0, s = m(), r) {
+    }; n < p; ++n) if (r = t[n], u) switch (u = !1, "." == r ? (l = !1, r = t[++n]) : "0" == r && "." == t[n + 1] ? (l = !0, r = t[n += 2]) : l = !0, s = m(), r) {
         case"b":
             g += parseInt(c(), 10).toString(2);
             break;
@@ -214,21 +251,21 @@ function stringToUtf8ByteArray(e) {
         var s = e.charCodeAt(o);
         s < 128 ? t[r++] = s : (s < 2048 ? t[r++] = s >> 6 | 192 : (55296 == (64512 & s) && o + 1 < e.length && 56320 == (64512 & e.charCodeAt(o + 1)) ? (s = 65536 + ((1023 & s) << 10) + (1023 & e.charCodeAt(++o)), t[r++] = s >> 18 | 240, t[r++] = s >> 12 & 63 | 128) : t[r++] = s >> 12 | 224, t[r++] = s >> 6 & 63 | 128), t[r++] = 63 & s | 128)
     }
-    for (var i = new Uint8Array(t.length), n = 0; n < i.length; n++) i[n] = t[n];
+    for (var i = new Uint8Array(t.length), a = 0; a < i.length; a++) i[a] = t[a];
     return i
 }
 
 function utf8ByteArrayToString(e) {
     for (var t = [], r = 0, o = 0; r < e.length;) {
-        if ((n = e[r++]) < 128) t[o++] = String.fromCharCode(n); else if (191 < n && n < 224) {
+        if ((a = e[r++]) < 128) t[o++] = String.fromCharCode(a); else if (191 < a && a < 224) {
             var s = e[r++];
-            t[o++] = String.fromCharCode((31 & n) << 6 | 63 & s)
-        } else if (239 < n && n < 365) {
+            t[o++] = String.fromCharCode((31 & a) << 6 | 63 & s)
+        } else if (239 < a && a < 365) {
             s = e[r++];
             var i = e[r++],
-                n = ((7 & n) << 18 | (63 & s) << 12 | (63 & i) << 6 | 63 & e[r++]) - 65536;
-            t[o++] = String.fromCharCode(55296 + (n >> 10)), t[o++] = String.fromCharCode(56320 + (1023 & n))
-        } else s = e[r++], i = e[r++], t[o++] = String.fromCharCode((15 & n) << 12 | (63 & s) << 6 | 63 & i)
+                a = ((7 & a) << 18 | (63 & s) << 12 | (63 & i) << 6 | 63 & e[r++]) - 65536;
+            t[o++] = String.fromCharCode(55296 + (a >> 10)), t[o++] = String.fromCharCode(56320 + (1023 & a))
+        } else s = e[r++], i = e[r++], t[o++] = String.fromCharCode((15 & a) << 12 | (63 & s) << 6 | 63 & i)
     }
     return t.join("")
 }
@@ -245,15 +282,15 @@ function u8array2str(e) {
 }
 
 function LocalStore_Save(e, t) {
-    return window.localStorage ? (localStorage.setItem(e, t), !0) : MVSCONFIG.MVS_PTF_ADATPER !== ENMU_MVS_PTF.MVS_EGRET && ("undefined" != typeof wx && (wx.setStorageSync(e, t), !0))
+    return window.localStorage ? (localStorage.setItem(e, t), !0) : "undefined" != typeof wx && (wx.setStorageSync(e, t), !0)
 }
 
 function LocalStore_Clear() {
-    return window.localStorage ? (localStorage.clear(), !0) : MVSCONFIG.MVS_PTF_ADATPER !== ENMU_MVS_PTF.MVS_EGRET && ("undefined" != typeof wx && (wx.clearStorageSync(), !0))
+    return window.localStorage ? (localStorage.clear(), !0) : "undefined" != typeof wx && (wx.clearStorageSync(), !0)
 }
 
 function LocalStore_Load(e) {
-    return window.localStorage ? localStorage.getItem(e) : MVSCONFIG.MVS_PTF_ADATPER === ENMU_MVS_PTF.MVS_EGRET ? null : "undefined" != typeof wx ? wx.getStorageSync(e) : null
+    return window.localStorage ? localStorage.getItem(e) : "undefined" != typeof wx ? wx.getStorageSync(e) : null
 }
 
 function isIE() {
@@ -261,23 +298,29 @@ function isIE() {
 }
 
 function isNeedUseWSS() {
-    return "undefined" != typeof wx
+    return !!MVS.IsWss || "undefined" != typeof wx
 }
 
-function getHotelUrl(e) {
-    return isNeedUseWSS() ? "wss://" + e.getWssproxy() + "/proxy?hotel=" + e.getHoteladdr() : "ws://" + e.getHoteladdr()
-}
-
-function commEngineStateCheck(e, t, r) {
-    var o = 0;
-    return (e & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT && (o = -2), (e & ENGE_STATE.INITING) === ENGE_STATE.INITING && (o = -3), (e & ENGE_STATE.HAVE_LOGIN) !== ENGE_STATE.HAVE_LOGIN && (o = -4), (e & ENGE_STATE.LOGINING) === ENGE_STATE.LOGINING && (o = -5), (e & ENGE_STATE.CREATEROOM) === ENGE_STATE.CREATEROOM && (o = -7), (e & ENGE_STATE.JOIN_ROOMING) === ENGE_STATE.JOIN_ROOMING && (o = -7), (e & ENGE_STATE.LOGOUTING) === ENGE_STATE.LOGOUTING && (o = -11), 1 === r ? ((e & ENGE_STATE.IN_ROOM) !== ENGE_STATE.IN_ROOM && (o = -6), (e & ENGE_STATE.LEAVE_ROOMING) === ENGE_STATE.LEAVE_ROOMING && (o = -10)) : 2 === r ? ((e & ENGE_STATE.IN_ROOM) === ENGE_STATE.IN_ROOM && (o = -8), (e & ENGE_STATE.LEAVE_ROOMING) === ENGE_STATE.LEAVE_ROOMING && (o = -10)) : 3 === r && (e & ENGE_STATE.LEAVE_ROOMING) === ENGE_STATE.LEAVE_ROOMING && (o = -10), 0 !== o && MatchvsLog.logI("error code:" + o + " see the error documentation : http://www.matchvs.com/service?page=js"), o
+function commEngineStateCheck(e, t) {
+    var r = 0;
+    return (e & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT && (r = -2), (e & ENGE_STATE.INITING) === ENGE_STATE.INITING && (r = -3), (e & ENGE_STATE.HAVE_LOGIN) !== ENGE_STATE.HAVE_LOGIN && (r = -4), (e & ENGE_STATE.LOGINING) === ENGE_STATE.LOGINING && (r = -5), (e & ENGE_STATE.CREATEROOM) === ENGE_STATE.CREATEROOM && (r = -7), (e & ENGE_STATE.JOIN_ROOMING) === ENGE_STATE.JOIN_ROOMING && (r = -7), (e & ENGE_STATE.LOGOUTING) === ENGE_STATE.LOGOUTING && (r = -11), (e & MVS.ENGE_STATE.IN_WATCHING) === MVS.ENGE_STATE.IN_WATCHING && (r = -12), 1 === t ? ((e & ENGE_STATE.IN_ROOM) !== ENGE_STATE.IN_ROOM && (r = -6), (e & ENGE_STATE.LEAVE_ROOMING) === ENGE_STATE.LEAVE_ROOMING && (r = -10)) : 2 === t ? ((e & ENGE_STATE.IN_ROOM) === ENGE_STATE.IN_ROOM && (r = -8), (e & MVS.ENGE_STATE.IN_WATCH) === MVS.ENGE_STATE.IN_WATCH && (r = -8), (e & ENGE_STATE.LEAVE_ROOMING) === ENGE_STATE.LEAVE_ROOMING && (r = -10), (e & MVS.ENGE_STATE.LEAVE_WATCHING) === MVS.ENGE_STATE.LEAVE_WATCHING && (r = -14)) : 3 === t ? ((e & MVS.ENGE_STATE.LEAVE_ROOMING) === MVS.ENGE_STATE.LEAVE_ROOMING && (r = -10), (e & MVS.ENGE_STATE.LEAVE_WATCHING) === MVS.ENGE_STATE.LEAVE_WATCHING && (r = -10)) : 4 === t && ((e & MVS.ENGE_STATE.IN_WATCH) !== MVS.ENGE_STATE.IN_WATCH && (r = -6), (e & MVS.ENGE_STATE.LEAVE_WATCHING) === MVS.ENGE_STATE.LEAVE_WATCHING && (r = -10)), 0 !== r && MatchvsLog.logI("error code:" + r + " see the error documentation : http://www.matchvs.com/service?page=js"), r
 }
 
 "function" != typeof String.prototype.startsWith && (String.prototype.startsWith = function (e) {
     return this.slice(0, e.length) === e
 }), "function" != typeof String.prototype.endsWith && (String.prototype.endsWith = function (e) {
     return -1 !== this.indexOf(e, this.length - e.length)
-});
+}), function (e) {
+    var t = {
+        getLiveUrl: function (e, t, r, o) {
+            var s = "live=" + e.getHoteladdr() + "&gameID=" + t + "&roomID=" + r + "&setID=" + o;
+            return MVS.IsWss ? "wss://" + e.getWssproxy() + "/watch?" + s : "ws://" + e.getHoteladdr()
+        }, getHotelUrl: function (e) {
+            return isNeedUseWSS() ? "wss://" + e.getWssproxy() + "/proxy?hotel=" + e.getHoteladdr() : "ws://" + e.getHoteladdr()
+        }
+    };
+    (MVS || {}).MsUtil = t
+}();
 var MvsTicker = function (e) {
     var s = {}, i = 0;
 
@@ -300,33 +343,28 @@ var MvsTicker = function (e) {
 }(), MVS = function (e) {
     return e.ticker = new MvsTicker, e
 }(MVS || {}), MVS = function (e) {
-    var o, t, r = (o = ["", "E", "C", "M"], (t = function () {
+    var t, r = ((t = function () {
     }).prototype.isInvailed = function (e) {
-        for (var t = function (e) {
-            e.length;
-            var t = e.split("#");
-            return 2 !== t.length ? "" : t[1]
-        }(e), r = 0; r < o.length; r++) if (t === o[r]) return !0;
-        return !1
+        return !0
     }, t);
     return e.AppKeyCheck = r, e
 }(MVS || {});
-!function i(n, a, p) {
+!function i(a, n, p) {
     function g(t, e) {
-        if (!a[t]) {
-            if (!n[t]) {
+        if (!n[t]) {
+            if (!a[t]) {
                 var r = "function" == typeof _require && _require;
                 if (!e && r) return r(t, !0);
                 if (u) return u(t, !0);
                 var o = new Error("Cannot find module '" + t + "'");
                 throw o.code = "MODULE_NOT_FOUND", o
             }
-            var s = a[t] = {exports: {}};
-            n[t][0].call(s.exports, function (e) {
-                return g(n[t][1][e] || e)
-            }, s, s.exports, i, n, a, p)
+            var s = n[t] = {exports: {}};
+            a[t][0].call(s.exports, function (e) {
+                return g(a[t][1][e] || e)
+            }, s, s.exports, i, a, n, p)
         }
-        return a[t].exports
+        return n[t].exports
     }
 
     for (var u = "function" == typeof _require && _require, e = 0; e < p.length; e++) g(p[e]);
@@ -338,17 +376,17 @@ var MvsTicker = function (e) {
             var t = m(e), r = t[0], o = t[1];
             return 3 * (r + o) / 4 - o
         }, r.toByteArray = function (e) {
-            for (var t, r = m(e), o = r[0], s = r[1], i = new c((g = o, u = s, 3 * (g + u) / 4 - u)), n = 0, a = 0 < s ? o - 4 : o, p = 0; p < a; p += 4) t = l[e.charCodeAt(p)] << 18 | l[e.charCodeAt(p + 1)] << 12 | l[e.charCodeAt(p + 2)] << 6 | l[e.charCodeAt(p + 3)], i[n++] = t >> 16 & 255, i[n++] = t >> 8 & 255, i[n++] = 255 & t;
+            for (var t, r = m(e), o = r[0], s = r[1], i = new c((g = o, u = s, 3 * (g + u) / 4 - u)), a = 0, n = 0 < s ? o - 4 : o, p = 0; p < n; p += 4) t = l[e.charCodeAt(p)] << 18 | l[e.charCodeAt(p + 1)] << 12 | l[e.charCodeAt(p + 2)] << 6 | l[e.charCodeAt(p + 3)], i[a++] = t >> 16 & 255, i[a++] = t >> 8 & 255, i[a++] = 255 & t;
             var g, u;
-            2 === s && (t = l[e.charCodeAt(p)] << 2 | l[e.charCodeAt(p + 1)] >> 4, i[n++] = 255 & t);
-            1 === s && (t = l[e.charCodeAt(p)] << 10 | l[e.charCodeAt(p + 1)] << 4 | l[e.charCodeAt(p + 2)] >> 2, i[n++] = t >> 8 & 255, i[n++] = 255 & t);
+            2 === s && (t = l[e.charCodeAt(p)] << 2 | l[e.charCodeAt(p + 1)] >> 4, i[a++] = 255 & t);
+            1 === s && (t = l[e.charCodeAt(p)] << 10 | l[e.charCodeAt(p + 1)] << 4 | l[e.charCodeAt(p + 2)] >> 2, i[a++] = t >> 8 & 255, i[a++] = 255 & t);
             return i
         }, r.fromByteArray = function (e) {
-            for (var t, r = e.length, o = r % 3, s = [], i = 0, n = r - o; i < n; i += 16383) s.push(p(e, i, n < i + 16383 ? n : i + 16383));
-            1 === o ? (t = e[r - 1], s.push(a[t >> 2] + a[t << 4 & 63] + "==")) : 2 === o && (t = (e[r - 2] << 8) + e[r - 1], s.push(a[t >> 10] + a[t >> 4 & 63] + a[t << 2 & 63] + "="));
+            for (var t, r = e.length, o = r % 3, s = [], i = 0, a = r - o; i < a; i += 16383) s.push(p(e, i, a < i + 16383 ? a : i + 16383));
+            1 === o ? (t = e[r - 1], s.push(n[t >> 2] + n[t << 4 & 63] + "==")) : 2 === o && (t = (e[r - 2] << 8) + e[r - 1], s.push(n[t >> 10] + n[t >> 4 & 63] + n[t << 2 & 63] + "="));
             return s.join("")
         };
-        for (var a = [], l = [], c = "undefined" != typeof Uint8Array ? Uint8Array : Array, o = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", s = 0, i = o.length; s < i; ++s) a[s] = o[s], l[o.charCodeAt(s)] = s;
+        for (var n = [], l = [], c = "undefined" != typeof Uint8Array ? Uint8Array : Array, o = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", s = 0, i = o.length; s < i; ++s) n[s] = o[s], l[o.charCodeAt(s)] = s;
 
         function m(e) {
             var t = e.length;
@@ -358,12 +396,13 @@ var MvsTicker = function (e) {
         }
 
         function p(e, t, r) {
-            for (var o, s, i = [], n = t; n < r; n += 3) o = (e[n] << 16 & 16711680) + (e[n + 1] << 8 & 65280) + (255 & e[n + 2]), i.push(a[(s = o) >> 18 & 63] + a[s >> 12 & 63] + a[s >> 6 & 63] + a[63 & s]);
+            for (var o, s, i = [], a = t; a < r; a += 3) o = (e[a] << 16 & 16711680) + (e[a + 1] << 8 & 65280) + (255 & e[a + 2]), i.push(n[(s = o) >> 18 & 63] + n[s >> 12 & 63] + n[s >> 6 & 63] + n[63 & s]);
             return i.join("")
         }
 
         l["-".charCodeAt(0)] = 62, l["_".charCodeAt(0)] = 63
-    }, {}], 2: [function (e, t, r) {
+    }, {}],
+    2: [function (e, t, r) {
         "use strict";
         var o = e("base64-js"), i = e("ieee754");
         r.Buffer = l, r.SlowBuffer = function (e) {
@@ -372,7 +411,7 @@ var MvsTicker = function (e) {
         }, r.INSPECT_MAX_BYTES = 50;
         var s = 2147483647;
 
-        function n(e) {
+        function a(e) {
             if (s < e) throw new RangeError('The value "' + e + '" is invalid for option "size"');
             var t = new Uint8Array(e);
             return t.__proto__ = l.prototype, t
@@ -383,14 +422,14 @@ var MvsTicker = function (e) {
                 if ("string" == typeof t) throw new TypeError('The "string" argument must be of type string. Received type number');
                 return g(e)
             }
-            return a(e, t, r)
+            return n(e, t, r)
         }
 
-        function a(e, t, r) {
+        function n(e, t, r) {
             if ("string" == typeof e) return function (e, t) {
                 "string" == typeof t && "" !== t || (t = "utf8");
                 if (!l.isEncoding(t)) throw new TypeError("Unknown encoding: " + t);
-                var r = 0 | m(e, t), o = n(r), s = o.write(e, t);
+                var r = 0 | m(e, t), o = a(r), s = o.write(e, t);
                 s !== r && (o = o.slice(0, s));
                 return o
             }(e, t);
@@ -408,10 +447,10 @@ var MvsTicker = function (e) {
             if (null != o && o !== e) return l.from(o, t, r);
             var s = function (e) {
                 if (l.isBuffer(e)) {
-                    var t = 0 | c(e.length), r = n(t);
+                    var t = 0 | c(e.length), r = a(t);
                     return 0 === r.length || e.copy(r, 0, 0, t), r
                 }
-                if (void 0 !== e.length) return "number" != typeof e.length || k(e.length) ? n(0) : u(e);
+                if (void 0 !== e.length) return "number" != typeof e.length || L(e.length) ? a(0) : u(e);
                 if ("Buffer" === e.type && Array.isArray(e.data)) return u(e.data)
             }(e);
             if (s) return s;
@@ -425,11 +464,11 @@ var MvsTicker = function (e) {
         }
 
         function g(e) {
-            return p(e), n(e < 0 ? 0 : 0 | c(e))
+            return p(e), a(e < 0 ? 0 : 0 | c(e))
         }
 
         function u(e) {
-            for (var t = e.length < 0 ? 0 : 0 | c(e.length), r = n(t), o = 0; o < t; o += 1) r[o] = 255 & e[o];
+            for (var t = e.length < 0 ? 0 : 0 | c(e.length), r = a(t), o = 0; o < t; o += 1) r[o] = 255 & e[o];
             return r
         }
 
@@ -451,7 +490,7 @@ var MvsTicker = function (e) {
                     return r;
                 case"utf8":
                 case"utf-8":
-                    return w(e).length;
+                    return D(e).length;
                 case"ucs2":
                 case"ucs-2":
                 case"utf16le":
@@ -460,9 +499,9 @@ var MvsTicker = function (e) {
                 case"hex":
                     return r >>> 1;
                 case"base64":
-                    return D(e).length;
+                    return w(e).length;
                 default:
-                    if (s) return o ? -1 : w(e).length;
+                    if (s) return o ? -1 : D(e).length;
                     t = ("" + t).toLowerCase(), s = !0
             }
         }
@@ -474,7 +513,7 @@ var MvsTicker = function (e) {
 
         function f(e, t, r, o, s) {
             if (0 === e.length) return -1;
-            if ("string" == typeof r ? (o = r, r = 0) : 2147483647 < r ? r = 2147483647 : r < -2147483648 && (r = -2147483648), k(r = +r) && (r = s ? 0 : e.length - 1), r < 0 && (r = e.length + r), r >= e.length) {
+            if ("string" == typeof r ? (o = r, r = 0) : 2147483647 < r ? r = 2147483647 : r < -2147483648 && (r = -2147483648), L(r = +r) && (r = s ? 0 : e.length - 1), r < 0 && (r = e.length + r), r >= e.length) {
                 if (s) return -1;
                 r = e.length - 1
             } else if (r < 0) {
@@ -487,22 +526,22 @@ var MvsTicker = function (e) {
         }
 
         function h(e, t, r, o, s) {
-            var i, n = 1, a = e.length, p = t.length;
+            var i, a = 1, n = e.length, p = t.length;
             if (void 0 !== o && ("ucs2" === (o = String(o).toLowerCase()) || "ucs-2" === o || "utf16le" === o || "utf-16le" === o)) {
                 if (e.length < 2 || t.length < 2) return -1;
-                a /= n = 2, p /= 2, r /= 2
+                n /= a = 2, p /= 2, r /= 2
             }
 
             function g(e, t) {
-                return 1 === n ? e[t] : e.readUInt16BE(t * n)
+                return 1 === a ? e[t] : e.readUInt16BE(t * a)
             }
 
             if (s) {
                 var u = -1;
-                for (i = r; i < a; i++) if (g(e, i) === g(t, -1 === u ? 0 : i - u)) {
-                    if (-1 === u && (u = i), i - u + 1 === p) return u * n
+                for (i = r; i < n; i++) if (g(e, i) === g(t, -1 === u ? 0 : i - u)) {
+                    if (-1 === u && (u = i), i - u + 1 === p) return u * a
                 } else -1 !== u && (i -= i - u), u = -1
-            } else for (a < r + p && (r = a - p), i = r; 0 <= i; i--) {
+            } else for (n < r + p && (r = n - p), i = r; 0 <= i; i--) {
                 for (var l = !0, c = 0; c < p; c++) if (g(e, i + c) !== g(t, c)) {
                     l = !1;
                     break
@@ -518,29 +557,29 @@ var MvsTicker = function (e) {
             o ? s < (o = Number(o)) && (o = s) : o = s;
             var i = t.length;
             i / 2 < o && (o = i / 2);
-            for (var n = 0; n < o; ++n) {
-                var a = parseInt(t.substr(2 * n, 2), 16);
-                if (k(a)) return n;
-                e[r + n] = a
+            for (var a = 0; a < o; ++a) {
+                var n = parseInt(t.substr(2 * a, 2), 16);
+                if (L(n)) return a;
+                e[r + a] = n
             }
-            return n
+            return a
         }
 
         function R(e, t, r, o) {
-            return j(function (e) {
+            return C(function (e) {
                 for (var t = [], r = 0; r < e.length; ++r) t.push(255 & e.charCodeAt(r));
                 return t
             }(t), e, r, o)
         }
 
-        function b(e, t, r) {
+        function M(e, t, r) {
             return 0 === t && r === e.length ? o.fromByteArray(e) : o.fromByteArray(e.slice(t, r))
         }
 
-        function _(e, t, r) {
+        function E(e, t, r) {
             r = Math.min(e.length, r);
             for (var o = [], s = t; s < r;) {
-                var i, n, a, p, g = e[s], u = null, l = 239 < g ? 4 : 223 < g ? 3 : 191 < g ? 2 : 1;
+                var i, a, n, p, g = e[s], u = null, l = 239 < g ? 4 : 223 < g ? 3 : 191 < g ? 2 : 1;
                 if (s + l <= r) switch (l) {
                     case 1:
                         g < 128 && (u = g);
@@ -549,18 +588,18 @@ var MvsTicker = function (e) {
                         128 == (192 & (i = e[s + 1])) && 127 < (p = (31 & g) << 6 | 63 & i) && (u = p);
                         break;
                     case 3:
-                        i = e[s + 1], n = e[s + 2], 128 == (192 & i) && 128 == (192 & n) && 2047 < (p = (15 & g) << 12 | (63 & i) << 6 | 63 & n) && (p < 55296 || 57343 < p) && (u = p);
+                        i = e[s + 1], a = e[s + 2], 128 == (192 & i) && 128 == (192 & a) && 2047 < (p = (15 & g) << 12 | (63 & i) << 6 | 63 & a) && (p < 55296 || 57343 < p) && (u = p);
                         break;
                     case 4:
-                        i = e[s + 1], n = e[s + 2], a = e[s + 3], 128 == (192 & i) && 128 == (192 & n) && 128 == (192 & a) && 65535 < (p = (15 & g) << 18 | (63 & i) << 12 | (63 & n) << 6 | 63 & a) && p < 1114112 && (u = p)
+                        i = e[s + 1], a = e[s + 2], n = e[s + 3], 128 == (192 & i) && 128 == (192 & a) && 128 == (192 & n) && 65535 < (p = (15 & g) << 18 | (63 & i) << 12 | (63 & a) << 6 | 63 & n) && p < 1114112 && (u = p)
                 }
                 null === u ? (u = 65533, l = 1) : 65535 < u && (u -= 65536, o.push(u >>> 10 & 1023 | 55296), u = 56320 | 1023 & u), o.push(u), s += l
             }
             return function (e) {
                 var t = e.length;
-                if (t <= E) return String.fromCharCode.apply(String, e);
+                if (t <= b) return String.fromCharCode.apply(String, e);
                 var r = "", o = 0;
-                for (; o < t;) r += String.fromCharCode.apply(String, e.slice(o, o += E));
+                for (; o < t;) r += String.fromCharCode.apply(String, e.slice(o, o += b));
                 return r
             }(o)
         }
@@ -576,7 +615,7 @@ var MvsTicker = function (e) {
             } catch (e) {
                 return !1
             }
-        }()) || "undefined" == typeof console || "function" != typeof console.error || console.error("This browser lacks typed array (Uint8Array) support which is required by `buffer` v5.x. Use `buffer` v4.x if you require old browser support."), Object.defineProperty(l.prototype, "parent", {
+        }()) || "undefined" == typeof console || "function" != typeof console.error || console.error("This browser lacks typed array (Uint8Array) support which is required by `buffer` v5.x. Use `buffer` v4.x if you _require old browser support."), Object.defineProperty(l.prototype, "parent", {
             enumerable: !0,
             get: function () {
                 if (l.isBuffer(this)) return this.buffer
@@ -591,9 +630,9 @@ var MvsTicker = function (e) {
             enumerable: !1,
             writable: !1
         }), l.poolSize = 8192, l.from = function (e, t, r) {
-            return a(e, t, r)
+            return n(e, t, r)
         }, l.prototype.__proto__ = Uint8Array.prototype, l.__proto__ = Uint8Array, l.alloc = function (e, t, r) {
-            return s = t, i = r, p(o = e), o <= 0 ? n(o) : void 0 !== s ? "string" == typeof i ? n(o).fill(s, i) : n(o).fill(s) : n(o);
+            return s = t, i = r, p(o = e), o <= 0 ? a(o) : void 0 !== s ? "string" == typeof i ? a(o).fill(s, i) : a(o).fill(s) : a(o);
             var o, s, i
         }, l.allocUnsafe = function (e) {
             return g(e)
@@ -655,29 +694,29 @@ var MvsTicker = function (e) {
             return this
         }, l.prototype.toLocaleString = l.prototype.toString = function () {
             var e = this.length;
-            return 0 === e ? "" : 0 === arguments.length ? _(this, 0, e) : function (e, t, r) {
+            return 0 === e ? "" : 0 === arguments.length ? E(this, 0, e) : function (e, t, r) {
                 var o = !1;
                 if ((void 0 === t || t < 0) && (t = 0), t > this.length) return "";
                 if ((void 0 === r || r > this.length) && (r = this.length), r <= 0) return "";
                 if ((r >>>= 0) <= (t >>>= 0)) return "";
                 for (e || (e = "utf8"); ;) switch (e) {
                     case"hex":
-                        return I(this, t, r);
+                        return v(this, t, r);
                     case"utf8":
                     case"utf-8":
-                        return _(this, t, r);
+                        return E(this, t, r);
                     case"ascii":
                         return S(this, t, r);
                     case"latin1":
                     case"binary":
-                        return M(this, t, r);
+                        return _(this, t, r);
                     case"base64":
-                        return b(this, t, r);
+                        return M(this, t, r);
                     case"ucs2":
                     case"ucs-2":
                     case"utf16le":
                     case"utf-16le":
-                        return A(this, t, r);
+                        return I(this, t, r);
                     default:
                         if (o) throw new TypeError("Unknown encoding: " + e);
                         e = (e + "").toLowerCase(), o = !0
@@ -696,11 +735,11 @@ var MvsTicker = function (e) {
             if (s <= o) return -1;
             if (r <= t) return 1;
             if (this === e) return 0;
-            for (var i = (s >>>= 0) - (o >>>= 0), n = (r >>>= 0) - (t >>>= 0), a = Math.min(i, n), p = this.slice(o, s), g = e.slice(t, r), u = 0; u < a; ++u) if (p[u] !== g[u]) {
-                i = p[u], n = g[u];
+            for (var i = (s >>>= 0) - (o >>>= 0), a = (r >>>= 0) - (t >>>= 0), n = Math.min(i, a), p = this.slice(o, s), g = e.slice(t, r), u = 0; u < n; ++u) if (p[u] !== g[u]) {
+                i = p[u], a = g[u];
                 break
             }
-            return i < n ? -1 : n < i ? 1 : 0
+            return i < a ? -1 : a < i ? 1 : 0
         }, l.prototype.includes = function (e, t, r) {
             return -1 !== this.indexOf(e, t, r)
         }, l.prototype.indexOf = function (e, t, r) {
@@ -715,27 +754,27 @@ var MvsTicker = function (e) {
             var s = this.length - t;
             if ((void 0 === r || s < r) && (r = s), 0 < e.length && (r < 0 || t < 0) || t > this.length) throw new RangeError("Attempt to write outside buffer bounds");
             o || (o = "utf8");
-            for (var i, n, a, p, g, u, l, c, m, d = !1; ;) switch (o) {
+            for (var i, a, n, p, g, u, l, c, m, d = !1; ;) switch (o) {
                 case"hex":
                     return y(this, e, t, r);
                 case"utf8":
                 case"utf-8":
-                    return c = t, m = r, j(w(e, (l = this).length - c), l, c, m);
+                    return c = t, m = r, C(D(e, (l = this).length - c), l, c, m);
                 case"ascii":
                     return R(this, e, t, r);
                 case"latin1":
                 case"binary":
                     return R(this, e, t, r);
                 case"base64":
-                    return p = this, g = t, u = r, j(D(e), p, g, u);
+                    return p = this, g = t, u = r, C(w(e), p, g, u);
                 case"ucs2":
                 case"ucs-2":
                 case"utf16le":
                 case"utf-16le":
-                    return n = t, a = r, j(function (e, t) {
-                        for (var r, o, s, i = [], n = 0; n < e.length && !((t -= 2) < 0); ++n) r = e.charCodeAt(n), o = r >> 8, s = r % 256, i.push(s), i.push(o);
+                    return a = t, n = r, C(function (e, t) {
+                        for (var r, o, s, i = [], a = 0; a < e.length && !((t -= 2) < 0); ++a) r = e.charCodeAt(a), o = r >> 8, s = r % 256, i.push(s), i.push(o);
                         return i
-                    }(e, (i = this).length - n), i, n, a);
+                    }(e, (i = this).length - a), i, a, n);
                 default:
                     if (d) throw new TypeError("Unknown encoding: " + o);
                     o = ("" + o).toLowerCase(), d = !0
@@ -743,7 +782,7 @@ var MvsTicker = function (e) {
         }, l.prototype.toJSON = function () {
             return {type: "Buffer", data: Array.prototype.slice.call(this._arr || this, 0)}
         };
-        var E = 4096;
+        var b = 4096;
 
         function S(e, t, r) {
             var o = "";
@@ -752,47 +791,47 @@ var MvsTicker = function (e) {
             return o
         }
 
-        function M(e, t, r) {
+        function _(e, t, r) {
             var o = "";
             r = Math.min(e.length, r);
             for (var s = t; s < r; ++s) o += String.fromCharCode(e[s]);
             return o
         }
 
-        function I(e, t, r) {
+        function v(e, t, r) {
             var o = e.length;
             (!t || t < 0) && (t = 0), (!r || r < 0 || o < r) && (r = o);
-            for (var s = "", i = t; i < r; ++i) s += C(e[i]);
+            for (var s = "", i = t; i < r; ++i) s += W(e[i]);
             return s
         }
 
-        function A(e, t, r) {
+        function I(e, t, r) {
             for (var o = e.slice(t, r), s = "", i = 0; i < o.length; i += 2) s += String.fromCharCode(o[i] + 256 * o[i + 1]);
             return s
         }
 
-        function O(e, t, r) {
+        function T(e, t, r) {
             if (e % 1 != 0 || e < 0) throw new RangeError("offset is not uint");
             if (r < e + t) throw new RangeError("Trying to access beyond buffer length")
         }
 
-        function T(e, t, r, o, s, i) {
+        function B(e, t, r, o, s, i) {
             if (!l.isBuffer(e)) throw new TypeError('"buffer" argument must be a Buffer instance');
             if (s < t || t < i) throw new RangeError('"value" argument is out of bounds');
             if (r + o > e.length) throw new RangeError("Index out of range")
         }
 
-        function v(e, t, r, o, s, i) {
+        function F(e, t, r, o, s, i) {
             if (r + o > e.length) throw new RangeError("Index out of range");
             if (r < 0) throw new RangeError("Index out of range")
         }
 
-        function B(e, t, r, o, s) {
-            return t = +t, r >>>= 0, s || v(e, 0, r, 4), i.write(e, t, r, o, 23, 4), r + 4
+        function O(e, t, r, o, s) {
+            return t = +t, r >>>= 0, s || F(e, 0, r, 4), i.write(e, t, r, o, 23, 4), r + 4
         }
 
-        function F(e, t, r, o, s) {
-            return t = +t, r >>>= 0, s || v(e, 0, r, 8), i.write(e, t, r, o, 52, 8), r + 8
+        function A(e, t, r, o, s) {
+            return t = +t, r >>>= 0, s || F(e, 0, r, 8), i.write(e, t, r, o, 52, 8), r + 8
         }
 
         l.prototype.slice = function (e, t) {
@@ -801,107 +840,107 @@ var MvsTicker = function (e) {
             var o = this.subarray(e, t);
             return o.__proto__ = l.prototype, o
         }, l.prototype.readUIntLE = function (e, t, r) {
-            e >>>= 0, t >>>= 0, r || O(e, t, this.length);
+            e >>>= 0, t >>>= 0, r || T(e, t, this.length);
             for (var o = this[e], s = 1, i = 0; ++i < t && (s *= 256);) o += this[e + i] * s;
             return o
         }, l.prototype.readUIntBE = function (e, t, r) {
-            e >>>= 0, t >>>= 0, r || O(e, t, this.length);
+            e >>>= 0, t >>>= 0, r || T(e, t, this.length);
             for (var o = this[e + --t], s = 1; 0 < t && (s *= 256);) o += this[e + --t] * s;
             return o
         }, l.prototype.readUInt8 = function (e, t) {
-            return e >>>= 0, t || O(e, 1, this.length), this[e]
+            return e >>>= 0, t || T(e, 1, this.length), this[e]
         }, l.prototype.readUInt16LE = function (e, t) {
-            return e >>>= 0, t || O(e, 2, this.length), this[e] | this[e + 1] << 8
+            return e >>>= 0, t || T(e, 2, this.length), this[e] | this[e + 1] << 8
         }, l.prototype.readUInt16BE = function (e, t) {
-            return e >>>= 0, t || O(e, 2, this.length), this[e] << 8 | this[e + 1]
+            return e >>>= 0, t || T(e, 2, this.length), this[e] << 8 | this[e + 1]
         }, l.prototype.readUInt32LE = function (e, t) {
-            return e >>>= 0, t || O(e, 4, this.length), (this[e] | this[e + 1] << 8 | this[e + 2] << 16) + 16777216 * this[e + 3]
+            return e >>>= 0, t || T(e, 4, this.length), (this[e] | this[e + 1] << 8 | this[e + 2] << 16) + 16777216 * this[e + 3]
         }, l.prototype.readUInt32BE = function (e, t) {
-            return e >>>= 0, t || O(e, 4, this.length), 16777216 * this[e] + (this[e + 1] << 16 | this[e + 2] << 8 | this[e + 3])
+            return e >>>= 0, t || T(e, 4, this.length), 16777216 * this[e] + (this[e + 1] << 16 | this[e + 2] << 8 | this[e + 3])
         }, l.prototype.readIntLE = function (e, t, r) {
-            e >>>= 0, t >>>= 0, r || O(e, t, this.length);
+            e >>>= 0, t >>>= 0, r || T(e, t, this.length);
             for (var o = this[e], s = 1, i = 0; ++i < t && (s *= 256);) o += this[e + i] * s;
             return (s *= 128) <= o && (o -= Math.pow(2, 8 * t)), o
         }, l.prototype.readIntBE = function (e, t, r) {
-            e >>>= 0, t >>>= 0, r || O(e, t, this.length);
+            e >>>= 0, t >>>= 0, r || T(e, t, this.length);
             for (var o = t, s = 1, i = this[e + --o]; 0 < o && (s *= 256);) i += this[e + --o] * s;
             return (s *= 128) <= i && (i -= Math.pow(2, 8 * t)), i
         }, l.prototype.readInt8 = function (e, t) {
-            return e >>>= 0, t || O(e, 1, this.length), 128 & this[e] ? -1 * (255 - this[e] + 1) : this[e]
+            return e >>>= 0, t || T(e, 1, this.length), 128 & this[e] ? -1 * (255 - this[e] + 1) : this[e]
         }, l.prototype.readInt16LE = function (e, t) {
-            e >>>= 0, t || O(e, 2, this.length);
+            e >>>= 0, t || T(e, 2, this.length);
             var r = this[e] | this[e + 1] << 8;
             return 32768 & r ? 4294901760 | r : r
         }, l.prototype.readInt16BE = function (e, t) {
-            e >>>= 0, t || O(e, 2, this.length);
+            e >>>= 0, t || T(e, 2, this.length);
             var r = this[e + 1] | this[e] << 8;
             return 32768 & r ? 4294901760 | r : r
         }, l.prototype.readInt32LE = function (e, t) {
-            return e >>>= 0, t || O(e, 4, this.length), this[e] | this[e + 1] << 8 | this[e + 2] << 16 | this[e + 3] << 24
+            return e >>>= 0, t || T(e, 4, this.length), this[e] | this[e + 1] << 8 | this[e + 2] << 16 | this[e + 3] << 24
         }, l.prototype.readInt32BE = function (e, t) {
-            return e >>>= 0, t || O(e, 4, this.length), this[e] << 24 | this[e + 1] << 16 | this[e + 2] << 8 | this[e + 3]
+            return e >>>= 0, t || T(e, 4, this.length), this[e] << 24 | this[e + 1] << 16 | this[e + 2] << 8 | this[e + 3]
         }, l.prototype.readFloatLE = function (e, t) {
-            return e >>>= 0, t || O(e, 4, this.length), i.read(this, e, !0, 23, 4)
+            return e >>>= 0, t || T(e, 4, this.length), i.read(this, e, !0, 23, 4)
         }, l.prototype.readFloatBE = function (e, t) {
-            return e >>>= 0, t || O(e, 4, this.length), i.read(this, e, !1, 23, 4)
+            return e >>>= 0, t || T(e, 4, this.length), i.read(this, e, !1, 23, 4)
         }, l.prototype.readDoubleLE = function (e, t) {
-            return e >>>= 0, t || O(e, 8, this.length), i.read(this, e, !0, 52, 8)
+            return e >>>= 0, t || T(e, 8, this.length), i.read(this, e, !0, 52, 8)
         }, l.prototype.readDoubleBE = function (e, t) {
-            return e >>>= 0, t || O(e, 8, this.length), i.read(this, e, !1, 52, 8)
+            return e >>>= 0, t || T(e, 8, this.length), i.read(this, e, !1, 52, 8)
         }, l.prototype.writeUIntLE = function (e, t, r, o) {
-            (e = +e, t >>>= 0, r >>>= 0, o) || T(this, e, t, r, Math.pow(2, 8 * r) - 1, 0);
+            (e = +e, t >>>= 0, r >>>= 0, o) || B(this, e, t, r, Math.pow(2, 8 * r) - 1, 0);
             var s = 1, i = 0;
             for (this[t] = 255 & e; ++i < r && (s *= 256);) this[t + i] = e / s & 255;
             return t + r
         }, l.prototype.writeUIntBE = function (e, t, r, o) {
-            (e = +e, t >>>= 0, r >>>= 0, o) || T(this, e, t, r, Math.pow(2, 8 * r) - 1, 0);
+            (e = +e, t >>>= 0, r >>>= 0, o) || B(this, e, t, r, Math.pow(2, 8 * r) - 1, 0);
             var s = r - 1, i = 1;
             for (this[t + s] = 255 & e; 0 <= --s && (i *= 256);) this[t + s] = e / i & 255;
             return t + r
         }, l.prototype.writeUInt8 = function (e, t, r) {
-            return e = +e, t >>>= 0, r || T(this, e, t, 1, 255, 0), this[t] = 255 & e, t + 1
+            return e = +e, t >>>= 0, r || B(this, e, t, 1, 255, 0), this[t] = 255 & e, t + 1
         }, l.prototype.writeUInt16LE = function (e, t, r) {
-            return e = +e, t >>>= 0, r || T(this, e, t, 2, 65535, 0), this[t] = 255 & e, this[t + 1] = e >>> 8, t + 2
+            return e = +e, t >>>= 0, r || B(this, e, t, 2, 65535, 0), this[t] = 255 & e, this[t + 1] = e >>> 8, t + 2
         }, l.prototype.writeUInt16BE = function (e, t, r) {
-            return e = +e, t >>>= 0, r || T(this, e, t, 2, 65535, 0), this[t] = e >>> 8, this[t + 1] = 255 & e, t + 2
+            return e = +e, t >>>= 0, r || B(this, e, t, 2, 65535, 0), this[t] = e >>> 8, this[t + 1] = 255 & e, t + 2
         }, l.prototype.writeUInt32LE = function (e, t, r) {
-            return e = +e, t >>>= 0, r || T(this, e, t, 4, 4294967295, 0), this[t + 3] = e >>> 24, this[t + 2] = e >>> 16, this[t + 1] = e >>> 8, this[t] = 255 & e, t + 4
+            return e = +e, t >>>= 0, r || B(this, e, t, 4, 4294967295, 0), this[t + 3] = e >>> 24, this[t + 2] = e >>> 16, this[t + 1] = e >>> 8, this[t] = 255 & e, t + 4
         }, l.prototype.writeUInt32BE = function (e, t, r) {
-            return e = +e, t >>>= 0, r || T(this, e, t, 4, 4294967295, 0), this[t] = e >>> 24, this[t + 1] = e >>> 16, this[t + 2] = e >>> 8, this[t + 3] = 255 & e, t + 4
+            return e = +e, t >>>= 0, r || B(this, e, t, 4, 4294967295, 0), this[t] = e >>> 24, this[t + 1] = e >>> 16, this[t + 2] = e >>> 8, this[t + 3] = 255 & e, t + 4
         }, l.prototype.writeIntLE = function (e, t, r, o) {
             if (e = +e, t >>>= 0, !o) {
                 var s = Math.pow(2, 8 * r - 1);
-                T(this, e, t, r, s - 1, -s)
+                B(this, e, t, r, s - 1, -s)
             }
-            var i = 0, n = 1, a = 0;
-            for (this[t] = 255 & e; ++i < r && (n *= 256);) e < 0 && 0 === a && 0 !== this[t + i - 1] && (a = 1), this[t + i] = (e / n >> 0) - a & 255;
+            var i = 0, a = 1, n = 0;
+            for (this[t] = 255 & e; ++i < r && (a *= 256);) e < 0 && 0 === n && 0 !== this[t + i - 1] && (n = 1), this[t + i] = (e / a >> 0) - n & 255;
             return t + r
         }, l.prototype.writeIntBE = function (e, t, r, o) {
             if (e = +e, t >>>= 0, !o) {
                 var s = Math.pow(2, 8 * r - 1);
-                T(this, e, t, r, s - 1, -s)
+                B(this, e, t, r, s - 1, -s)
             }
-            var i = r - 1, n = 1, a = 0;
-            for (this[t + i] = 255 & e; 0 <= --i && (n *= 256);) e < 0 && 0 === a && 0 !== this[t + i + 1] && (a = 1), this[t + i] = (e / n >> 0) - a & 255;
+            var i = r - 1, a = 1, n = 0;
+            for (this[t + i] = 255 & e; 0 <= --i && (a *= 256);) e < 0 && 0 === n && 0 !== this[t + i + 1] && (n = 1), this[t + i] = (e / a >> 0) - n & 255;
             return t + r
         }, l.prototype.writeInt8 = function (e, t, r) {
-            return e = +e, t >>>= 0, r || T(this, e, t, 1, 127, -128), e < 0 && (e = 255 + e + 1), this[t] = 255 & e, t + 1
+            return e = +e, t >>>= 0, r || B(this, e, t, 1, 127, -128), e < 0 && (e = 255 + e + 1), this[t] = 255 & e, t + 1
         }, l.prototype.writeInt16LE = function (e, t, r) {
-            return e = +e, t >>>= 0, r || T(this, e, t, 2, 32767, -32768), this[t] = 255 & e, this[t + 1] = e >>> 8, t + 2
+            return e = +e, t >>>= 0, r || B(this, e, t, 2, 32767, -32768), this[t] = 255 & e, this[t + 1] = e >>> 8, t + 2
         }, l.prototype.writeInt16BE = function (e, t, r) {
-            return e = +e, t >>>= 0, r || T(this, e, t, 2, 32767, -32768), this[t] = e >>> 8, this[t + 1] = 255 & e, t + 2
+            return e = +e, t >>>= 0, r || B(this, e, t, 2, 32767, -32768), this[t] = e >>> 8, this[t + 1] = 255 & e, t + 2
         }, l.prototype.writeInt32LE = function (e, t, r) {
-            return e = +e, t >>>= 0, r || T(this, e, t, 4, 2147483647, -2147483648), this[t] = 255 & e, this[t + 1] = e >>> 8, this[t + 2] = e >>> 16, this[t + 3] = e >>> 24, t + 4
+            return e = +e, t >>>= 0, r || B(this, e, t, 4, 2147483647, -2147483648), this[t] = 255 & e, this[t + 1] = e >>> 8, this[t + 2] = e >>> 16, this[t + 3] = e >>> 24, t + 4
         }, l.prototype.writeInt32BE = function (e, t, r) {
-            return e = +e, t >>>= 0, r || T(this, e, t, 4, 2147483647, -2147483648), e < 0 && (e = 4294967295 + e + 1), this[t] = e >>> 24, this[t + 1] = e >>> 16, this[t + 2] = e >>> 8, this[t + 3] = 255 & e, t + 4
+            return e = +e, t >>>= 0, r || B(this, e, t, 4, 2147483647, -2147483648), e < 0 && (e = 4294967295 + e + 1), this[t] = e >>> 24, this[t + 1] = e >>> 16, this[t + 2] = e >>> 8, this[t + 3] = 255 & e, t + 4
         }, l.prototype.writeFloatLE = function (e, t, r) {
-            return B(this, e, t, !0, r)
+            return O(this, e, t, !0, r)
         }, l.prototype.writeFloatBE = function (e, t, r) {
-            return B(this, e, t, !1, r)
+            return O(this, e, t, !1, r)
         }, l.prototype.writeDoubleLE = function (e, t, r) {
-            return F(this, e, t, !0, r)
+            return A(this, e, t, !0, r)
         }, l.prototype.writeDoubleBE = function (e, t, r) {
-            return F(this, e, t, !1, r)
+            return A(this, e, t, !1, r)
         }, l.prototype.copy = function (e, t, r, o) {
             if (!l.isBuffer(e)) throw new TypeError("argument should be a Buffer");
             if (r || (r = 0), o || 0 === o || (o = this.length), t >= e.length && (t = e.length), t || (t = 0), 0 < o && o < r && (o = r), o === r) return 0;
@@ -926,29 +965,29 @@ var MvsTicker = function (e) {
             if (r <= t) return this;
             var i;
             if (t >>>= 0, r = void 0 === r ? this.length : r >>> 0, e || (e = 0), "number" == typeof e) for (i = t; i < r; ++i) this[i] = e; else {
-                var n = l.isBuffer(e) ? e : l.from(e, o), a = n.length;
-                if (0 === a) throw new TypeError('The value "' + e + '" is invalid for argument "value"');
-                for (i = 0; i < r - t; ++i) this[i + t] = n[i % a]
+                var a = l.isBuffer(e) ? e : l.from(e, o), n = a.length;
+                if (0 === n) throw new TypeError('The value "' + e + '" is invalid for argument "value"');
+                for (i = 0; i < r - t; ++i) this[i + t] = a[i % n]
             }
             return this
         };
         var N = /[^+/0-9A-Za-z-_]/g;
 
-        function C(e) {
+        function W(e) {
             return e < 16 ? "0" + e.toString(16) : e.toString(16)
         }
 
-        function w(e, t) {
+        function D(e, t) {
             var r;
             t = t || 1 / 0;
-            for (var o = e.length, s = null, i = [], n = 0; n < o; ++n) {
-                if (55295 < (r = e.charCodeAt(n)) && r < 57344) {
+            for (var o = e.length, s = null, i = [], a = 0; a < o; ++a) {
+                if (55295 < (r = e.charCodeAt(a)) && r < 57344) {
                     if (!s) {
                         if (56319 < r) {
                             -1 < (t -= 3) && i.push(239, 191, 189);
                             continue
                         }
-                        if (n + 1 === o) {
+                        if (a + 1 === o) {
                             -1 < (t -= 3) && i.push(239, 191, 189);
                             continue
                         }
@@ -979,7 +1018,7 @@ var MvsTicker = function (e) {
             return i
         }
 
-        function D(e) {
+        function w(e) {
             return o.toByteArray(function (e) {
                 if ((e = (e = e.split("=")[0]).trim().replace(N, "")).length < 2) return "";
                 for (; e.length % 4 != 0;) e += "=";
@@ -987,7 +1026,7 @@ var MvsTicker = function (e) {
             }(e))
         }
 
-        function j(e, t, r, o) {
+        function C(e, t, r, o) {
             for (var s = 0; s < o && !(s + r >= t.length || s >= e.length); ++s) t[s + r] = e[s];
             return s
         }
@@ -996,29 +1035,354 @@ var MvsTicker = function (e) {
             return e instanceof t || null != e && null != e.constructor && null != e.constructor.name && e.constructor.name === t.name
         }
 
-        function k(e) {
+        function L(e) {
             return e != e
         }
-    }, {"base64-js": 1, ieee754: 3}], 3: [function (e, t, r) {
+    }, {"base64-js": 1, ieee754: 3}],
+    3: [function (e, t, r) {
         r.read = function (e, t, r, o, s) {
-            var i, n, a = 8 * s - o - 1, p = (1 << a) - 1, g = p >> 1, u = -7, l = r ? s - 1 : 0,
+            var i, a, n = 8 * s - o - 1, p = (1 << n) - 1, g = p >> 1, u = -7, l = r ? s - 1 : 0,
                 c = r ? -1 : 1, m = e[t + l];
-            for (l += c, i = m & (1 << -u) - 1, m >>= -u, u += a; 0 < u; i = 256 * i + e[t + l], l += c, u -= 8) ;
-            for (n = i & (1 << -u) - 1, i >>= -u, u += o; 0 < u; n = 256 * n + e[t + l], l += c, u -= 8) ;
+            for (l += c, i = m & (1 << -u) - 1, m >>= -u, u += n; 0 < u; i = 256 * i + e[t + l], l += c, u -= 8) ;
+            for (a = i & (1 << -u) - 1, i >>= -u, u += o; 0 < u; a = 256 * a + e[t + l], l += c, u -= 8) ;
             if (0 === i) i = 1 - g; else {
-                if (i === p) return n ? NaN : 1 / 0 * (m ? -1 : 1);
-                n += Math.pow(2, o), i -= g
+                if (i === p) return a ? NaN : 1 / 0 * (m ? -1 : 1);
+                a += Math.pow(2, o), i -= g
             }
-            return (m ? -1 : 1) * n * Math.pow(2, i - o)
+            return (m ? -1 : 1) * a * Math.pow(2, i - o)
         }, r.write = function (e, t, r, o, s, i) {
-            var n, a, p, g = 8 * i - s - 1, u = (1 << g) - 1, l = u >> 1,
+            var a, n, p, g = 8 * i - s - 1, u = (1 << g) - 1, l = u >> 1,
                 c = 23 === s ? Math.pow(2, -24) - Math.pow(2, -77) : 0, m = o ? 0 : i - 1,
                 d = o ? 1 : -1, f = t < 0 || 0 === t && 1 / t < 0 ? 1 : 0;
-            for (t = Math.abs(t), isNaN(t) || t === 1 / 0 ? (a = isNaN(t) ? 1 : 0, n = u) : (n = Math.floor(Math.log(t) / Math.LN2), t * (p = Math.pow(2, -n)) < 1 && (n--, p *= 2), 2 <= (t += 1 <= n + l ? c / p : c * Math.pow(2, 1 - l)) * p && (n++, p /= 2), u <= n + l ? (a = 0, n = u) : 1 <= n + l ? (a = (t * p - 1) * Math.pow(2, s), n += l) : (a = t * Math.pow(2, l - 1) * Math.pow(2, s), n = 0)); 8 <= s; e[r + m] = 255 & a, m += d, a /= 256, s -= 8) ;
-            for (n = n << s | a, g += s; 0 < g; e[r + m] = 255 & n, m += d, n /= 256, g -= 8) ;
+            for (t = Math.abs(t), isNaN(t) || t === 1 / 0 ? (n = isNaN(t) ? 1 : 0, a = u) : (a = Math.floor(Math.log(t) / Math.LN2), t * (p = Math.pow(2, -a)) < 1 && (a--, p *= 2), 2 <= (t += 1 <= a + l ? c / p : c * Math.pow(2, 1 - l)) * p && (a++, p /= 2), u <= a + l ? (n = 0, a = u) : 1 <= a + l ? (n = (t * p - 1) * Math.pow(2, s), a += l) : (n = t * Math.pow(2, l - 1) * Math.pow(2, s), a = 0)); 8 <= s; e[r + m] = 255 & n, m += d, n /= 256, s -= 8) ;
+            for (a = a << s | n, g += s; 0 < g; e[r + m] = 255 & a, m += d, a /= 256, g -= 8) ;
             e[r + m - d] |= 128 * f
         }
-    }, {}], 4: [function (e, t, r) {
+    }, {}],
+    4: [function (e, t, r) {
+        var o = e("google-protobuf"), s = o, i = window;
+        s.exportSymbol("proto.stream.Audience", null, i), s.exportSymbol("proto.stream.LiveWatchInfo", null, i), s.exportSymbol("proto.stream.WatchBookInfo", null, i), s.exportSymbol("proto.stream.WatchParams", null, i), proto.stream.Audience = function (e) {
+            o.Message.initialize(this, e, 0, -1, null, null)
+        }, s.inherits(proto.stream.Audience, o.Message), s.DEBUG && !COMPILED && (proto.stream.Audience.displayName = "proto.stream.Audience"), o.Message.GENERATE_TO_OBJECT && (proto.stream.Audience.prototype.toObject = function (e) {
+            return proto.stream.Audience.toObject(e, this)
+        }, proto.stream.Audience.toObject = function (e, t) {
+            var r = {
+                userid: o.Message.getFieldWithDefault(t, 1, 0),
+                profile: t.getProfile_asB64(),
+                entertime: o.Message.getFieldWithDefault(t, 3, 0)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }), proto.stream.Audience.deserializeBinary = function (e) {
+            var t = new o.BinaryReader(e), r = new proto.stream.Audience;
+            return proto.stream.Audience.deserializeBinaryFromReader(r, t)
+        }, proto.stream.Audience.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    case 2:
+                        r = t.readBytes();
+                        e.setProfile(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setEntertime(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.Audience.prototype.serializeBinary = function () {
+            var e = new o.BinaryWriter;
+            return proto.stream.Audience.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.Audience.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getUserid()) && t.writeUint32(1, r), 0 < (r = e.getProfile_asU8()).length && t.writeBytes(2, r), 0 !== (r = e.getEntertime()) && t.writeUint32(3, r)
+        }, proto.stream.Audience.prototype.getUserid = function () {
+            return o.Message.getFieldWithDefault(this, 1, 0)
+        }, proto.stream.Audience.prototype.setUserid = function (e) {
+            o.Message.setProto3IntField(this, 1, e)
+        }, proto.stream.Audience.prototype.getProfile = function () {
+            return o.Message.getFieldWithDefault(this, 2, "")
+        }, proto.stream.Audience.prototype.getProfile_asB64 = function () {
+            return o.Message.bytesAsB64(this.getProfile())
+        }, proto.stream.Audience.prototype.getProfile_asU8 = function () {
+            return o.Message.bytesAsU8(this.getProfile())
+        }, proto.stream.Audience.prototype.setProfile = function (e) {
+            o.Message.setProto3BytesField(this, 2, e)
+        }, proto.stream.Audience.prototype.getEntertime = function () {
+            return o.Message.getFieldWithDefault(this, 3, 0)
+        }, proto.stream.Audience.prototype.setEntertime = function (e) {
+            o.Message.setProto3IntField(this, 3, e)
+        }, proto.stream.LiveWatchInfo = function (e) {
+            o.Message.initialize(this, e, 0, -1, proto.stream.LiveWatchInfo.repeatedFields_, null)
+        }, s.inherits(proto.stream.LiveWatchInfo, o.Message), s.DEBUG && !COMPILED && (proto.stream.LiveWatchInfo.displayName = "proto.stream.LiveWatchInfo"), proto.stream.LiveWatchInfo.repeatedFields_ = [8], o.Message.GENERATE_TO_OBJECT && (proto.stream.LiveWatchInfo.prototype.toObject = function (e) {
+            return proto.stream.LiveWatchInfo.toObject(e, this)
+        }, proto.stream.LiveWatchInfo.toObject = function (e, t) {
+            var r = {
+                roomid: o.Message.getFieldWithDefault(t, 1, "0"),
+                startts: o.Message.getFieldWithDefault(t, 2, "0"),
+                delayms: o.Message.getFieldWithDefault(t, 3, 0),
+                cachems: o.Message.getFieldWithDefault(t, 4, 0),
+                maxaudiences: o.Message.getFieldWithDefault(t, 5, 0),
+                curaudiences: o.Message.getFieldWithDefault(t, 6, 0),
+                peakaudiences: o.Message.getFieldWithDefault(t, 7, 0),
+                lastaudiencesList: o.Message.toObjectList(t.getLastaudiencesList(), proto.stream.Audience.toObject, e)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }), proto.stream.LiveWatchInfo.deserializeBinary = function (e) {
+            var t = new o.BinaryReader(e), r = new proto.stream.LiveWatchInfo;
+            return proto.stream.LiveWatchInfo.deserializeBinaryFromReader(r, t)
+        }, proto.stream.LiveWatchInfo.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 2:
+                        r = t.readUint64String();
+                        e.setStartts(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setDelayms(r);
+                        break;
+                    case 4:
+                        r = t.readUint32();
+                        e.setCachems(r);
+                        break;
+                    case 5:
+                        r = t.readUint32();
+                        e.setMaxaudiences(r);
+                        break;
+                    case 6:
+                        r = t.readUint32();
+                        e.setCuraudiences(r);
+                        break;
+                    case 7:
+                        r = t.readUint32();
+                        e.setPeakaudiences(r);
+                        break;
+                    case 8:
+                        r = new proto.stream.Audience;
+                        t.readMessage(r, proto.stream.Audience.deserializeBinaryFromReader), e.addLastaudiences(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.LiveWatchInfo.prototype.serializeBinary = function () {
+            var e = new o.BinaryWriter;
+            return proto.stream.LiveWatchInfo.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.LiveWatchInfo.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(1, r), r = e.getStartts(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r), 0 !== (r = e.getDelayms()) && t.writeUint32(3, r), 0 !== (r = e.getCachems()) && t.writeUint32(4, r), 0 !== (r = e.getMaxaudiences()) && t.writeUint32(5, r), 0 !== (r = e.getCuraudiences()) && t.writeUint32(6, r), 0 !== (r = e.getPeakaudiences()) && t.writeUint32(7, r), 0 < (r = e.getLastaudiencesList()).length && t.writeRepeatedMessage(8, r, proto.stream.Audience.serializeBinaryToWriter)
+        }, proto.stream.LiveWatchInfo.prototype.getRoomid = function () {
+            return o.Message.getFieldWithDefault(this, 1, "0")
+        }, proto.stream.LiveWatchInfo.prototype.setRoomid = function (e) {
+            o.Message.setProto3StringIntField(this, 1, e)
+        }, proto.stream.LiveWatchInfo.prototype.getStartts = function () {
+            return o.Message.getFieldWithDefault(this, 2, "0")
+        }, proto.stream.LiveWatchInfo.prototype.setStartts = function (e) {
+            o.Message.setProto3StringIntField(this, 2, e)
+        }, proto.stream.LiveWatchInfo.prototype.getDelayms = function () {
+            return o.Message.getFieldWithDefault(this, 3, 0)
+        }, proto.stream.LiveWatchInfo.prototype.setDelayms = function (e) {
+            o.Message.setProto3IntField(this, 3, e)
+        }, proto.stream.LiveWatchInfo.prototype.getCachems = function () {
+            return o.Message.getFieldWithDefault(this, 4, 0)
+        }, proto.stream.LiveWatchInfo.prototype.setCachems = function (e) {
+            o.Message.setProto3IntField(this, 4, e)
+        }, proto.stream.LiveWatchInfo.prototype.getMaxaudiences = function () {
+            return o.Message.getFieldWithDefault(this, 5, 0)
+        }, proto.stream.LiveWatchInfo.prototype.setMaxaudiences = function (e) {
+            o.Message.setProto3IntField(this, 5, e)
+        }, proto.stream.LiveWatchInfo.prototype.getCuraudiences = function () {
+            return o.Message.getFieldWithDefault(this, 6, 0)
+        }, proto.stream.LiveWatchInfo.prototype.setCuraudiences = function (e) {
+            o.Message.setProto3IntField(this, 6, e)
+        }, proto.stream.LiveWatchInfo.prototype.getPeakaudiences = function () {
+            return o.Message.getFieldWithDefault(this, 7, 0)
+        }, proto.stream.LiveWatchInfo.prototype.setPeakaudiences = function (e) {
+            o.Message.setProto3IntField(this, 7, e)
+        }, proto.stream.LiveWatchInfo.prototype.getLastaudiencesList = function () {
+            return o.Message.getRepeatedWrapperField(this, proto.stream.Audience, 8)
+        }, proto.stream.LiveWatchInfo.prototype.setLastaudiencesList = function (e) {
+            o.Message.setRepeatedWrapperField(this, 8, e)
+        }, proto.stream.LiveWatchInfo.prototype.addLastaudiences = function (e, t) {
+            return o.Message.addToRepeatedWrapperField(this, 8, e, proto.stream.Audience, t)
+        }, proto.stream.LiveWatchInfo.prototype.clearLastaudiencesList = function () {
+            this.setLastaudiencesList([])
+        }, proto.stream.WatchParams = function (e) {
+            o.Message.initialize(this, e, 0, -1, null, null)
+        }, s.inherits(proto.stream.WatchParams, o.Message), s.DEBUG && !COMPILED && (proto.stream.WatchParams.displayName = "proto.stream.WatchParams"), o.Message.GENERATE_TO_OBJECT && (proto.stream.WatchParams.prototype.toObject = function (e) {
+            return proto.stream.WatchParams.toObject(e, this)
+        }, proto.stream.WatchParams.toObject = function (e, t) {
+            var r = {
+                canwatch: o.Message.getFieldWithDefault(t, 1, !1),
+                maxaudiences: o.Message.getFieldWithDefault(t, 2, 0),
+                delayms: o.Message.getFieldWithDefault(t, 3, 0),
+                cachems: o.Message.getFieldWithDefault(t, 4, 0),
+                bufferbytes: o.Message.getFieldWithDefault(t, 5, 0),
+                lastsize: o.Message.getFieldWithDefault(t, 6, 0),
+                needreplay: o.Message.getFieldWithDefault(t, 7, !1)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }), proto.stream.WatchParams.deserializeBinary = function (e) {
+            var t = new o.BinaryReader(e), r = new proto.stream.WatchParams;
+            return proto.stream.WatchParams.deserializeBinaryFromReader(r, t)
+        }, proto.stream.WatchParams.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readBool();
+                        e.setCanwatch(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setMaxaudiences(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setDelayms(r);
+                        break;
+                    case 4:
+                        r = t.readUint32();
+                        e.setCachems(r);
+                        break;
+                    case 5:
+                        r = t.readUint32();
+                        e.setBufferbytes(r);
+                        break;
+                    case 6:
+                        r = t.readUint32();
+                        e.setLastsize(r);
+                        break;
+                    case 7:
+                        r = t.readBool();
+                        e.setNeedreplay(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.WatchParams.prototype.serializeBinary = function () {
+            var e = new o.BinaryWriter;
+            return proto.stream.WatchParams.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.WatchParams.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            (r = e.getCanwatch()) && t.writeBool(1, r), 0 !== (r = e.getMaxaudiences()) && t.writeUint32(2, r), 0 !== (r = e.getDelayms()) && t.writeUint32(3, r), 0 !== (r = e.getCachems()) && t.writeUint32(4, r), 0 !== (r = e.getBufferbytes()) && t.writeUint32(5, r), 0 !== (r = e.getLastsize()) && t.writeUint32(6, r), (r = e.getNeedreplay()) && t.writeBool(7, r)
+        }, proto.stream.WatchParams.prototype.getCanwatch = function () {
+            return o.Message.getFieldWithDefault(this, 1, !1)
+        }, proto.stream.WatchParams.prototype.setCanwatch = function (e) {
+            o.Message.setProto3BooleanField(this, 1, e)
+        }, proto.stream.WatchParams.prototype.getMaxaudiences = function () {
+            return o.Message.getFieldWithDefault(this, 2, 0)
+        }, proto.stream.WatchParams.prototype.setMaxaudiences = function (e) {
+            o.Message.setProto3IntField(this, 2, e)
+        }, proto.stream.WatchParams.prototype.getDelayms = function () {
+            return o.Message.getFieldWithDefault(this, 3, 0)
+        }, proto.stream.WatchParams.prototype.setDelayms = function (e) {
+            o.Message.setProto3IntField(this, 3, e)
+        }, proto.stream.WatchParams.prototype.getCachems = function () {
+            return o.Message.getFieldWithDefault(this, 4, 0)
+        }, proto.stream.WatchParams.prototype.setCachems = function (e) {
+            o.Message.setProto3IntField(this, 4, e)
+        }, proto.stream.WatchParams.prototype.getBufferbytes = function () {
+            return o.Message.getFieldWithDefault(this, 5, 0)
+        }, proto.stream.WatchParams.prototype.setBufferbytes = function (e) {
+            o.Message.setProto3IntField(this, 5, e)
+        }, proto.stream.WatchParams.prototype.getLastsize = function () {
+            return o.Message.getFieldWithDefault(this, 6, 0)
+        }, proto.stream.WatchParams.prototype.setLastsize = function (e) {
+            o.Message.setProto3IntField(this, 6, e)
+        }, proto.stream.WatchParams.prototype.getNeedreplay = function () {
+            return o.Message.getFieldWithDefault(this, 7, !1)
+        }, proto.stream.WatchParams.prototype.setNeedreplay = function (e) {
+            o.Message.setProto3BooleanField(this, 7, e)
+        }, proto.stream.WatchBookInfo = function (e) {
+            o.Message.initialize(this, e, 0, -1, proto.stream.WatchBookInfo.repeatedFields_, null)
+        }, s.inherits(proto.stream.WatchBookInfo, o.Message), s.DEBUG && !COMPILED && (proto.stream.WatchBookInfo.displayName = "proto.stream.WatchBookInfo"), proto.stream.WatchBookInfo.repeatedFields_ = [4], o.Message.GENERATE_TO_OBJECT && (proto.stream.WatchBookInfo.prototype.toObject = function (e) {
+            return proto.stream.WatchBookInfo.toObject(e, this)
+        }, proto.stream.WatchBookInfo.toObject = function (e, t) {
+            var r = {
+                bookid: o.Message.getFieldWithDefault(t, 1, ""),
+                ticket: o.Message.getFieldWithDefault(t, 2, ""),
+                setid: o.Message.getFieldWithDefault(t, 3, 0),
+                livesList: o.Message.getRepeatedField(t, 4),
+                wssproxy: o.Message.getFieldWithDefault(t, 5, "")
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }), proto.stream.WatchBookInfo.deserializeBinary = function (e) {
+            var t = new o.BinaryReader(e), r = new proto.stream.WatchBookInfo;
+            return proto.stream.WatchBookInfo.deserializeBinaryFromReader(r, t)
+        }, proto.stream.WatchBookInfo.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readString();
+                        e.setBookid(r);
+                        break;
+                    case 2:
+                        r = t.readString();
+                        e.setTicket(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setSetid(r);
+                        break;
+                    case 4:
+                        r = t.readString();
+                        e.addLives(r);
+                        break;
+                    case 5:
+                        r = t.readString();
+                        e.setWssproxy(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.WatchBookInfo.prototype.serializeBinary = function () {
+            var e = new o.BinaryWriter;
+            return proto.stream.WatchBookInfo.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.WatchBookInfo.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 < (r = e.getBookid()).length && t.writeString(1, r), 0 < (r = e.getTicket()).length && t.writeString(2, r), 0 !== (r = e.getSetid()) && t.writeUint32(3, r), 0 < (r = e.getLivesList()).length && t.writeRepeatedString(4, r), 0 < (r = e.getWssproxy()).length && t.writeString(5, r)
+        }, proto.stream.WatchBookInfo.prototype.getBookid = function () {
+            return o.Message.getFieldWithDefault(this, 1, "")
+        }, proto.stream.WatchBookInfo.prototype.setBookid = function (e) {
+            o.Message.setProto3StringField(this, 1, e)
+        }, proto.stream.WatchBookInfo.prototype.getTicket = function () {
+            return o.Message.getFieldWithDefault(this, 2, "")
+        }, proto.stream.WatchBookInfo.prototype.setTicket = function (e) {
+            o.Message.setProto3StringField(this, 2, e)
+        }, proto.stream.WatchBookInfo.prototype.getSetid = function () {
+            return o.Message.getFieldWithDefault(this, 3, 0)
+        }, proto.stream.WatchBookInfo.prototype.setSetid = function (e) {
+            o.Message.setProto3IntField(this, 3, e)
+        }, proto.stream.WatchBookInfo.prototype.getLivesList = function () {
+            return o.Message.getRepeatedField(this, 4)
+        }, proto.stream.WatchBookInfo.prototype.setLivesList = function (e) {
+            o.Message.setField(this, 4, e || [])
+        }, proto.stream.WatchBookInfo.prototype.addLives = function (e, t) {
+            o.Message.addToRepeatedField(this, 4, e, t)
+        }, proto.stream.WatchBookInfo.prototype.clearLivesList = function () {
+            this.setLivesList([])
+        }, proto.stream.WatchBookInfo.prototype.getWssproxy = function () {
+            return o.Message.getFieldWithDefault(this, 5, "")
+        }, proto.stream.WatchBookInfo.prototype.setWssproxy = function (e) {
+            o.Message.setProto3StringField(this, 5, e)
+        }, s.object.extend(r, proto.stream)
+    }, {"google-protobuf": 8}],
+    5: [function (e, t, r) {
         var o = e("google-protobuf"), s = window;
         o.exportSymbol("proto.stream.ErrorCode", null, s), proto.stream.ErrorCode = {
             NOERROR: 0,
@@ -1035,15 +1399,246 @@ var MvsTicker = function (e) {
             BADGATEWAY: 502,
             SERVICEUNAVAILABLE: 503
         }, o.object.extend(r, proto.stream)
-    }, {"google-protobuf": 7}], 5: [function (e, t, r) {
-        var o = e("./sdk_pb"), s = e("./gateway_pb"), i = e("./errorcode_pb");
-        t.exports = {DataProto: o, DataProto: s, DataProto: i}
-    }, {"./errorcode_pb": 4, "./gateway_pb": 6, "./sdk_pb": 8}], 6: [function (e, t, r) {
+    }, {"google-protobuf": 8}],
+    6: [function (e, t, r) {
+        var o = e("./sdk_pb"), s = e("./gateway_pb"), i = e("./errorcode_pb"),
+            a = e("./watchsdk_pb");
+        t.exports = {DataProto: o, DataProto: s, DataProto: i, DataProto: a}
+    }, {"./errorcode_pb": 5, "./gateway_pb": 7, "./sdk_pb": 9, "./watchsdk_pb": 10}],
+    7: [function (e, t, r) {
         var s = e("google-protobuf"), o = s, i = window;
         e("./errorcode_pb.js");
-        o.exportSymbol("proto.stream.BookInfo", null, i), o.exportSymbol("proto.stream.CmdId", null, i), o.exportSymbol("proto.stream.ConnDetailV2", null, i), o.exportSymbol("proto.stream.CreateRoom", null, i), o.exportSymbol("proto.stream.CreateRoomRsp", null, i), o.exportSymbol("proto.stream.DisconnectReq", null, i), o.exportSymbol("proto.stream.DisconnectRsp", null, i), o.exportSymbol("proto.stream.GetRoomDetailReq", null, i), o.exportSymbol("proto.stream.GetRoomDetailRsp", null, i), o.exportSymbol("proto.stream.GetRoomList", null, i), o.exportSymbol("proto.stream.GetRoomListExReq", null, i), o.exportSymbol("proto.stream.GetRoomListExRsp", null, i), o.exportSymbol("proto.stream.GetRoomListRsp", null, i), o.exportSymbol("proto.stream.HeartbeatReq", null, i), o.exportSymbol("proto.stream.HeartbeatRsp", null, i), o.exportSymbol("proto.stream.JoinOpenNotify", null, i), o.exportSymbol("proto.stream.JoinOpenReq", null, i), o.exportSymbol("proto.stream.JoinOpenRsp", null, i), o.exportSymbol("proto.stream.JoinOverNotify", null, i), o.exportSymbol("proto.stream.JoinOverReq", null, i), o.exportSymbol("proto.stream.JoinOverRsp", null, i), o.exportSymbol("proto.stream.JoinRoomReq", null, i), o.exportSymbol("proto.stream.JoinRoomRsp", null, i), o.exportSymbol("proto.stream.JoinRoomType", null, i), o.exportSymbol("proto.stream.KickPlayer", null, i), o.exportSymbol("proto.stream.KickPlayerNotify", null, i), o.exportSymbol("proto.stream.KickPlayerRsp", null, i), o.exportSymbol("proto.stream.LeaveRoomReq", null, i), o.exportSymbol("proto.stream.LeaveRoomRsp", null, i), o.exportSymbol("proto.stream.LoginReq", null, i), o.exportSymbol("proto.stream.LoginRsp", null, i), o.exportSymbol("proto.stream.LogoutRsp", null, i), o.exportSymbol("proto.stream.NetworkStateNotify", null, i), o.exportSymbol("proto.stream.NetworkStateReq", null, i), o.exportSymbol("proto.stream.NetworkStateRsp", null, i), o.exportSymbol("proto.stream.NoticeJoin", null, i), o.exportSymbol("proto.stream.NoticeLeave", null, i), o.exportSymbol("proto.stream.NoticeRoomProperty", null, i), o.exportSymbol("proto.stream.PlayerInfo", null, i), o.exportSymbol("proto.stream.RoomDetail", null, i), o.exportSymbol("proto.stream.RoomFilter", null, i), o.exportSymbol("proto.stream.RoomInfo", null, i), o.exportSymbol("proto.stream.RoomInfoEx", null, i), o.exportSymbol("proto.stream.RoomListSort", null, i), o.exportSymbol("proto.stream.RoomState", null, i), o.exportSymbol("proto.stream.SetRoomPropertyReq", null, i), o.exportSymbol("proto.stream.SetRoomPropertyRsp", null, i), o.exportSymbol("proto.stream.SortOrder", null, i), o.exportSymbol("proto.stream.TcpProtoHeader", null, i), o.exportSymbol("proto.stream.UserV2", null, i), o.exportSymbol("proto.stream.keyValue", null, i), proto.stream.LoginReq = function (e) {
+        o.exportSymbol("proto.stream.BookInfo", null, i), o.exportSymbol("proto.stream.ChangeRole", null, i), o.exportSymbol("proto.stream.ChangeRoleRsp", null, i), o.exportSymbol("proto.stream.CmdId", null, i), o.exportSymbol("proto.stream.ConnDetailV2", null, i), o.exportSymbol("proto.stream.CreateRoom", null, i), o.exportSymbol("proto.stream.CreateRoomRsp", null, i), o.exportSymbol("proto.stream.DisconnectReq", null, i), o.exportSymbol("proto.stream.DisconnectRsp", null, i), o.exportSymbol("proto.stream.GetRoomDetailReq", null, i), o.exportSymbol("proto.stream.GetRoomDetailRsp", null, i), o.exportSymbol("proto.stream.GetRoomList", null, i), o.exportSymbol("proto.stream.GetRoomListExReq", null, i), o.exportSymbol("proto.stream.GetRoomListExRsp", null, i), o.exportSymbol("proto.stream.GetRoomListRsp", null, i), o.exportSymbol("proto.stream.GetWatchDataReq", null, i), o.exportSymbol("proto.stream.GetWatchDataRsp", null, i), o.exportSymbol("proto.stream.GetWatchRoomsReq", null, i), o.exportSymbol("proto.stream.GetWatchRoomsRsp", null, i), o.exportSymbol("proto.stream.HeartbeatReq", null, i), o.exportSymbol("proto.stream.HeartbeatRsp", null, i), o.exportSymbol("proto.stream.JoinOpenNotify", null, i), o.exportSymbol("proto.stream.JoinOpenReq", null, i), o.exportSymbol("proto.stream.JoinOpenRsp", null, i), o.exportSymbol("proto.stream.JoinOverNotify", null, i), o.exportSymbol("proto.stream.JoinOverReq", null, i), o.exportSymbol("proto.stream.JoinOverRsp", null, i), o.exportSymbol("proto.stream.JoinRoomReq", null, i), o.exportSymbol("proto.stream.JoinRoomRsp", null, i), o.exportSymbol("proto.stream.JoinRoomType", null, i), o.exportSymbol("proto.stream.JoinWatchRoomNotify", null, i), o.exportSymbol("proto.stream.JoinWatchRoomReq", null, i), o.exportSymbol("proto.stream.JoinWatchRoomRsp", null, i), o.exportSymbol("proto.stream.KickPlayer", null, i), o.exportSymbol("proto.stream.KickPlayerNotify", null, i), o.exportSymbol("proto.stream.KickPlayerRsp", null, i), o.exportSymbol("proto.stream.LeaveRoomReq", null, i), o.exportSymbol("proto.stream.LeaveRoomRsp", null, i), o.exportSymbol("proto.stream.LeaveWatchRoomNotify", null, i), o.exportSymbol("proto.stream.LeaveWatchRoomReq", null, i), o.exportSymbol("proto.stream.LeaveWatchRoomRsp", null, i), o.exportSymbol("proto.stream.LoginReq", null, i), o.exportSymbol("proto.stream.LoginRsp", null, i), o.exportSymbol("proto.stream.LogoutRsp", null, i), o.exportSymbol("proto.stream.NetworkStateNotify", null, i), o.exportSymbol("proto.stream.NetworkStateReq", null, i), o.exportSymbol("proto.stream.NetworkStateRsp", null, i), o.exportSymbol("proto.stream.NoticeJoin", null, i), o.exportSymbol("proto.stream.NoticeLeave", null, i), o.exportSymbol("proto.stream.NoticeRoomProperty", null, i), o.exportSymbol("proto.stream.PlayRoom", null, i), o.exportSymbol("proto.stream.PlayerInfo", null, i), o.exportSymbol("proto.stream.RoomDetail", null, i), o.exportSymbol("proto.stream.RoomFilter", null, i), o.exportSymbol("proto.stream.RoomInfo", null, i), o.exportSymbol("proto.stream.RoomInfoEx", null, i), o.exportSymbol("proto.stream.RoomListSort", null, i), o.exportSymbol("proto.stream.RoomOverNotify", null, i), o.exportSymbol("proto.stream.RoomState", null, i), o.exportSymbol("proto.stream.RoomType", null, i), o.exportSymbol("proto.stream.SetReconnectTimeoutReq", null, i), o.exportSymbol("proto.stream.SetReconnectTimeoutRsp", null, i), o.exportSymbol("proto.stream.SetRoomPropertyReq", null, i), o.exportSymbol("proto.stream.SetRoomPropertyRsp", null, i), o.exportSymbol("proto.stream.SortOrder", null, i), o.exportSymbol("proto.stream.TcpProtoHeader", null, i), o.exportSymbol("proto.stream.UserV2", null, i), o.exportSymbol("proto.stream.WatchInfo", null, i), o.exportSymbol("proto.stream.WatchRoom", null, i), o.exportSymbol("proto.stream.WatchSetting", null, i), o.exportSymbol("proto.stream.keyValue", null, i), proto.stream.WatchSetting = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        }, o.inherits(proto.stream.LoginReq, s.Message), o.DEBUG && !COMPILED && (proto.stream.LoginReq.displayName = "proto.stream.LoginReq"), s.Message.GENERATE_TO_OBJECT && (proto.stream.LoginReq.prototype.toObject = function (e) {
+        }, o.inherits(proto.stream.WatchSetting, s.Message), o.DEBUG && !COMPILED && (proto.stream.WatchSetting.displayName = "proto.stream.WatchSetting"), s.Message.GENERATE_TO_OBJECT && (proto.stream.WatchSetting.prototype.toObject = function (e) {
+            return proto.stream.WatchSetting.toObject(e, this)
+        }, proto.stream.WatchSetting.toObject = function (e, t) {
+            var r = {
+                maxwatch: s.Message.getFieldWithDefault(t, 1, 0),
+                watchpersistent: s.Message.getFieldWithDefault(t, 2, !1),
+                watchdelayms: s.Message.getFieldWithDefault(t, 3, 0),
+                cachetime: s.Message.getFieldWithDefault(t, 4, 0)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }), proto.stream.WatchSetting.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.WatchSetting;
+            return proto.stream.WatchSetting.deserializeBinaryFromReader(r, t)
+        }, proto.stream.WatchSetting.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setMaxwatch(r);
+                        break;
+                    case 2:
+                        r = t.readBool();
+                        e.setWatchpersistent(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setWatchdelayms(r);
+                        break;
+                    case 4:
+                        r = t.readUint32();
+                        e.setCachetime(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.WatchSetting.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.WatchSetting.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.WatchSetting.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getMaxwatch()) && t.writeUint32(1, r), (r = e.getWatchpersistent()) && t.writeBool(2, r), 0 !== (r = e.getWatchdelayms()) && t.writeUint32(3, r), 0 !== (r = e.getCachetime()) && t.writeUint32(4, r)
+        }, proto.stream.WatchSetting.prototype.getMaxwatch = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        }, proto.stream.WatchSetting.prototype.setMaxwatch = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        }, proto.stream.WatchSetting.prototype.getWatchpersistent = function () {
+            return s.Message.getFieldWithDefault(this, 2, !1)
+        }, proto.stream.WatchSetting.prototype.setWatchpersistent = function (e) {
+            s.Message.setProto3BooleanField(this, 2, e)
+        }, proto.stream.WatchSetting.prototype.getWatchdelayms = function () {
+            return s.Message.getFieldWithDefault(this, 3, 0)
+        }, proto.stream.WatchSetting.prototype.setWatchdelayms = function (e) {
+            s.Message.setProto3IntField(this, 3, e)
+        }, proto.stream.WatchSetting.prototype.getCachetime = function () {
+            return s.Message.getFieldWithDefault(this, 4, 0)
+        }, proto.stream.WatchSetting.prototype.setCachetime = function (e) {
+            s.Message.setProto3IntField(this, 4, e)
+        }, proto.stream.WatchInfo = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        }, o.inherits(proto.stream.WatchInfo, s.Message), o.DEBUG && !COMPILED && (proto.stream.WatchInfo.displayName = "proto.stream.WatchInfo"), s.Message.GENERATE_TO_OBJECT && (proto.stream.WatchInfo.prototype.toObject = function (e) {
+            return proto.stream.WatchInfo.toObject(e, this)
+        }, proto.stream.WatchInfo.toObject = function (e, t) {
+            var r, o = {
+                roomid: s.Message.getFieldWithDefault(t, 1, "0"),
+                state: s.Message.getFieldWithDefault(t, 2, 0),
+                watchsetting: (r = t.getWatchsetting()) && proto.stream.WatchSetting.toObject(e, r),
+                curwatch: s.Message.getFieldWithDefault(t, 4, 0)
+            };
+            return e && (o.$jspbMessageInstance = t), o
+        }), proto.stream.WatchInfo.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.WatchInfo;
+            return proto.stream.WatchInfo.deserializeBinaryFromReader(r, t)
+        }, proto.stream.WatchInfo.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setState(r);
+                        break;
+                    case 3:
+                        r = new proto.stream.WatchSetting;
+                        t.readMessage(r, proto.stream.WatchSetting.deserializeBinaryFromReader), e.setWatchsetting(r);
+                        break;
+                    case 4:
+                        r = t.readUint32();
+                        e.setCurwatch(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.WatchInfo.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.WatchInfo.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.WatchInfo.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(1, r), 0 !== (r = e.getState()) && t.writeUint32(2, r), null != (r = e.getWatchsetting()) && t.writeMessage(3, r, proto.stream.WatchSetting.serializeBinaryToWriter), 0 !== (r = e.getCurwatch()) && t.writeUint32(4, r)
+        }, proto.stream.WatchInfo.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 1, "0")
+        }, proto.stream.WatchInfo.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 1, e)
+        }, proto.stream.WatchInfo.prototype.getState = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        }, proto.stream.WatchInfo.prototype.setState = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        }, proto.stream.WatchInfo.prototype.getWatchsetting = function () {
+            return s.Message.getWrapperField(this, proto.stream.WatchSetting, 3)
+        }, proto.stream.WatchInfo.prototype.setWatchsetting = function (e) {
+            s.Message.setWrapperField(this, 3, e)
+        },proto.stream.WatchInfo.prototype.clearWatchsetting = function () {
+            this.setWatchsetting(void 0)
+        },proto.stream.WatchInfo.prototype.hasWatchsetting = function () {
+            return null != s.Message.getField(this, 3)
+        },proto.stream.WatchInfo.prototype.getCurwatch = function () {
+            return s.Message.getFieldWithDefault(this, 4, 0)
+        },proto.stream.WatchInfo.prototype.setCurwatch = function (e) {
+            s.Message.setProto3IntField(this, 4, e)
+        },proto.stream.WatchRoom = function (e) {
+            s.Message.initialize(this, e, 0, -1, proto.stream.WatchRoom.repeatedFields_, null)
+        },o.inherits(proto.stream.WatchRoom, s.Message),o.DEBUG && !COMPILED && (proto.stream.WatchRoom.displayName = "proto.stream.WatchRoom"),proto.stream.WatchRoom.repeatedFields_ = [2],s.Message.GENERATE_TO_OBJECT && (proto.stream.WatchRoom.prototype.toObject = function (e) {
+            return proto.stream.WatchRoom.toObject(e, this)
+        }, proto.stream.WatchRoom.toObject = function (e, t) {
+            var r, o = {
+                watchinfo: (r = t.getWatchinfo()) && proto.stream.WatchInfo.toObject(e, r),
+                watchplayersList: s.Message.toObjectList(t.getWatchplayersList(), proto.stream.PlayerInfo.toObject, e)
+            };
+            return e && (o.$jspbMessageInstance = t), o
+        }),proto.stream.WatchRoom.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.WatchRoom;
+            return proto.stream.WatchRoom.deserializeBinaryFromReader(r, t)
+        },proto.stream.WatchRoom.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = new proto.stream.WatchInfo;
+                        t.readMessage(r, proto.stream.WatchInfo.deserializeBinaryFromReader), e.setWatchinfo(r);
+                        break;
+                    case 2:
+                        r = new proto.stream.PlayerInfo;
+                        t.readMessage(r, proto.stream.PlayerInfo.deserializeBinaryFromReader), e.addWatchplayers(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.WatchRoom.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.WatchRoom.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.WatchRoom.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            null != (r = e.getWatchinfo()) && t.writeMessage(1, r, proto.stream.WatchInfo.serializeBinaryToWriter), 0 < (r = e.getWatchplayersList()).length && t.writeRepeatedMessage(2, r, proto.stream.PlayerInfo.serializeBinaryToWriter)
+        },proto.stream.WatchRoom.prototype.getWatchinfo = function () {
+            return s.Message.getWrapperField(this, proto.stream.WatchInfo, 1)
+        },proto.stream.WatchRoom.prototype.setWatchinfo = function (e) {
+            s.Message.setWrapperField(this, 1, e)
+        },proto.stream.WatchRoom.prototype.clearWatchinfo = function () {
+            this.setWatchinfo(void 0)
+        },proto.stream.WatchRoom.prototype.hasWatchinfo = function () {
+            return null != s.Message.getField(this, 1)
+        },proto.stream.WatchRoom.prototype.getWatchplayersList = function () {
+            return s.Message.getRepeatedWrapperField(this, proto.stream.PlayerInfo, 2)
+        },proto.stream.WatchRoom.prototype.setWatchplayersList = function (e) {
+            s.Message.setRepeatedWrapperField(this, 2, e)
+        },proto.stream.WatchRoom.prototype.addWatchplayers = function (e, t) {
+            return s.Message.addToRepeatedWrapperField(this, 2, e, proto.stream.PlayerInfo, t)
+        },proto.stream.WatchRoom.prototype.clearWatchplayersList = function () {
+            this.setWatchplayersList([])
+        },proto.stream.PlayRoom = function (e) {
+            s.Message.initialize(this, e, 0, -1, proto.stream.PlayRoom.repeatedFields_, null)
+        },o.inherits(proto.stream.PlayRoom, s.Message),o.DEBUG && !COMPILED && (proto.stream.PlayRoom.displayName = "proto.stream.PlayRoom"),proto.stream.PlayRoom.repeatedFields_ = [2],s.Message.GENERATE_TO_OBJECT && (proto.stream.PlayRoom.prototype.toObject = function (e) {
+            return proto.stream.PlayRoom.toObject(e, this)
+        }, proto.stream.PlayRoom.toObject = function (e, t) {
+            var r, o = {
+                roominfo: (r = t.getRoominfo()) && proto.stream.RoomInfo.toObject(e, r),
+                playerList: s.Message.toObjectList(t.getPlayerList(), proto.stream.PlayerInfo.toObject, e)
+            };
+            return e && (o.$jspbMessageInstance = t), o
+        }),proto.stream.PlayRoom.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.PlayRoom;
+            return proto.stream.PlayRoom.deserializeBinaryFromReader(r, t)
+        },proto.stream.PlayRoom.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = new proto.stream.RoomInfo;
+                        t.readMessage(r, proto.stream.RoomInfo.deserializeBinaryFromReader), e.setRoominfo(r);
+                        break;
+                    case 2:
+                        r = new proto.stream.PlayerInfo;
+                        t.readMessage(r, proto.stream.PlayerInfo.deserializeBinaryFromReader), e.addPlayer(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.PlayRoom.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.PlayRoom.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.PlayRoom.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            null != (r = e.getRoominfo()) && t.writeMessage(1, r, proto.stream.RoomInfo.serializeBinaryToWriter), 0 < (r = e.getPlayerList()).length && t.writeRepeatedMessage(2, r, proto.stream.PlayerInfo.serializeBinaryToWriter)
+        },proto.stream.PlayRoom.prototype.getRoominfo = function () {
+            return s.Message.getWrapperField(this, proto.stream.RoomInfo, 1)
+        },proto.stream.PlayRoom.prototype.setRoominfo = function (e) {
+            s.Message.setWrapperField(this, 1, e)
+        },proto.stream.PlayRoom.prototype.clearRoominfo = function () {
+            this.setRoominfo(void 0)
+        },proto.stream.PlayRoom.prototype.hasRoominfo = function () {
+            return null != s.Message.getField(this, 1)
+        },proto.stream.PlayRoom.prototype.getPlayerList = function () {
+            return s.Message.getRepeatedWrapperField(this, proto.stream.PlayerInfo, 2)
+        },proto.stream.PlayRoom.prototype.setPlayerList = function (e) {
+            s.Message.setRepeatedWrapperField(this, 2, e)
+        },proto.stream.PlayRoom.prototype.addPlayer = function (e, t) {
+            return s.Message.addToRepeatedWrapperField(this, 2, e, proto.stream.PlayerInfo, t)
+        },proto.stream.PlayRoom.prototype.clearPlayerList = function () {
+            this.setPlayerList([])
+        },proto.stream.LoginReq = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.LoginReq, s.Message),o.DEBUG && !COMPILED && (proto.stream.LoginReq.displayName = "proto.stream.LoginReq"),s.Message.GENERATE_TO_OBJECT && (proto.stream.LoginReq.prototype.toObject = function (e) {
             return proto.stream.LoginReq.toObject(e, this)
         }, proto.stream.LoginReq.toObject = function (e, t) {
             var r = {
@@ -1056,10 +1651,10 @@ var MvsTicker = function (e) {
                 token: s.Message.getFieldWithDefault(t, 7, "")
             };
             return e && (r.$jspbMessageInstance = t), r
-        }), proto.stream.LoginReq.deserializeBinary = function (e) {
+        }),proto.stream.LoginReq.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.LoginReq;
             return proto.stream.LoginReq.deserializeBinaryFromReader(r, t)
-        }, proto.stream.LoginReq.deserializeBinaryFromReader = function (e, t) {
+        },proto.stream.LoginReq.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -1095,43 +1690,43 @@ var MvsTicker = function (e) {
                 }
             }
             return e
-        }, proto.stream.LoginReq.prototype.serializeBinary = function () {
+        },proto.stream.LoginReq.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.LoginReq.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        }, proto.stream.LoginReq.serializeBinaryToWriter = function (e, t) {
+        },proto.stream.LoginReq.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
             0 !== (r = e.getGameid()) && t.writeUint32(1, r), 0 < (r = e.getAppkey()).length && t.writeString(2, r), 0 < (r = e.getDeviceid()).length && t.writeString(3, r), 0 < (r = e.getSign()).length && t.writeString(4, r), 0 < (r = e.getSdkver()).length && t.writeString(5, r), 0 !== (r = e.getVendor()) && t.writeUint32(6, r), 0 < (r = e.getToken()).length && t.writeString(7, r)
-        }, proto.stream.LoginReq.prototype.getGameid = function () {
+        },proto.stream.LoginReq.prototype.getGameid = function () {
             return s.Message.getFieldWithDefault(this, 1, 0)
-        }, proto.stream.LoginReq.prototype.setGameid = function (e) {
+        },proto.stream.LoginReq.prototype.setGameid = function (e) {
             s.Message.setProto3IntField(this, 1, e)
-        }, proto.stream.LoginReq.prototype.getAppkey = function () {
+        },proto.stream.LoginReq.prototype.getAppkey = function () {
             return s.Message.getFieldWithDefault(this, 2, "")
-        }, proto.stream.LoginReq.prototype.setAppkey = function (e) {
+        },proto.stream.LoginReq.prototype.setAppkey = function (e) {
             s.Message.setProto3StringField(this, 2, e)
-        }, proto.stream.LoginReq.prototype.getDeviceid = function () {
+        },proto.stream.LoginReq.prototype.getDeviceid = function () {
             return s.Message.getFieldWithDefault(this, 3, "")
-        }, proto.stream.LoginReq.prototype.setDeviceid = function (e) {
+        },proto.stream.LoginReq.prototype.setDeviceid = function (e) {
             s.Message.setProto3StringField(this, 3, e)
-        }, proto.stream.LoginReq.prototype.getSign = function () {
+        },proto.stream.LoginReq.prototype.getSign = function () {
             return s.Message.getFieldWithDefault(this, 4, "")
-        }, proto.stream.LoginReq.prototype.setSign = function (e) {
+        },proto.stream.LoginReq.prototype.setSign = function (e) {
             s.Message.setProto3StringField(this, 4, e)
-        }, proto.stream.LoginReq.prototype.getSdkver = function () {
+        },proto.stream.LoginReq.prototype.getSdkver = function () {
             return s.Message.getFieldWithDefault(this, 5, "")
-        }, proto.stream.LoginReq.prototype.setSdkver = function (e) {
+        },proto.stream.LoginReq.prototype.setSdkver = function (e) {
             s.Message.setProto3StringField(this, 5, e)
-        }, proto.stream.LoginReq.prototype.getVendor = function () {
+        },proto.stream.LoginReq.prototype.getVendor = function () {
             return s.Message.getFieldWithDefault(this, 6, 0)
-        }, proto.stream.LoginReq.prototype.setVendor = function (e) {
+        },proto.stream.LoginReq.prototype.setVendor = function (e) {
             s.Message.setProto3IntField(this, 6, e)
-        }, proto.stream.LoginReq.prototype.getToken = function () {
+        },proto.stream.LoginReq.prototype.getToken = function () {
             return s.Message.getFieldWithDefault(this, 7, "")
-        }, proto.stream.LoginReq.prototype.setToken = function (e) {
+        },proto.stream.LoginReq.prototype.setToken = function (e) {
             s.Message.setProto3StringField(this, 7, e)
-        }, proto.stream.LoginRsp = function (e) {
+        },proto.stream.LoginRsp = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        }, o.inherits(proto.stream.LoginRsp, s.Message), o.DEBUG && !COMPILED && (proto.stream.LoginRsp.displayName = "proto.stream.LoginRsp"), s.Message.GENERATE_TO_OBJECT && (proto.stream.LoginRsp.prototype.toObject = function (e) {
+        },o.inherits(proto.stream.LoginRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.LoginRsp.displayName = "proto.stream.LoginRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.LoginRsp.prototype.toObject = function (e) {
             return proto.stream.LoginRsp.toObject(e, this)
         }, proto.stream.LoginRsp.toObject = function (e, t) {
             var r = {
@@ -1139,10 +1734,10 @@ var MvsTicker = function (e) {
                 roomid: s.Message.getFieldWithDefault(t, 2, "0")
             };
             return e && (r.$jspbMessageInstance = t), r
-        }), proto.stream.LoginRsp.deserializeBinary = function (e) {
+        }),proto.stream.LoginRsp.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.LoginRsp;
             return proto.stream.LoginRsp.deserializeBinaryFromReader(r, t)
-        }, proto.stream.LoginRsp.deserializeBinaryFromReader = function (e, t) {
+        },proto.stream.LoginRsp.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -1158,23 +1753,23 @@ var MvsTicker = function (e) {
                 }
             }
             return e
-        }, proto.stream.LoginRsp.prototype.serializeBinary = function () {
+        },proto.stream.LoginRsp.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.LoginRsp.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        }, proto.stream.LoginRsp.serializeBinaryToWriter = function (e, t) {
+        },proto.stream.LoginRsp.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
             0 !== (r = e.getStatus()) && t.writeEnum(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r)
-        }, proto.stream.LoginRsp.prototype.getStatus = function () {
+        },proto.stream.LoginRsp.prototype.getStatus = function () {
             return s.Message.getFieldWithDefault(this, 1, 0)
-        }, proto.stream.LoginRsp.prototype.setStatus = function (e) {
+        },proto.stream.LoginRsp.prototype.setStatus = function (e) {
             s.Message.setProto3EnumField(this, 1, e)
-        }, proto.stream.LoginRsp.prototype.getRoomid = function () {
+        },proto.stream.LoginRsp.prototype.getRoomid = function () {
             return s.Message.getFieldWithDefault(this, 2, "0")
-        }, proto.stream.LoginRsp.prototype.setRoomid = function (e) {
+        },proto.stream.LoginRsp.prototype.setRoomid = function (e) {
             s.Message.setProto3StringIntField(this, 2, e)
-        }, proto.stream.HeartbeatReq = function (e) {
+        },proto.stream.HeartbeatReq = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        }, o.inherits(proto.stream.HeartbeatReq, s.Message), o.DEBUG && !COMPILED && (proto.stream.HeartbeatReq.displayName = "proto.stream.HeartbeatReq"), s.Message.GENERATE_TO_OBJECT && (proto.stream.HeartbeatReq.prototype.toObject = function (e) {
+        },o.inherits(proto.stream.HeartbeatReq, s.Message),o.DEBUG && !COMPILED && (proto.stream.HeartbeatReq.displayName = "proto.stream.HeartbeatReq"),s.Message.GENERATE_TO_OBJECT && (proto.stream.HeartbeatReq.prototype.toObject = function (e) {
             return proto.stream.HeartbeatReq.toObject(e, this)
         }, proto.stream.HeartbeatReq.toObject = function (e, t) {
             var r = {
@@ -1182,10 +1777,10 @@ var MvsTicker = function (e) {
                 roomid: s.Message.getFieldWithDefault(t, 2, "0")
             };
             return e && (r.$jspbMessageInstance = t), r
-        }), proto.stream.HeartbeatReq.deserializeBinary = function (e) {
+        }),proto.stream.HeartbeatReq.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.HeartbeatReq;
             return proto.stream.HeartbeatReq.deserializeBinaryFromReader(r, t)
-        }, proto.stream.HeartbeatReq.deserializeBinaryFromReader = function (e, t) {
+        },proto.stream.HeartbeatReq.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -1201,23 +1796,23 @@ var MvsTicker = function (e) {
                 }
             }
             return e
-        }, proto.stream.HeartbeatReq.prototype.serializeBinary = function () {
+        },proto.stream.HeartbeatReq.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.HeartbeatReq.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        }, proto.stream.HeartbeatReq.serializeBinaryToWriter = function (e, t) {
+        },proto.stream.HeartbeatReq.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
             0 !== (r = e.getGameid()) && t.writeUint32(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r)
-        }, proto.stream.HeartbeatReq.prototype.getGameid = function () {
+        },proto.stream.HeartbeatReq.prototype.getGameid = function () {
             return s.Message.getFieldWithDefault(this, 1, 0)
-        }, proto.stream.HeartbeatReq.prototype.setGameid = function (e) {
+        },proto.stream.HeartbeatReq.prototype.setGameid = function (e) {
             s.Message.setProto3IntField(this, 1, e)
-        }, proto.stream.HeartbeatReq.prototype.getRoomid = function () {
+        },proto.stream.HeartbeatReq.prototype.getRoomid = function () {
             return s.Message.getFieldWithDefault(this, 2, "0")
-        }, proto.stream.HeartbeatReq.prototype.setRoomid = function (e) {
+        },proto.stream.HeartbeatReq.prototype.setRoomid = function (e) {
             s.Message.setProto3StringIntField(this, 2, e)
-        }, proto.stream.HeartbeatRsp = function (e) {
+        },proto.stream.HeartbeatRsp = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        }, o.inherits(proto.stream.HeartbeatRsp, s.Message), o.DEBUG && !COMPILED && (proto.stream.HeartbeatRsp.displayName = "proto.stream.HeartbeatRsp"), s.Message.GENERATE_TO_OBJECT && (proto.stream.HeartbeatRsp.prototype.toObject = function (e) {
+        },o.inherits(proto.stream.HeartbeatRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.HeartbeatRsp.displayName = "proto.stream.HeartbeatRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.HeartbeatRsp.prototype.toObject = function (e) {
             return proto.stream.HeartbeatRsp.toObject(e, this)
         }, proto.stream.HeartbeatRsp.toObject = function (e, t) {
             var r = {
@@ -1646,7 +2241,8 @@ var MvsTicker = function (e) {
                 gameid: s.Message.getFieldWithDefault(t, 3, 0),
                 roominfo: (r = t.getRoominfo()) && proto.stream.RoomInfo.toObject(e, r),
                 tagsList: s.Message.toObjectList(t.getTagsList(), proto.stream.keyValue.toObject, e),
-                cpproto: t.getCpproto_asB64()
+                cpproto: t.getCpproto_asB64(),
+                watchsetting: (r = t.getWatchsetting()) && proto.stream.WatchSetting.toObject(e, r)
             };
             return e && (o.$jspbMessageInstance = t), o
         }),proto.stream.JoinRoomReq.deserializeBinary = function (e) {
@@ -1679,6 +2275,10 @@ var MvsTicker = function (e) {
                         r = t.readBytes();
                         e.setCpproto(r);
                         break;
+                    case 7:
+                        r = new proto.stream.WatchSetting;
+                        t.readMessage(r, proto.stream.WatchSetting.deserializeBinaryFromReader), e.setWatchsetting(r);
+                        break;
                     default:
                         t.skipField()
                 }
@@ -1689,7 +2289,7 @@ var MvsTicker = function (e) {
             return proto.stream.JoinRoomReq.serializeBinaryToWriter(this, e), e.getResultBuffer()
         },proto.stream.JoinRoomReq.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
-            0 !== (r = e.getJointype()) && t.writeEnum(1, r), null != (r = e.getPlayerinfo()) && t.writeMessage(2, r, proto.stream.PlayerInfo.serializeBinaryToWriter), 0 !== (r = e.getGameid()) && t.writeUint32(3, r), null != (r = e.getRoominfo()) && t.writeMessage(4, r, proto.stream.RoomInfo.serializeBinaryToWriter), 0 < (r = e.getTagsList()).length && t.writeRepeatedMessage(5, r, proto.stream.keyValue.serializeBinaryToWriter), 0 < (r = e.getCpproto_asU8()).length && t.writeBytes(6, r)
+            0 !== (r = e.getJointype()) && t.writeEnum(1, r), null != (r = e.getPlayerinfo()) && t.writeMessage(2, r, proto.stream.PlayerInfo.serializeBinaryToWriter), 0 !== (r = e.getGameid()) && t.writeUint32(3, r), null != (r = e.getRoominfo()) && t.writeMessage(4, r, proto.stream.RoomInfo.serializeBinaryToWriter), 0 < (r = e.getTagsList()).length && t.writeRepeatedMessage(5, r, proto.stream.keyValue.serializeBinaryToWriter), 0 < (r = e.getCpproto_asU8()).length && t.writeBytes(6, r), null != (r = e.getWatchsetting()) && t.writeMessage(7, r, proto.stream.WatchSetting.serializeBinaryToWriter)
         },proto.stream.JoinRoomReq.prototype.getJointype = function () {
             return s.Message.getFieldWithDefault(this, 1, 0)
         },proto.stream.JoinRoomReq.prototype.setJointype = function (e) {
@@ -1730,6 +2330,14 @@ var MvsTicker = function (e) {
             return s.Message.bytesAsU8(this.getCpproto())
         },proto.stream.JoinRoomReq.prototype.setCpproto = function (e) {
             s.Message.setProto3BytesField(this, 6, e)
+        },proto.stream.JoinRoomReq.prototype.getWatchsetting = function () {
+            return s.Message.getWrapperField(this, proto.stream.WatchSetting, 7)
+        },proto.stream.JoinRoomReq.prototype.setWatchsetting = function (e) {
+            s.Message.setWrapperField(this, 7, e)
+        },proto.stream.JoinRoomReq.prototype.clearWatchsetting = function () {
+            this.setWatchsetting(void 0)
+        },proto.stream.JoinRoomReq.prototype.hasWatchsetting = function () {
+            return null != s.Message.getField(this, 7)
         },proto.stream.JoinRoomRsp = function (e) {
             s.Message.initialize(this, e, 0, -1, proto.stream.JoinRoomRsp.repeatedFields_, null)
         },o.inherits(proto.stream.JoinRoomRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.JoinRoomRsp.displayName = "proto.stream.JoinRoomRsp"),proto.stream.JoinRoomRsp.repeatedFields_ = [2],s.Message.GENERATE_TO_OBJECT && (proto.stream.JoinRoomRsp.prototype.toObject = function (e) {
@@ -2785,7 +3393,8 @@ var MvsTicker = function (e) {
             var r, o = {
                 playerinfo: (r = t.getPlayerinfo()) && proto.stream.PlayerInfo.toObject(e, r),
                 gameid: s.Message.getFieldWithDefault(t, 2, 0),
-                roominfo: (r = t.getRoominfo()) && proto.stream.RoomInfo.toObject(e, r)
+                roominfo: (r = t.getRoominfo()) && proto.stream.RoomInfo.toObject(e, r),
+                watchsetting: (r = t.getWatchsetting()) && proto.stream.WatchSetting.toObject(e, r)
             };
             return e && (o.$jspbMessageInstance = t), o
         }),proto.stream.CreateRoom.deserializeBinary = function (e) {
@@ -2806,6 +3415,10 @@ var MvsTicker = function (e) {
                         r = new proto.stream.RoomInfo;
                         t.readMessage(r, proto.stream.RoomInfo.deserializeBinaryFromReader), e.setRoominfo(r);
                         break;
+                    case 4:
+                        r = new proto.stream.WatchSetting;
+                        t.readMessage(r, proto.stream.WatchSetting.deserializeBinaryFromReader), e.setWatchsetting(r);
+                        break;
                     default:
                         t.skipField()
                 }
@@ -2816,7 +3429,7 @@ var MvsTicker = function (e) {
             return proto.stream.CreateRoom.serializeBinaryToWriter(this, e), e.getResultBuffer()
         },proto.stream.CreateRoom.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
-            null != (r = e.getPlayerinfo()) && t.writeMessage(1, r, proto.stream.PlayerInfo.serializeBinaryToWriter), 0 !== (r = e.getGameid()) && t.writeUint32(2, r), null != (r = e.getRoominfo()) && t.writeMessage(3, r, proto.stream.RoomInfo.serializeBinaryToWriter)
+            null != (r = e.getPlayerinfo()) && t.writeMessage(1, r, proto.stream.PlayerInfo.serializeBinaryToWriter), 0 !== (r = e.getGameid()) && t.writeUint32(2, r), null != (r = e.getRoominfo()) && t.writeMessage(3, r, proto.stream.RoomInfo.serializeBinaryToWriter), null != (r = e.getWatchsetting()) && t.writeMessage(4, r, proto.stream.WatchSetting.serializeBinaryToWriter)
         },proto.stream.CreateRoom.prototype.getPlayerinfo = function () {
             return s.Message.getWrapperField(this, proto.stream.PlayerInfo, 1)
         },proto.stream.CreateRoom.prototype.setPlayerinfo = function (e) {
@@ -2837,6 +3450,14 @@ var MvsTicker = function (e) {
             this.setRoominfo(void 0)
         },proto.stream.CreateRoom.prototype.hasRoominfo = function () {
             return null != s.Message.getField(this, 3)
+        },proto.stream.CreateRoom.prototype.getWatchsetting = function () {
+            return s.Message.getWrapperField(this, proto.stream.WatchSetting, 4)
+        },proto.stream.CreateRoom.prototype.setWatchsetting = function (e) {
+            s.Message.setWrapperField(this, 4, e)
+        },proto.stream.CreateRoom.prototype.clearWatchsetting = function () {
+            this.setWatchsetting(void 0)
+        },proto.stream.CreateRoom.prototype.hasWatchsetting = function () {
+            return null != s.Message.getField(this, 4)
         },proto.stream.CreateRoomRsp = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
         },o.inherits(proto.stream.CreateRoomRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.CreateRoomRsp.displayName = "proto.stream.CreateRoomRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.CreateRoomRsp.prototype.toObject = function (e) {
@@ -3167,7 +3788,7 @@ var MvsTicker = function (e) {
         },o.inherits(proto.stream.RoomInfoEx, s.Message),o.DEBUG && !COMPILED && (proto.stream.RoomInfoEx.displayName = "proto.stream.RoomInfoEx"),s.Message.GENERATE_TO_OBJECT && (proto.stream.RoomInfoEx.prototype.toObject = function (e) {
             return proto.stream.RoomInfoEx.toObject(e, this)
         }, proto.stream.RoomInfoEx.toObject = function (e, t) {
-            var r = {
+            var r, o = {
                 roomid: s.Message.getFieldWithDefault(t, 1, "0"),
                 roomname: s.Message.getFieldWithDefault(t, 2, ""),
                 maxplayer: s.Message.getFieldWithDefault(t, 3, 0),
@@ -3178,9 +3799,10 @@ var MvsTicker = function (e) {
                 roomproperty: t.getRoomproperty_asB64(),
                 owner: s.Message.getFieldWithDefault(t, 9, 0),
                 state: s.Message.getFieldWithDefault(t, 10, 0),
-                createtime: s.Message.getFieldWithDefault(t, 11, 0)
+                createtime: s.Message.getFieldWithDefault(t, 11, 0),
+                watchinfo: (r = t.getWatchinfo()) && proto.stream.WatchInfo.toObject(e, r)
             };
-            return e && (r.$jspbMessageInstance = t), r
+            return e && (o.$jspbMessageInstance = t), o
         }),proto.stream.RoomInfoEx.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.RoomInfoEx;
             return proto.stream.RoomInfoEx.deserializeBinaryFromReader(r, t)
@@ -3231,6 +3853,10 @@ var MvsTicker = function (e) {
                         r = t.readUint64();
                         e.setCreatetime(r);
                         break;
+                    case 12:
+                        r = new proto.stream.WatchInfo;
+                        t.readMessage(r, proto.stream.WatchInfo.deserializeBinaryFromReader), e.setWatchinfo(r);
+                        break;
                     default:
                         t.skipField()
                 }
@@ -3241,7 +3867,7 @@ var MvsTicker = function (e) {
             return proto.stream.RoomInfoEx.serializeBinaryToWriter(this, e), e.getResultBuffer()
         },proto.stream.RoomInfoEx.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
-            r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(1, r), 0 < (r = e.getRoomname()).length && t.writeString(2, r), 0 !== (r = e.getMaxplayer()) && t.writeUint32(3, r), 0 !== (r = e.getGameplayer()) && t.writeUint32(4, r), 0 !== (r = e.getWatchplayer()) && t.writeUint32(5, r), 0 !== (r = e.getMode()) && t.writeInt32(6, r), 0 !== (r = e.getCanwatch()) && t.writeInt32(7, r), 0 < (r = e.getRoomproperty_asU8()).length && t.writeBytes(8, r), 0 !== (r = e.getOwner()) && t.writeUint32(9, r), 0 !== (r = e.getState()) && t.writeEnum(10, r), 0 !== (r = e.getCreatetime()) && t.writeUint64(11, r)
+            r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(1, r), 0 < (r = e.getRoomname()).length && t.writeString(2, r), 0 !== (r = e.getMaxplayer()) && t.writeUint32(3, r), 0 !== (r = e.getGameplayer()) && t.writeUint32(4, r), 0 !== (r = e.getWatchplayer()) && t.writeUint32(5, r), 0 !== (r = e.getMode()) && t.writeInt32(6, r), 0 !== (r = e.getCanwatch()) && t.writeInt32(7, r), 0 < (r = e.getRoomproperty_asU8()).length && t.writeBytes(8, r), 0 !== (r = e.getOwner()) && t.writeUint32(9, r), 0 !== (r = e.getState()) && t.writeEnum(10, r), 0 !== (r = e.getCreatetime()) && t.writeUint64(11, r), null != (r = e.getWatchinfo()) && t.writeMessage(12, r, proto.stream.WatchInfo.serializeBinaryToWriter)
         },proto.stream.RoomInfoEx.prototype.getRoomid = function () {
             return s.Message.getFieldWithDefault(this, 1, "0")
         },proto.stream.RoomInfoEx.prototype.setRoomid = function (e) {
@@ -3290,6 +3916,14 @@ var MvsTicker = function (e) {
             return s.Message.getFieldWithDefault(this, 11, 0)
         },proto.stream.RoomInfoEx.prototype.setCreatetime = function (e) {
             s.Message.setProto3IntField(this, 11, e)
+        },proto.stream.RoomInfoEx.prototype.getWatchinfo = function () {
+            return s.Message.getWrapperField(this, proto.stream.WatchInfo, 12)
+        },proto.stream.RoomInfoEx.prototype.setWatchinfo = function (e) {
+            s.Message.setWrapperField(this, 12, e)
+        },proto.stream.RoomInfoEx.prototype.clearWatchinfo = function () {
+            this.setWatchinfo(void 0)
+        },proto.stream.RoomInfoEx.prototype.hasWatchinfo = function () {
+            return null != s.Message.getField(this, 12)
         },proto.stream.GetRoomListExRsp = function (e) {
             s.Message.initialize(this, e, 0, -1, proto.stream.GetRoomListExRsp.repeatedFields_, null)
         },o.inherits(proto.stream.GetRoomListExRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.GetRoomListExRsp.displayName = "proto.stream.GetRoomListExRsp"),proto.stream.GetRoomListExRsp.repeatedFields_ = [3],s.Message.GENERATE_TO_OBJECT && (proto.stream.GetRoomListExRsp.prototype.toObject = function (e) {
@@ -3353,7 +3987,8 @@ var MvsTicker = function (e) {
         }, proto.stream.GetRoomDetailReq.toObject = function (e, t) {
             var r = {
                 gameid: s.Message.getFieldWithDefault(t, 1, 0),
-                roomid: s.Message.getFieldWithDefault(t, 2, "0")
+                roomid: s.Message.getFieldWithDefault(t, 2, "0"),
+                latestwatchernum: s.Message.getFieldWithDefault(t, 3, 0)
             };
             return e && (r.$jspbMessageInstance = t), r
         }),proto.stream.GetRoomDetailReq.deserializeBinary = function (e) {
@@ -3370,6 +4005,10 @@ var MvsTicker = function (e) {
                         r = t.readUint64String();
                         e.setRoomid(r);
                         break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setLatestwatchernum(r);
+                        break;
                     default:
                         t.skipField()
                 }
@@ -3378,20 +4017,25 @@ var MvsTicker = function (e) {
         },proto.stream.GetRoomDetailReq.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.GetRoomDetailReq.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        },proto.stream.GetRoomDetailReq.serializeBinaryToWriter = function (e, t) {
+        };
+        proto.stream.GetRoomDetailReq.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
-            0 !== (r = e.getGameid()) && t.writeUint32(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r)
-        },proto.stream.GetRoomDetailReq.prototype.getGameid = function () {
+            0 !== (r = e.getGameid()) && t.writeUint32(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r), 0 !== (r = e.getLatestwatchernum()) && t.writeUint32(3, r)
+        }, proto.stream.GetRoomDetailReq.prototype.getGameid = function () {
             return s.Message.getFieldWithDefault(this, 1, 0)
-        },proto.stream.GetRoomDetailReq.prototype.setGameid = function (e) {
+        }, proto.stream.GetRoomDetailReq.prototype.setGameid = function (e) {
             s.Message.setProto3IntField(this, 1, e)
-        },proto.stream.GetRoomDetailReq.prototype.getRoomid = function () {
+        }, proto.stream.GetRoomDetailReq.prototype.getRoomid = function () {
             return s.Message.getFieldWithDefault(this, 2, "0")
-        },proto.stream.GetRoomDetailReq.prototype.setRoomid = function (e) {
+        }, proto.stream.GetRoomDetailReq.prototype.setRoomid = function (e) {
             s.Message.setProto3StringIntField(this, 2, e)
-        },proto.stream.GetRoomDetailRsp = function (e) {
+        }, proto.stream.GetRoomDetailReq.prototype.getLatestwatchernum = function () {
+            return s.Message.getFieldWithDefault(this, 3, 0)
+        }, proto.stream.GetRoomDetailReq.prototype.setLatestwatchernum = function (e) {
+            s.Message.setProto3IntField(this, 3, e)
+        }, proto.stream.GetRoomDetailRsp = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        },o.inherits(proto.stream.GetRoomDetailRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.GetRoomDetailRsp.displayName = "proto.stream.GetRoomDetailRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.GetRoomDetailRsp.prototype.toObject = function (e) {
+        }, o.inherits(proto.stream.GetRoomDetailRsp, s.Message), o.DEBUG && !COMPILED && (proto.stream.GetRoomDetailRsp.displayName = "proto.stream.GetRoomDetailRsp"), s.Message.GENERATE_TO_OBJECT && (proto.stream.GetRoomDetailRsp.prototype.toObject = function (e) {
             return proto.stream.GetRoomDetailRsp.toObject(e, this)
         }, proto.stream.GetRoomDetailRsp.toObject = function (e, t) {
             var r, o = {
@@ -3399,10 +4043,10 @@ var MvsTicker = function (e) {
                 roomdetail: (r = t.getRoomdetail()) && proto.stream.RoomDetail.toObject(e, r)
             };
             return e && (o.$jspbMessageInstance = t), o
-        }),proto.stream.GetRoomDetailRsp.deserializeBinary = function (e) {
+        }), proto.stream.GetRoomDetailRsp.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.GetRoomDetailRsp;
             return proto.stream.GetRoomDetailRsp.deserializeBinaryFromReader(r, t)
-        },proto.stream.GetRoomDetailRsp.deserializeBinaryFromReader = function (e, t) {
+        }, proto.stream.GetRoomDetailRsp.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -3418,30 +4062,30 @@ var MvsTicker = function (e) {
                 }
             }
             return e
-        },proto.stream.GetRoomDetailRsp.prototype.serializeBinary = function () {
+        }, proto.stream.GetRoomDetailRsp.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.GetRoomDetailRsp.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        },proto.stream.GetRoomDetailRsp.serializeBinaryToWriter = function (e, t) {
+        }, proto.stream.GetRoomDetailRsp.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
             0 !== (r = e.getStatus()) && t.writeEnum(1, r), null != (r = e.getRoomdetail()) && t.writeMessage(2, r, proto.stream.RoomDetail.serializeBinaryToWriter)
-        },proto.stream.GetRoomDetailRsp.prototype.getStatus = function () {
+        }, proto.stream.GetRoomDetailRsp.prototype.getStatus = function () {
             return s.Message.getFieldWithDefault(this, 1, 0)
-        },proto.stream.GetRoomDetailRsp.prototype.setStatus = function (e) {
+        }, proto.stream.GetRoomDetailRsp.prototype.setStatus = function (e) {
             s.Message.setProto3EnumField(this, 1, e)
-        },proto.stream.GetRoomDetailRsp.prototype.getRoomdetail = function () {
+        }, proto.stream.GetRoomDetailRsp.prototype.getRoomdetail = function () {
             return s.Message.getWrapperField(this, proto.stream.RoomDetail, 2)
-        },proto.stream.GetRoomDetailRsp.prototype.setRoomdetail = function (e) {
+        }, proto.stream.GetRoomDetailRsp.prototype.setRoomdetail = function (e) {
             s.Message.setWrapperField(this, 2, e)
-        },proto.stream.GetRoomDetailRsp.prototype.clearRoomdetail = function () {
+        }, proto.stream.GetRoomDetailRsp.prototype.clearRoomdetail = function () {
             this.setRoomdetail(void 0)
-        },proto.stream.GetRoomDetailRsp.prototype.hasRoomdetail = function () {
+        }, proto.stream.GetRoomDetailRsp.prototype.hasRoomdetail = function () {
             return null != s.Message.getField(this, 2)
-        },proto.stream.RoomDetail = function (e) {
+        }, proto.stream.RoomDetail = function (e) {
             s.Message.initialize(this, e, 0, -1, proto.stream.RoomDetail.repeatedFields_, null)
-        },o.inherits(proto.stream.RoomDetail, s.Message),o.DEBUG && !COMPILED && (proto.stream.RoomDetail.displayName = "proto.stream.RoomDetail"),proto.stream.RoomDetail.repeatedFields_ = [9],s.Message.GENERATE_TO_OBJECT && (proto.stream.RoomDetail.prototype.toObject = function (e) {
+        }, o.inherits(proto.stream.RoomDetail, s.Message), o.DEBUG && !COMPILED && (proto.stream.RoomDetail.displayName = "proto.stream.RoomDetail"), proto.stream.RoomDetail.repeatedFields_ = [9], s.Message.GENERATE_TO_OBJECT && (proto.stream.RoomDetail.prototype.toObject = function (e) {
             return proto.stream.RoomDetail.toObject(e, this)
         }, proto.stream.RoomDetail.toObject = function (e, t) {
-            var r = {
+            var r, o = {
                 roomid: s.Message.getFieldWithDefault(t, 1, "0"),
                 state: s.Message.getFieldWithDefault(t, 2, 0),
                 maxplayer: s.Message.getFieldWithDefault(t, 3, 0),
@@ -3450,13 +4094,14 @@ var MvsTicker = function (e) {
                 roomproperty: t.getRoomproperty_asB64(),
                 owner: s.Message.getFieldWithDefault(t, 7, 0),
                 createflag: s.Message.getFieldWithDefault(t, 8, 0),
-                playerinfosList: s.Message.toObjectList(t.getPlayerinfosList(), proto.stream.PlayerInfo.toObject, e)
+                playerinfosList: s.Message.toObjectList(t.getPlayerinfosList(), proto.stream.PlayerInfo.toObject, e),
+                watchroom: (r = t.getWatchroom()) && proto.stream.WatchRoom.toObject(e, r)
             };
-            return e && (r.$jspbMessageInstance = t), r
-        }),proto.stream.RoomDetail.deserializeBinary = function (e) {
+            return e && (o.$jspbMessageInstance = t), o
+        }), proto.stream.RoomDetail.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.RoomDetail;
             return proto.stream.RoomDetail.deserializeBinaryFromReader(r, t)
-        },proto.stream.RoomDetail.deserializeBinaryFromReader = function (e, t) {
+        }, proto.stream.RoomDetail.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -3495,64 +4140,76 @@ var MvsTicker = function (e) {
                         r = new proto.stream.PlayerInfo;
                         t.readMessage(r, proto.stream.PlayerInfo.deserializeBinaryFromReader), e.addPlayerinfos(r);
                         break;
+                    case 10:
+                        r = new proto.stream.WatchRoom;
+                        t.readMessage(r, proto.stream.WatchRoom.deserializeBinaryFromReader), e.setWatchroom(r);
+                        break;
                     default:
                         t.skipField()
                 }
             }
             return e
-        },proto.stream.RoomDetail.prototype.serializeBinary = function () {
+        }, proto.stream.RoomDetail.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.RoomDetail.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        },proto.stream.RoomDetail.serializeBinaryToWriter = function (e, t) {
+        }, proto.stream.RoomDetail.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
-            r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(1, r), 0 !== (r = e.getState()) && t.writeEnum(2, r), 0 !== (r = e.getMaxplayer()) && t.writeUint32(3, r), 0 !== (r = e.getMode()) && t.writeInt32(4, r), 0 !== (r = e.getCanwatch()) && t.writeInt32(5, r), 0 < (r = e.getRoomproperty_asU8()).length && t.writeBytes(6, r), 0 !== (r = e.getOwner()) && t.writeUint32(7, r), 0 !== (r = e.getCreateflag()) && t.writeUint32(8, r), 0 < (r = e.getPlayerinfosList()).length && t.writeRepeatedMessage(9, r, proto.stream.PlayerInfo.serializeBinaryToWriter)
-        },proto.stream.RoomDetail.prototype.getRoomid = function () {
+            r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(1, r), 0 !== (r = e.getState()) && t.writeEnum(2, r), 0 !== (r = e.getMaxplayer()) && t.writeUint32(3, r), 0 !== (r = e.getMode()) && t.writeInt32(4, r), 0 !== (r = e.getCanwatch()) && t.writeInt32(5, r), 0 < (r = e.getRoomproperty_asU8()).length && t.writeBytes(6, r), 0 !== (r = e.getOwner()) && t.writeUint32(7, r), 0 !== (r = e.getCreateflag()) && t.writeUint32(8, r), 0 < (r = e.getPlayerinfosList()).length && t.writeRepeatedMessage(9, r, proto.stream.PlayerInfo.serializeBinaryToWriter), null != (r = e.getWatchroom()) && t.writeMessage(10, r, proto.stream.WatchRoom.serializeBinaryToWriter)
+        }, proto.stream.RoomDetail.prototype.getRoomid = function () {
             return s.Message.getFieldWithDefault(this, 1, "0")
-        },proto.stream.RoomDetail.prototype.setRoomid = function (e) {
+        }, proto.stream.RoomDetail.prototype.setRoomid = function (e) {
             s.Message.setProto3StringIntField(this, 1, e)
-        },proto.stream.RoomDetail.prototype.getState = function () {
+        }, proto.stream.RoomDetail.prototype.getState = function () {
             return s.Message.getFieldWithDefault(this, 2, 0)
-        },proto.stream.RoomDetail.prototype.setState = function (e) {
+        }, proto.stream.RoomDetail.prototype.setState = function (e) {
             s.Message.setProto3EnumField(this, 2, e)
-        },proto.stream.RoomDetail.prototype.getMaxplayer = function () {
+        }, proto.stream.RoomDetail.prototype.getMaxplayer = function () {
             return s.Message.getFieldWithDefault(this, 3, 0)
-        },proto.stream.RoomDetail.prototype.setMaxplayer = function (e) {
+        }, proto.stream.RoomDetail.prototype.setMaxplayer = function (e) {
             s.Message.setProto3IntField(this, 3, e)
-        },proto.stream.RoomDetail.prototype.getMode = function () {
+        }, proto.stream.RoomDetail.prototype.getMode = function () {
             return s.Message.getFieldWithDefault(this, 4, 0)
-        },proto.stream.RoomDetail.prototype.setMode = function (e) {
+        }, proto.stream.RoomDetail.prototype.setMode = function (e) {
             s.Message.setProto3IntField(this, 4, e)
-        },proto.stream.RoomDetail.prototype.getCanwatch = function () {
+        }, proto.stream.RoomDetail.prototype.getCanwatch = function () {
             return s.Message.getFieldWithDefault(this, 5, 0)
-        },proto.stream.RoomDetail.prototype.setCanwatch = function (e) {
+        }, proto.stream.RoomDetail.prototype.setCanwatch = function (e) {
             s.Message.setProto3IntField(this, 5, e)
-        },proto.stream.RoomDetail.prototype.getRoomproperty = function () {
+        }, proto.stream.RoomDetail.prototype.getRoomproperty = function () {
             return s.Message.getFieldWithDefault(this, 6, "")
-        },proto.stream.RoomDetail.prototype.getRoomproperty_asB64 = function () {
+        }, proto.stream.RoomDetail.prototype.getRoomproperty_asB64 = function () {
             return s.Message.bytesAsB64(this.getRoomproperty())
-        },proto.stream.RoomDetail.prototype.getRoomproperty_asU8 = function () {
+        }, proto.stream.RoomDetail.prototype.getRoomproperty_asU8 = function () {
             return s.Message.bytesAsU8(this.getRoomproperty())
-        },proto.stream.RoomDetail.prototype.setRoomproperty = function (e) {
+        }, proto.stream.RoomDetail.prototype.setRoomproperty = function (e) {
             s.Message.setProto3BytesField(this, 6, e)
-        },proto.stream.RoomDetail.prototype.getOwner = function () {
+        }, proto.stream.RoomDetail.prototype.getOwner = function () {
             return s.Message.getFieldWithDefault(this, 7, 0)
-        },proto.stream.RoomDetail.prototype.setOwner = function (e) {
+        }, proto.stream.RoomDetail.prototype.setOwner = function (e) {
             s.Message.setProto3IntField(this, 7, e)
-        },proto.stream.RoomDetail.prototype.getCreateflag = function () {
+        }, proto.stream.RoomDetail.prototype.getCreateflag = function () {
             return s.Message.getFieldWithDefault(this, 8, 0)
-        },proto.stream.RoomDetail.prototype.setCreateflag = function (e) {
+        }, proto.stream.RoomDetail.prototype.setCreateflag = function (e) {
             s.Message.setProto3IntField(this, 8, e)
-        },proto.stream.RoomDetail.prototype.getPlayerinfosList = function () {
+        }, proto.stream.RoomDetail.prototype.getPlayerinfosList = function () {
             return s.Message.getRepeatedWrapperField(this, proto.stream.PlayerInfo, 9)
-        },proto.stream.RoomDetail.prototype.setPlayerinfosList = function (e) {
+        }, proto.stream.RoomDetail.prototype.setPlayerinfosList = function (e) {
             s.Message.setRepeatedWrapperField(this, 9, e)
-        },proto.stream.RoomDetail.prototype.addPlayerinfos = function (e, t) {
+        }, proto.stream.RoomDetail.prototype.addPlayerinfos = function (e, t) {
             return s.Message.addToRepeatedWrapperField(this, 9, e, proto.stream.PlayerInfo, t)
-        },proto.stream.RoomDetail.prototype.clearPlayerinfosList = function () {
+        }, proto.stream.RoomDetail.prototype.clearPlayerinfosList = function () {
             this.setPlayerinfosList([])
-        },proto.stream.KickPlayer = function (e) {
+        }, proto.stream.RoomDetail.prototype.getWatchroom = function () {
+            return s.Message.getWrapperField(this, proto.stream.WatchRoom, 10)
+        }, proto.stream.RoomDetail.prototype.setWatchroom = function (e) {
+            s.Message.setWrapperField(this, 10, e)
+        }, proto.stream.RoomDetail.prototype.clearWatchroom = function () {
+            this.setWatchroom(void 0)
+        }, proto.stream.RoomDetail.prototype.hasWatchroom = function () {
+            return null != s.Message.getField(this, 10)
+        }, proto.stream.KickPlayer = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        },o.inherits(proto.stream.KickPlayer, s.Message),o.DEBUG && !COMPILED && (proto.stream.KickPlayer.displayName = "proto.stream.KickPlayer"),s.Message.GENERATE_TO_OBJECT && (proto.stream.KickPlayer.prototype.toObject = function (e) {
+        }, o.inherits(proto.stream.KickPlayer, s.Message), o.DEBUG && !COMPILED && (proto.stream.KickPlayer.displayName = "proto.stream.KickPlayer"), s.Message.GENERATE_TO_OBJECT && (proto.stream.KickPlayer.prototype.toObject = function (e) {
             return proto.stream.KickPlayer.toObject(e, this)
         }, proto.stream.KickPlayer.toObject = function (e, t) {
             var r = {
@@ -3562,10 +4219,10 @@ var MvsTicker = function (e) {
                 cpproto: t.getCpproto_asB64()
             };
             return e && (r.$jspbMessageInstance = t), r
-        }),proto.stream.KickPlayer.deserializeBinary = function (e) {
+        }), proto.stream.KickPlayer.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.KickPlayer;
             return proto.stream.KickPlayer.deserializeBinaryFromReader(r, t)
-        },proto.stream.KickPlayer.deserializeBinaryFromReader = function (e, t) {
+        }, proto.stream.KickPlayer.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -3589,35 +4246,35 @@ var MvsTicker = function (e) {
                 }
             }
             return e
-        },proto.stream.KickPlayer.prototype.serializeBinary = function () {
+        }, proto.stream.KickPlayer.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.KickPlayer.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        },proto.stream.KickPlayer.serializeBinaryToWriter = function (e, t) {
+        }, proto.stream.KickPlayer.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
             r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(1, r), 0 !== (r = e.getSrcuserid()) && t.writeUint32(2, r), 0 !== (r = e.getUserid()) && t.writeUint32(3, r), 0 < (r = e.getCpproto_asU8()).length && t.writeBytes(4, r)
-        },proto.stream.KickPlayer.prototype.getRoomid = function () {
+        }, proto.stream.KickPlayer.prototype.getRoomid = function () {
             return s.Message.getFieldWithDefault(this, 1, "0")
-        },proto.stream.KickPlayer.prototype.setRoomid = function (e) {
+        }, proto.stream.KickPlayer.prototype.setRoomid = function (e) {
             s.Message.setProto3StringIntField(this, 1, e)
-        },proto.stream.KickPlayer.prototype.getSrcuserid = function () {
+        }, proto.stream.KickPlayer.prototype.getSrcuserid = function () {
             return s.Message.getFieldWithDefault(this, 2, 0)
-        },proto.stream.KickPlayer.prototype.setSrcuserid = function (e) {
+        }, proto.stream.KickPlayer.prototype.setSrcuserid = function (e) {
             s.Message.setProto3IntField(this, 2, e)
-        },proto.stream.KickPlayer.prototype.getUserid = function () {
+        }, proto.stream.KickPlayer.prototype.getUserid = function () {
             return s.Message.getFieldWithDefault(this, 3, 0)
-        },proto.stream.KickPlayer.prototype.setUserid = function (e) {
+        }, proto.stream.KickPlayer.prototype.setUserid = function (e) {
             s.Message.setProto3IntField(this, 3, e)
-        },proto.stream.KickPlayer.prototype.getCpproto = function () {
+        }, proto.stream.KickPlayer.prototype.getCpproto = function () {
             return s.Message.getFieldWithDefault(this, 4, "")
-        },proto.stream.KickPlayer.prototype.getCpproto_asB64 = function () {
+        }, proto.stream.KickPlayer.prototype.getCpproto_asB64 = function () {
             return s.Message.bytesAsB64(this.getCpproto())
-        },proto.stream.KickPlayer.prototype.getCpproto_asU8 = function () {
+        }, proto.stream.KickPlayer.prototype.getCpproto_asU8 = function () {
             return s.Message.bytesAsU8(this.getCpproto())
-        },proto.stream.KickPlayer.prototype.setCpproto = function (e) {
+        }, proto.stream.KickPlayer.prototype.setCpproto = function (e) {
             s.Message.setProto3BytesField(this, 4, e)
-        },proto.stream.KickPlayerRsp = function (e) {
+        }, proto.stream.KickPlayerRsp = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        },o.inherits(proto.stream.KickPlayerRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.KickPlayerRsp.displayName = "proto.stream.KickPlayerRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.KickPlayerRsp.prototype.toObject = function (e) {
+        }, o.inherits(proto.stream.KickPlayerRsp, s.Message), o.DEBUG && !COMPILED && (proto.stream.KickPlayerRsp.displayName = "proto.stream.KickPlayerRsp"), s.Message.GENERATE_TO_OBJECT && (proto.stream.KickPlayerRsp.prototype.toObject = function (e) {
             return proto.stream.KickPlayerRsp.toObject(e, this)
         }, proto.stream.KickPlayerRsp.toObject = function (e, t) {
             var r = {
@@ -3627,10 +4284,10 @@ var MvsTicker = function (e) {
                 owner: s.Message.getFieldWithDefault(t, 4, 0)
             };
             return e && (r.$jspbMessageInstance = t), r
-        }),proto.stream.KickPlayerRsp.deserializeBinary = function (e) {
+        }), proto.stream.KickPlayerRsp.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.KickPlayerRsp;
             return proto.stream.KickPlayerRsp.deserializeBinaryFromReader(r, t)
-        },proto.stream.KickPlayerRsp.deserializeBinaryFromReader = function (e, t) {
+        }, proto.stream.KickPlayerRsp.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -3654,31 +4311,31 @@ var MvsTicker = function (e) {
                 }
             }
             return e
-        },proto.stream.KickPlayerRsp.prototype.serializeBinary = function () {
+        }, proto.stream.KickPlayerRsp.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.KickPlayerRsp.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        },proto.stream.KickPlayerRsp.serializeBinaryToWriter = function (e, t) {
+        }, proto.stream.KickPlayerRsp.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
             0 !== (r = e.getStatus()) && t.writeEnum(1, r), 0 !== (r = e.getUserid()) && t.writeUint32(2, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(3, r), 0 !== (r = e.getOwner()) && t.writeUint32(4, r)
-        },proto.stream.KickPlayerRsp.prototype.getStatus = function () {
+        }, proto.stream.KickPlayerRsp.prototype.getStatus = function () {
             return s.Message.getFieldWithDefault(this, 1, 0)
-        },proto.stream.KickPlayerRsp.prototype.setStatus = function (e) {
+        }, proto.stream.KickPlayerRsp.prototype.setStatus = function (e) {
             s.Message.setProto3EnumField(this, 1, e)
-        },proto.stream.KickPlayerRsp.prototype.getUserid = function () {
+        }, proto.stream.KickPlayerRsp.prototype.getUserid = function () {
             return s.Message.getFieldWithDefault(this, 2, 0)
-        },proto.stream.KickPlayerRsp.prototype.setUserid = function (e) {
+        }, proto.stream.KickPlayerRsp.prototype.setUserid = function (e) {
             s.Message.setProto3IntField(this, 2, e)
-        },proto.stream.KickPlayerRsp.prototype.getRoomid = function () {
+        }, proto.stream.KickPlayerRsp.prototype.getRoomid = function () {
             return s.Message.getFieldWithDefault(this, 3, "0")
-        },proto.stream.KickPlayerRsp.prototype.setRoomid = function (e) {
+        }, proto.stream.KickPlayerRsp.prototype.setRoomid = function (e) {
             s.Message.setProto3StringIntField(this, 3, e)
-        },proto.stream.KickPlayerRsp.prototype.getOwner = function () {
+        }, proto.stream.KickPlayerRsp.prototype.getOwner = function () {
             return s.Message.getFieldWithDefault(this, 4, 0)
-        },proto.stream.KickPlayerRsp.prototype.setOwner = function (e) {
+        }, proto.stream.KickPlayerRsp.prototype.setOwner = function (e) {
             s.Message.setProto3IntField(this, 4, e)
-        },proto.stream.KickPlayerNotify = function (e) {
+        }, proto.stream.KickPlayerNotify = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        },o.inherits(proto.stream.KickPlayerNotify, s.Message),o.DEBUG && !COMPILED && (proto.stream.KickPlayerNotify.displayName = "proto.stream.KickPlayerNotify"),s.Message.GENERATE_TO_OBJECT && (proto.stream.KickPlayerNotify.prototype.toObject = function (e) {
+        }, o.inherits(proto.stream.KickPlayerNotify, s.Message), o.DEBUG && !COMPILED && (proto.stream.KickPlayerNotify.displayName = "proto.stream.KickPlayerNotify"), s.Message.GENERATE_TO_OBJECT && (proto.stream.KickPlayerNotify.prototype.toObject = function (e) {
             return proto.stream.KickPlayerNotify.toObject(e, this)
         }, proto.stream.KickPlayerNotify.toObject = function (e, t) {
             var r = {
@@ -3688,10 +4345,10 @@ var MvsTicker = function (e) {
                 owner: s.Message.getFieldWithDefault(t, 4, 0)
             };
             return e && (r.$jspbMessageInstance = t), r
-        }),proto.stream.KickPlayerNotify.deserializeBinary = function (e) {
+        }), proto.stream.KickPlayerNotify.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.KickPlayerNotify;
             return proto.stream.KickPlayerNotify.deserializeBinaryFromReader(r, t)
-        },proto.stream.KickPlayerNotify.deserializeBinaryFromReader = function (e, t) {
+        }, proto.stream.KickPlayerNotify.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -3715,17 +4372,17 @@ var MvsTicker = function (e) {
                 }
             }
             return e
-        },proto.stream.KickPlayerNotify.prototype.serializeBinary = function () {
+        }, proto.stream.KickPlayerNotify.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.KickPlayerNotify.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        },proto.stream.KickPlayerNotify.serializeBinaryToWriter = function (e, t) {
+        }, proto.stream.KickPlayerNotify.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
             0 !== (r = e.getSrcuserid()) && t.writeUint32(1, r), 0 !== (r = e.getUserid()) && t.writeUint32(2, r), 0 < (r = e.getCpproto_asU8()).length && t.writeBytes(3, r), 0 !== (r = e.getOwner()) && t.writeUint32(4, r)
-        },proto.stream.KickPlayerNotify.prototype.getSrcuserid = function () {
+        }, proto.stream.KickPlayerNotify.prototype.getSrcuserid = function () {
             return s.Message.getFieldWithDefault(this, 1, 0)
-        },proto.stream.KickPlayerNotify.prototype.setSrcuserid = function (e) {
+        }, proto.stream.KickPlayerNotify.prototype.setSrcuserid = function (e) {
             s.Message.setProto3IntField(this, 1, e)
-        },proto.stream.KickPlayerNotify.prototype.getUserid = function () {
+        }, proto.stream.KickPlayerNotify.prototype.getUserid = function () {
             return s.Message.getFieldWithDefault(this, 2, 0)
         },proto.stream.KickPlayerNotify.prototype.setUserid = function (e) {
             s.Message.setProto3IntField(this, 2, e)
@@ -3737,14 +4394,13 @@ var MvsTicker = function (e) {
             return s.Message.bytesAsU8(this.getCpproto())
         },proto.stream.KickPlayerNotify.prototype.setCpproto = function (e) {
             s.Message.setProto3BytesField(this, 3, e)
-        };
-        proto.stream.KickPlayerNotify.prototype.getOwner = function () {
+        },proto.stream.KickPlayerNotify.prototype.getOwner = function () {
             return s.Message.getFieldWithDefault(this, 4, 0)
-        }, proto.stream.KickPlayerNotify.prototype.setOwner = function (e) {
+        },proto.stream.KickPlayerNotify.prototype.setOwner = function (e) {
             s.Message.setProto3IntField(this, 4, e)
-        }, proto.stream.SetRoomPropertyReq = function (e) {
+        },proto.stream.SetRoomPropertyReq = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        }, o.inherits(proto.stream.SetRoomPropertyReq, s.Message), o.DEBUG && !COMPILED && (proto.stream.SetRoomPropertyReq.displayName = "proto.stream.SetRoomPropertyReq"), s.Message.GENERATE_TO_OBJECT && (proto.stream.SetRoomPropertyReq.prototype.toObject = function (e) {
+        },o.inherits(proto.stream.SetRoomPropertyReq, s.Message),o.DEBUG && !COMPILED && (proto.stream.SetRoomPropertyReq.displayName = "proto.stream.SetRoomPropertyReq"),s.Message.GENERATE_TO_OBJECT && (proto.stream.SetRoomPropertyReq.prototype.toObject = function (e) {
             return proto.stream.SetRoomPropertyReq.toObject(e, this)
         }, proto.stream.SetRoomPropertyReq.toObject = function (e, t) {
             var r = {
@@ -3754,10 +4410,10 @@ var MvsTicker = function (e) {
                 roomproperty: t.getRoomproperty_asB64()
             };
             return e && (r.$jspbMessageInstance = t), r
-        }), proto.stream.SetRoomPropertyReq.deserializeBinary = function (e) {
+        }),proto.stream.SetRoomPropertyReq.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.SetRoomPropertyReq;
             return proto.stream.SetRoomPropertyReq.deserializeBinaryFromReader(r, t)
-        }, proto.stream.SetRoomPropertyReq.deserializeBinaryFromReader = function (e, t) {
+        },proto.stream.SetRoomPropertyReq.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -3781,35 +4437,35 @@ var MvsTicker = function (e) {
                 }
             }
             return e
-        }, proto.stream.SetRoomPropertyReq.prototype.serializeBinary = function () {
+        },proto.stream.SetRoomPropertyReq.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.SetRoomPropertyReq.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        }, proto.stream.SetRoomPropertyReq.serializeBinaryToWriter = function (e, t) {
+        },proto.stream.SetRoomPropertyReq.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
             0 !== (r = e.getGameid()) && t.writeUint32(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r), 0 !== (r = e.getUserid()) && t.writeUint32(3, r), 0 < (r = e.getRoomproperty_asU8()).length && t.writeBytes(4, r)
-        }, proto.stream.SetRoomPropertyReq.prototype.getGameid = function () {
+        },proto.stream.SetRoomPropertyReq.prototype.getGameid = function () {
             return s.Message.getFieldWithDefault(this, 1, 0)
-        }, proto.stream.SetRoomPropertyReq.prototype.setGameid = function (e) {
+        },proto.stream.SetRoomPropertyReq.prototype.setGameid = function (e) {
             s.Message.setProto3IntField(this, 1, e)
-        }, proto.stream.SetRoomPropertyReq.prototype.getRoomid = function () {
+        },proto.stream.SetRoomPropertyReq.prototype.getRoomid = function () {
             return s.Message.getFieldWithDefault(this, 2, "0")
-        }, proto.stream.SetRoomPropertyReq.prototype.setRoomid = function (e) {
+        },proto.stream.SetRoomPropertyReq.prototype.setRoomid = function (e) {
             s.Message.setProto3StringIntField(this, 2, e)
-        }, proto.stream.SetRoomPropertyReq.prototype.getUserid = function () {
+        },proto.stream.SetRoomPropertyReq.prototype.getUserid = function () {
             return s.Message.getFieldWithDefault(this, 3, 0)
-        }, proto.stream.SetRoomPropertyReq.prototype.setUserid = function (e) {
+        },proto.stream.SetRoomPropertyReq.prototype.setUserid = function (e) {
             s.Message.setProto3IntField(this, 3, e)
-        }, proto.stream.SetRoomPropertyReq.prototype.getRoomproperty = function () {
+        },proto.stream.SetRoomPropertyReq.prototype.getRoomproperty = function () {
             return s.Message.getFieldWithDefault(this, 4, "")
-        }, proto.stream.SetRoomPropertyReq.prototype.getRoomproperty_asB64 = function () {
+        },proto.stream.SetRoomPropertyReq.prototype.getRoomproperty_asB64 = function () {
             return s.Message.bytesAsB64(this.getRoomproperty())
-        }, proto.stream.SetRoomPropertyReq.prototype.getRoomproperty_asU8 = function () {
+        },proto.stream.SetRoomPropertyReq.prototype.getRoomproperty_asU8 = function () {
             return s.Message.bytesAsU8(this.getRoomproperty())
-        }, proto.stream.SetRoomPropertyReq.prototype.setRoomproperty = function (e) {
+        },proto.stream.SetRoomPropertyReq.prototype.setRoomproperty = function (e) {
             s.Message.setProto3BytesField(this, 4, e)
-        }, proto.stream.SetRoomPropertyRsp = function (e) {
+        },proto.stream.SetRoomPropertyRsp = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        }, o.inherits(proto.stream.SetRoomPropertyRsp, s.Message), o.DEBUG && !COMPILED && (proto.stream.SetRoomPropertyRsp.displayName = "proto.stream.SetRoomPropertyRsp"), s.Message.GENERATE_TO_OBJECT && (proto.stream.SetRoomPropertyRsp.prototype.toObject = function (e) {
+        },o.inherits(proto.stream.SetRoomPropertyRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.SetRoomPropertyRsp.displayName = "proto.stream.SetRoomPropertyRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.SetRoomPropertyRsp.prototype.toObject = function (e) {
             return proto.stream.SetRoomPropertyRsp.toObject(e, this)
         }, proto.stream.SetRoomPropertyRsp.toObject = function (e, t) {
             var r = {
@@ -3819,10 +4475,10 @@ var MvsTicker = function (e) {
                 roomproperty: t.getRoomproperty_asB64()
             };
             return e && (r.$jspbMessageInstance = t), r
-        }), proto.stream.SetRoomPropertyRsp.deserializeBinary = function (e) {
+        }),proto.stream.SetRoomPropertyRsp.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.SetRoomPropertyRsp;
             return proto.stream.SetRoomPropertyRsp.deserializeBinaryFromReader(r, t)
-        }, proto.stream.SetRoomPropertyRsp.deserializeBinaryFromReader = function (e, t) {
+        },proto.stream.SetRoomPropertyRsp.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -3846,35 +4502,35 @@ var MvsTicker = function (e) {
                 }
             }
             return e
-        }, proto.stream.SetRoomPropertyRsp.prototype.serializeBinary = function () {
+        },proto.stream.SetRoomPropertyRsp.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.SetRoomPropertyRsp.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        }, proto.stream.SetRoomPropertyRsp.serializeBinaryToWriter = function (e, t) {
+        },proto.stream.SetRoomPropertyRsp.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
             0 !== (r = e.getStatus()) && t.writeEnum(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r), 0 !== (r = e.getUserid()) && t.writeUint32(3, r), 0 < (r = e.getRoomproperty_asU8()).length && t.writeBytes(4, r)
-        }, proto.stream.SetRoomPropertyRsp.prototype.getStatus = function () {
+        },proto.stream.SetRoomPropertyRsp.prototype.getStatus = function () {
             return s.Message.getFieldWithDefault(this, 1, 0)
-        }, proto.stream.SetRoomPropertyRsp.prototype.setStatus = function (e) {
+        },proto.stream.SetRoomPropertyRsp.prototype.setStatus = function (e) {
             s.Message.setProto3EnumField(this, 1, e)
-        }, proto.stream.SetRoomPropertyRsp.prototype.getRoomid = function () {
+        },proto.stream.SetRoomPropertyRsp.prototype.getRoomid = function () {
             return s.Message.getFieldWithDefault(this, 2, "0")
-        }, proto.stream.SetRoomPropertyRsp.prototype.setRoomid = function (e) {
+        },proto.stream.SetRoomPropertyRsp.prototype.setRoomid = function (e) {
             s.Message.setProto3StringIntField(this, 2, e)
-        }, proto.stream.SetRoomPropertyRsp.prototype.getUserid = function () {
+        },proto.stream.SetRoomPropertyRsp.prototype.getUserid = function () {
             return s.Message.getFieldWithDefault(this, 3, 0)
-        }, proto.stream.SetRoomPropertyRsp.prototype.setUserid = function (e) {
+        },proto.stream.SetRoomPropertyRsp.prototype.setUserid = function (e) {
             s.Message.setProto3IntField(this, 3, e)
-        }, proto.stream.SetRoomPropertyRsp.prototype.getRoomproperty = function () {
+        },proto.stream.SetRoomPropertyRsp.prototype.getRoomproperty = function () {
             return s.Message.getFieldWithDefault(this, 4, "")
-        }, proto.stream.SetRoomPropertyRsp.prototype.getRoomproperty_asB64 = function () {
+        },proto.stream.SetRoomPropertyRsp.prototype.getRoomproperty_asB64 = function () {
             return s.Message.bytesAsB64(this.getRoomproperty())
-        }, proto.stream.SetRoomPropertyRsp.prototype.getRoomproperty_asU8 = function () {
+        },proto.stream.SetRoomPropertyRsp.prototype.getRoomproperty_asU8 = function () {
             return s.Message.bytesAsU8(this.getRoomproperty())
-        }, proto.stream.SetRoomPropertyRsp.prototype.setRoomproperty = function (e) {
+        },proto.stream.SetRoomPropertyRsp.prototype.setRoomproperty = function (e) {
             s.Message.setProto3BytesField(this, 4, e)
-        }, proto.stream.NoticeRoomProperty = function (e) {
+        },proto.stream.NoticeRoomProperty = function (e) {
             s.Message.initialize(this, e, 0, -1, null, null)
-        }, o.inherits(proto.stream.NoticeRoomProperty, s.Message), o.DEBUG && !COMPILED && (proto.stream.NoticeRoomProperty.displayName = "proto.stream.NoticeRoomProperty"), s.Message.GENERATE_TO_OBJECT && (proto.stream.NoticeRoomProperty.prototype.toObject = function (e) {
+        },o.inherits(proto.stream.NoticeRoomProperty, s.Message),o.DEBUG && !COMPILED && (proto.stream.NoticeRoomProperty.displayName = "proto.stream.NoticeRoomProperty"),s.Message.GENERATE_TO_OBJECT && (proto.stream.NoticeRoomProperty.prototype.toObject = function (e) {
             return proto.stream.NoticeRoomProperty.toObject(e, this)
         }, proto.stream.NoticeRoomProperty.toObject = function (e, t) {
             var r = {
@@ -3883,10 +4539,10 @@ var MvsTicker = function (e) {
                 roomproperty: t.getRoomproperty_asB64()
             };
             return e && (r.$jspbMessageInstance = t), r
-        }), proto.stream.NoticeRoomProperty.deserializeBinary = function (e) {
+        }),proto.stream.NoticeRoomProperty.deserializeBinary = function (e) {
             var t = new s.BinaryReader(e), r = new proto.stream.NoticeRoomProperty;
             return proto.stream.NoticeRoomProperty.deserializeBinaryFromReader(r, t)
-        }, proto.stream.NoticeRoomProperty.deserializeBinaryFromReader = function (e, t) {
+        },proto.stream.NoticeRoomProperty.deserializeBinaryFromReader = function (e, t) {
             for (; t.nextField() && !t.isEndGroup();) {
                 switch (t.getFieldNumber()) {
                     case 1:
@@ -3906,35 +4562,853 @@ var MvsTicker = function (e) {
                 }
             }
             return e
-        }, proto.stream.NoticeRoomProperty.prototype.serializeBinary = function () {
+        },proto.stream.NoticeRoomProperty.prototype.serializeBinary = function () {
             var e = new s.BinaryWriter;
             return proto.stream.NoticeRoomProperty.serializeBinaryToWriter(this, e), e.getResultBuffer()
-        }, proto.stream.NoticeRoomProperty.serializeBinaryToWriter = function (e, t) {
+        },proto.stream.NoticeRoomProperty.serializeBinaryToWriter = function (e, t) {
             var r = void 0;
             r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(1, r), 0 !== (r = e.getUserid()) && t.writeUint32(2, r), 0 < (r = e.getRoomproperty_asU8()).length && t.writeBytes(3, r)
-        }, proto.stream.NoticeRoomProperty.prototype.getRoomid = function () {
+        },proto.stream.NoticeRoomProperty.prototype.getRoomid = function () {
             return s.Message.getFieldWithDefault(this, 1, "0")
-        }, proto.stream.NoticeRoomProperty.prototype.setRoomid = function (e) {
+        },proto.stream.NoticeRoomProperty.prototype.setRoomid = function (e) {
             s.Message.setProto3StringIntField(this, 1, e)
-        }, proto.stream.NoticeRoomProperty.prototype.getUserid = function () {
+        },proto.stream.NoticeRoomProperty.prototype.getUserid = function () {
             return s.Message.getFieldWithDefault(this, 2, 0)
-        }, proto.stream.NoticeRoomProperty.prototype.setUserid = function (e) {
+        },proto.stream.NoticeRoomProperty.prototype.setUserid = function (e) {
             s.Message.setProto3IntField(this, 2, e)
-        }, proto.stream.NoticeRoomProperty.prototype.getRoomproperty = function () {
+        },proto.stream.NoticeRoomProperty.prototype.getRoomproperty = function () {
             return s.Message.getFieldWithDefault(this, 3, "")
-        }, proto.stream.NoticeRoomProperty.prototype.getRoomproperty_asB64 = function () {
+        },proto.stream.NoticeRoomProperty.prototype.getRoomproperty_asB64 = function () {
             return s.Message.bytesAsB64(this.getRoomproperty())
-        }, proto.stream.NoticeRoomProperty.prototype.getRoomproperty_asU8 = function () {
+        },proto.stream.NoticeRoomProperty.prototype.getRoomproperty_asU8 = function () {
             return s.Message.bytesAsU8(this.getRoomproperty())
-        }, proto.stream.NoticeRoomProperty.prototype.setRoomproperty = function (e) {
+        },proto.stream.NoticeRoomProperty.prototype.setRoomproperty = function (e) {
             s.Message.setProto3BytesField(this, 3, e)
-        }, proto.stream.CmdId = {
+        },proto.stream.JoinWatchRoomReq = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.JoinWatchRoomReq, s.Message),o.DEBUG && !COMPILED && (proto.stream.JoinWatchRoomReq.displayName = "proto.stream.JoinWatchRoomReq"),s.Message.GENERATE_TO_OBJECT && (proto.stream.JoinWatchRoomReq.prototype.toObject = function (e) {
+            return proto.stream.JoinWatchRoomReq.toObject(e, this)
+        }, proto.stream.JoinWatchRoomReq.toObject = function (e, t) {
+            var r = {
+                gameid: s.Message.getFieldWithDefault(t, 1, 0),
+                userid: s.Message.getFieldWithDefault(t, 2, 0),
+                userprofile: t.getUserprofile_asB64(),
+                roomid: s.Message.getFieldWithDefault(t, 4, "0")
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.JoinWatchRoomReq.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.JoinWatchRoomReq;
+            return proto.stream.JoinWatchRoomReq.deserializeBinaryFromReader(r, t)
+        },proto.stream.JoinWatchRoomReq.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setGameid(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    case 3:
+                        r = t.readBytes();
+                        e.setUserprofile(r);
+                        break;
+                    case 4:
+                        r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.JoinWatchRoomReq.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.JoinWatchRoomReq.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.JoinWatchRoomReq.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getGameid()) && t.writeUint32(1, r), 0 !== (r = e.getUserid()) && t.writeUint32(2, r), 0 < (r = e.getUserprofile_asU8()).length && t.writeBytes(3, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(4, r)
+        },proto.stream.JoinWatchRoomReq.prototype.getGameid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.JoinWatchRoomReq.prototype.setGameid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.JoinWatchRoomReq.prototype.getUserid = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        },proto.stream.JoinWatchRoomReq.prototype.setUserid = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        },proto.stream.JoinWatchRoomReq.prototype.getUserprofile = function () {
+            return s.Message.getFieldWithDefault(this, 3, "")
+        },proto.stream.JoinWatchRoomReq.prototype.getUserprofile_asB64 = function () {
+            return s.Message.bytesAsB64(this.getUserprofile())
+        },proto.stream.JoinWatchRoomReq.prototype.getUserprofile_asU8 = function () {
+            return s.Message.bytesAsU8(this.getUserprofile())
+        },proto.stream.JoinWatchRoomReq.prototype.setUserprofile = function (e) {
+            s.Message.setProto3BytesField(this, 3, e)
+        },proto.stream.JoinWatchRoomReq.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 4, "0")
+        },proto.stream.JoinWatchRoomReq.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 4, e)
+        },proto.stream.JoinWatchRoomRsp = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.JoinWatchRoomRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.JoinWatchRoomRsp.displayName = "proto.stream.JoinWatchRoomRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.JoinWatchRoomRsp.prototype.toObject = function (e) {
+            return proto.stream.JoinWatchRoomRsp.toObject(e, this)
+        }, proto.stream.JoinWatchRoomRsp.toObject = function (e, t) {
+            var r, o = {
+                status: s.Message.getFieldWithDefault(t, 1, 0),
+                bookinfo: (r = t.getBookinfo()) && proto.stream.BookInfo.toObject(e, r),
+                setid: s.Message.getFieldWithDefault(t, 3, 0),
+                roomid: s.Message.getFieldWithDefault(t, 4, "0")
+            };
+            return e && (o.$jspbMessageInstance = t), o
+        }),proto.stream.JoinWatchRoomRsp.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.JoinWatchRoomRsp;
+            return proto.stream.JoinWatchRoomRsp.deserializeBinaryFromReader(r, t)
+        },proto.stream.JoinWatchRoomRsp.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readEnum();
+                        e.setStatus(r);
+                        break;
+                    case 2:
+                        r = new proto.stream.BookInfo;
+                        t.readMessage(r, proto.stream.BookInfo.deserializeBinaryFromReader), e.setBookinfo(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setSetid(r);
+                        break;
+                    case 4:
+                        r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.JoinWatchRoomRsp.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.JoinWatchRoomRsp.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.JoinWatchRoomRsp.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getStatus()) && t.writeEnum(1, r), null != (r = e.getBookinfo()) && t.writeMessage(2, r, proto.stream.BookInfo.serializeBinaryToWriter), 0 !== (r = e.getSetid()) && t.writeUint32(3, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(4, r)
+        },proto.stream.JoinWatchRoomRsp.prototype.getStatus = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.JoinWatchRoomRsp.prototype.setStatus = function (e) {
+            s.Message.setProto3EnumField(this, 1, e)
+        },proto.stream.JoinWatchRoomRsp.prototype.getBookinfo = function () {
+            return s.Message.getWrapperField(this, proto.stream.BookInfo, 2)
+        },proto.stream.JoinWatchRoomRsp.prototype.setBookinfo = function (e) {
+            s.Message.setWrapperField(this, 2, e)
+        },proto.stream.JoinWatchRoomRsp.prototype.clearBookinfo = function () {
+            this.setBookinfo(void 0)
+        },proto.stream.JoinWatchRoomRsp.prototype.hasBookinfo = function () {
+            return null != s.Message.getField(this, 2)
+        },proto.stream.JoinWatchRoomRsp.prototype.getSetid = function () {
+            return s.Message.getFieldWithDefault(this, 3, 0)
+        },proto.stream.JoinWatchRoomRsp.prototype.setSetid = function (e) {
+            s.Message.setProto3IntField(this, 3, e)
+        },proto.stream.JoinWatchRoomRsp.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 4, "0")
+        },proto.stream.JoinWatchRoomRsp.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 4, e)
+        },proto.stream.JoinWatchRoomNotify = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.JoinWatchRoomNotify, s.Message),o.DEBUG && !COMPILED && (proto.stream.JoinWatchRoomNotify.displayName = "proto.stream.JoinWatchRoomNotify"),s.Message.GENERATE_TO_OBJECT && (proto.stream.JoinWatchRoomNotify.prototype.toObject = function (e) {
+            return proto.stream.JoinWatchRoomNotify.toObject(e, this)
+        }, proto.stream.JoinWatchRoomNotify.toObject = function (e, t) {
+            var r, o = {watcher: (r = t.getWatcher()) && proto.stream.PlayerInfo.toObject(e, r)};
+            return e && (o.$jspbMessageInstance = t), o
+        }),proto.stream.JoinWatchRoomNotify.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.JoinWatchRoomNotify;
+            return proto.stream.JoinWatchRoomNotify.deserializeBinaryFromReader(r, t)
+        },proto.stream.JoinWatchRoomNotify.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = new proto.stream.PlayerInfo;
+                        t.readMessage(r, proto.stream.PlayerInfo.deserializeBinaryFromReader), e.setWatcher(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.JoinWatchRoomNotify.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.JoinWatchRoomNotify.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.JoinWatchRoomNotify.serializeBinaryToWriter = function (e, t) {
+            var r;
+            null != (r = e.getWatcher()) && t.writeMessage(1, r, proto.stream.PlayerInfo.serializeBinaryToWriter)
+        },proto.stream.JoinWatchRoomNotify.prototype.getWatcher = function () {
+            return s.Message.getWrapperField(this, proto.stream.PlayerInfo, 1)
+        },proto.stream.JoinWatchRoomNotify.prototype.setWatcher = function (e) {
+            s.Message.setWrapperField(this, 1, e)
+        },proto.stream.JoinWatchRoomNotify.prototype.clearWatcher = function () {
+            this.setWatcher(void 0)
+        },proto.stream.JoinWatchRoomNotify.prototype.hasWatcher = function () {
+            return null != s.Message.getField(this, 1)
+        },proto.stream.LeaveWatchRoomReq = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.LeaveWatchRoomReq, s.Message),o.DEBUG && !COMPILED && (proto.stream.LeaveWatchRoomReq.displayName = "proto.stream.LeaveWatchRoomReq"),s.Message.GENERATE_TO_OBJECT && (proto.stream.LeaveWatchRoomReq.prototype.toObject = function (e) {
+            return proto.stream.LeaveWatchRoomReq.toObject(e, this)
+        }, proto.stream.LeaveWatchRoomReq.toObject = function (e, t) {
+            var r = {
+                gameid: s.Message.getFieldWithDefault(t, 1, 0),
+                userid: s.Message.getFieldWithDefault(t, 2, 0),
+                roomid: s.Message.getFieldWithDefault(t, 3, "0"),
+                cpproto: t.getCpproto_asB64()
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.LeaveWatchRoomReq.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LeaveWatchRoomReq;
+            return proto.stream.LeaveWatchRoomReq.deserializeBinaryFromReader(r, t)
+        },proto.stream.LeaveWatchRoomReq.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setGameid(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    case 3:
+                        r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 4:
+                        r = t.readBytes();
+                        e.setCpproto(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.LeaveWatchRoomReq.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LeaveWatchRoomReq.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.LeaveWatchRoomReq.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getGameid()) && t.writeUint32(1, r), 0 !== (r = e.getUserid()) && t.writeUint32(2, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(3, r), 0 < (r = e.getCpproto_asU8()).length && t.writeBytes(4, r)
+        },proto.stream.LeaveWatchRoomReq.prototype.getGameid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.LeaveWatchRoomReq.prototype.setGameid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.LeaveWatchRoomReq.prototype.getUserid = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        },proto.stream.LeaveWatchRoomReq.prototype.setUserid = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        },proto.stream.LeaveWatchRoomReq.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 3, "0")
+        },proto.stream.LeaveWatchRoomReq.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 3, e)
+        },proto.stream.LeaveWatchRoomReq.prototype.getCpproto = function () {
+            return s.Message.getFieldWithDefault(this, 4, "")
+        },proto.stream.LeaveWatchRoomReq.prototype.getCpproto_asB64 = function () {
+            return s.Message.bytesAsB64(this.getCpproto())
+        },proto.stream.LeaveWatchRoomReq.prototype.getCpproto_asU8 = function () {
+            return s.Message.bytesAsU8(this.getCpproto())
+        },proto.stream.LeaveWatchRoomReq.prototype.setCpproto = function (e) {
+            s.Message.setProto3BytesField(this, 4, e)
+        },proto.stream.LeaveWatchRoomRsp = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.LeaveWatchRoomRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.LeaveWatchRoomRsp.displayName = "proto.stream.LeaveWatchRoomRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.LeaveWatchRoomRsp.prototype.toObject = function (e) {
+            return proto.stream.LeaveWatchRoomRsp.toObject(e, this)
+        }, proto.stream.LeaveWatchRoomRsp.toObject = function (e, t) {
+            var r = {status: s.Message.getFieldWithDefault(t, 1, 0)};
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.LeaveWatchRoomRsp.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LeaveWatchRoomRsp;
+            return proto.stream.LeaveWatchRoomRsp.deserializeBinaryFromReader(r, t)
+        },proto.stream.LeaveWatchRoomRsp.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readEnum();
+                        e.setStatus(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.LeaveWatchRoomRsp.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LeaveWatchRoomRsp.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.LeaveWatchRoomRsp.serializeBinaryToWriter = function (e, t) {
+            var r;
+            0 !== (r = e.getStatus()) && t.writeEnum(1, r)
+        },proto.stream.LeaveWatchRoomRsp.prototype.getStatus = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.LeaveWatchRoomRsp.prototype.setStatus = function (e) {
+            s.Message.setProto3EnumField(this, 1, e)
+        },proto.stream.LeaveWatchRoomNotify = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.LeaveWatchRoomNotify, s.Message),o.DEBUG && !COMPILED && (proto.stream.LeaveWatchRoomNotify.displayName = "proto.stream.LeaveWatchRoomNotify"),s.Message.GENERATE_TO_OBJECT && (proto.stream.LeaveWatchRoomNotify.prototype.toObject = function (e) {
+            return proto.stream.LeaveWatchRoomNotify.toObject(e, this)
+        }, proto.stream.LeaveWatchRoomNotify.toObject = function (e, t) {
+            var r, o = {watcher: (r = t.getWatcher()) && proto.stream.PlayerInfo.toObject(e, r)};
+            return e && (o.$jspbMessageInstance = t), o
+        }),proto.stream.LeaveWatchRoomNotify.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LeaveWatchRoomNotify;
+            return proto.stream.LeaveWatchRoomNotify.deserializeBinaryFromReader(r, t)
+        },proto.stream.LeaveWatchRoomNotify.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = new proto.stream.PlayerInfo;
+                        t.readMessage(r, proto.stream.PlayerInfo.deserializeBinaryFromReader), e.setWatcher(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.LeaveWatchRoomNotify.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LeaveWatchRoomNotify.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.LeaveWatchRoomNotify.serializeBinaryToWriter = function (e, t) {
+            var r;
+            null != (r = e.getWatcher()) && t.writeMessage(1, r, proto.stream.PlayerInfo.serializeBinaryToWriter)
+        },proto.stream.LeaveWatchRoomNotify.prototype.getWatcher = function () {
+            return s.Message.getWrapperField(this, proto.stream.PlayerInfo, 1)
+        },proto.stream.LeaveWatchRoomNotify.prototype.setWatcher = function (e) {
+            s.Message.setWrapperField(this, 1, e)
+        },proto.stream.LeaveWatchRoomNotify.prototype.clearWatcher = function () {
+            this.setWatcher(void 0)
+        },proto.stream.LeaveWatchRoomNotify.prototype.hasWatcher = function () {
+            return null != s.Message.getField(this, 1)
+        },proto.stream.RoomOverNotify = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.RoomOverNotify, s.Message),o.DEBUG && !COMPILED && (proto.stream.RoomOverNotify.displayName = "proto.stream.RoomOverNotify"),s.Message.GENERATE_TO_OBJECT && (proto.stream.RoomOverNotify.prototype.toObject = function (e) {
+            return proto.stream.RoomOverNotify.toObject(e, this)
+        }, proto.stream.RoomOverNotify.toObject = function (e, t) {
+            var r = {
+                roomid: s.Message.getFieldWithDefault(t, 1, "0"),
+                cpproto: t.getCpproto_asB64()
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.RoomOverNotify.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.RoomOverNotify;
+            return proto.stream.RoomOverNotify.deserializeBinaryFromReader(r, t)
+        },proto.stream.RoomOverNotify.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 2:
+                        r = t.readBytes();
+                        e.setCpproto(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.RoomOverNotify.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.RoomOverNotify.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.RoomOverNotify.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(1, r), 0 < (r = e.getCpproto_asU8()).length && t.writeBytes(2, r)
+        },proto.stream.RoomOverNotify.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 1, "0")
+        },proto.stream.RoomOverNotify.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 1, e)
+        },proto.stream.RoomOverNotify.prototype.getCpproto = function () {
+            return s.Message.getFieldWithDefault(this, 2, "")
+        },proto.stream.RoomOverNotify.prototype.getCpproto_asB64 = function () {
+            return s.Message.bytesAsB64(this.getCpproto())
+        },proto.stream.RoomOverNotify.prototype.getCpproto_asU8 = function () {
+            return s.Message.bytesAsU8(this.getCpproto())
+        },proto.stream.RoomOverNotify.prototype.setCpproto = function (e) {
+            s.Message.setProto3BytesField(this, 2, e)
+        },proto.stream.ChangeRole = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.ChangeRole, s.Message),o.DEBUG && !COMPILED && (proto.stream.ChangeRole.displayName = "proto.stream.ChangeRole"),s.Message.GENERATE_TO_OBJECT && (proto.stream.ChangeRole.prototype.toObject = function (e) {
+            return proto.stream.ChangeRole.toObject(e, this)
+        }, proto.stream.ChangeRole.toObject = function (e, t) {
+            var r = {
+                userid: s.Message.getFieldWithDefault(t, 1, 0),
+                gameid: s.Message.getFieldWithDefault(t, 2, 0),
+                roomid: s.Message.getFieldWithDefault(t, 3, "0"),
+                targetroomtype: s.Message.getFieldWithDefault(t, 4, 0),
+                userprofile: t.getUserprofile_asB64()
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.ChangeRole.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.ChangeRole;
+            return proto.stream.ChangeRole.deserializeBinaryFromReader(r, t)
+        },proto.stream.ChangeRole.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setGameid(r);
+                        break;
+                    case 3:
+                        r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 4:
+                        r = t.readEnum();
+                        e.setTargetroomtype(r);
+                        break;
+                    case 5:
+                        r = t.readBytes();
+                        e.setUserprofile(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.ChangeRole.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.ChangeRole.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.ChangeRole.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getUserid()) && t.writeUint32(1, r), 0 !== (r = e.getGameid()) && t.writeUint32(2, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(3, r), 0 !== (r = e.getTargetroomtype()) && t.writeEnum(4, r), 0 < (r = e.getUserprofile_asU8()).length && t.writeBytes(5, r)
+        },proto.stream.ChangeRole.prototype.getUserid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.ChangeRole.prototype.setUserid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.ChangeRole.prototype.getGameid = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        },proto.stream.ChangeRole.prototype.setGameid = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        },proto.stream.ChangeRole.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 3, "0")
+        },proto.stream.ChangeRole.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 3, e)
+        },proto.stream.ChangeRole.prototype.getTargetroomtype = function () {
+            return s.Message.getFieldWithDefault(this, 4, 0)
+        },proto.stream.ChangeRole.prototype.setTargetroomtype = function (e) {
+            s.Message.setProto3EnumField(this, 4, e)
+        },proto.stream.ChangeRole.prototype.getUserprofile = function () {
+            return s.Message.getFieldWithDefault(this, 5, "")
+        },proto.stream.ChangeRole.prototype.getUserprofile_asB64 = function () {
+            return s.Message.bytesAsB64(this.getUserprofile())
+        },proto.stream.ChangeRole.prototype.getUserprofile_asU8 = function () {
+            return s.Message.bytesAsU8(this.getUserprofile())
+        },proto.stream.ChangeRole.prototype.setUserprofile = function (e) {
+            s.Message.setProto3BytesField(this, 5, e)
+        },proto.stream.ChangeRoleRsp = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.ChangeRoleRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.ChangeRoleRsp.displayName = "proto.stream.ChangeRoleRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.ChangeRoleRsp.prototype.toObject = function (e) {
+            return proto.stream.ChangeRoleRsp.toObject(e, this)
+        }, proto.stream.ChangeRoleRsp.toObject = function (e, t) {
+            var r, o = {
+                status: s.Message.getFieldWithDefault(t, 1, 0),
+                targetroomtype: s.Message.getFieldWithDefault(t, 2, 0),
+                playroom: (r = t.getPlayroom()) && proto.stream.PlayRoom.toObject(e, r),
+                bookinfo: (r = t.getBookinfo()) && proto.stream.BookInfo.toObject(e, r),
+                roomid: s.Message.getFieldWithDefault(t, 5, "0"),
+                setid: s.Message.getFieldWithDefault(t, 6, 0)
+            };
+            return e && (o.$jspbMessageInstance = t), o
+        }),proto.stream.ChangeRoleRsp.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.ChangeRoleRsp;
+            return proto.stream.ChangeRoleRsp.deserializeBinaryFromReader(r, t)
+        },proto.stream.ChangeRoleRsp.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readEnum();
+                        e.setStatus(r);
+                        break;
+                    case 2:
+                        r = t.readEnum();
+                        e.setTargetroomtype(r);
+                        break;
+                    case 3:
+                        r = new proto.stream.PlayRoom;
+                        t.readMessage(r, proto.stream.PlayRoom.deserializeBinaryFromReader), e.setPlayroom(r);
+                        break;
+                    case 4:
+                        r = new proto.stream.BookInfo;
+                        t.readMessage(r, proto.stream.BookInfo.deserializeBinaryFromReader), e.setBookinfo(r);
+                        break;
+                    case 5:
+                        r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 6:
+                        r = t.readUint32();
+                        e.setSetid(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.ChangeRoleRsp.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.ChangeRoleRsp.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.ChangeRoleRsp.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getStatus()) && t.writeEnum(1, r), 0 !== (r = e.getTargetroomtype()) && t.writeEnum(2, r), null != (r = e.getPlayroom()) && t.writeMessage(3, r, proto.stream.PlayRoom.serializeBinaryToWriter), null != (r = e.getBookinfo()) && t.writeMessage(4, r, proto.stream.BookInfo.serializeBinaryToWriter), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(5, r), 0 !== (r = e.getSetid()) && t.writeUint32(6, r)
+        },proto.stream.ChangeRoleRsp.prototype.getStatus = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.ChangeRoleRsp.prototype.setStatus = function (e) {
+            s.Message.setProto3EnumField(this, 1, e)
+        },proto.stream.ChangeRoleRsp.prototype.getTargetroomtype = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        },proto.stream.ChangeRoleRsp.prototype.setTargetroomtype = function (e) {
+            s.Message.setProto3EnumField(this, 2, e)
+        },proto.stream.ChangeRoleRsp.prototype.getPlayroom = function () {
+            return s.Message.getWrapperField(this, proto.stream.PlayRoom, 3)
+        },proto.stream.ChangeRoleRsp.prototype.setPlayroom = function (e) {
+            s.Message.setWrapperField(this, 3, e)
+        },proto.stream.ChangeRoleRsp.prototype.clearPlayroom = function () {
+            this.setPlayroom(void 0)
+        },proto.stream.ChangeRoleRsp.prototype.hasPlayroom = function () {
+            return null != s.Message.getField(this, 3)
+        },proto.stream.ChangeRoleRsp.prototype.getBookinfo = function () {
+            return s.Message.getWrapperField(this, proto.stream.BookInfo, 4)
+        },proto.stream.ChangeRoleRsp.prototype.setBookinfo = function (e) {
+            s.Message.setWrapperField(this, 4, e)
+        },proto.stream.ChangeRoleRsp.prototype.clearBookinfo = function () {
+            this.setBookinfo(void 0)
+        },proto.stream.ChangeRoleRsp.prototype.hasBookinfo = function () {
+            return null != s.Message.getField(this, 4)
+        },proto.stream.ChangeRoleRsp.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 5, "0")
+        },proto.stream.ChangeRoleRsp.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 5, e)
+        },proto.stream.ChangeRoleRsp.prototype.getSetid = function () {
+            return s.Message.getFieldWithDefault(this, 6, 0)
+        },proto.stream.ChangeRoleRsp.prototype.setSetid = function (e) {
+            s.Message.setProto3IntField(this, 6, e)
+        },proto.stream.GetWatchRoomsReq = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.GetWatchRoomsReq, s.Message),o.DEBUG && !COMPILED && (proto.stream.GetWatchRoomsReq.displayName = "proto.stream.GetWatchRoomsReq"),s.Message.GENERATE_TO_OBJECT && (proto.stream.GetWatchRoomsReq.prototype.toObject = function (e) {
+            return proto.stream.GetWatchRoomsReq.toObject(e, this)
+        }, proto.stream.GetWatchRoomsReq.toObject = function (e, t) {
+            var r, o = {
+                gameid: s.Message.getFieldWithDefault(t, 1, 0),
+                roomfilter: (r = t.getRoomfilter()) && proto.stream.RoomFilter.toObject(e, r),
+                sort: s.Message.getFieldWithDefault(t, 3, 0),
+                order: s.Message.getFieldWithDefault(t, 4, 0),
+                pageno: s.Message.getFieldWithDefault(t, 5, 0),
+                pagesize: s.Message.getFieldWithDefault(t, 6, 0)
+            };
+            return e && (o.$jspbMessageInstance = t), o
+        }),proto.stream.GetWatchRoomsReq.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.GetWatchRoomsReq;
+            return proto.stream.GetWatchRoomsReq.deserializeBinaryFromReader(r, t)
+        },proto.stream.GetWatchRoomsReq.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setGameid(r);
+                        break;
+                    case 2:
+                        r = new proto.stream.RoomFilter;
+                        t.readMessage(r, proto.stream.RoomFilter.deserializeBinaryFromReader), e.setRoomfilter(r);
+                        break;
+                    case 3:
+                        r = t.readEnum();
+                        e.setSort(r);
+                        break;
+                    case 4:
+                        r = t.readEnum();
+                        e.setOrder(r);
+                        break;
+                    case 5:
+                        r = t.readInt32();
+                        e.setPageno(r);
+                        break;
+                    case 6:
+                        r = t.readInt32();
+                        e.setPagesize(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.GetWatchRoomsReq.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.GetWatchRoomsReq.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.GetWatchRoomsReq.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getGameid()) && t.writeUint32(1, r), null != (r = e.getRoomfilter()) && t.writeMessage(2, r, proto.stream.RoomFilter.serializeBinaryToWriter), 0 !== (r = e.getSort()) && t.writeEnum(3, r), 0 !== (r = e.getOrder()) && t.writeEnum(4, r), 0 !== (r = e.getPageno()) && t.writeInt32(5, r), 0 !== (r = e.getPagesize()) && t.writeInt32(6, r)
+        },proto.stream.GetWatchRoomsReq.prototype.getGameid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.GetWatchRoomsReq.prototype.setGameid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.GetWatchRoomsReq.prototype.getRoomfilter = function () {
+            return s.Message.getWrapperField(this, proto.stream.RoomFilter, 2)
+        },proto.stream.GetWatchRoomsReq.prototype.setRoomfilter = function (e) {
+            s.Message.setWrapperField(this, 2, e)
+        },proto.stream.GetWatchRoomsReq.prototype.clearRoomfilter = function () {
+            this.setRoomfilter(void 0)
+        },proto.stream.GetWatchRoomsReq.prototype.hasRoomfilter = function () {
+            return null != s.Message.getField(this, 2)
+        },proto.stream.GetWatchRoomsReq.prototype.getSort = function () {
+            return s.Message.getFieldWithDefault(this, 3, 0)
+        },proto.stream.GetWatchRoomsReq.prototype.setSort = function (e) {
+            s.Message.setProto3EnumField(this, 3, e)
+        },proto.stream.GetWatchRoomsReq.prototype.getOrder = function () {
+            return s.Message.getFieldWithDefault(this, 4, 0)
+        },proto.stream.GetWatchRoomsReq.prototype.setOrder = function (e) {
+            s.Message.setProto3EnumField(this, 4, e)
+        },proto.stream.GetWatchRoomsReq.prototype.getPageno = function () {
+            return s.Message.getFieldWithDefault(this, 5, 0)
+        },proto.stream.GetWatchRoomsReq.prototype.setPageno = function (e) {
+            s.Message.setProto3IntField(this, 5, e)
+        },proto.stream.GetWatchRoomsReq.prototype.getPagesize = function () {
+            return s.Message.getFieldWithDefault(this, 6, 0)
+        },proto.stream.GetWatchRoomsReq.prototype.setPagesize = function (e) {
+            s.Message.setProto3IntField(this, 6, e)
+        },proto.stream.GetWatchRoomsRsp = function (e) {
+            s.Message.initialize(this, e, 0, -1, proto.stream.GetWatchRoomsRsp.repeatedFields_, null)
+        },o.inherits(proto.stream.GetWatchRoomsRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.GetWatchRoomsRsp.displayName = "proto.stream.GetWatchRoomsRsp"),proto.stream.GetWatchRoomsRsp.repeatedFields_ = [3],s.Message.GENERATE_TO_OBJECT && (proto.stream.GetWatchRoomsRsp.prototype.toObject = function (e) {
+            return proto.stream.GetWatchRoomsRsp.toObject(e, this)
+        }, proto.stream.GetWatchRoomsRsp.toObject = function (e, t) {
+            var r = {
+                status: s.Message.getFieldWithDefault(t, 1, 0),
+                total: s.Message.getFieldWithDefault(t, 2, 0),
+                roominfoexList: s.Message.toObjectList(t.getRoominfoexList(), proto.stream.RoomInfoEx.toObject, e)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.GetWatchRoomsRsp.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.GetWatchRoomsRsp;
+            return proto.stream.GetWatchRoomsRsp.deserializeBinaryFromReader(r, t)
+        },proto.stream.GetWatchRoomsRsp.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readEnum();
+                        e.setStatus(r);
+                        break;
+                    case 2:
+                        r = t.readInt32();
+                        e.setTotal(r);
+                        break;
+                    case 3:
+                        r = new proto.stream.RoomInfoEx;
+                        t.readMessage(r, proto.stream.RoomInfoEx.deserializeBinaryFromReader), e.addRoominfoex(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.GetWatchRoomsRsp.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.GetWatchRoomsRsp.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.GetWatchRoomsRsp.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getStatus()) && t.writeEnum(1, r), 0 !== (r = e.getTotal()) && t.writeInt32(2, r), 0 < (r = e.getRoominfoexList()).length && t.writeRepeatedMessage(3, r, proto.stream.RoomInfoEx.serializeBinaryToWriter)
+        },proto.stream.GetWatchRoomsRsp.prototype.getStatus = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.GetWatchRoomsRsp.prototype.setStatus = function (e) {
+            s.Message.setProto3EnumField(this, 1, e)
+        },proto.stream.GetWatchRoomsRsp.prototype.getTotal = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        },proto.stream.GetWatchRoomsRsp.prototype.setTotal = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        },proto.stream.GetWatchRoomsRsp.prototype.getRoominfoexList = function () {
+            return s.Message.getRepeatedWrapperField(this, proto.stream.RoomInfoEx, 3)
+        },proto.stream.GetWatchRoomsRsp.prototype.setRoominfoexList = function (e) {
+            s.Message.setRepeatedWrapperField(this, 3, e)
+        },proto.stream.GetWatchRoomsRsp.prototype.addRoominfoex = function (e, t) {
+            return s.Message.addToRepeatedWrapperField(this, 3, e, proto.stream.RoomInfoEx, t)
+        },proto.stream.GetWatchRoomsRsp.prototype.clearRoominfoexList = function () {
+            this.setRoominfoexList([])
+        },proto.stream.GetWatchDataReq = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.GetWatchDataReq, s.Message),o.DEBUG && !COMPILED && (proto.stream.GetWatchDataReq.displayName = "proto.stream.GetWatchDataReq"),s.Message.GENERATE_TO_OBJECT && (proto.stream.GetWatchDataReq.prototype.toObject = function (e) {
+            return proto.stream.GetWatchDataReq.toObject(e, this)
+        }, proto.stream.GetWatchDataReq.toObject = function (e, t) {
+            var r = {
+                userid: s.Message.getFieldWithDefault(t, 1, 0),
+                roomid: s.Message.getFieldWithDefault(t, 2, "0"),
+                watchtime: s.Message.getFieldWithDefault(t, 3, 0)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.GetWatchDataReq.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.GetWatchDataReq;
+            return proto.stream.GetWatchDataReq.deserializeBinaryFromReader(r, t)
+        },proto.stream.GetWatchDataReq.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    case 2:
+                        r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setWatchtime(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.GetWatchDataReq.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.GetWatchDataReq.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.GetWatchDataReq.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getUserid()) && t.writeUint32(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r), 0 !== (r = e.getWatchtime()) && t.writeUint32(3, r)
+        },proto.stream.GetWatchDataReq.prototype.getUserid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.GetWatchDataReq.prototype.setUserid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.GetWatchDataReq.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 2, "0")
+        },proto.stream.GetWatchDataReq.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 2, e)
+        },proto.stream.GetWatchDataReq.prototype.getWatchtime = function () {
+            return s.Message.getFieldWithDefault(this, 3, 0)
+        },proto.stream.GetWatchDataReq.prototype.setWatchtime = function (e) {
+            s.Message.setProto3IntField(this, 3, e)
+        },proto.stream.GetWatchDataRsp = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.GetWatchDataRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.GetWatchDataRsp.displayName = "proto.stream.GetWatchDataRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.GetWatchDataRsp.prototype.toObject = function (e) {
+            return proto.stream.GetWatchDataRsp.toObject(e, this)
+        }, proto.stream.GetWatchDataRsp.toObject = function (e, t) {
+            var r = {
+                status: s.Message.getFieldWithDefault(t, 1, 0),
+                cachestate: s.Message.getFieldWithDefault(t, 2, 0)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.GetWatchDataRsp.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.GetWatchDataRsp;
+            return proto.stream.GetWatchDataRsp.deserializeBinaryFromReader(r, t)
+        },proto.stream.GetWatchDataRsp.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readEnum();
+                        e.setStatus(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setCachestate(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.GetWatchDataRsp.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.GetWatchDataRsp.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.GetWatchDataRsp.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getStatus()) && t.writeEnum(1, r), 0 !== (r = e.getCachestate()) && t.writeUint32(2, r)
+        },proto.stream.GetWatchDataRsp.prototype.getStatus = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.GetWatchDataRsp.prototype.setStatus = function (e) {
+            s.Message.setProto3EnumField(this, 1, e)
+        },proto.stream.GetWatchDataRsp.prototype.getCachestate = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        },proto.stream.GetWatchDataRsp.prototype.setCachestate = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        },proto.stream.SetReconnectTimeoutReq = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.SetReconnectTimeoutReq, s.Message),o.DEBUG && !COMPILED && (proto.stream.SetReconnectTimeoutReq.displayName = "proto.stream.SetReconnectTimeoutReq"),s.Message.GENERATE_TO_OBJECT && (proto.stream.SetReconnectTimeoutReq.prototype.toObject = function (e) {
+            return proto.stream.SetReconnectTimeoutReq.toObject(e, this)
+        }, proto.stream.SetReconnectTimeoutReq.toObject = function (e, t) {
+            var r = {
+                userid: s.Message.getFieldWithDefault(t, 1, 0),
+                timeout: s.Message.getFieldWithDefault(t, 2, 0)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.SetReconnectTimeoutReq.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.SetReconnectTimeoutReq;
+            return proto.stream.SetReconnectTimeoutReq.deserializeBinaryFromReader(r, t)
+        },proto.stream.SetReconnectTimeoutReq.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setTimeout(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.SetReconnectTimeoutReq.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.SetReconnectTimeoutReq.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.SetReconnectTimeoutReq.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getUserid()) && t.writeUint32(1, r), 0 !== (r = e.getTimeout()) && t.writeUint32(2, r)
+        },proto.stream.SetReconnectTimeoutReq.prototype.getUserid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.SetReconnectTimeoutReq.prototype.setUserid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.SetReconnectTimeoutReq.prototype.getTimeout = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        },proto.stream.SetReconnectTimeoutReq.prototype.setTimeout = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        },proto.stream.SetReconnectTimeoutRsp = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.SetReconnectTimeoutRsp, s.Message),o.DEBUG && !COMPILED && (proto.stream.SetReconnectTimeoutRsp.displayName = "proto.stream.SetReconnectTimeoutRsp"),s.Message.GENERATE_TO_OBJECT && (proto.stream.SetReconnectTimeoutRsp.prototype.toObject = function (e) {
+            return proto.stream.SetReconnectTimeoutRsp.toObject(e, this)
+        }, proto.stream.SetReconnectTimeoutRsp.toObject = function (e, t) {
+            var r = {status: s.Message.getFieldWithDefault(t, 1, 0)};
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.SetReconnectTimeoutRsp.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.SetReconnectTimeoutRsp;
+            return proto.stream.SetReconnectTimeoutRsp.deserializeBinaryFromReader(r, t)
+        },proto.stream.SetReconnectTimeoutRsp.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readEnum();
+                        e.setStatus(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.SetReconnectTimeoutRsp.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.SetReconnectTimeoutRsp.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.SetReconnectTimeoutRsp.serializeBinaryToWriter = function (e, t) {
+            var r;
+            0 !== (r = e.getStatus()) && t.writeEnum(1, r)
+        },proto.stream.SetReconnectTimeoutRsp.prototype.getStatus = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.SetReconnectTimeoutRsp.prototype.setStatus = function (e) {
+            s.Message.setProto3EnumField(this, 1, e)
+        },proto.stream.CmdId = {
             NOCMD: 0,
             LOGINREQ: 1101,
             LOGINRSP: 1102,
             LOGOUTREQ: 1105,
             LOGOUTRSP: 1106,
             HEARTBEATREQ: 1103,
+            SETRECONNECTTIMEOUTREQ: 1109,
+            SETRECONNECTTIMEOUTRSP: 1110,
             NETWORKSTATEREQ: 1120,
             NETWORKSTATERSP: 1121,
             NOTICENETWORKSTATEREQ: 1122,
@@ -3965,23 +5439,44 @@ var MvsTicker = function (e) {
             DISCONNECTRSP: 1108,
             KICKPLAYERREQ: 1303,
             KICKPLAYERRSP: 1304,
-            KICKPLAYERNOTIFY: 1305
-        }, proto.stream.JoinRoomType = {
+            KICKPLAYERNOTIFY: 1305,
+            JOINWATCHROOMREQ: 1225,
+            JOINWATCHROOMRSP: 1226,
+            LEAVEWATCHROOMREQ: 1227,
+            LEAVEWATCHROOMRSP: 1228,
+            GETWATCHROOMSREQ: 1229,
+            GETWATCHROOMSRSP: 1230,
+            CHANGEROLEREQ: 1231,
+            CHANGEROLERSP: 1232,
+            GETWATCHDATAREQ: 1409,
+            GETWATCHDATARSP: 1410,
+            ROOMOVERNOTIFY: 1412,
+            JOINWATCHROOMNOTIFY: 1414,
+            LEAVEWATCHROOMNOTIFY: 1416
+        },proto.stream.JoinRoomType = {
             NOJOIN: 0,
             JOINSPECIALROOM: 1,
             JOINROOMWITHPROPERTY: 2,
-            JOINRANDOMROOM: 3
-        }, proto.stream.RoomState = {
+            JOINRANDOMROOM: 3,
+            REJOINSPECIALROOM: 4
+        },proto.stream.RoomState = {
             ROOMSTATENIL: 0,
             ROOMSTATEOPEN: 1,
             ROOMSTATECLOSED: 2
-        }, proto.stream.RoomListSort = {
+        },proto.stream.RoomListSort = {
             ROOMSORTNIL: 0,
             ROOMSORTCREATETIME: 1,
             ROOMSORTPLAYERNUM: 2,
             ROOMSORTSTATE: 3
-        }, proto.stream.SortOrder = {SORTASC: 0, SORTDESC: 1}, o.object.extend(r, proto.stream)
-    }, {"./errorcode_pb.js": 4, "google-protobuf": 7}], 7: [function (_require, module, exports) {
+        },proto.stream.SortOrder = {
+            SORTASC: 0,
+            SORTDESC: 1
+        },proto.stream.RoomType = {
+            GAMEROOMTYPE: 0,
+            WATCHROOMTYPE: 1
+        },o.object.extend(r, proto.stream)
+    }, {"./errorcode_pb.js": 5, "google-protobuf": 8}],
+    8: [function (_require, module, exports) {
         (function (global, Buffer) {
             var $jscomp = {
                 scope: {}, getGlobal: function (e) {
@@ -4231,11 +5726,11 @@ var MvsTicker = function (e) {
                 return e = Number(e), ($jscomp.math.log1p(e) - $jscomp.math.log1p(-e)) / 2
             }, $jscomp.math.hypot = function (e, t, r) {
                 e = Number(e), t = Number(t);
-                var o, s, i, n = Math.max(Math.abs(e), Math.abs(t));
-                for (o = 2; o < arguments.length; o++) n = Math.max(n, Math.abs(arguments[o]));
-                if (1e100 < n || n < 1e-100) {
-                    for (i = (e /= n) * e + (t /= n) * t, o = 2; o < arguments.length; o++) i += (s = Number(arguments[o]) / n) * s;
-                    return Math.sqrt(i) * n
+                var o, s, i, a = Math.max(Math.abs(e), Math.abs(t));
+                for (o = 2; o < arguments.length; o++) a = Math.max(a, Math.abs(arguments[o]));
+                if (1e100 < a || a < 1e-100) {
+                    for (i = (e /= a) * e + (t /= a) * t, o = 2; o < arguments.length; o++) i += (s = Number(arguments[o]) / a) * s;
+                    return Math.sqrt(i) * a
                 }
                 for (i = e * e + t * t, o = 2; o < arguments.length; o++) i += (s = Number(arguments[o])) * s;
                 return Math.sqrt(i)
@@ -4337,8 +5832,8 @@ var MvsTicker = function (e) {
             }, $jscomp.string.startsWith = function (e, t) {
                 var r = $jscomp.checkStringArgs(this, e, "startsWith");
                 e += "";
-                for (var o = r.length, s = e.length, i = Math.max(0, Math.min(0 | t, r.length)), n = 0; n < s && i < o;) if (r[i++] != e[n++]) return !1;
-                return s <= n
+                for (var o = r.length, s = e.length, i = Math.max(0, Math.min(0 | t, r.length)), a = 0; a < s && i < o;) if (r[i++] != e[a++]) return !1;
+                return s <= a
             }, $jscomp.string.startsWith$install = function () {
                 String.prototype.startsWith || (String.prototype.startsWith = $jscomp.string.startsWith)
             }, $jscomp.string.endsWith = function (e, t) {
@@ -4403,12 +5898,12 @@ var MvsTicker = function (e) {
                 if (goog.DEPENDENCIES_ENABLED) {
                     var s;
                     e = e.replace(/\\/g, "/");
-                    for (var i = goog.dependencies_, n = 0; s = t[n]; n++) i.nameToPath[s] = e, i.pathIsModule[e] = !!o;
+                    for (var i = goog.dependencies_, a = 0; s = t[a]; a++) i.nameToPath[s] = e, i.pathIsModule[e] = !!o;
                     for (o = 0; t = r[o]; o++) e in i.requires || (i.requires[e] = {}), i.requires[e][t] = !0
                 }
             }, goog.ENABLE_DEBUG_LOADER = !0, goog.logToConsole_ = function (e) {
                 goog.global.console && goog.global.console.error(e)
-            }, goog._require = function (e) {
+            }, goog.require = function (e) {
                 if (!COMPILED) {
                     if (goog.ENABLE_DEBUG_LOADER && goog.IS_OLD_IE_ && goog.maybeProcessDeferredDep_(e), goog.isProvided_(e)) return goog.isInModuleLoader_() ? goog.module.getInternal_(e) : null;
                     if (goog.ENABLE_DEBUG_LOADER) {
@@ -4679,7 +6174,7 @@ var MvsTicker = function (e) {
                 }
                 for (s = Array(arguments.length - 2), i = 2; i < arguments.length; i++) s[i - 2] = arguments[i];
                 i = !1;
-                for (var n = e.constructor; n; n = n.superClass_ && n.superClass_.constructor) if (n.prototype[t] === o) i = !0; else if (i) return n.prototype[t].apply(e, s);
+                for (var a = e.constructor; a; a = a.superClass_ && a.superClass_.constructor) if (a.prototype[t] === o) i = !0; else if (i) return a.prototype[t].apply(e, s);
                 if (e[t] === o) return e.constructor.prototype[t].apply(e, s);
                 throw Error("goog.base called from a method of one name to a method of a different name")
             }, goog.scope = function (e) {
@@ -4782,10 +6277,10 @@ var MvsTicker = function (e) {
                 if (e == t) return 0;
                 if (!e) return -1;
                 if (!t) return 1;
-                for (var o = e.toLowerCase().match(r), s = t.toLowerCase().match(r), i = Math.min(o.length, s.length), n = 0; n < i; n++) {
-                    r = o[n];
-                    var a = s[n];
-                    if (r != a) return e = parseInt(r, 10), !isNaN(e) && (t = parseInt(a, 10), !isNaN(t) && e - t) ? e - t : r < a ? -1 : 1
+                for (var o = e.toLowerCase().match(r), s = t.toLowerCase().match(r), i = Math.min(o.length, s.length), a = 0; a < i; a++) {
+                    r = o[a];
+                    var n = s[a];
+                    if (r != n) return e = parseInt(r, 10), !isNaN(e) && (t = parseInt(n, 10), !isNaN(t) && e - t) ? e - t : r < n ? -1 : 1
                 }
                 return o.length != s.length ? o.length - s.length : e < t ? -1 : 1
             },goog.string.intAwareCompare = function (e, t) {
@@ -4913,11 +6408,11 @@ var MvsTicker = function (e) {
             },goog.string.getRandomString = function () {
                 return Math.floor(2147483648 * Math.random()).toString(36) + Math.abs(Math.floor(2147483648 * Math.random()) ^ goog.now()).toString(36)
             },goog.string.compareVersions = function (e, t) {
-                for (var r = 0, o = goog.string.trim(String(e)).split("."), s = goog.string.trim(String(t)).split("."), i = Math.max(o.length, s.length), n = 0; 0 == r && n < i; n++) {
-                    var a = o[n] || "", p = s[n] || "", g = RegExp("(\\d*)(\\D*)", "g"),
+                for (var r = 0, o = goog.string.trim(String(e)).split("."), s = goog.string.trim(String(t)).split("."), i = Math.max(o.length, s.length), a = 0; 0 == r && a < i; a++) {
+                    var n = o[a] || "", p = s[a] || "", g = RegExp("(\\d*)(\\D*)", "g"),
                         u = RegExp("(\\d*)(\\D*)", "g");
                     do {
-                        var l = g.exec(a) || ["", "", ""], c = u.exec(p) || ["", "", ""];
+                        var l = g.exec(n) || ["", "", ""], c = u.exec(p) || ["", "", ""];
                         if (0 == l[0].length && 0 == c[0].length) break;
                         r = 0 == l[1].length ? 0 : parseInt(l[1], 10);
                         var m = 0 == c[1].length ? 0 : parseInt(c[1], 10);
@@ -5011,7 +6506,7 @@ var MvsTicker = function (e) {
                 Map: function (e, t) {
                     this.arr_ = e, this.valueCtor_ = t, this.map_ = {}, this.arrClean = !0, 0 < this.arr_.length && this.loadFromArray_()
                 }
-            }, M$, N$;
+            }, c8, d8;
             jspb.Map.prototype.loadFromArray_ = function () {
                 for (var e = 0; e < this.arr_.length; e++) {
                     var t = this.arr_[e], r = t[0];
@@ -5039,8 +6534,8 @@ var MvsTicker = function (e) {
                 for (var r = this.toArray(), o = [], s = 0; s < r.length; s++) {
                     var i = this.map_[r[s][0].toString()];
                     this.wrapEntry_(i);
-                    var n = i.valueWrapper;
-                    n ? (goog.asserts.assert(t), o.push([i.key, t(e, n)])) : o.push([i.key, i.value])
+                    var a = i.valueWrapper;
+                    a ? (goog.asserts.assert(t), o.push([i.key, t(e, a)])) : o.push([i.key, i.value])
                 }
                 return o
             }, jspb.Map.fromObject = function (e, t, r) {
@@ -5112,16 +6607,16 @@ var MvsTicker = function (e) {
             }, jspb.Map.prototype.serializeBinary = function (e, t, r, o, s) {
                 var i = this.stringKeys_();
                 i.sort();
-                for (var n = 0; n < i.length; n++) {
-                    var a = this.map_[i[n]];
-                    t.beginSubMessage(e), r.call(t, 1, a.key), this.valueCtor_ ? o.call(t, 2, this.wrapEntry_(a), s) : o.call(t, 2, a.value), t.endSubMessage()
+                for (var a = 0; a < i.length; a++) {
+                    var n = this.map_[i[a]];
+                    t.beginSubMessage(e), r.call(t, 1, n.key), this.valueCtor_ ? o.call(t, 2, this.wrapEntry_(n), s) : o.call(t, 2, n.value), t.endSubMessage()
                 }
             }, jspb.Map.deserializeBinary = function (e, t, r, o, s, i) {
-                for (var n = void 0; t.nextField() && !t.isEndGroup();) {
-                    var a = t.getFieldNumber();
-                    1 == a ? i = r.call(t) : 2 == a && (e.valueCtor_ ? (goog.asserts.assert(s), n = new e.valueCtor_, o.call(t, n, s)) : n = o.call(t))
+                for (var a = void 0; t.nextField() && !t.isEndGroup();) {
+                    var n = t.getFieldNumber();
+                    1 == n ? i = r.call(t) : 2 == n && (e.valueCtor_ ? (goog.asserts.assert(s), a = new e.valueCtor_, o.call(t, a, s)) : a = o.call(t))
                 }
-                goog.asserts.assert(null != i), goog.asserts.assert(null != n), e.set(i, n)
+                goog.asserts.assert(null != i), goog.asserts.assert(null != a), e.set(i, a)
             }, jspb.Map.prototype.stringKeys_ = function () {
                 var e, t = this.map_, r = [];
                 for (e in t) Object.prototype.hasOwnProperty.call(t, e) && r.push(e);
@@ -5152,15 +6647,15 @@ var MvsTicker = function (e) {
             }, goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.filter) ? function (e, t, r) {
                 return goog.asserts.assert(null != e.length), Array.prototype.filter.call(e, t, r)
             } : function (e, t, r) {
-                for (var o = e.length, s = [], i = 0, n = goog.isString(e) ? e.split("") : e, a = 0; a < o; a++) if (a in n) {
-                    var p = n[a];
-                    t.call(r, p, a, e) && (s[i++] = p)
+                for (var o = e.length, s = [], i = 0, a = goog.isString(e) ? e.split("") : e, n = 0; n < o; n++) if (n in a) {
+                    var p = a[n];
+                    t.call(r, p, n, e) && (s[i++] = p)
                 }
                 return s
             }, goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.map) ? function (e, t, r) {
                 return goog.asserts.assert(null != e.length), Array.prototype.map.call(e, t, r)
             } : function (e, t, r) {
-                for (var o = e.length, s = Array(o), i = goog.isString(e) ? e.split("") : e, n = 0; n < o; n++) n in i && (s[n] = t.call(r, i[n], n, e));
+                for (var o = e.length, s = Array(o), i = goog.isString(e) ? e.split("") : e, a = 0; a < o; a++) a in i && (s[a] = t.call(r, i[a], a, e));
                 return s
             }, goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.reduce) ? function (e, t, r, o) {
                 return goog.asserts.assert(null != e.length), o && (t = goog.bind(t, o)), Array.prototype.reduce.call(e, t, r)
@@ -5247,7 +6742,7 @@ var MvsTicker = function (e) {
                     if (goog.isArrayLike(o)) {
                         var s = e.length || 0, i = o.length || 0;
                         e.length = s + i;
-                        for (var n = 0; n < i; n++) e[s + n] = o[n]
+                        for (var a = 0; a < i; a++) e[s + a] = o[a]
                     } else e.push(o)
                 }
             }, goog.array.splice = function (e, t, r, o) {
@@ -5262,8 +6757,8 @@ var MvsTicker = function (e) {
                 r = r || o;
                 o = {};
                 for (var s = 0, i = 0; i < e.length;) {
-                    var n = e[i++], a = r(n);
-                    Object.prototype.hasOwnProperty.call(o, a) || (o[a] = !0, t[s++] = n)
+                    var a = e[i++], n = r(a);
+                    Object.prototype.hasOwnProperty.call(o, n) || (o[n] = !0, t[s++] = a)
                 }
                 t.length = s
             }, goog.array.binarySearch = function (e, t, r) {
@@ -5271,11 +6766,11 @@ var MvsTicker = function (e) {
             }, goog.array.binarySelect = function (e, t, r) {
                 return goog.array.binarySearch_(e, t, !0, void 0, r)
             }, goog.array.binarySearch_ = function (e, t, r, o, s) {
-                for (var i, n = 0, a = e.length; n < a;) {
-                    var p, g = n + a >> 1;
-                    0 < (p = r ? t.call(s, e[g], g, e) : t(o, e[g])) ? n = g + 1 : (a = g, i = !p)
+                for (var i, a = 0, n = e.length; a < n;) {
+                    var p, g = a + n >> 1;
+                    0 < (p = r ? t.call(s, e[g], g, e) : t(o, e[g])) ? a = g + 1 : (n = g, i = !p)
                 }
-                return i ? n : ~n
+                return i ? a : ~a
             }, goog.array.sort = function (e, t) {
                 e.sort(t || goog.array.defaultCompare)
             }, goog.array.stableSort = function (e, t) {
@@ -5325,8 +6820,8 @@ var MvsTicker = function (e) {
                 return 0 <= (t = goog.array.binarySearch(e, t, r)) && goog.array.removeAt(e, t)
             }, goog.array.bucket = function (e, t, r) {
                 for (var o = {}, s = 0; s < e.length; s++) {
-                    var i = e[s], n = t.call(r, i, s, e);
-                    goog.isDef(n) && (o[n] || (o[n] = [])).push(i)
+                    var i = e[s], a = t.call(r, i, s, e);
+                    goog.isDef(a) && (o[a] || (o[a] = [])).push(i)
                 }
                 return o
             }, goog.array.toObject = function (r, o, s) {
@@ -5345,7 +6840,7 @@ var MvsTicker = function (e) {
             }, goog.array.flatten = function (e) {
                 for (var t = [], r = 0; r < arguments.length; r++) {
                     var o = arguments[r];
-                    if (goog.isArray(o)) for (var s = 0; s < o.length; s += 8192) for (var i = goog.array.slice(o, s, s + 8192), n = (i = goog.array.flatten.apply(null, i), 0); n < i.length; n++) t.push(i[n]); else t.push(o)
+                    if (goog.isArray(o)) for (var s = 0; s < o.length; s += 8192) for (var i = goog.array.slice(o, s, s + 8192), a = (i = goog.array.flatten.apply(null, i), 0); a < i.length; a++) t.push(i[a]); else t.push(o)
                 }
                 return t
             }, goog.array.rotate = function (e, t) {
@@ -5399,15 +6894,15 @@ var MvsTicker = function (e) {
                 return t
             }, goog.crypt.utf8ByteArrayToString = function (e) {
                 for (var t = [], r = 0, o = 0; r < e.length;) {
-                    if ((n = e[r++]) < 128) t[o++] = String.fromCharCode(n); else if (191 < n && n < 224) {
+                    if ((a = e[r++]) < 128) t[o++] = String.fromCharCode(a); else if (191 < a && a < 224) {
                         var s = e[r++];
-                        t[o++] = String.fromCharCode((31 & n) << 6 | 63 & s)
-                    } else if (239 < n && n < 365) {
+                        t[o++] = String.fromCharCode((31 & a) << 6 | 63 & s)
+                    } else if (239 < a && a < 365) {
                         s = e[r++];
                         var i = e[r++],
-                            n = ((7 & n) << 18 | (63 & s) << 12 | (63 & i) << 6 | 63 & e[r++]) - 65536;
-                        t[o++] = String.fromCharCode(55296 + (n >> 10)), t[o++] = String.fromCharCode(56320 + (1023 & n))
-                    } else s = e[r++], i = e[r++], t[o++] = String.fromCharCode((15 & n) << 12 | (63 & s) << 6 | 63 & i)
+                            a = ((7 & a) << 18 | (63 & s) << 12 | (63 & i) << 6 | 63 & e[r++]) - 65536;
+                        t[o++] = String.fromCharCode(55296 + (a >> 10)), t[o++] = String.fromCharCode(56320 + (1023 & a))
+                    } else s = e[r++], i = e[r++], t[o++] = String.fromCharCode((15 & a) << 12 | (63 & s) << 6 | 63 & i)
                 }
                 return t.join("")
             }, goog.crypt.xorByteArray = function (e, t) {
@@ -5682,17 +7177,17 @@ var MvsTicker = function (e) {
                 return goog.userAgent.ASSUME_ANY_VERSION || goog.userAgent.isVersionOrHigherCache_[e] || (goog.userAgent.isVersionOrHigherCache_[e] = 0 <= goog.string.compareVersions(goog.userAgent.VERSION, e))
             },goog.userAgent.isVersion = goog.userAgent.isVersionOrHigher,goog.userAgent.isDocumentModeOrHigher = function (e) {
                 return Number(goog.userAgent.DOCUMENT_MODE) >= e
-            },goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher,goog.userAgent.DOCUMENT_MODE = (M$ = goog.global.document, N$ = goog.userAgent.getDocumentMode_(), M$ && goog.userAgent.IE ? N$ || ("CSS1Compat" == M$.compatMode ? parseInt(goog.userAgent.VERSION, 10) : 5) : void 0),goog.userAgent.product = {},goog.userAgent.product.ASSUME_FIREFOX = !1,goog.userAgent.product.ASSUME_IPHONE = !1,goog.userAgent.product.ASSUME_IPAD = !1,goog.userAgent.product.ASSUME_ANDROID = !1,goog.userAgent.product.ASSUME_CHROME = !1,goog.userAgent.product.ASSUME_SAFARI = !1,goog.userAgent.product.PRODUCT_KNOWN_ = goog.userAgent.ASSUME_IE || goog.userAgent.ASSUME_EDGE || goog.userAgent.ASSUME_OPERA || goog.userAgent.product.ASSUME_FIREFOX || goog.userAgent.product.ASSUME_IPHONE || goog.userAgent.product.ASSUME_IPAD || goog.userAgent.product.ASSUME_ANDROID || goog.userAgent.product.ASSUME_CHROME || goog.userAgent.product.ASSUME_SAFARI,goog.userAgent.product.OPERA = goog.userAgent.OPERA,goog.userAgent.product.IE = goog.userAgent.IE,goog.userAgent.product.EDGE = goog.userAgent.EDGE,goog.userAgent.product.FIREFOX = goog.userAgent.product.PRODUCT_KNOWN_ ? goog.userAgent.product.ASSUME_FIREFOX : goog.labs.userAgent.browser.isFirefox(),goog.userAgent.product.isIphoneOrIpod_ = function () {
+            },goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher,goog.userAgent.DOCUMENT_MODE = (c8 = goog.global.document, d8 = goog.userAgent.getDocumentMode_(), c8 && goog.userAgent.IE ? d8 || ("CSS1Compat" == c8.compatMode ? parseInt(goog.userAgent.VERSION, 10) : 5) : void 0),goog.userAgent.product = {},goog.userAgent.product.ASSUME_FIREFOX = !1,goog.userAgent.product.ASSUME_IPHONE = !1,goog.userAgent.product.ASSUME_IPAD = !1,goog.userAgent.product.ASSUME_ANDROID = !1,goog.userAgent.product.ASSUME_CHROME = !1,goog.userAgent.product.ASSUME_SAFARI = !1,goog.userAgent.product.PRODUCT_KNOWN_ = goog.userAgent.ASSUME_IE || goog.userAgent.ASSUME_EDGE || goog.userAgent.ASSUME_OPERA || goog.userAgent.product.ASSUME_FIREFOX || goog.userAgent.product.ASSUME_IPHONE || goog.userAgent.product.ASSUME_IPAD || goog.userAgent.product.ASSUME_ANDROID || goog.userAgent.product.ASSUME_CHROME || goog.userAgent.product.ASSUME_SAFARI,goog.userAgent.product.OPERA = goog.userAgent.OPERA,goog.userAgent.product.IE = goog.userAgent.IE,goog.userAgent.product.EDGE = goog.userAgent.EDGE,goog.userAgent.product.FIREFOX = goog.userAgent.product.PRODUCT_KNOWN_ ? goog.userAgent.product.ASSUME_FIREFOX : goog.labs.userAgent.browser.isFirefox(),goog.userAgent.product.isIphoneOrIpod_ = function () {
                 return goog.labs.userAgent.platform.isIphone() || goog.labs.userAgent.platform.isIpod()
             },goog.userAgent.product.IPHONE = goog.userAgent.product.PRODUCT_KNOWN_ ? goog.userAgent.product.ASSUME_IPHONE : goog.userAgent.product.isIphoneOrIpod_(),goog.userAgent.product.IPAD = goog.userAgent.product.PRODUCT_KNOWN_ ? goog.userAgent.product.ASSUME_IPAD : goog.labs.userAgent.platform.isIpad(),goog.userAgent.product.ANDROID = goog.userAgent.product.PRODUCT_KNOWN_ ? goog.userAgent.product.ASSUME_ANDROID : goog.labs.userAgent.browser.isAndroidBrowser(),goog.userAgent.product.CHROME = goog.userAgent.product.PRODUCT_KNOWN_ ? goog.userAgent.product.ASSUME_CHROME : goog.labs.userAgent.browser.isChrome(),goog.userAgent.product.isSafariDesktop_ = function () {
                 return goog.labs.userAgent.browser.isSafari() && !goog.labs.userAgent.platform.isIos()
             },goog.userAgent.product.SAFARI = goog.userAgent.product.PRODUCT_KNOWN_ ? goog.userAgent.product.ASSUME_SAFARI : goog.userAgent.product.isSafariDesktop_(),goog.crypt.base64 = {},goog.crypt.base64.byteToCharMap_ = null,goog.crypt.base64.charToByteMap_ = null,goog.crypt.base64.byteToCharMapWebSafe_ = null,goog.crypt.base64.ENCODED_VALS_BASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",goog.crypt.base64.ENCODED_VALS = goog.crypt.base64.ENCODED_VALS_BASE + "+/=",goog.crypt.base64.ENCODED_VALS_WEBSAFE = goog.crypt.base64.ENCODED_VALS_BASE + "-_.",goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ = goog.userAgent.GECKO || goog.userAgent.WEBKIT && !goog.userAgent.product.SAFARI || goog.userAgent.OPERA,goog.crypt.base64.HAS_NATIVE_ENCODE_ = goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ || "function" == typeof goog.global.btoa,goog.crypt.base64.HAS_NATIVE_DECODE_ = goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ || !goog.userAgent.product.SAFARI && !goog.userAgent.IE && "function" == typeof goog.global.atob,goog.crypt.base64.encodeByteArray = function (e, t) {
                 goog.asserts.assert(goog.isArrayLike(e), "encodeByteArray takes an array as a parameter"), goog.crypt.base64.init_();
                 for (var r = t ? goog.crypt.base64.byteToCharMapWebSafe_ : goog.crypt.base64.byteToCharMap_, o = [], s = 0; s < e.length; s += 3) {
-                    var i = e[s], n = s + 1 < e.length, a = n ? e[s + 1] : 0, p = s + 2 < e.length,
+                    var i = e[s], a = s + 1 < e.length, n = a ? e[s + 1] : 0, p = s + 2 < e.length,
                         g = i >> 2,
-                        u = (i = (3 & i) << 4 | a >> 4, a = (15 & a) << 2 | (u = p ? e[s + 2] : 0) >> 6, 63 & u);
-                    p || (u = 64, n || (a = 64)), o.push(r[g], r[i], r[a], r[u])
+                        u = (i = (3 & i) << 4 | n >> 4, n = (15 & n) << 2 | (u = p ? e[s + 2] : 0) >> 6, 63 & u);
+                    p || (u = 64, a || (n = 64)), o.push(r[g], r[i], r[n], r[u])
                 }
                 return o.join("")
             },goog.crypt.base64.encodeString = function (e, t) {
@@ -5726,9 +7221,9 @@ var MvsTicker = function (e) {
 
                 goog.crypt.base64.init_();
                 for (var s = 0; ;) {
-                    var r = t(-1), i = t(0), n = t(64), a = t(64);
-                    if (64 === a && -1 === r) break;
-                    e(r << 2 | i >> 4), 64 != n && (e(i << 4 & 240 | n >> 2), 64 != a && e(n << 6 & 192 | a))
+                    var r = t(-1), i = t(0), a = t(64), n = t(64);
+                    if (64 === n && -1 === r) break;
+                    e(r << 2 | i >> 4), 64 != a && (e(i << 4 & 240 | a >> 2), 64 != n && e(a << 6 & 192 | n))
                 }
             },goog.crypt.base64.init_ = function () {
                 if (!goog.crypt.base64.byteToCharMap_) {
@@ -5767,28 +7262,28 @@ var MvsTicker = function (e) {
                 return o
             },jspb.Message.toObjectExtension = function (e, t, r, o, s) {
                 for (var i in r) {
-                    var n = r[i], a = o.call(e, n);
-                    if (null != a) {
-                        for (var p in n.fieldName) if (n.fieldName.hasOwnProperty(p)) break;
-                        t[p] = n.toObjectFn ? n.isRepeated ? jspb.Message.toObjectList(a, n.toObjectFn, s) : n.toObjectFn(s, a) : a
+                    var a = r[i], n = o.call(e, a);
+                    if (null != n) {
+                        for (var p in a.fieldName) if (a.fieldName.hasOwnProperty(p)) break;
+                        t[p] = a.toObjectFn ? a.isRepeated ? jspb.Message.toObjectList(n, a.toObjectFn, s) : a.toObjectFn(s, n) : n
                     }
                 }
             },jspb.Message.serializeBinaryExtensions = function (e, t, r, o) {
                 for (var s in r) {
-                    var i = r[s], n = i.fieldInfo;
+                    var i = r[s], a = i.fieldInfo;
                     if (!i.binaryWriterFn) throw Error("Message extension present that was generated without binary serialization support");
-                    var a = o.call(e, n);
-                    if (null != a) if (n.isMessageType()) {
+                    var n = o.call(e, a);
+                    if (null != n) if (a.isMessageType()) {
                         if (!i.binaryMessageSerializeFn) throw Error("Message extension present holding submessage without binary support enabled, and message is being serialized to binary format");
-                        i.binaryWriterFn.call(t, n.fieldIndex, a, i.binaryMessageSerializeFn)
-                    } else i.binaryWriterFn.call(t, n.fieldIndex, a)
+                        i.binaryWriterFn.call(t, a.fieldIndex, n, i.binaryMessageSerializeFn)
+                    } else i.binaryWriterFn.call(t, a.fieldIndex, n)
                 }
             },jspb.Message.readBinaryExtension = function (e, t, r, o, s) {
                 var i = r[t.getFieldNumber()];
                 if (i) {
                     if (r = i.fieldInfo, !i.binaryReaderFn) throw Error("Deserializing extension whose generated code does not support binary format");
-                    var n;
-                    r.isMessageType() ? (n = new r.ctor, i.binaryReaderFn.call(t, n, i.binaryMessageDeserializeFn)) : n = i.binaryReaderFn.call(t), r.isRepeated && !i.isPacked ? (t = o.call(e, r)) ? t.push(n) : s.call(e, r, [n]) : s.call(e, r, n)
+                    var a;
+                    r.isMessageType() ? (a = new r.ctor, i.binaryReaderFn.call(t, a, i.binaryMessageDeserializeFn)) : a = i.binaryReaderFn.call(t), r.isRepeated && !i.isPacked ? (t = o.call(e, r)) ? t.push(a) : s.call(e, r, [a]) : s.call(e, r, a)
                 } else t.skipField()
             },jspb.Message.getField = function (e, t) {
                 if (t < e.pivot_) {
@@ -5855,8 +7350,8 @@ var MvsTicker = function (e) {
                 (r = jspb.Message.computeOneofCase(e, r)) && r !== t && void 0 !== o && (e.wrappers_ && r in e.wrappers_ && (e.wrappers_[r] = void 0), jspb.Message.setField(e, r, void 0)), jspb.Message.setField(e, t, o)
             },jspb.Message.computeOneofCase = function (e, t) {
                 for (var r, o, s = 0; s < t.length; s++) {
-                    var i = t[s], n = jspb.Message.getField(e, i);
-                    null != n && (r = i, o = n, jspb.Message.setField(e, i, void 0))
+                    var i = t[s], a = jspb.Message.getField(e, i);
+                    null != a && (r = i, o = a, jspb.Message.setField(e, i, void 0))
                 }
                 return r ? (jspb.Message.setField(e, r, o), r) : 0
             },jspb.Message.getWrapperField = function (e, t, r, o) {
@@ -5920,8 +7415,8 @@ var MvsTicker = function (e) {
             },jspb.Message.difference = function (e, t) {
                 if (!(e instanceof t.constructor)) throw Error("Messages have different types.");
                 var r = e.toArray(), o = t.toArray(), s = [], i = 0,
-                    n = r.length > o.length ? r.length : o.length;
-                for (e.getJsPbMessageId() && (s[0] = e.getJsPbMessageId(), i = 1); i < n; i++) jspb.Message.compareFields(r[i], o[i]) || (s[i] = o[i]);
+                    a = r.length > o.length ? r.length : o.length;
+                for (e.getJsPbMessageId() && (s[0] = e.getJsPbMessageId(), i = 1); i < a; i++) jspb.Message.compareFields(r[i], o[i]) || (s[i] = o[i]);
                 return new e.constructor(s)
             },jspb.Message.equals = function (e, t) {
                 return e == t || !(!e || !t) && e instanceof t.constructor && jspb.Message.compareFields(e.toArray(), t.toArray())
@@ -5944,8 +7439,8 @@ var MvsTicker = function (e) {
                 if (e.constructor === Array) {
                     var o = void 0, s = void 0, i = Math.max(e.length, t.length);
                     for (r = 0; r < i; r++) {
-                        var n = e[r], a = t[r];
-                        if (n && n.constructor == Object && (goog.asserts.assert(void 0 === o), goog.asserts.assert(r === e.length - 1), o = n, n = void 0), a && a.constructor == Object && (goog.asserts.assert(void 0 === s), goog.asserts.assert(r === t.length - 1), s = a, a = void 0), !jspb.Message.compareFields(n, a)) return !1
+                        var a = e[r], n = t[r];
+                        if (a && a.constructor == Object && (goog.asserts.assert(void 0 === o), goog.asserts.assert(r === e.length - 1), o = a, a = void 0), n && n.constructor == Object && (goog.asserts.assert(void 0 === s), goog.asserts.assert(r === t.length - 1), s = n, n = void 0), !jspb.Message.compareFields(a, n)) return !1
                     }
                     return !o && !s || (o = o || {}, s = s || {}, jspb.Message.compareExtensions(o, s))
                 }
@@ -5993,8 +7488,8 @@ var MvsTicker = function (e) {
             },jspb.arith.UInt64.prototype.sub = function (e) {
                 return new jspb.arith.UInt64((this.lo - e.lo & 4294967295) >>> 0 >>> 0, ((this.hi - e.hi & 4294967295) >>> 0) - (this.lo - e.lo < 0 ? 1 : 0) >>> 0)
             },jspb.arith.UInt64.mul32x32 = function (e, t) {
-                for (var r = e >>> 16, o = 65535 & t, s = t >>> 16, i = (n = 65535 & e) * o + 65536 * (n * s & 65535) + 65536 * (r * o & 65535), n = r * s + (n * s >>> 16) + (r * o >>> 16); 4294967296 <= i;) i -= 4294967296, n += 1;
-                return new jspb.arith.UInt64(i >>> 0, n >>> 0)
+                for (var r = e >>> 16, o = 65535 & t, s = t >>> 16, i = (a = 65535 & e) * o + 65536 * (a * s & 65535) + 65536 * (r * o & 65535), a = r * s + (a * s >>> 16) + (r * o >>> 16); 4294967296 <= i;) i -= 4294967296, a += 1;
+                return new jspb.arith.UInt64(i >>> 0, a >>> 0)
             },jspb.arith.UInt64.prototype.mul = function (e) {
                 var t = jspb.arith.UInt64.mul32x32(this.lo, e);
                 return (e = jspb.arith.UInt64.mul32x32(this.hi, e)).hi = e.lo, e.lo = 0, t.add(e)
@@ -6120,9 +7615,9 @@ var MvsTicker = function (e) {
                 }
             },jspb.utils.splitHash64 = function (e) {
                 var t = e.charCodeAt(0), r = e.charCodeAt(1), o = e.charCodeAt(2),
-                    s = e.charCodeAt(3), i = e.charCodeAt(4), n = e.charCodeAt(5),
-                    a = e.charCodeAt(6);
-                e = e.charCodeAt(7), jspb.utils.split64Low = t + (r << 8) + (o << 16) + (s << 24) >>> 0, jspb.utils.split64High = i + (n << 8) + (a << 16) + (e << 24) >>> 0
+                    s = e.charCodeAt(3), i = e.charCodeAt(4), a = e.charCodeAt(5),
+                    n = e.charCodeAt(6);
+                e = e.charCodeAt(7), jspb.utils.split64Low = t + (r << 8) + (o << 16) + (s << 24) >>> 0, jspb.utils.split64High = i + (a << 8) + (n << 16) + (e << 24) >>> 0
             },jspb.utils.joinUint64 = function (e, t) {
                 return t * jspb.BinaryConstants.TWO_TO_32 + e
             },jspb.utils.joinInt64 = function (e, t) {
@@ -6148,7 +7643,7 @@ var MvsTicker = function (e) {
                 function r(e) {
                     for (var t = 1e7, r = 0; r < 7; r++) {
                         var o = e / (t = t / 10) % 10 >>> 0;
-                        (0 != o || a) && (a = !0, p += n[o])
+                        (0 != o || n) && (n = !0, p += a[o])
                     }
                 }
 
@@ -6156,8 +7651,8 @@ var MvsTicker = function (e) {
                 var o = (16777215 & e) + 6777216 * (s = (e >>> 24 | t << 8) >>> 0 & 16777215) + 6710656 * (i = t >> 16 & 65535),
                     s = s + 8147497 * i, i = 2 * i;
                 1e7 <= o && (s += Math.floor(o / 1e7), o %= 1e7), 1e7 <= s && (i += Math.floor(s / 1e7), s %= 1e7);
-                var n = jspb.utils.DIGITS, a = !1, p = "";
-                return (i || a) && r(i), (s || a) && r(s), (o || a) && r(o), p
+                var a = jspb.utils.DIGITS, n = !1, p = "";
+                return (i || n) && r(i), (s || n) && r(s), (o || n) && r(o), p
             },jspb.utils.joinSignedDecimalString = function (e, t) {
                 var r = 2147483648 & t;
                 r && (t = ~t + (0 == (e = 1 + ~e >>> 0) ? 1 : 0) >>> 0);
@@ -6229,11 +7724,11 @@ var MvsTicker = function (e) {
             },jspb.utils.countFixedFields_ = function (e, t, r, o, s) {
                 var i = 0;
                 if (o < 128) for (; t < r && e[t++] == o;) i++, t += s; else for (; t < r;) {
-                    for (var n = o; 128 < n;) {
-                        if (e[t++] != (127 & n | 128)) return i;
-                        n >>= 7
+                    for (var a = o; 128 < a;) {
+                        if (e[t++] != (127 & a | 128)) return i;
+                        a >>= 7
                     }
-                    if (e[t++] != n) break;
+                    if (e[t++] != a) break;
                     i++, t += s
                 }
                 return i
@@ -6250,8 +7745,8 @@ var MvsTicker = function (e) {
                     }
                     if (e[t++] != i) break;
                     s++;
-                    for (var n = 0, a = 1; n += (127 & (i = e[t++])) * a, a *= 128, 0 != (128 & i);) ;
-                    t += n
+                    for (var a = 0, n = 1; a += (127 & (i = e[t++])) * n, n *= 128, 0 != (128 & i);) ;
+                    t += a
                 }
                 return s
             },jspb.utils.debugBytesToTextFormat = function (e) {
@@ -6852,18 +8347,18 @@ var MvsTicker = function (e) {
                 var t = this.bytes_, r = this.cursor_;
                 e = r + e;
                 for (var o = [], s = ""; r < e;) {
-                    if ((a = t[r++]) < 128) o.push(a); else {
-                        if (a < 192) continue;
-                        if (a < 224) {
+                    if ((n = t[r++]) < 128) o.push(n); else {
+                        if (n < 192) continue;
+                        if (n < 224) {
                             var i = t[r++];
-                            o.push((31 & a) << 6 | 63 & i)
-                        } else if (a < 240) {
+                            o.push((31 & n) << 6 | 63 & i)
+                        } else if (n < 240) {
                             i = t[r++];
-                            var n = t[r++];
-                            o.push((15 & a) << 12 | (63 & i) << 6 | 63 & n)
-                        } else if (a < 248) {
-                            var a = (a = (7 & a) << 18 | (63 & (i = t[r++])) << 12 | (63 & (n = t[r++])) << 6 | 63 & t[r++]) - 65536;
-                            o.push(55296 + (a >> 10 & 1023), 56320 + (1023 & a))
+                            var a = t[r++];
+                            o.push((15 & n) << 12 | (63 & i) << 6 | 63 & a)
+                        } else if (n < 248) {
+                            var n = (n = (7 & n) << 18 | (63 & (i = t[r++])) << 12 | (63 & (a = t[r++])) << 6 | 63 & t[r++]) - 65536;
+                            o.push(55296 + (n >> 10 & 1023), 56320 + (1023 & n))
                         }
                     }
                     8192 <= o.length && (s += String.fromCharCode.apply(null, o), o.length = 0)
@@ -6880,9 +8375,9 @@ var MvsTicker = function (e) {
                 return this.readSplitVarint64_(), jspb.utils.joinHash64(this.tempLow_, this.tempHigh_)
             },jspb.BinaryDecoder.prototype.readFixedHash64 = function () {
                 var e = this.bytes_, t = this.cursor_, r = e[t + 0], o = e[t + 1], s = e[t + 2],
-                    i = e[t + 3], n = e[t + 4], a = e[t + 5], p = e[t + 6];
+                    i = e[t + 3], a = e[t + 4], n = e[t + 5], p = e[t + 6];
                 e = e[t + 7];
-                return this.cursor_ += 8, String.fromCharCode(r, o, s, i, n, a, p, e)
+                return this.cursor_ += 8, String.fromCharCode(r, o, s, i, a, n, p, e)
             },jspb.BinaryReader = function (e, t, r) {
                 this.decoder_ = jspb.BinaryDecoder.alloc(e, t, r), this.fieldCursor_ = this.decoder_.getCursor(), this.nextField_ = jspb.BinaryConstants.INVALID_FIELD_NUMBER, this.nextWireType_ = jspb.BinaryConstants.WireType.INVALID, this.error_ = !1, this.readCallbacks_ = null
             },jspb.BinaryReader.instanceCache_ = [],jspb.BinaryReader.alloc = function (e, t, r) {
@@ -7141,7 +8636,8 @@ var MvsTicker = function (e) {
                 return this.readPackedField_(this.decoder_.readFixedHash64)
             },jspb.Export = {},exports.Map = jspb.Map,exports.Message = jspb.Message,exports.BinaryReader = jspb.BinaryReader,exports.BinaryWriter = jspb.BinaryWriter,exports.ExtensionFieldInfo = jspb.ExtensionFieldInfo,exports.ExtensionFieldBinaryInfo = jspb.ExtensionFieldBinaryInfo,exports.exportSymbol = goog.exportSymbol,exports.inherits = goog.inherits,exports.object = {extend: goog.object.extend},exports.typeOf = goog.typeOf
         }).call(this, "undefined" != typeof global ? global : "undefined" != typeof self ? self : "undefined" != typeof window ? window : {}, _require("buffer").Buffer)
-    }, {buffer: 2}], 8: [function (e, t, r) {
+    }, {buffer: 2}],
+    9: [function (e, t, r) {
         var o = e("google-protobuf"), s = o, i = window;
         s.exportSymbol("proto.stream.Broadcast", null, i), s.exportSymbol("proto.stream.BroadcastAck", null, i), s.exportSymbol("proto.stream.CheckIn", null, i), s.exportSymbol("proto.stream.CheckInAck", null, i), s.exportSymbol("proto.stream.CheckInNotify", null, i), s.exportSymbol("proto.stream.FrameBroadcast", null, i), s.exportSymbol("proto.stream.FrameBroadcastAck", null, i), s.exportSymbol("proto.stream.FrameDataNotify", null, i), s.exportSymbol("proto.stream.FrameSyncNotify", null, i), s.exportSymbol("proto.stream.Heartbeat", null, i), s.exportSymbol("proto.stream.HeartbeatAck", null, i), s.exportSymbol("proto.stream.Notify", null, i), s.exportSymbol("proto.stream.Publish", null, i), s.exportSymbol("proto.stream.PublishAck", null, i), s.exportSymbol("proto.stream.PublishNotify", null, i), s.exportSymbol("proto.stream.SDKHotelCmdID", null, i), s.exportSymbol("proto.stream.SetFrameSyncRate", null, i), s.exportSymbol("proto.stream.SetFrameSyncRateAck", null, i), s.exportSymbol("proto.stream.SetFrameSyncRateNotify", null, i), s.exportSymbol("proto.stream.SetUseTimeStamp", null, i), s.exportSymbol("proto.stream.SetUseTimeStampAck", null, i), s.exportSymbol("proto.stream.Subscribe", null, i), s.exportSymbol("proto.stream.SubscribeAck", null, i), proto.stream.CheckIn = function (e) {
             o.Message.initialize(this, e, 0, -1, null, null)
@@ -8458,17 +9954,834 @@ var MvsTicker = function (e) {
             PUBLISHACKCMDID: 1414,
             PUBLISHNOTIFYCMDID: 1416
         },s.object.extend(r, proto.stream)
-    }, {"google-protobuf": 7}]
-}, {}, [5]);
-var MVS = function (e) {
-    return e.FrameOpt = {
+    }, {"google-protobuf": 8}],
+    10: [function (e, t, r) {
+        var s = e("google-protobuf"), o = s, i = window, a = e("./common_pb.js");
+        o.exportSymbol("proto.stream.EnterLiveRoom", null, i), o.exportSymbol("proto.stream.EnterLiveRoomAck", null, i), o.exportSymbol("proto.stream.EnterLiveRoomNotify", null, i), o.exportSymbol("proto.stream.ExitLiveRoomNotify", null, i), o.exportSymbol("proto.stream.LiveBroadcast", null, i), o.exportSymbol("proto.stream.LiveBroadcastAck", null, i), o.exportSymbol("proto.stream.LiveBroadcastNotify", null, i), o.exportSymbol("proto.stream.LiveFrameDataNotify", null, i), o.exportSymbol("proto.stream.LiveFrameSyncNotify", null, i), o.exportSymbol("proto.stream.LiveHeartbeat", null, i), o.exportSymbol("proto.stream.LiveHeartbeatAck", null, i), o.exportSymbol("proto.stream.LiveOverNotify", null, i), o.exportSymbol("proto.stream.SDKWatchCmdID", null, i), o.exportSymbol("proto.stream.SetLiveOffset", null, i), o.exportSymbol("proto.stream.SetLiveOffsetAck", null, i), proto.stream.EnterLiveRoom = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        }, o.inherits(proto.stream.EnterLiveRoom, s.Message), o.DEBUG && !COMPILED && (proto.stream.EnterLiveRoom.displayName = "proto.stream.EnterLiveRoom"), s.Message.GENERATE_TO_OBJECT && (proto.stream.EnterLiveRoom.prototype.toObject = function (e) {
+            return proto.stream.EnterLiveRoom.toObject(e, this)
+        }, proto.stream.EnterLiveRoom.toObject = function (e, t) {
+            var r = {
+                gameid: s.Message.getFieldWithDefault(t, 1, 0),
+                roomid: s.Message.getFieldWithDefault(t, 2, "0"),
+                userid: s.Message.getFieldWithDefault(t, 3, 0),
+                userprofile: t.getUserprofile_asB64(),
+                bookid: s.Message.getFieldWithDefault(t, 5, ""),
+                ticket: s.Message.getFieldWithDefault(t, 6, ""),
+                setid: s.Message.getFieldWithDefault(t, 7, 0)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }), proto.stream.EnterLiveRoom.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.EnterLiveRoom;
+            return proto.stream.EnterLiveRoom.deserializeBinaryFromReader(r, t)
+        }, proto.stream.EnterLiveRoom.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setGameid(r);
+                        break;
+                    case 2:
+                        r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    case 4:
+                        r = t.readBytes();
+                        e.setUserprofile(r);
+                        break;
+                    case 5:
+                        r = t.readString();
+                        e.setBookid(r);
+                        break;
+                    case 6:
+                        r = t.readString();
+                        e.setTicket(r);
+                        break;
+                    case 7:
+                        r = t.readUint32();
+                        e.setSetid(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.EnterLiveRoom.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.EnterLiveRoom.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.EnterLiveRoom.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getGameid()) && t.writeUint32(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r), 0 !== (r = e.getUserid()) && t.writeUint32(3, r), 0 < (r = e.getUserprofile_asU8()).length && t.writeBytes(4, r), 0 < (r = e.getBookid()).length && t.writeString(5, r), 0 < (r = e.getTicket()).length && t.writeString(6, r), 0 !== (r = e.getSetid()) && t.writeUint32(7, r)
+        }, proto.stream.EnterLiveRoom.prototype.getGameid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        }, proto.stream.EnterLiveRoom.prototype.setGameid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        }, proto.stream.EnterLiveRoom.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 2, "0")
+        }, proto.stream.EnterLiveRoom.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 2, e)
+        }, proto.stream.EnterLiveRoom.prototype.getUserid = function () {
+            return s.Message.getFieldWithDefault(this, 3, 0)
+        }, proto.stream.EnterLiveRoom.prototype.setUserid = function (e) {
+            s.Message.setProto3IntField(this, 3, e)
+        }, proto.stream.EnterLiveRoom.prototype.getUserprofile = function () {
+            return s.Message.getFieldWithDefault(this, 4, "")
+        }, proto.stream.EnterLiveRoom.prototype.getUserprofile_asB64 = function () {
+            return s.Message.bytesAsB64(this.getUserprofile())
+        }, proto.stream.EnterLiveRoom.prototype.getUserprofile_asU8 = function () {
+            return s.Message.bytesAsU8(this.getUserprofile())
+        }, proto.stream.EnterLiveRoom.prototype.setUserprofile = function (e) {
+            s.Message.setProto3BytesField(this, 4, e)
+        }, proto.stream.EnterLiveRoom.prototype.getBookid = function () {
+            return s.Message.getFieldWithDefault(this, 5, "")
+        }, proto.stream.EnterLiveRoom.prototype.setBookid = function (e) {
+            s.Message.setProto3StringField(this, 5, e)
+        }, proto.stream.EnterLiveRoom.prototype.getTicket = function () {
+            return s.Message.getFieldWithDefault(this, 6, "")
+        }, proto.stream.EnterLiveRoom.prototype.setTicket = function (e) {
+            s.Message.setProto3StringField(this, 6, e)
+        }, proto.stream.EnterLiveRoom.prototype.getSetid = function () {
+            return s.Message.getFieldWithDefault(this, 7, 0)
+        }, proto.stream.EnterLiveRoom.prototype.setSetid = function (e) {
+            s.Message.setProto3IntField(this, 7, e)
+        }, proto.stream.EnterLiveRoomAck = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        }, o.inherits(proto.stream.EnterLiveRoomAck, s.Message), o.DEBUG && !COMPILED && (proto.stream.EnterLiveRoomAck.displayName = "proto.stream.EnterLiveRoomAck"), s.Message.GENERATE_TO_OBJECT && (proto.stream.EnterLiveRoomAck.prototype.toObject = function (e) {
+            return proto.stream.EnterLiveRoomAck.toObject(e, this)
+        }, proto.stream.EnterLiveRoomAck.toObject = function (e, t) {
+            var r, o = {
+                status: s.Message.getFieldWithDefault(t, 1, 0),
+                roomstatus: s.Message.getFieldWithDefault(t, 2, 0),
+                reserved: s.Message.getFieldWithDefault(t, 3, ""),
+                wathchinfo: (r = t.getWathchinfo()) && a.LiveWatchInfo.toObject(e, r)
+            };
+            return e && (o.$jspbMessageInstance = t), o
+        }), proto.stream.EnterLiveRoomAck.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.EnterLiveRoomAck;
+            return proto.stream.EnterLiveRoomAck.deserializeBinaryFromReader(r, t)
+        }, proto.stream.EnterLiveRoomAck.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setStatus(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setRoomstatus(r);
+                        break;
+                    case 3:
+                        r = t.readString();
+                        e.setReserved(r);
+                        break;
+                    case 4:
+                        r = new a.LiveWatchInfo;
+                        t.readMessage(r, a.LiveWatchInfo.deserializeBinaryFromReader), e.setWathchinfo(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.EnterLiveRoomAck.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.EnterLiveRoomAck.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.EnterLiveRoomAck.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getStatus()) && t.writeUint32(1, r), 0 !== (r = e.getRoomstatus()) && t.writeUint32(2, r), 0 < (r = e.getReserved()).length && t.writeString(3, r), null != (r = e.getWathchinfo()) && t.writeMessage(4, r, a.LiveWatchInfo.serializeBinaryToWriter)
+        }, proto.stream.EnterLiveRoomAck.prototype.getStatus = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        }, proto.stream.EnterLiveRoomAck.prototype.setStatus = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        }, proto.stream.EnterLiveRoomAck.prototype.getRoomstatus = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        }, proto.stream.EnterLiveRoomAck.prototype.setRoomstatus = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        }, proto.stream.EnterLiveRoomAck.prototype.getReserved = function () {
+            return s.Message.getFieldWithDefault(this, 3, "")
+        }, proto.stream.EnterLiveRoomAck.prototype.setReserved = function (e) {
+            s.Message.setProto3StringField(this, 3, e)
+        }, proto.stream.EnterLiveRoomAck.prototype.getWathchinfo = function () {
+            return s.Message.getWrapperField(this, a.LiveWatchInfo, 4)
+        }, proto.stream.EnterLiveRoomAck.prototype.setWathchinfo = function (e) {
+            s.Message.setWrapperField(this, 4, e)
+        }, proto.stream.EnterLiveRoomAck.prototype.clearWathchinfo = function () {
+            this.setWathchinfo(void 0)
+        }, proto.stream.EnterLiveRoomAck.prototype.hasWathchinfo = function () {
+            return null != s.Message.getField(this, 4)
+        }, proto.stream.LiveHeartbeat = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        }, o.inherits(proto.stream.LiveHeartbeat, s.Message), o.DEBUG && !COMPILED && (proto.stream.LiveHeartbeat.displayName = "proto.stream.LiveHeartbeat"), s.Message.GENERATE_TO_OBJECT && (proto.stream.LiveHeartbeat.prototype.toObject = function (e) {
+            return proto.stream.LiveHeartbeat.toObject(e, this)
+        }, proto.stream.LiveHeartbeat.toObject = function (e, t) {
+            var r = {
+                gameid: s.Message.getFieldWithDefault(t, 1, 0),
+                roomid: s.Message.getFieldWithDefault(t, 2, "0"),
+                userid: s.Message.getFieldWithDefault(t, 3, 0)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }), proto.stream.LiveHeartbeat.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LiveHeartbeat;
+            return proto.stream.LiveHeartbeat.deserializeBinaryFromReader(r, t)
+        }, proto.stream.LiveHeartbeat.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setGameid(r);
+                        break;
+                    case 2:
+                        r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.LiveHeartbeat.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LiveHeartbeat.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.LiveHeartbeat.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getGameid()) && t.writeUint32(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r), 0 !== (r = e.getUserid()) && t.writeUint32(3, r)
+        }, proto.stream.LiveHeartbeat.prototype.getGameid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        }, proto.stream.LiveHeartbeat.prototype.setGameid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        }, proto.stream.LiveHeartbeat.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 2, "0")
+        }, proto.stream.LiveHeartbeat.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 2, e)
+        }, proto.stream.LiveHeartbeat.prototype.getUserid = function () {
+            return s.Message.getFieldWithDefault(this, 3, 0)
+        }, proto.stream.LiveHeartbeat.prototype.setUserid = function (e) {
+            s.Message.setProto3IntField(this, 3, e)
+        }, proto.stream.LiveHeartbeatAck = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        }, o.inherits(proto.stream.LiveHeartbeatAck, s.Message), o.DEBUG && !COMPILED && (proto.stream.LiveHeartbeatAck.displayName = "proto.stream.LiveHeartbeatAck"), s.Message.GENERATE_TO_OBJECT && (proto.stream.LiveHeartbeatAck.prototype.toObject = function (e) {
+            return proto.stream.LiveHeartbeatAck.toObject(e, this)
+        }, proto.stream.LiveHeartbeatAck.toObject = function (e, t) {
+            var r = {status: s.Message.getFieldWithDefault(t, 1, 0)};
+            return e && (r.$jspbMessageInstance = t), r
+        }), proto.stream.LiveHeartbeatAck.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LiveHeartbeatAck;
+            return proto.stream.LiveHeartbeatAck.deserializeBinaryFromReader(r, t)
+        }, proto.stream.LiveHeartbeatAck.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setStatus(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.LiveHeartbeatAck.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LiveHeartbeatAck.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.LiveHeartbeatAck.serializeBinaryToWriter = function (e, t) {
+            var r;
+            0 !== (r = e.getStatus()) && t.writeUint32(1, r)
+        }, proto.stream.LiveHeartbeatAck.prototype.getStatus = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        }, proto.stream.LiveHeartbeatAck.prototype.setStatus = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        }, proto.stream.LiveBroadcast = function (e) {
+            s.Message.initialize(this, e, 0, -1, proto.stream.LiveBroadcast.repeatedFields_, null)
+        }, o.inherits(proto.stream.LiveBroadcast, s.Message), o.DEBUG && !COMPILED && (proto.stream.LiveBroadcast.displayName = "proto.stream.LiveBroadcast"), proto.stream.LiveBroadcast.repeatedFields_ = [3], s.Message.GENERATE_TO_OBJECT && (proto.stream.LiveBroadcast.prototype.toObject = function (e) {
+            return proto.stream.LiveBroadcast.toObject(e, this)
+        }, proto.stream.LiveBroadcast.toObject = function (e, t) {
+            var r = {
+                roomid: s.Message.getFieldWithDefault(t, 1, "0"),
+                flag: s.Message.getFieldWithDefault(t, 2, 0),
+                dstuidsList: s.Message.getRepeatedField(t, 3),
+                cpproto: t.getCpproto_asB64()
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }), proto.stream.LiveBroadcast.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LiveBroadcast;
+            return proto.stream.LiveBroadcast.deserializeBinaryFromReader(r, t)
+        }, proto.stream.LiveBroadcast.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setFlag(r);
+                        break;
+                    case 3:
+                        r = t.readPackedUint32();
+                        e.setDstuidsList(r);
+                        break;
+                    case 4:
+                        r = t.readBytes();
+                        e.setCpproto(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        }, proto.stream.LiveBroadcast.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LiveBroadcast.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        }, proto.stream.LiveBroadcast.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(1, r), 0 !== (r = e.getFlag()) && t.writeUint32(2, r), 0 < (r = e.getDstuidsList()).length && t.writePackedUint32(3, r), 0 < (r = e.getCpproto_asU8()).length && t.writeBytes(4, r)
+        }, proto.stream.LiveBroadcast.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 1, "0")
+        }, proto.stream.LiveBroadcast.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 1, e)
+        }, proto.stream.LiveBroadcast.prototype.getFlag = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        }, proto.stream.LiveBroadcast.prototype.setFlag = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        }, proto.stream.LiveBroadcast.prototype.getDstuidsList = function () {
+            return s.Message.getRepeatedField(this, 3)
+        }, proto.stream.LiveBroadcast.prototype.setDstuidsList = function (e) {
+            s.Message.setField(this, 3, e || [])
+        }, proto.stream.LiveBroadcast.prototype.addDstuids = function (e, t) {
+            s.Message.addToRepeatedField(this, 3, e, t)
+        }, proto.stream.LiveBroadcast.prototype.clearDstuidsList = function () {
+            this.setDstuidsList([])
+        }, proto.stream.LiveBroadcast.prototype.getCpproto = function () {
+            return s.Message.getFieldWithDefault(this, 4, "")
+        }, proto.stream.LiveBroadcast.prototype.getCpproto_asB64 = function () {
+            return s.Message.bytesAsB64(this.getCpproto())
+        }, proto.stream.LiveBroadcast.prototype.getCpproto_asU8 = function () {
+            return s.Message.bytesAsU8(this.getCpproto())
+        },proto.stream.LiveBroadcast.prototype.setCpproto = function (e) {
+            s.Message.setProto3BytesField(this, 4, e)
+        },proto.stream.LiveBroadcastAck = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.LiveBroadcastAck, s.Message),o.DEBUG && !COMPILED && (proto.stream.LiveBroadcastAck.displayName = "proto.stream.LiveBroadcastAck"),s.Message.GENERATE_TO_OBJECT && (proto.stream.LiveBroadcastAck.prototype.toObject = function (e) {
+            return proto.stream.LiveBroadcastAck.toObject(e, this)
+        }, proto.stream.LiveBroadcastAck.toObject = function (e, t) {
+            var r = {status: s.Message.getFieldWithDefault(t, 1, 0)};
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.LiveBroadcastAck.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LiveBroadcastAck;
+            return proto.stream.LiveBroadcastAck.deserializeBinaryFromReader(r, t)
+        },proto.stream.LiveBroadcastAck.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setStatus(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.LiveBroadcastAck.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LiveBroadcastAck.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.LiveBroadcastAck.serializeBinaryToWriter = function (e, t) {
+            var r;
+            0 !== (r = e.getStatus()) && t.writeUint32(1, r)
+        },proto.stream.LiveBroadcastAck.prototype.getStatus = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.LiveBroadcastAck.prototype.setStatus = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.SetLiveOffset = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.SetLiveOffset, s.Message),o.DEBUG && !COMPILED && (proto.stream.SetLiveOffset.displayName = "proto.stream.SetLiveOffset"),s.Message.GENERATE_TO_OBJECT && (proto.stream.SetLiveOffset.prototype.toObject = function (e) {
+            return proto.stream.SetLiveOffset.toObject(e, this)
+        }, proto.stream.SetLiveOffset.toObject = function (e, t) {
+            var r = {
+                gameid: s.Message.getFieldWithDefault(t, 1, 0),
+                roomid: s.Message.getFieldWithDefault(t, 2, "0"),
+                userid: s.Message.getFieldWithDefault(t, 3, 0),
+                offsetms: s.Message.getFieldWithDefault(t, 4, 0)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.SetLiveOffset.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.SetLiveOffset;
+            return proto.stream.SetLiveOffset.deserializeBinaryFromReader(r, t)
+        },proto.stream.SetLiveOffset.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setGameid(r);
+                        break;
+                    case 2:
+                        r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    case 4:
+                        r = t.readInt32();
+                        e.setOffsetms(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.SetLiveOffset.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.SetLiveOffset.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.SetLiveOffset.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getGameid()) && t.writeUint32(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r), 0 !== (r = e.getUserid()) && t.writeUint32(3, r), 0 !== (r = e.getOffsetms()) && t.writeInt32(4, r)
+        },proto.stream.SetLiveOffset.prototype.getGameid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.SetLiveOffset.prototype.setGameid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.SetLiveOffset.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 2, "0")
+        },proto.stream.SetLiveOffset.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 2, e)
+        },proto.stream.SetLiveOffset.prototype.getUserid = function () {
+            return s.Message.getFieldWithDefault(this, 3, 0)
+        },proto.stream.SetLiveOffset.prototype.setUserid = function (e) {
+            s.Message.setProto3IntField(this, 3, e)
+        },proto.stream.SetLiveOffset.prototype.getOffsetms = function () {
+            return s.Message.getFieldWithDefault(this, 4, 0)
+        },proto.stream.SetLiveOffset.prototype.setOffsetms = function (e) {
+            s.Message.setProto3IntField(this, 4, e)
+        },proto.stream.SetLiveOffsetAck = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.SetLiveOffsetAck, s.Message),o.DEBUG && !COMPILED && (proto.stream.SetLiveOffsetAck.displayName = "proto.stream.SetLiveOffsetAck"),s.Message.GENERATE_TO_OBJECT && (proto.stream.SetLiveOffsetAck.prototype.toObject = function (e) {
+            return proto.stream.SetLiveOffsetAck.toObject(e, this)
+        }, proto.stream.SetLiveOffsetAck.toObject = function (e, t) {
+            var r = {status: s.Message.getFieldWithDefault(t, 1, 0)};
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.SetLiveOffsetAck.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.SetLiveOffsetAck;
+            return proto.stream.SetLiveOffsetAck.deserializeBinaryFromReader(r, t)
+        },proto.stream.SetLiveOffsetAck.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setStatus(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.SetLiveOffsetAck.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.SetLiveOffsetAck.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.SetLiveOffsetAck.serializeBinaryToWriter = function (e, t) {
+            var r;
+            0 !== (r = e.getStatus()) && t.writeUint32(1, r)
+        },proto.stream.SetLiveOffsetAck.prototype.getStatus = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.SetLiveOffsetAck.prototype.setStatus = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.EnterLiveRoomNotify = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.EnterLiveRoomNotify, s.Message),o.DEBUG && !COMPILED && (proto.stream.EnterLiveRoomNotify.displayName = "proto.stream.EnterLiveRoomNotify"),s.Message.GENERATE_TO_OBJECT && (proto.stream.EnterLiveRoomNotify.prototype.toObject = function (e) {
+            return proto.stream.EnterLiveRoomNotify.toObject(e, this)
+        }, proto.stream.EnterLiveRoomNotify.toObject = function (e, t) {
+            var r = {
+                userid: s.Message.getFieldWithDefault(t, 1, 0),
+                userprofile: t.getUserprofile_asB64()
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.EnterLiveRoomNotify.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.EnterLiveRoomNotify;
+            return proto.stream.EnterLiveRoomNotify.deserializeBinaryFromReader(r, t)
+        },proto.stream.EnterLiveRoomNotify.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    case 2:
+                        r = t.readBytes();
+                        e.setUserprofile(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.EnterLiveRoomNotify.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.EnterLiveRoomNotify.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.EnterLiveRoomNotify.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getUserid()) && t.writeUint32(1, r), 0 < (r = e.getUserprofile_asU8()).length && t.writeBytes(2, r)
+        },proto.stream.EnterLiveRoomNotify.prototype.getUserid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.EnterLiveRoomNotify.prototype.setUserid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.EnterLiveRoomNotify.prototype.getUserprofile = function () {
+            return s.Message.getFieldWithDefault(this, 2, "")
+        },proto.stream.EnterLiveRoomNotify.prototype.getUserprofile_asB64 = function () {
+            return s.Message.bytesAsB64(this.getUserprofile())
+        },proto.stream.EnterLiveRoomNotify.prototype.getUserprofile_asU8 = function () {
+            return s.Message.bytesAsU8(this.getUserprofile())
+        },proto.stream.EnterLiveRoomNotify.prototype.setUserprofile = function (e) {
+            s.Message.setProto3BytesField(this, 2, e)
+        },proto.stream.ExitLiveRoomNotify = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.ExitLiveRoomNotify, s.Message),o.DEBUG && !COMPILED && (proto.stream.ExitLiveRoomNotify.displayName = "proto.stream.ExitLiveRoomNotify"),s.Message.GENERATE_TO_OBJECT && (proto.stream.ExitLiveRoomNotify.prototype.toObject = function (e) {
+            return proto.stream.ExitLiveRoomNotify.toObject(e, this)
+        }, proto.stream.ExitLiveRoomNotify.toObject = function (e, t) {
+            var r = {
+                userid: s.Message.getFieldWithDefault(t, 1, 0),
+                userprofile: t.getUserprofile_asB64()
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.ExitLiveRoomNotify.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.ExitLiveRoomNotify;
+            return proto.stream.ExitLiveRoomNotify.deserializeBinaryFromReader(r, t)
+        },proto.stream.ExitLiveRoomNotify.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setUserid(r);
+                        break;
+                    case 2:
+                        r = t.readBytes();
+                        e.setUserprofile(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.ExitLiveRoomNotify.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.ExitLiveRoomNotify.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.ExitLiveRoomNotify.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getUserid()) && t.writeUint32(1, r), 0 < (r = e.getUserprofile_asU8()).length && t.writeBytes(2, r)
+        },proto.stream.ExitLiveRoomNotify.prototype.getUserid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.ExitLiveRoomNotify.prototype.setUserid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.ExitLiveRoomNotify.prototype.getUserprofile = function () {
+            return s.Message.getFieldWithDefault(this, 2, "")
+        },proto.stream.ExitLiveRoomNotify.prototype.getUserprofile_asB64 = function () {
+            return s.Message.bytesAsB64(this.getUserprofile())
+        },proto.stream.ExitLiveRoomNotify.prototype.getUserprofile_asU8 = function () {
+            return s.Message.bytesAsU8(this.getUserprofile())
+        },proto.stream.ExitLiveRoomNotify.prototype.setUserprofile = function (e) {
+            s.Message.setProto3BytesField(this, 2, e)
+        },proto.stream.LiveBroadcastNotify = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.LiveBroadcastNotify, s.Message),o.DEBUG && !COMPILED && (proto.stream.LiveBroadcastNotify.displayName = "proto.stream.LiveBroadcastNotify"),s.Message.GENERATE_TO_OBJECT && (proto.stream.LiveBroadcastNotify.prototype.toObject = function (e) {
+            return proto.stream.LiveBroadcastNotify.toObject(e, this)
+        }, proto.stream.LiveBroadcastNotify.toObject = function (e, t) {
+            var r = {
+                srcuid: s.Message.getFieldWithDefault(t, 1, 0),
+                priority: s.Message.getFieldWithDefault(t, 2, 0),
+                cpproto: t.getCpproto_asB64()
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.LiveBroadcastNotify.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LiveBroadcastNotify;
+            return proto.stream.LiveBroadcastNotify.deserializeBinaryFromReader(r, t)
+        },proto.stream.LiveBroadcastNotify.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setSrcuid(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setPriority(r);
+                        break;
+                    case 3:
+                        r = t.readBytes();
+                        e.setCpproto(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.LiveBroadcastNotify.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LiveBroadcastNotify.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.LiveBroadcastNotify.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getSrcuid()) && t.writeUint32(1, r), 0 !== (r = e.getPriority()) && t.writeUint32(2, r), 0 < (r = e.getCpproto_asU8()).length && t.writeBytes(3, r)
+        },proto.stream.LiveBroadcastNotify.prototype.getSrcuid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.LiveBroadcastNotify.prototype.setSrcuid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.LiveBroadcastNotify.prototype.getPriority = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        },proto.stream.LiveBroadcastNotify.prototype.setPriority = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        },proto.stream.LiveBroadcastNotify.prototype.getCpproto = function () {
+            return s.Message.getFieldWithDefault(this, 3, "")
+        },proto.stream.LiveBroadcastNotify.prototype.getCpproto_asB64 = function () {
+            return s.Message.bytesAsB64(this.getCpproto())
+        },proto.stream.LiveBroadcastNotify.prototype.getCpproto_asU8 = function () {
+            return s.Message.bytesAsU8(this.getCpproto())
+        },proto.stream.LiveBroadcastNotify.prototype.setCpproto = function (e) {
+            s.Message.setProto3BytesField(this, 3, e)
+        },proto.stream.LiveOverNotify = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.LiveOverNotify, s.Message),o.DEBUG && !COMPILED && (proto.stream.LiveOverNotify.displayName = "proto.stream.LiveOverNotify"),s.Message.GENERATE_TO_OBJECT && (proto.stream.LiveOverNotify.prototype.toObject = function (e) {
+            return proto.stream.LiveOverNotify.toObject(e, this)
+        }, proto.stream.LiveOverNotify.toObject = function (e, t) {
+            var r = {
+                gameid: s.Message.getFieldWithDefault(t, 1, 0),
+                roomid: s.Message.getFieldWithDefault(t, 2, "0")
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.LiveOverNotify.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LiveOverNotify;
+            return proto.stream.LiveOverNotify.deserializeBinaryFromReader(r, t)
+        },proto.stream.LiveOverNotify.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setGameid(r);
+                        break;
+                    case 2:
+                        r = t.readUint64String();
+                        e.setRoomid(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.LiveOverNotify.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LiveOverNotify.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.LiveOverNotify.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getGameid()) && t.writeUint32(1, r), r = e.getRoomid(), 0 !== parseInt(r, 10) && t.writeUint64String(2, r)
+        },proto.stream.LiveOverNotify.prototype.getGameid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.LiveOverNotify.prototype.setGameid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.LiveOverNotify.prototype.getRoomid = function () {
+            return s.Message.getFieldWithDefault(this, 2, "0")
+        },proto.stream.LiveOverNotify.prototype.setRoomid = function (e) {
+            s.Message.setProto3StringIntField(this, 2, e)
+        },proto.stream.LiveFrameDataNotify = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.LiveFrameDataNotify, s.Message),o.DEBUG && !COMPILED && (proto.stream.LiveFrameDataNotify.displayName = "proto.stream.LiveFrameDataNotify"),s.Message.GENERATE_TO_OBJECT && (proto.stream.LiveFrameDataNotify.prototype.toObject = function (e) {
+            return proto.stream.LiveFrameDataNotify.toObject(e, this)
+        }, proto.stream.LiveFrameDataNotify.toObject = function (e, t) {
+            var r = {
+                srcuid: s.Message.getFieldWithDefault(t, 1, 0),
+                priority: s.Message.getFieldWithDefault(t, 2, 0),
+                cpproto: t.getCpproto_asB64(),
+                timestamp: s.Message.getFieldWithDefault(t, 4, 0),
+                frameidx: s.Message.getFieldWithDefault(t, 5, 0)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.LiveFrameDataNotify.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LiveFrameDataNotify;
+            return proto.stream.LiveFrameDataNotify.deserializeBinaryFromReader(r, t)
+        },proto.stream.LiveFrameDataNotify.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setSrcuid(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setPriority(r);
+                        break;
+                    case 3:
+                        r = t.readBytes();
+                        e.setCpproto(r);
+                        break;
+                    case 4:
+                        r = t.readUint64();
+                        e.setTimestamp(r);
+                        break;
+                    case 5:
+                        r = t.readUint32();
+                        e.setFrameidx(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.LiveFrameDataNotify.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LiveFrameDataNotify.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.LiveFrameDataNotify.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getSrcuid()) && t.writeUint32(1, r), 0 !== (r = e.getPriority()) && t.writeUint32(2, r), 0 < (r = e.getCpproto_asU8()).length && t.writeBytes(3, r), 0 !== (r = e.getTimestamp()) && t.writeUint64(4, r), 0 !== (r = e.getFrameidx()) && t.writeUint32(5, r)
+        },proto.stream.LiveFrameDataNotify.prototype.getSrcuid = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.LiveFrameDataNotify.prototype.setSrcuid = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.LiveFrameDataNotify.prototype.getPriority = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        },proto.stream.LiveFrameDataNotify.prototype.setPriority = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        },proto.stream.LiveFrameDataNotify.prototype.getCpproto = function () {
+            return s.Message.getFieldWithDefault(this, 3, "")
+        },proto.stream.LiveFrameDataNotify.prototype.getCpproto_asB64 = function () {
+            return s.Message.bytesAsB64(this.getCpproto())
+        },proto.stream.LiveFrameDataNotify.prototype.getCpproto_asU8 = function () {
+            return s.Message.bytesAsU8(this.getCpproto())
+        },proto.stream.LiveFrameDataNotify.prototype.setCpproto = function (e) {
+            s.Message.setProto3BytesField(this, 3, e)
+        },proto.stream.LiveFrameDataNotify.prototype.getTimestamp = function () {
+            return s.Message.getFieldWithDefault(this, 4, 0)
+        },proto.stream.LiveFrameDataNotify.prototype.setTimestamp = function (e) {
+            s.Message.setProto3IntField(this, 4, e)
+        },proto.stream.LiveFrameDataNotify.prototype.getFrameidx = function () {
+            return s.Message.getFieldWithDefault(this, 5, 0)
+        },proto.stream.LiveFrameDataNotify.prototype.setFrameidx = function (e) {
+            s.Message.setProto3IntField(this, 5, e)
+        },proto.stream.LiveFrameSyncNotify = function (e) {
+            s.Message.initialize(this, e, 0, -1, null, null)
+        },o.inherits(proto.stream.LiveFrameSyncNotify, s.Message),o.DEBUG && !COMPILED && (proto.stream.LiveFrameSyncNotify.displayName = "proto.stream.LiveFrameSyncNotify"),s.Message.GENERATE_TO_OBJECT && (proto.stream.LiveFrameSyncNotify.prototype.toObject = function (e) {
+            return proto.stream.LiveFrameSyncNotify.toObject(e, this)
+        }, proto.stream.LiveFrameSyncNotify.toObject = function (e, t) {
+            var r = {
+                priority: s.Message.getFieldWithDefault(t, 1, 0),
+                lastidx: s.Message.getFieldWithDefault(t, 2, 0),
+                nextidx: s.Message.getFieldWithDefault(t, 3, 0),
+                startts: s.Message.getFieldWithDefault(t, 4, 0),
+                endts: s.Message.getFieldWithDefault(t, 5, 0),
+                timestamp: s.Message.getFieldWithDefault(t, 6, 0)
+            };
+            return e && (r.$jspbMessageInstance = t), r
+        }),proto.stream.LiveFrameSyncNotify.deserializeBinary = function (e) {
+            var t = new s.BinaryReader(e), r = new proto.stream.LiveFrameSyncNotify;
+            return proto.stream.LiveFrameSyncNotify.deserializeBinaryFromReader(r, t)
+        },proto.stream.LiveFrameSyncNotify.deserializeBinaryFromReader = function (e, t) {
+            for (; t.nextField() && !t.isEndGroup();) {
+                switch (t.getFieldNumber()) {
+                    case 1:
+                        var r = t.readUint32();
+                        e.setPriority(r);
+                        break;
+                    case 2:
+                        r = t.readUint32();
+                        e.setLastidx(r);
+                        break;
+                    case 3:
+                        r = t.readUint32();
+                        e.setNextidx(r);
+                        break;
+                    case 4:
+                        r = t.readUint64();
+                        e.setStartts(r);
+                        break;
+                    case 5:
+                        r = t.readUint64();
+                        e.setEndts(r);
+                        break;
+                    case 6:
+                        r = t.readUint64();
+                        e.setTimestamp(r);
+                        break;
+                    default:
+                        t.skipField()
+                }
+            }
+            return e
+        },proto.stream.LiveFrameSyncNotify.prototype.serializeBinary = function () {
+            var e = new s.BinaryWriter;
+            return proto.stream.LiveFrameSyncNotify.serializeBinaryToWriter(this, e), e.getResultBuffer()
+        },proto.stream.LiveFrameSyncNotify.serializeBinaryToWriter = function (e, t) {
+            var r = void 0;
+            0 !== (r = e.getPriority()) && t.writeUint32(1, r), 0 !== (r = e.getLastidx()) && t.writeUint32(2, r), 0 !== (r = e.getNextidx()) && t.writeUint32(3, r), 0 !== (r = e.getStartts()) && t.writeUint64(4, r), 0 !== (r = e.getEndts()) && t.writeUint64(5, r), 0 !== (r = e.getTimestamp()) && t.writeUint64(6, r)
+        },proto.stream.LiveFrameSyncNotify.prototype.getPriority = function () {
+            return s.Message.getFieldWithDefault(this, 1, 0)
+        },proto.stream.LiveFrameSyncNotify.prototype.setPriority = function (e) {
+            s.Message.setProto3IntField(this, 1, e)
+        },proto.stream.LiveFrameSyncNotify.prototype.getLastidx = function () {
+            return s.Message.getFieldWithDefault(this, 2, 0)
+        },proto.stream.LiveFrameSyncNotify.prototype.setLastidx = function (e) {
+            s.Message.setProto3IntField(this, 2, e)
+        },proto.stream.LiveFrameSyncNotify.prototype.getNextidx = function () {
+            return s.Message.getFieldWithDefault(this, 3, 0)
+        },proto.stream.LiveFrameSyncNotify.prototype.setNextidx = function (e) {
+            s.Message.setProto3IntField(this, 3, e)
+        },proto.stream.LiveFrameSyncNotify.prototype.getStartts = function () {
+            return s.Message.getFieldWithDefault(this, 4, 0)
+        },proto.stream.LiveFrameSyncNotify.prototype.setStartts = function (e) {
+            s.Message.setProto3IntField(this, 4, e)
+        },proto.stream.LiveFrameSyncNotify.prototype.getEndts = function () {
+            return s.Message.getFieldWithDefault(this, 5, 0)
+        },proto.stream.LiveFrameSyncNotify.prototype.setEndts = function (e) {
+            s.Message.setProto3IntField(this, 5, e)
+        },proto.stream.LiveFrameSyncNotify.prototype.getTimestamp = function () {
+            return s.Message.getFieldWithDefault(this, 6, 0)
+        },proto.stream.LiveFrameSyncNotify.prototype.setTimestamp = function (e) {
+            s.Message.setProto3IntField(this, 6, e)
+        },proto.stream.SDKWatchCmdID = {
+            INVALIDWATCHCMD: 0,
+            ENTERLIVEROOMCMDID: 3401,
+            ENTERLIVEROOMACKCMDID: 3402,
+            LIVEHEARTBEATCMDID: 3403,
+            LIVEHEARTBEATACKCMDID: 3404,
+            LIVEBROADCASTCMDID: 3405,
+            LIVEBROADCASTACKCMDID: 3406,
+            SETLIVEOFFSETCMDID: 3407,
+            SETLIVEOFFSETACKCMDID: 3408,
+            ENTERLIVEROOMNOTIFYCMDID: 3420,
+            EXITLIVEROOMNOTIFYCMDID: 3422,
+            LIVEBROADCASTNOTIFYCMDID: 3424,
+            LIVEOVERNOTIFYCMDID: 3426,
+            LIVEFRAMEDATANOTIFYCMDID: 3428,
+            LIVEFRAMESYNCNOTIFYCMDID: 3430
+        },o.object.extend(r, proto.stream)
+    }, {"./common_pb.js": 4, "google-protobuf": 8}]
+}, {}, [6]), function (e) {
+    e.FrameOpt = {
         ONLY_CLIENT: 0,
         ONLY_GS: 1,
         CLIENT_GS: 2
     }, e.MsSetFrameSyncNotify = function (e, t, r, o) {
-        this.frameRate = e, this.startIndex = t, this.timestamp = r, this.enableGS = o, MatchvsLog.logI(this + " MsSetFrameSyncNotify:" + JSON.stringify(this))
-    }, e
-}(MVS || {}), MvsCode = {
+        this.frameRate = e, this.startIndex = t, this.timestamp = r, this.enableGS = o
+    }, e.MsWatchSet = function (e, t, r, o) {
+        this.cacheMS = e, this.maxWatch = t, this.delayMS = r, this.persistent = o
+    }, e.MsLiveFrameDataNotify = function (e, t, r, o) {
+        this.srcUserID = e, this.cpProto = t, this.timeStamp = r, this.frameIdx = o
+    }, e.MsLiveAudience = function (e, t, r) {
+        this.userID = e, this.profile = t, this.enterTime = r
+    }, e.MsLiveWatchInfo = function (e, t, r, o, s, i, a, n) {
+        this.roomID = e, this.startTS = t, this.delayMS = r, this.cacheMS = o, this.maxAudiences = s, this.curAudiences = i, this.peakAudiences = a, this.lastAudiences = n
+    }, e.MsJoinWatchRoomRsp = function (e, t, r, o) {
+        this.status = e, this.roomStatus = t, this.reserved = r, this.wathchInfo = o
+    }, e.MsExitLiveRoomNotify = function (e, t) {
+        this.userID = e, this.userProfile = t
+    }, e.MsLiveOverNotify = function (e, t) {
+        this.gameID = e, this.roomID = t
+    }, e.MsChangeRoleRsp = function (e, t) {
+        this.status = e, this.targetRoomType = t
+    }
+}(MVS || {});
+var MvsCode = {
     NoLogin: -2,
     CODE_201: 201,
     CODE_400: 400,
@@ -8486,14 +10799,15 @@ var MVS = function (e) {
     CODE_509: 509,
     CODE_521: 521,
     CODE_522: 522,
+    CODE_523: 523,
     CODE_527: 527,
     CODE_1000: 1e3,
-    NetWorkErr: 1001,
+    NetworkErr: 1001,
     CODE_1005: 1005,
     DataParseErr: 1606
 }, MvsErrMsg = new function () {
-    this[MvsCode.NoLogin] = "you are not logined, please reference [http://www.matchvs.com/service?page=js]", this[MvsCode.NetWorkErr] = "network error, please reference [http://www.matchvs.com/service?page=egretGuide]", this[MvsCode.CODE_1000] = "netwrk closed normal ", this[MvsCode.CODE_1005] = "netwrk closed no status ", this[MvsCode.DataParseErr] = "you data parse error ", this[MvsCode.CODE_400] = "bad request ", this[MvsCode.CODE_401] = "invaild appkey ", this[MvsCode.CODE_402] = "invaild sign [http://www.matchvs.com/service?page=js]", this[MvsCode.CODE_403] = "forbidden", this[MvsCode.CODE_404] = "not found anything, please reference [ http://www.matchvs.com/service?page=js ]", this[MvsCode.CODE_405] = "room have full, please reference [ http://www.matchvs.com/service?page=js ]", this[MvsCode.CODE_406] = "room had joinOver, please reference [ http://www.matchvs.com/service?page=js ]", this[MvsCode.CODE_500] = "server error, please reference [ http://www.matchvs.com/service?page=egretGuide ]", this[MvsCode.CODE_502] = "service stoped,the license expires or the account is in arrears. please reference [ http://www.matchvs.com/price ]", this[MvsCode.CODE_503] = "the ccu exceed the limit. please reference [ http://www.matchvs.com/price ]", this[MvsCode.CODE_504] = "your traffic is running out today,please recharge [ http://www.matchvs.com/price ]", this[MvsCode.CODE_507] = "room does not exist", this[MvsCode.CODE_509] = "not in the room ", this[MvsCode.CODE_521] = "gameServer not exist, please check your gameserver is ok http://www.matchvs.com/service?page=gameServer", this[MvsCode.CODE_522] = "frame sync is close, please call the api 'setFrameSync' [http://www.matchvs.com/service?page=js]", this[MvsCode.CODE_527] = "sending message too often ,  can't exceed 500 times per second", this[MvsCode.CODE_201] = "reconnect not in room http://www.matchvs.com/service?page=js"
-}, MatchvsNetWork, MatchvsHttp;
+    this[MvsCode.NoLogin] = "you are not logined, please reference [http://www.matchvs.com/service?page=js]", this[MvsCode.NetworkErr] = "network error, please reference [http://www.matchvs.com/service?page=egretGuide]", this[MvsCode.CODE_1000] = "netwrk closed normal ", this[MvsCode.CODE_1005] = "netwrk closed no status ", this[MvsCode.DataParseErr] = "you data parse error ", this[MvsCode.CODE_400] = "bad request ", this[MvsCode.CODE_401] = "invaild appkey ", this[MvsCode.CODE_402] = "invaild sign [http://www.matchvs.com/service?page=js]", this[MvsCode.CODE_403] = "forbidden", this[MvsCode.CODE_404] = "not found anything, please reference [ http://www.matchvs.com/service?page=js ]", this[MvsCode.CODE_405] = "room have full, please reference [ http://www.matchvs.com/service?page=js ]", this[MvsCode.CODE_406] = "room had joinOver, please reference [ http://www.matchvs.com/service?page=js ]", this[MvsCode.CODE_500] = "server error, please reference [ http://www.matchvs.com/service?page=egretGuide ]", this[MvsCode.CODE_502] = "service stoped,the license expires or the account is in arrears. please reference [ http://www.matchvs.com/price ]", this[MvsCode.CODE_503] = "the ccu exceed the limit. please reference [ http://www.matchvs.com/price ]", this[MvsCode.CODE_504] = "your traffic is running out today,please recharge [ http://www.matchvs.com/price ]", this[MvsCode.CODE_507] = "room does not exist", this[MvsCode.CODE_509] = "not in the room ", this[MvsCode.CODE_521] = "gameServer not exist, please check your gameserver is ok http://www.matchvs.com/service?page=gameServer", this[MvsCode.CODE_522] = "frame sync is close, please call the api 'setFrameSync' [http://www.matchvs.com/service?page=js]", this[MvsCode.CODE_523] = "gameServer internal error, need check you game server", this[MvsCode.CODE_527] = "sending message too often ,  can't exceed 500 times per second", this[MvsCode.CODE_201] = "reconnect not in room http://www.matchvs.com/service?page=js"
+};
 
 function MsCreateRoomInfo(e, t, r, o, s, i) {
     this.roomName = e, this.maxPlayer = t, this.mode = r, this.canWatch = o, this.visibility = s, this.roomProperty = i, this.toString = function () {
@@ -8504,8 +10818,8 @@ function MsCreateRoomInfo(e, t, r, o, s, i) {
 function MsEnum() {
 }
 
-function MsRoomJoin(e, t, r, o, s, i, n, a, p) {
-    this.joinType = e, this.userID = t, this.roomID = r, this.gameID = o, this.maxPlayer = s, this.mode = i, this.canWatch = n, this.tags = p, this.userProfile = a, MatchvsLog.logI(this + " MsRoomJoin:" + JSON.stringify(this))
+function MsRoomJoin(e, t, r, o, s, i, a, n, p, g, u) {
+    this.joinType = e, this.userID = t, this.roomID = r, this.gameID = o, this.maxPlayer = s, this.mode = i, this.canWatch = a, this.tags = p, this.userProfile = n, this.visibility = g, this.roomProperty = u, MatchvsLog.logI(this + " MsRoomJoin:" + JSON.stringify(this))
 }
 
 function MsJoinOverRsp(e, t) {
@@ -8524,8 +10838,8 @@ function MsCheckIn(e, t, r, o, s, i) {
     this.gameID = e, this.roomID = t, this.userID = r, this.bookID = o, this.bookKey = s, this.hotelInfo = i
 }
 
-function MsMatchInfo(e, t, r, o) {
-    this.maxPlayer = e, this.mode = t, this.canWatch = r, this.tags = {}, this.tags = o, MatchvsLog.logI(this + " MsMatchInfo:" + JSON.stringify(this))
+function MsMatchInfo(e, t, r, o, s, i) {
+    this.maxPlayer = e, this.mode = t, this.canWatch = r, this.tags = {}, this.tags = o, this.visibility = s, this.roomProperty = i, MatchvsLog.logI(this + " MsMatchInfo:" + JSON.stringify(this))
 }
 
 function MsRoomInfo(e, t, r, o) {
@@ -8560,8 +10874,8 @@ function MsLoginRsp(e, t) {
     this.status = e, this.roomID = t, MatchvsLog.logI("MsLoginRsp::" + JSON.stringify(this))
 }
 
-function MsPublicMemberArgs(e, t, r, o, s, i, n, a, p, g) {
-    this.userID = r, this.token = o, this.gameID = s, this.gameVersion = i, this.appKey = n, this.secretKey = a, this.deviceID = p, this.gatewayID = g, this.channel = e, this.platform = t, MatchvsLog.logI(this + ":" + JSON.stringify(this))
+function MsPublicMemberArgs(e, t, r, o, s, i, a, n) {
+    this.userID = r, this.token = o, this.gameID = s, this.gameVersion = i, this.appKey = a, this.deviceID = n, this.channel = e, this.platform = t, MatchvsLog.logI(this + ":" + JSON.stringify(this))
 }
 
 function MsCheckInNotify(e, t, r, o) {
@@ -8608,20 +10922,20 @@ function MsRoomFilter(e, t, r, o) {
     this.maxPlayer = e, this.mode = t, this.canWatch = r, this.roomProperty = o, MatchvsLog.logI(this + " MsRoomFilter:" + JSON.stringify(this))
 }
 
-function MsRoomFilterEx(e, t, r, o, s, i, n, a, p, g) {
-    this.maxPlayer = e, this.mode = t, this.canWatch = r, this.roomProperty = o, this.full = s, this.state = i, this.sort = n, this.order = a, this.pageNo = p, this.pageSize = g || 10, MatchvsLog.logI(this + " MsRoomFilterEx:" + JSON.stringify(this))
+function MsRoomFilterEx(e, t, r, o, s, i, a, n, p, g) {
+    this.maxPlayer = e, this.mode = t, this.canWatch = r, this.roomProperty = o, this.full = s, this.state = i, this.sort = a, this.order = n, this.pageNo = p, this.pageSize = g || 10, MatchvsLog.logI(this + " MsRoomFilterEx:" + JSON.stringify(this))
 }
 
-function MsGetRoomDetailRsp(e, t, r, o, s, i, n, a, p) {
-    this.status = e, this.state = t, this.maxPlayer = r, this.mode = o, this.canWatch = s, this.roomProperty = i, this.owner = n, this.createFlag = a, this.userInfos = [], this.userInfos = p, MatchvsLog.logI(this + " MsGetRoomDetailRsp:" + JSON.stringify(this))
+function MsGetRoomDetailRsp(e, t, r, o, s, i, a, n, p) {
+    this.status = e, this.state = t, this.maxPlayer = r, this.mode = o, this.canWatch = s, this.roomProperty = i, this.owner = a, this.createFlag = n, this.userInfos = [], this.userInfos = p, MatchvsLog.logI(this + " MsGetRoomDetailRsp:" + JSON.stringify(this))
 }
 
-function MsRoomAttribute(e, t, r, o, s, i, n, a, p, g, u) {
-    this.roomID = e, this.roomName = t, this.maxPlayer = r, this.gamePlayer = o, this.watchPlayer = s, this.mode = i, this.canWatch = n, this.roomProperty = a, this.owner = p, this.state = g, this.createTime = u, MatchvsLog.logI(this + " MsRoomAttribute:" + JSON.stringify(this))
+function MsRoomAttribute(e, t, r, o, s, i, a, n, p, g, u, l) {
+    this.roomID = e, this.roomName = t, this.maxPlayer = r, this.gamePlayer = o, this.watchPlayer = s, this.mode = i, this.canWatch = a, this.roomProperty = n, this.owner = p, this.state = g, this.createTime = u, this.watchSet = l, MatchvsLog.logI(this + " MsRoomAttribute:" + JSON.stringify(this))
 }
 
 function MsGetRoomListExRsp(e, t, r) {
-    this.status = e, this.total = t, this.roomAttrs = [], this.roomAttrs = r, MatchvsLog.logI(this + " MsGetRoomListExRsp:" + JSON.stringify(this))
+    this.status = e, this.total = t, this.roomAttrs = r, MatchvsLog.logI(this + " MsGetRoomListExRsp:" + JSON.stringify(this))
 }
 
 function MsFrameItem(e, t, r) {
@@ -8660,154 +10974,183 @@ function MsReopenRoomNotify(e, t, r) {
     this.roomID = e, this.userID = t, this.cpProto = r, MatchvsLog.logI(this + " MsReopenRoomNotify:" + JSON.stringify(this))
 }
 
-function MatchvsNetWorkCallBack() {
-    this.onMsg = function (e) {
-    }, this.onErr = function (e, t) {
-    }
-}
-
 MsEnum.JoinRoomType = {
     NoJoin: 0,
     joinSpecialRoom: 1,
     joinRoomWithProperty: 2,
     joinRandomRoom: 3,
     reconnect: 4
-};
-try {
-    "undefined" != typeof wx ? (console.log("network api->WX"), MatchvsNetWork = function (e, t) {
-        this.socket = wx.connectSocket({
-            url: e,
-            header: {engine: "WeiXinGame"}
-        }), this.socketOpen = !1;
-        var r = [], o = t, s = e, i = this;
-        this.close = function () {
-            this.socket && this.socket.close({code: 1e3, reason: "normal"})
-        }, this.send = function (e) {
-            this.socketOpen ? this.socket.send({data: e.buffer}) : r.length < 100 && r.push(e)
-        }, this.socket.onOpen(function (e) {
-            for (MatchvsLog.logI("[wx.WebSocket][connect]:" + e), i.socketOpen = !0; 0 < r.length;) i.send(r.pop());
-            o.onConnect && o.onConnect(s)
-        }), this.socket.onClose(function (e) {
-            i.socketOpen = !1, o.onDisConnect && o.onDisConnect(s, e), MatchvsLog.logI("[wx.WebSocket] [onClose] case:" + JSON.stringify(e))
-        }), this.socket.onMessage(function (e) {
-            var t = new DataView(e.data);
-            o.onMsg(t)
-        }), this.socket.onError(function (e) {
-            o.onDisConnect && o.onDisConnect(s, e), MatchvsLog.logI("[wx.WebSocket] [onError] case:" + JSON.stringify(e))
-        })
-    }, MatchvsHttp = function (e) {
-        function r(e, r, t, o) {
-            var s = t ? "application/json" : "application/x-www-form-urlencoded";
-            wx.request({
-                url: e, data: o, header: {"content-type": s}, success: function (e) {
-                    var t = JSON.stringify(e.data);
-                    MatchvsLog.logI("http success:" + t), r.onMsg(t)
-                }, fail: function (e) {
-                    MatchvsLog.logI("http fail:" + e.errMsg), r.onErr(0, e.errMsg)
-                }
-            })
-        }
-
-        this.mCallback = e, this.get = function (e) {
-            r(e, this.mCallback, !1, null)
-        }, this.post = function (e, t) {
-            r(e, this.mCallback, !0, t)
-        }
-    }) : "undefined" != typeof BK ? (console.log("network api->BK"), MatchvsNetWork = function (e, t) {
-        var i = t, r = e, o = [], s = !1, n = new BK.WebSocket(e), a = this;
-        this.send = function (e) {
-            s ? n.send(e.buffer) : o.length < 100 && o.push(e)
-        }, this.close = function () {
-            n && n.close()
-        }, n.onOpen = function (e) {
-            for (s = !0, MatchvsLog.logI("[BK.WebSocket][connect][Matchvs]:" + e); 0 < o.length;) a.send(o.pop());
-            i.onConnect && i.onConnect(r)
-        }, n.onClose = function (e) {
-            s = !1;
-            i.onDisConnect && i.onDisConnect(r, {
-                code: 1e3,
-                message: " close normal"
-            }), MatchvsLog.logI("[BK.WebSocket][onClose][Matchvs] case:" + JSON.stringify(e))
-        }, n.onError = function (e) {
-            n && s && (s = !1, n.close());
-            var t = {code: e.getErrorCode(), message: e.getErrorString()};
-            65535 === t.code && (t.code = 1e3), i.onDisConnect && i.onDisConnect(r, t), MatchvsLog.logI("[BK.WebSocket] [onError][Matchvs] case:" + JSON.stringify(e))
-        }, n.onMessage = function (e, t) {
-            var r = t.data;
-            r.rewind();
-            for (var o = new ArrayBuffer(r.length), s = new DataView(o); !r.eof;) s.setUint8(r.pointer, r.readUint8Buffer());
-            i.onMsg && i.onMsg(s)
-        }, n && n.connect()
-    }, MatchvsHttp = function (e) {
-        function r(o, s, e, t) {
-            var r = new BK.HttpUtil(o);
-            r.setHttpMethod(e ? "post" : "get"), r.setHttpHeader("Content-type", "application/x-www-form-urlencoded"), r.requestAsync(function (e, t) {
-                if (200 === t) {
-                    var r = e.readAsString(!0);
-                    s.onMsg(r), MatchvsLog.logI("[HTTP:](" + o + ")+" + r)
-                } else s.onErr(t, e.readAsString(!0))
-            }), e ? r.setHttpPostData(t) : r.setHttpUrl(o)
-        }
-
-        this.mCallback = e, this.get = function (e) {
-            r(e, this.mCallback, !1, null)
-        }, this.post = function (e, t) {
-            r(e, this.mCallback, !0, t)
-        }
-    }) : (console.log("network api->browser"), MatchvsNetWork = function (e, t) {
-        this.socket = null, this.mCallBack = t, this.mHost = e;
-        var o = [];
-        this.send = function (e) {
-            if (window.WebSocket) {
-                if (isIE()) {
-                    for (var t = new Uint8Array(e.buffer.byteLength), r = 0; r < t.length; r++) t[r] = e.getUint8(r);
-                    e = t
-                }
-                this.socket.readyState === WebSocket.OPEN ? this.socket.send(e.buffer) : o.push(e)
-            }
-        }, this.close = function () {
-            this.socket && ("undefined" != typeof cc && void 0 !== cc.Component ? this.socket.close() : this.socket.close(1e3, ""))
-        }, window.WebSocket || (window.WebSocket = window.MozWebSocket), window.WebSocket ? (this.socket = new WebSocket(e), this.socket.hashcode = (new Date).getMilliseconds(), MatchvsLog.logI("try to create a socket:" + this.mHost + " socket is " + this.socket.hashcode), this.socket.onmessage = function (e) {
-            if ("undefined" != typeof FileReader && e.data instanceof Blob) {
-                var r = new FileReader;
-                r.readAsArrayBuffer(e.data), r.onload = function (e) {
-                    if (e.target.readyState === FileReader.DONE) {
-                        var t = new DataView(r.result);
-                        this.mCallBack.onMsg(t)
-                    } else this.mCallBack.onErr(MvsCode.DataParseErr, "[err]parse fail")
-                }.bind(this)
-            } else if (e.data instanceof ArrayBuffer) {
+}, function (e) {
+    var t, r;
+    try {
+        "undefined" != typeof egret && (t = function (e, t) {
+            var s = null, i = !1, a = [], n = t, r = e, o = this;
+            this.close = function () {
+                s && s.close()
+            }, this.send = function (e) {
+                if (i) {
+                    var t = new egret.ByteArray;
+                    t.position = 0;
+                    for (var r = e.buffer.byteLength, o = 0; o < r; o++) t.writeByte(e.getUint8(o));
+                    s.writeBytes(t, 0, t.bytesAvailable)
+                } else a.length < 100 && a.unshift(e)
+            };
+            var p = function (e) {
+                for (log.i("[egret.WebSocket][connect]:" + e), i = !0; 0 < a.length;) o.send(a.pop());
+                n.onConnect && n.onConnect(r)
+            }, g = function (e) {
+                i = !1, n.onDisConnect && n.onDisConnect(0, "wx.onClose", r), log.i("[egret.WebSocket] [onClose] case:" + JSON.stringify(e))
+            }, u = function () {
+                var e = new egret.ByteArray;
+                s.readBytes(e);
+                for (var t = new ArrayBuffer(e.readAvailable), r = new DataView(t), o = 0; o < t.byteLength; o++) r.setUint8(o, e.readUnsignedByte());
+                n.onMsg(r)
+            }, l = function (e) {
+                n.onErr && n.onErr(0, "wx.onError", r), log.i("[egret.WebSocket] [onError] case:" + JSON.stringify(e))
+            };
+            !function () {
+                (s = new egret.WebSocket).type = egret.WebSocket.TYPE_BINARY, s.addEventListener(egret.ProgressEvent.SOCKET_DATA, u, this), s.addEventListener(egret.Event.CONNECT, p, this), s.addEventListener(egret.Event.CLOSE, g, this), s.addEventListener(egret.IOErrorEvent.IO_ERROR, l, this), s.connectByUrl(e)
+            }()
+        }), "undefined" != typeof wx ? (console.log("network api->WX"), t = function (e, t) {
+            this.socket = wx.connectSocket({
+                url: e,
+                header: {engine: "WeiXinGame"}
+            }), this.socketOpen = !1;
+            var r = [], o = t, s = e, i = this;
+            this.close = function () {
+                this.socket && this.socket.close({code: 1e3, reason: "normal"})
+            }, this.send = function (e) {
+                this.socketOpen ? this.socket.send({data: e.buffer}) : r.length < 100 && r.unshift(e)
+            }, this.socket.onOpen(function (e) {
+                for (MatchvsLog.logI("[wx.WebSocket][connect]:" + e), i.socketOpen = !0; 0 < r.length;) i.send(r.pop());
+                o.onConnect && o.onConnect(s)
+            }), this.socket.onClose(function (e) {
+                i.socketOpen = !1, o.onDisConnect && o.onDisConnect(s, e), MatchvsLog.logI("[wx.WebSocket] [onClose] case:" + JSON.stringify(e))
+            }), this.socket.onMessage(function (e) {
                 var t = new DataView(e.data);
-                this.mCallBack.onMsg(t)
-            } else console.log("[error] unknown event :" + e + " => " + JSON.stringify(e)), this.mCallBack.onErr(MvsCode.DataParseErr, "[err]parse fail")
-        }.bind(this), this.socket.onopen = function (e) {
-            for (MatchvsLog.logI("Create the socket is success :" + this.mHost + " socket is " + this.socket.hashcode); 0 < o.length;) this.send(o.pop());
-            this.mCallBack.onConnect && this.mCallBack.onConnect(this.mHost)
-        }.bind(this), this.socket.onclose = function (e) {
-            "undefined" != typeof cc && void 0 !== cc.Component && (e = {
-                code: 1e3,
-                reason: "jsb friend close "
-            }), MatchvsLog.logI("socket on closed ,code:" + e.code + "(1000:NORMAL,1005:CLOSE_NO_STATUS,1006:RESET,1009:CLOSE_TOO_LARGE) err:" + JSON.stringify(e)), this.mCallBack.onDisConnect && this.mCallBack.onDisConnect(this.mHost, e)
-        }.bind(this), this.socket.onerror = function (e) {
-            MatchvsLog.logI("socket on error ,event:" + JSON.stringify(e)), this.mCallBack.onDisConnect && this.mCallBack.onDisConnect(this.mHost, e)
-        }.bind(this)) : alert("Not Support the WebSocket！")
-    }, MatchvsHttp = function (e) {
-        function r(e, t, r, o) {
-            var s = new XMLHttpRequest;
-            s.open(r ? "POST" : "GET", e, !0), s.setRequestHeader("Content-type", "application/x-www-form-urlencoded"), s.onreadystatechange = function () {
-                4 === s.readyState && (200 === s.status ? (t.onMsg(s.responseText), MatchvsLog.logI("[HTTP:](" + e + ")+" + s.responseText)) : t.onErr(s.status, s.statusText))
-            }, r ? s.send(o) : s.send(null)
-        }
+                o.onMsg(t)
+            }), this.socket.onError(function (e) {
+                o.onDisConnect && o.onDisConnect(s, e), MatchvsLog.logI("[wx.WebSocket] [onError] case:" + JSON.stringify(e))
+            })
+        }, r = function (e) {
+            function r(e, r, t, o) {
+                var s = t ? "application/json" : "application/x-www-form-urlencoded";
+                wx.request({
+                    url: e, data: o, header: {"content-type": s}, success: function (e) {
+                        var t = JSON.stringify(e.data);
+                        MatchvsLog.logI("http success:" + t), r.onMsg(t)
+                    }, fail: function (e) {
+                        MatchvsLog.logI("http fail:" + e.errMsg), r.onErr(0, e.errMsg)
+                    }
+                })
+            }
 
-        this.mCallback = e, this.get = function (e) {
-            r(e, this.mCallback, !1, null)
-        }, this.post = function (e, t) {
-            r(e, this.mCallback, !0, t)
+            this.mCallback = e, this.get = function (e) {
+                r(e, this.mCallback, !1, null)
+            }, this.post = function (e, t) {
+                r(e, this.mCallback, !0, t)
+            }
+        }) : "undefined" != typeof BK ? (console.log("network api->BK"), t = function (e, t) {
+            var i = t, r = e, o = [], s = !1, a = new BK.WebSocket(e), n = this;
+            this.send = function (e) {
+                s ? a.send(e.buffer) : o.length < 100 && o.unshift(e)
+            }, this.close = function () {
+                console.log("[matchvs sdk]websocket close"), a && a.close()
+            }, a.onOpen = function (e) {
+                for (s = !0, console.log("[BK.WebSocket][connect][Matchvs]:", e); 0 < o.length;) n.send(o.pop());
+                i.onConnect && i.onConnect(r)
+            }, a.onClose = function (e) {
+                s = !1, console.log("[BK.WebSocket][onClose][Matchvs] case:", JSON.stringify(e));
+                i.onDisConnect && i.onDisConnect(r, {code: 1e3, message: " close normal"})
+            }, a.onError = function (e) {
+                a && s && (s = !1, a.close());
+                var t = {code: e.getErrorCode(), message: e.getErrorString()};
+                65535 === t.code && (t.code = 1e3), i.onDisConnect && i.onDisConnect(r, t), MatchvsLog.logI("[BK.WebSocket] [onError][Matchvs] case:" + JSON.stringify(e))
+            }, a.onMessage = function (e, t) {
+                var r = t.data;
+                r.rewind();
+                for (var o = new ArrayBuffer(r.length), s = new DataView(o); !r.eof;) s.setUint8(r.pointer, r.readUint8Buffer());
+                i.onMsg && i.onMsg(s)
+            }, a && a.connect()
+        }, r = function (e) {
+            function r(o, s, e, t) {
+                var r = new BK.HttpUtil(o);
+                r.setHttpMethod(e ? "post" : "get"), r.setHttpHeader("Content-type", "application/x-www-form-urlencoded"), r.requestAsync(function (e, t) {
+                    if (200 === t) {
+                        var r = e.readAsString(!0);
+                        s.onMsg(r), MatchvsLog.logI("[HTTP:](" + o + ")+" + r)
+                    } else s.onErr(t, e.readAsString(!0))
+                }), e ? r.setHttpPostData(t) : r.setHttpUrl(o)
+            }
+
+            this.mCallback = e, this.get = function (e) {
+                r(e, this.mCallback, !1, null)
+            }, this.post = function (e, t) {
+                r(e, this.mCallback, !0, t)
+            }
+        }) : (console.log("network api->browser"), t = function (e, t) {
+            this.socket = null, this.mCallBack = t, this.mHost = e;
+            var r = !1, o = [];
+            this.send = function (e) {
+                if (window.WebSocket) {
+                    if (isIE()) {
+                        for (var t = new Uint8Array(e.buffer.byteLength), r = 0; r < t.length; r++) t[r] = e.getUint8(r);
+                        e = t
+                    }
+                    this.socket.readyState === WebSocket.OPEN ? this.socket.send(e.buffer) : o.unshift(e)
+                }
+            }, this.close = function () {
+                this.socket && ("undefined" != typeof cc && void 0 !== cc.Component ? (r = !0, this.socket.close()) : this.socket.close(1e3, ""))
+            }, window.WebSocket || (window.WebSocket = window.MozWebSocket), window.WebSocket ? (this.socket = new WebSocket(e), this.socket.hashcode = (new Date).getMilliseconds(), MatchvsLog.logI("try to create a socket:" + this.mHost + " socket is " + this.socket.hashcode), this.socket.onmessage = function (e) {
+                if ("undefined" != typeof FileReader && e.data instanceof Blob) {
+                    var r = new FileReader;
+                    r.readAsArrayBuffer(e.data), r.onload = function (e) {
+                        if (e.target.readyState === FileReader.DONE) {
+                            var t = new DataView(r.result);
+                            this.mCallBack.onMsg(t)
+                        } else this.mCallBack.onErr(MvsCode.DataParseErr, "[err]parse fail")
+                    }.bind(this)
+                } else if (e.data instanceof ArrayBuffer) {
+                    var t = new DataView(e.data);
+                    this.mCallBack.onMsg(t)
+                } else console.log("[error] unknown event :" + e + " => " + JSON.stringify(e)), this.mCallBack.onErr(MvsCode.DataParseErr, "[err]parse fail")
+            }.bind(this), this.socket.onopen = function (e) {
+                for (r = !1, MatchvsLog.logI("Create the socket is success :" + this.mHost + " socket is " + this.socket.hashcode); 0 < o.length;) this.send(o.pop());
+                this.mCallBack.onConnect && this.mCallBack.onConnect(this.mHost)
+            }.bind(this), this.socket.onclose = function (e) {
+                "undefined" != typeof cc && void 0 !== cc.Component && (e = r ? {
+                    code: 1e3,
+                    reason: "jsb friend close "
+                } : {
+                    code: 1006,
+                    reason: "error close "
+                }), MatchvsLog.logI("socket on closed ,code:" + (e && e.code) + "(1000:NORMAL,1005:CLOSE_NO_STATUS,1006:RESET,1009:CLOSE_TOO_LARGE) err:" + JSON.stringify(e)), this.mCallBack.onDisConnect && this.mCallBack.onDisConnect(this.mHost, e)
+            }.bind(this), this.socket.onerror = function (e) {
+                MatchvsLog.logI("socket on error ,event:" + JSON.stringify(e)), this.mCallBack.onDisConnect && this.mCallBack.onDisConnect(this.mHost, e)
+            }.bind(this)) : alert("Not Support the WebSocket！")
+        }, r = function (e) {
+            function r(e, t, r, o) {
+                var s = new XMLHttpRequest;
+                s.open(r ? "POST" : "GET", e, !0), s.setRequestHeader("Content-type", "application/x-www-form-urlencoded"), s.onreadystatechange = function () {
+                    4 === s.readyState && (200 === s.status ? (t.onMsg(s.responseText), MatchvsLog.logI("[HTTP:](" + e + ")+" + s.responseText)) : t.onErr(s.status, s.statusText))
+                }, r ? s.send(o) : s.send(null)
+            }
+
+            this.mCallback = e, this.get = function (e) {
+                r(e, this.mCallback, !1, null)
+            }, this.post = function (e, t) {
+                r(e, this.mCallback, !0, t)
+            }
+        })
+    } catch (e) {
+        console.warn("network adapter warning:" + e.message)
+    }
+    e.MatchvsNetWork = t, e.MatchvsHttp = r, e.MatchvsNetWorkCallBack = function () {
+        this.onMsg = function (e) {
+        }, this.onErr = function (e, t) {
         }
-    })
-} catch (e) {
-    console.warn("network adapter warning:" + e.message)
-}
+    }
+}(MVS || {});
 var MATCHVS_USER_GATEWAY_SPEED_REQ = 1001, MATCHVS_USER_GATEWAY_SPEED_RSP = 1002,
     MATCHVS_USER_LOGIN_REQ = 1101, MATCHVS_USER_LOGIN_RSP = 1102, MATCHVS_USER_HEARTBEAT_REQ = 1103,
     MATCHVS_USER_HEARTBEAT_RSP = 1103, MATCHVS_NOTICE_USER_RELOGIN = 1104,
@@ -8833,8 +11176,39 @@ var MATCHVS_USER_GATEWAY_SPEED_REQ = 1001, MATCHVS_USER_GATEWAY_SPEED_RSP = 1002
     CMD_SET_FRAME_SYNCRATEACK_CMDID = 1420, CMD_SET_FRAME_SYNCRATENOTIFY_CMDID = 1422,
     CMD_FRAME_BROADCAST_CMDID = 1423, CMD_FRAME_BROADCASTACK_CMDID = 1424,
     CMD_FRAME_DATANOTIFY_CMDID = 1426, CMD_FRAME_SYNCNOTIFY_CMDID = 1428,
-    CMD_ROOM_JOIN_OPEN_REQ = 1221, CMD_ROOM_JOIN_OPEN_RSP = 1222, CMD_ROOM_JOIN_OPEN_NOT = 1308,
-    FIXED_HEAD_SIZE = 16, VERSION = 2;
+    CMD_ROOM_JOIN_OPEN_REQ = 1221, CMD_ROOM_JOIN_OPEN_RSP = 1222, CMD_ROOM_JOIN_OPEN_NOT = 1308;
+(MVS || {}).ProtoCmd = {
+    SET_RECONNECT_TIMEOUT_REQ: 1109,
+    SET_RECONNECT_TIMEOUT_RSP: 1110,
+    JOIN_WATCHROOM_REQ: 1225,
+    JOIN_WATCHROOM_RSP: 1226,
+    LEAVE_WATCHROOM_REQ: 1227,
+    LEAVE_WATCHROOM_RSP: 1228,
+    GET_WATCHROOM_REQ: 1229,
+    GET_WATCHROOM_RSP: 1230,
+    CHANGE_ROLE_REQ: 1231,
+    CHANGE_ROLE_RSP: 1232,
+    GET_WATCHDATA_REQ: 1233,
+    GET_WATCHDATA_RSP: 1234,
+    JOIN_WATCHROOM_NOTFY: 1235,
+    LEAVE_WATCHROOM_NOTIFY: 1236,
+    ROOM_OVER_NOTIFY: 1237,
+    ENTER_LIVEROOM_REQ: 3401,
+    ENTER_LIVEROOM_RSP: 3402,
+    ENTER_LIVEROOM_NOTIFY: 3420,
+    LIVE_HEARTBEAT_REQ: 3403,
+    LIVE_HEARTBEAT_RSP: 3404,
+    LIVE_BROADCAST_REQ: 3405,
+    LIVE_BROADCAST_RSP: 3406,
+    LIVE_BROADCAST_NOTIFY: 3424,
+    SET_LIVEOFFSET_REQ: 3407,
+    SET_LIVEOFFSET_RSP: 3408,
+    EXIT_LIVEROOM_NOTIFY: 3422,
+    LIVE_OVER_NOTIFY: 3426,
+    LIVE_FRAMEDATA_NOTIFY: 3428,
+    LIVE_FRAMESYNC_NOTIFY: 3430
+};
+var FIXED_HEAD_SIZE = 16, VERSION = 2;
 
 function Packet() {
 }
@@ -8852,12 +11226,12 @@ function MatchvsProtoMap() {
 var MsProtoMapDesc = new MatchvsProtoMap;
 
 function MatchvsProtocol() {
-    this.seq = 1;
-    var c = 0;
+    this.proto = proto.stream, this.seq = 1;
+    var l = 0, c = !1;
     this.msProtoMap = new MatchvsProtoMap, this.fillHeader = function (e, t) {
         MVS.mtaReport && MVS.mtaReport.Report(t);
         var r = new ArrayBuffer(FIXED_HEAD_SIZE + e.length), o = new DataView(r);
-        o.setInt32(0, r.byteLength, !0), o.setInt32(4, this.seq++, !0), o.setInt16(8, t, !0), o.setInt16(10, VERSION, !0), o.setInt32(12, Number(c), !0);
+        o.setInt32(0, r.byteLength, !0), o.setInt32(4, this.seq++, !0), o.setInt16(8, t, !0), c ? (c = !1, o.setInt16(10, 3, !0)) : o.setInt16(10, VERSION, !0), o.setInt32(12, Number(l), !0);
         for (var s = e.length, i = 0; i < s; i++) o.setUint8(i + FIXED_HEAD_SIZE, e[i]);
         return o
     }, this.parseHeader = function (e) {
@@ -8865,33 +11239,36 @@ function MatchvsProtocol() {
         return r.size = t.getInt32(0, !0), r.seq = t.getInt32(4, !0), r.cmd = t.getInt16(8, !0), r.version = t.getInt16(10, !0), r.userID = t.getInt32(12, !0), r
     }, this.handleMsg = function (e) {
         for (var t = e, r = this.parseHeader(e), o = new Uint8Array(r.size - FIXED_HEAD_SIZE), s = 0; s < o.length; s++) o[s] = e.getUint8(FIXED_HEAD_SIZE + s);
-        var i = MsProtoMapDesc[r.cmd], n = new Packet;
-        return n.header = r, n.buf = t, i ? n.payload = i.deserializeBinary && i.deserializeBinary(e.buffer.slice(FIXED_HEAD_SIZE, e.buffer.byteLength)) : MatchvsLog.logI("[WARN]unknown msg,Head:" + r), n
+        var i = MsProtoMapDesc[r.cmd], a = new Packet;
+        return a.header = r, a.buf = t, i ? a.payload = i.deserializeBinary && i.deserializeBinary(e.buffer.slice(FIXED_HEAD_SIZE, e.buffer.byteLength)) : MatchvsLog.logI("[WARN]unknown msg,Head:" + r), a
     }, this.init = function () {
-    }, this.login = function (e, t, r, o, s, i, n, a) {
-        var p = format("%s&UserID=%s&GameID=%s&VersionSdk=%d&%s", s, e, r, VERSION, i);
-        c = e;
-        var g = hex_md5(p);
-        MatchvsLog.logI("[Sign]" + p + "->" + g);
-        var u = new proto.stream.LoginReq;
-        u.setGameid(Number(r)), u.setAppkey(s), u.setDeviceid(n), u.setSign(g);
-        var l = u.serializeBinary();
-        return MatchvsLog.logI("[REQ]login...userID:" + e), this.fillHeader(l, MATCHVS_USER_LOGIN_REQ)
+    }, this.login = function (e, t, r, o, s, i) {
+        var a = hex_md5(t), n = format("%s&UserID=%s&GameID=%s&VersionSdk=%d&%s", s, e, r, 3, a);
+        l = e;
+        var p = hex_md5(n);
+        MatchvsLog.logI("[Sign]" + n + "->" + p);
+        var g = new proto.stream.LoginReq;
+        g.setGameid(Number(r)), g.setAppkey(s), g.setToken(a), g.setSdkver(3), g.setDeviceid(i), g.setSign(p);
+        var u = g.serializeBinary();
+        return MatchvsLog.logI("[REQ]login...userID:" + e), c = !0, this.fillHeader(u, MATCHVS_USER_LOGIN_REQ)
     }, this.speed = function (e, t, r, o, s) {
-        var i = new ArrayBuffer(49), n = new DataView(i), a = Number(e), p = Number(t);
-        n.setUint32(0, a, !0), n.setUint32(4, p, !0);
-        for (var g = 0; g < 32; g++) n.setUint8(8 + g, r.charCodeAt(g));
-        n.setUint16(40, o, !0), n.setUint16(42, s, !0), n.setUint32(44, 1, !0), n.setUint8(48, 1);
-        for (var u = new Uint8Array(n.byteLength), l = 0; l < n.byteLength; l++) u[l] = n.getUint8(l);
+        var i = new ArrayBuffer(49), a = new DataView(i), n = Number(e), p = Number(t);
+        a.setUint32(0, n, !0), a.setUint32(4, p, !0);
+        for (var g = 0; g < 32; g++) a.setUint8(8 + g, r.charCodeAt(g));
+        a.setUint16(40, o, !0), a.setUint16(42, s, !0), a.setUint32(44, 1, !0), a.setUint8(48, 1);
+        for (var u = new Uint8Array(a.byteLength), l = 0; l < a.byteLength; l++) u[l] = a.getUint8(l);
         return this.fillHeader(u, MATCHVS_USER_GATEWAY_SPEED_REQ)
-    }, this.roomCreate = function (e, t, r, o, s) {
-        var i = new proto.stream.CreateRoom;
-        i.setGameid(Number(r));
-        var n = new proto.stream.PlayerInfo;
-        n.setUserid(s.userID), n.setUserprofile(stringToUtf8ByteArray(s.userProfile)), i.setPlayerinfo(n);
+    }, this.roomCreate = function (e, t, r, o) {
+        var s = new proto.stream.CreateRoom;
+        s.setGameid(Number(e));
+        var i = new proto.stream.PlayerInfo;
+        i.setUserid(r.userID), i.setUserprofile(stringToUtf8ByteArray(r.userProfile)), s.setPlayerinfo(i);
         var a = new proto.stream.RoomInfo;
-        a.setMaxplayer(Number(o.maxPlayer)), a.setCanwatch(o.canWatch), a.setMode(o.mode), a.setVisibility(o.visibility), a.setRoomname(o.roomName), a.setRoomproperty(stringToUtf8ByteArray(o.roomProperty)), i.setRoominfo(a);
-        var p = i.serializeBinary();
+        if (a.setMaxplayer(Number(t.maxPlayer)), a.setCanwatch(t.canWatch), a.setMode(t.mode), a.setVisibility(t.visibility), a.setRoomname(t.roomName), a.setRoomproperty(stringToUtf8ByteArray(t.roomProperty)), s.setRoominfo(a), o) {
+            var n = new proto.stream.WatchSetting;
+            n.setCachetime(o.cacheMS), n.setMaxwatch(o.maxWatch), n.setWatchdelayms(o.delayMS), n.setWatchpersistent(o.persistent), s.setWatchsetting(n)
+        }
+        var p = s.serializeBinary();
         return this.fillHeader(p, MATCHVS_ROOM_CREATE_REQ)
     }, this.joinRandomRoom = function (e) {
         var t = new proto.stream.JoinRoomReq;
@@ -8911,19 +11288,22 @@ function MatchvsProtocol() {
         o.setMaxplayer(e.maxPlayer), o.setCanwatch(e.canWatch), o.setMode(e.mode), o.setVisibility(0), o.setRoomid(e.roomID), t.setRoominfo(o);
         var s = t.serializeBinary();
         return this.fillHeader(s, MATCHVS_ROOM_JOIN_REQ)
-    }, this.joinRoomWithProperties = function (e) {
-        var t = new proto.stream.JoinRoomReq, r = [], o = e.tags, s = 0;
-        for (var i in o) {
+    }, this.joinRoomWithProperties = function (e, t) {
+        var r = new proto.stream.JoinRoomReq, o = [], s = e.tags, i = 0;
+        for (var a in s) {
             var n = new proto.stream.keyValue;
-            n.setKey(i), n.setValue(o[i]), r[s++] = n
+            n.setKey(a), n.setValue(s[a]), o[i++] = n
         }
-        t.setTagsList(r), t.setGameid(e.gameID), t.setJointype(proto.stream.JoinRoomType.JOINROOMWITHPROPERTY), t.setCpproto(stringToUtf8ByteArray(e.userProfile));
-        var a = new proto.stream.PlayerInfo;
-        a.setUserid(e.userID), a.setUserprofile(stringToUtf8ByteArray(e.userProfile)), t.setPlayerinfo(a);
-        var p = new proto.stream.RoomInfo;
-        p.setMaxplayer(e.maxPlayer), p.setCanwatch(e.canWatch), p.setMode(e.mode), p.setVisibility(0), p.setRoomid(e.roomID), t.setRoominfo(p);
-        var g = t.serializeBinary();
-        return this.fillHeader(g, MATCHVS_ROOM_JOIN_REQ)
+        r.setTagsList(o), r.setGameid(e.gameID), r.setJointype(proto.stream.JoinRoomType.JOINROOMWITHPROPERTY), r.setCpproto(stringToUtf8ByteArray(e.userProfile));
+        var p = new proto.stream.PlayerInfo;
+        p.setUserid(e.userID), p.setUserprofile(stringToUtf8ByteArray(e.userProfile)), r.setPlayerinfo(p);
+        var g = new proto.stream.RoomInfo;
+        if (g.setMaxplayer(e.maxPlayer), g.setCanwatch(e.canWatch), g.setMode(e.mode), g.setVisibility(e.visibility), g.setRoomproperty(stringToUtf8ByteArray(e.roomProperty)), g.setRoomid(e.roomID), r.setRoominfo(g), t) {
+            var u = new proto.stream.WatchSetting;
+            u.setCachetime(t.cacheMS), u.setMaxwatch(t.maxWatch), u.setWatchdelayms(t.delayMS), u.setWatchpersistent(t.persistent), r.setWatchsetting(u)
+        }
+        var l = r.serializeBinary();
+        return this.fillHeader(l, MATCHVS_ROOM_JOIN_REQ)
     }, this.roomCheckIn = function (e, t, r, o) {
         var s = new proto.stream.CheckIn;
         s.setGameid(Number(o)), s.setRoomid(t.getRoomid()), s.setUserid(Number(r)), s.setBookid(e.getBookid()), s.setKey(e.getBookkey());
@@ -8957,19 +11337,7 @@ function MatchvsProtocol() {
     }
 }
 
-function PlayerInfo(e, t) {
-    this.userID = e, this.userProfile = t
-}
-
-function RoomInfo(e, t, r, o, s, i, n, a) {
-    this.roomID = e, this.roomName = t, this.maxPlayer = r, this.mode = o, this.canWatch = s, this.visibility = i, this.roomProperty = n, this.owner = a
-}
-
-function EngineNetworkMap() {
-    this[MATCHVS_USER_LOGIN_RSP] = new LoginRspWork, this[MATCHVS_ROOM_JOIN_RSP] = new JoinRoomRspWork, this[MATCHVS_ROOM_NOTICE_USER_JOIN] = new JoinRoomNotifyWork, this[MATCHVS_ROOM_CHECK_IN_RSP] = new CheckInRoomRspWork, this[MATCHVS_ROOM_CREATE_RSP] = new CreateRoomRspWork, this[MATCHVS_ROOM_CHECKIN_NOTIFY] = new CheckInRoomNtfyWork, this[MATCHVS_ROOM_JOIN_OVER_RSP] = new JoinOverRspWork, this[MATCHVS_ROOM_JOIN_OVER_NOTIFY] = new JoinOverNotifyWork, this[MATCHVS_ROOM_LEAVE_RSP] = new LeaveRoomRspWork, this[MATCHVS_ROOM_NOTICE_USER_LEAVE] = new LeaveRoomNotifyWork, this[MATCHVS_USER_HEARTBEAT_RSP] = new HeartBeatGatewayRspWork, this[MATCHVS_HEARTBEAT_HOTEL_RSP] = new HeartBeatHotelRspWork, this[MATCHVS_BROADCAST_HOTEL_RSP] = new SendEventRspWork, this[MATCHVS_HOTEL_NOTIFY] = new SendEventNotifyWork, this[CMD_SUBSCRIBE_ACK_CMDID] = new SubscribeEventGroupRspWork, this[CMD_PUBLISH_ACKCMDID] = new SendEventGroupRspWork, this[CMD_PUBLISH_NOTIFYCMDID] = new SendEventGroupNotifyWork, this[MATCHVS_USER_GATEWAY_SPEED_RSP] = new GatewaySpeedRspWork, this[CMD_GET_ROOM_LIST_RSP] = new GetRoomListRspWork, this[MATCHVS_USER_LOGOUT_RSP] = new LoginOutRspWork, this[CMD_DISCONNECT_RSP] = new DisConnectRspWork, this[CMD_KICK_PLAYER_NOTIFY] = new KickPlayerNotifyWork, this[CMD_KICK_PLAYER_RSP] = new KickPlayerRspWork, this[CMD_SET_FRAME_SYNCRATEACK_CMDID] = new SetFrameSyncRspWork, this[CMD_FRAME_BROADCASTACK_CMDID] = new SendFrameEventRspWork, this[CMD_SET_FRAME_SYNCRATENOTIFY_CMDID] = new SetFrameSyncNotifyWork, this[CMD_FRAME_DATANOTIFY_CMDID] = new FrameDataNotifyWork, this[CMD_FRAME_SYNCNOTIFY_CMDID] = new FrameSyncNotifyWork, this[MATCHVS_NETWORK_STATE_NOTIFY] = new NetworkStateNotifyWork, this[CMD_GET_ROOM_LIST_EX_RSP] = new GetRoomListRspWork_Ex, this[CMD_GET_ROOM_DETAIL_RSP] = new GetRoomDetailRspWork, this[CMD_SET_ROOM_PROPERTY_RSP] = new SetRoomPropertyRspWokr, this[CMD_SET_ROOM_PROPERTY_NOTIFY] = new SetRoomPropertyNotifyWork, this[CMD_ROOM_JOIN_OPEN_RSP] = new JoinOpenRspWork, this[CMD_ROOM_JOIN_OPEN_NOT] = new JoinOpenNotifyWork
-}
-
-MsProtoMapDesc[MATCHVS_USER_LOGIN_RSP] = proto.stream.LoginRsp, MsProtoMapDesc[MATCHVS_USER_LOGIN_RSP] = proto.stream.LoginRsp, MsProtoMapDesc[MATCHVS_ROOM_JOIN_RSP] = proto.stream.JoinRoomRsp, MsProtoMapDesc[MATCHVS_ROOM_CHECK_IN_RSP] = proto.stream.CheckInAck, MsProtoMapDesc[MATCHVS_ROOM_CREATE_RSP] = proto.stream.CreateRoomRsp, MsProtoMapDesc[MATCHVS_ROOM_CHECKIN_NOTIFY] = proto.stream.CheckInNotify, MsProtoMapDesc[MATCHVS_ROOM_JOIN_OVER_RSP] = proto.stream.JoinOverRsp, MsProtoMapDesc[MATCHVS_ROOM_LEAVE_RSP] = proto.stream.LeaveRoomRsp, MsProtoMapDesc[MATCHVS_ROOM_NOTICE_USER_JOIN] = proto.stream.NoticeJoin, MsProtoMapDesc[MATCHVS_HEARTBEAT_HOTEL_RSP] = proto.stream.HeartbeatAck, MsProtoMapDesc[MATCHVS_ROOM_NOTICE_USER_LEAVE] = proto.stream.NoticeLeave, MsProtoMapDesc[MATCHVS_BROADCAST_HOTEL_RSP] = proto.stream.BroadcastAck, MsProtoMapDesc[CMD_SUBSCRIBE_ACK_CMDID] = proto.stream.SubscribeAck, MsProtoMapDesc[MATCHVS_HOTEL_NOTIFY] = proto.stream.Notify, MsProtoMapDesc[CMD_PUBLISH_ACKCMDID] = proto.stream.PublishAck, MsProtoMapDesc[CMD_PUBLISH_NOTIFYCMDID] = proto.stream.PublishNotify, MsProtoMapDesc[MATCHVS_USER_HEARTBEAT_RSP] = proto.stream.HeartbeatRsp, MsProtoMapDesc[CMD_GET_ROOM_LIST_RSP] = proto.stream.GetRoomListRsp, MsProtoMapDesc[MATCHVS_USER_LOGOUT_RSP] = proto.stream.LogoutRsp, MsProtoMapDesc[CMD_DISCONNECT_RSP] = proto.stream.DisconnectRsp, MsProtoMapDesc[CMD_KICK_PLAYER_NOTIFY] = proto.stream.KickPlayerNotify, MsProtoMapDesc[CMD_KICK_PLAYER_RSP] = proto.stream.KickPlayerRsp, MsProtoMapDesc[CMD_SET_FRAME_SYNCRATEACK_CMDID] = proto.stream.SetFrameSyncRateAck, MsProtoMapDesc[CMD_FRAME_BROADCASTACK_CMDID] = proto.stream.FrameBroadcastAck, MsProtoMapDesc[CMD_SET_FRAME_SYNCRATENOTIFY_CMDID] = proto.stream.SetFrameSyncRateNotify, MsProtoMapDesc[CMD_FRAME_DATANOTIFY_CMDID] = proto.stream.FrameDataNotify, MsProtoMapDesc[MATCHVS_NETWORK_STATE_NOTIFY] = proto.stream.NetworkStateNotify, MsProtoMapDesc[CMD_FRAME_SYNCNOTIFY_CMDID] = proto.stream.FrameSyncNotify, MsProtoMapDesc[CMD_GET_ROOM_LIST_EX_RSP] = proto.stream.GetRoomListExRsp, MsProtoMapDesc[MATCHVS_ROOM_JOIN_OVER_NOTIFY] = proto.stream.JoinOverNotify, MsProtoMapDesc[CMD_GET_ROOM_DETAIL_RSP] = proto.stream.GetRoomDetailRsp, MsProtoMapDesc[CMD_SET_ROOM_PROPERTY_RSP] = proto.stream.SetRoomPropertyRsp, MsProtoMapDesc[CMD_ROOM_JOIN_OPEN_RSP] = proto.stream.JoinOpenRsp, MsProtoMapDesc[CMD_SET_ROOM_PROPERTY_NOTIFY] = proto.stream.NoticeRoomProperty, MsProtoMapDesc[CMD_ROOM_JOIN_OPEN_NOT] = proto.stream.JoinOpenNotify, MatchvsProtocol.prototype.heartBeat = function (e, t) {
+MsProtoMapDesc[MATCHVS_USER_LOGIN_RSP] = proto.stream.LoginRsp, MsProtoMapDesc[MATCHVS_USER_LOGIN_RSP] = proto.stream.LoginRsp, MsProtoMapDesc[MATCHVS_ROOM_JOIN_RSP] = proto.stream.JoinRoomRsp, MsProtoMapDesc[MATCHVS_ROOM_CHECK_IN_RSP] = proto.stream.CheckInAck, MsProtoMapDesc[MATCHVS_ROOM_CREATE_RSP] = proto.stream.CreateRoomRsp, MsProtoMapDesc[MATCHVS_ROOM_CHECKIN_NOTIFY] = proto.stream.CheckInNotify, MsProtoMapDesc[MATCHVS_ROOM_JOIN_OVER_RSP] = proto.stream.JoinOverRsp, MsProtoMapDesc[MATCHVS_ROOM_LEAVE_RSP] = proto.stream.LeaveRoomRsp, MsProtoMapDesc[MATCHVS_ROOM_NOTICE_USER_JOIN] = proto.stream.NoticeJoin, MsProtoMapDesc[MATCHVS_HEARTBEAT_HOTEL_RSP] = proto.stream.HeartbeatAck, MsProtoMapDesc[MATCHVS_ROOM_NOTICE_USER_LEAVE] = proto.stream.NoticeLeave, MsProtoMapDesc[MATCHVS_BROADCAST_HOTEL_RSP] = proto.stream.BroadcastAck, MsProtoMapDesc[CMD_SUBSCRIBE_ACK_CMDID] = proto.stream.SubscribeAck, MsProtoMapDesc[MATCHVS_HOTEL_NOTIFY] = proto.stream.Notify, MsProtoMapDesc[CMD_PUBLISH_ACKCMDID] = proto.stream.PublishAck, MsProtoMapDesc[CMD_PUBLISH_NOTIFYCMDID] = proto.stream.PublishNotify, MsProtoMapDesc[MATCHVS_USER_HEARTBEAT_RSP] = proto.stream.HeartbeatRsp, MsProtoMapDesc[CMD_GET_ROOM_LIST_RSP] = proto.stream.GetRoomListRsp, MsProtoMapDesc[MATCHVS_USER_LOGOUT_RSP] = proto.stream.LogoutRsp, MsProtoMapDesc[CMD_DISCONNECT_RSP] = proto.stream.DisconnectRsp, MsProtoMapDesc[CMD_KICK_PLAYER_NOTIFY] = proto.stream.KickPlayerNotify, MsProtoMapDesc[CMD_KICK_PLAYER_RSP] = proto.stream.KickPlayerRsp, MsProtoMapDesc[CMD_SET_FRAME_SYNCRATEACK_CMDID] = proto.stream.SetFrameSyncRateAck, MsProtoMapDesc[CMD_FRAME_BROADCASTACK_CMDID] = proto.stream.FrameBroadcastAck, MsProtoMapDesc[CMD_SET_FRAME_SYNCRATENOTIFY_CMDID] = proto.stream.SetFrameSyncRateNotify, MsProtoMapDesc[CMD_FRAME_DATANOTIFY_CMDID] = proto.stream.FrameDataNotify, MsProtoMapDesc[MATCHVS_NETWORK_STATE_NOTIFY] = proto.stream.NetworkStateNotify, MsProtoMapDesc[CMD_FRAME_SYNCNOTIFY_CMDID] = proto.stream.FrameSyncNotify, MsProtoMapDesc[CMD_GET_ROOM_LIST_EX_RSP] = proto.stream.GetRoomListExRsp, MsProtoMapDesc[MATCHVS_ROOM_JOIN_OVER_NOTIFY] = proto.stream.JoinOverNotify, MsProtoMapDesc[CMD_GET_ROOM_DETAIL_RSP] = proto.stream.GetRoomDetailRsp, MsProtoMapDesc[CMD_SET_ROOM_PROPERTY_RSP] = proto.stream.SetRoomPropertyRsp, MsProtoMapDesc[CMD_ROOM_JOIN_OPEN_RSP] = proto.stream.JoinOpenRsp, MsProtoMapDesc[CMD_SET_ROOM_PROPERTY_NOTIFY] = proto.stream.NoticeRoomProperty, MsProtoMapDesc[CMD_ROOM_JOIN_OPEN_NOT] = proto.stream.JoinOpenNotify, MsProtoMapDesc[MVS.ProtoCmd.JOIN_WATCHROOM_RSP] = proto.stream.JoinWatchRoomRsp, MsProtoMapDesc[MVS.ProtoCmd.JOIN_WATCHROOM_NOTFY] = proto.stream.JoinWatchRoomNotify, MsProtoMapDesc[MVS.ProtoCmd.ENTER_LIVEROOM_RSP] = proto.stream.EnterLiveRoomAck, MsProtoMapDesc[MVS.ProtoCmd.ENTER_LIVEROOM_NOTIFY] = proto.stream.EnterLiveRoomNotify, MsProtoMapDesc[MVS.ProtoCmd.LIVE_HEARTBEAT_RSP] = proto.stream.LiveHeartbeatAck, MsProtoMapDesc[MVS.ProtoCmd.LIVE_BROADCAST_RSP] = proto.stream.LiveBroadcastAck, MsProtoMapDesc[MVS.ProtoCmd.LIVE_BROADCAST_NOTIFY] = proto.stream.LiveBroadcastNotify, MsProtoMapDesc[MVS.ProtoCmd.SET_LIVEOFFSET_RSP] = proto.stream.SetLiveOffsetAck, MsProtoMapDesc[MVS.ProtoCmd.EXIT_LIVEROOM_NOTIFY] = proto.stream.ExitLiveRoomNotify, MsProtoMapDesc[MVS.ProtoCmd.LIVE_OVER_NOTIFY] = proto.stream.LiveOverNotify, MsProtoMapDesc[MVS.ProtoCmd.LIVE_FRAMEDATA_NOTIFY] = proto.stream.LiveFrameDataNotify, MsProtoMapDesc[MVS.ProtoCmd.LIVE_FRAMESYNC_NOTIFY] = proto.stream.LiveFrameSyncNotify, MsProtoMapDesc[MVS.ProtoCmd.LEAVE_WATCHROOM_RSP] = proto.stream.LeaveWatchRoomRsp, MsProtoMapDesc[MVS.ProtoCmd.LEAVE_WATCHROOM_NOTIFY] = proto.stream.LeaveWatchRoomNotify, MsProtoMapDesc[MVS.ProtoCmd.GET_WATCHROOM_RSP] = proto.stream.GetWatchRoomsRsp, MsProtoMapDesc[MVS.ProtoCmd.CHANGE_ROLE_RSP] = proto.stream.ChangeRoleRsp, MsProtoMapDesc[MVS.ProtoCmd.SET_RECONNECT_TIMEOUT_RSP] = proto.stream.SetReconnectTimeoutRsp, MatchvsProtocol.prototype.heartBeat = function (e, t) {
     var r = new proto.stream.HeartbeatReq;
     r.setGameid(e), r.setRoomid(t);
     var o = r.serializeBinary();
@@ -8980,10 +11348,10 @@ MsProtoMapDesc[MATCHVS_USER_LOGIN_RSP] = proto.stream.LoginRsp, MsProtoMapDesc[M
 }, MatchvsProtocol.prototype.broadCast = function (e, t, r, o, s) {
     var i = new proto.stream.Broadcast;
     i.setRoomid(e), i.setDstuidsList(t), i.setCpproto(s);
-    var n = 32 + ((3 & r) << 2) + (3 & o);
-    i.setFlag(n);
-    var a = i.serializeBinary();
-    return this.fillHeader(a, MATCHVS_BROADCAST_HOTEL_REQ)
+    var a = 32 + ((3 & r) << 2) + (3 & o);
+    i.setFlag(a);
+    var n = i.serializeBinary();
+    return this.fillHeader(n, MATCHVS_BROADCAST_HOTEL_REQ)
 }, MatchvsProtocol.prototype.subscribeEventGroup = function (e, t, r, o) {
     var s = new proto.stream.Subscribe;
     s.setRoomid(t), s.setGameid(e), s.setCancelsList(o), s.setConfirmsList(r);
@@ -8992,8 +11360,8 @@ MsProtoMapDesc[MATCHVS_USER_LOGIN_RSP] = proto.stream.LoginRsp, MsProtoMapDesc[M
 }, MatchvsProtocol.prototype.sendEventGroup = function (e, t, r, o, s) {
     var i = new proto.stream.Publish;
     i.setRoomid(t), i.setPriority(r), i.setCpproto(stringToUtf8ByteArray(s)), i.setGroupsList(o);
-    var n = i.serializeBinary();
-    return this.fillHeader(n, CMD_PUBLISH_CMDID)
+    var a = i.serializeBinary();
+    return this.fillHeader(a, CMD_PUBLISH_CMDID)
 }, MatchvsProtocol.prototype.hotelHeartBeat = function (e, t, r) {
     var o = new proto.stream.Heartbeat;
     o.setGameid(e), o.setRoomid(t), o.setUserid(r);
@@ -9010,10 +11378,10 @@ MsProtoMapDesc[MATCHVS_USER_LOGIN_RSP] = proto.stream.LoginRsp, MsProtoMapDesc[M
     var i = s.serializeBinary();
     return this.fillHeader(i, CMD_KICK_PLAYER_REQ)
 }, MatchvsProtocol.prototype.setFrameSync = function (e, t, r, o, s, i) {
-    var n = new proto.stream.SetFrameSyncRate;
-    n.setGameid(r), n.setRoomid(t), n.setPriority(o), n.setFramerate(e), n.setFrameidx(s), n.setEnablegs(i);
-    var a = n.serializeBinary();
-    return this.fillHeader(a, CMD_SET_FRAME_SYNCRATE_CMDID)
+    var a = new proto.stream.SetFrameSyncRate;
+    a.setGameid(r), a.setRoomid(t), a.setPriority(o), a.setFramerate(e), a.setFrameidx(s), a.setEnablegs(i);
+    var n = a.serializeBinary();
+    return this.fillHeader(n, CMD_SET_FRAME_SYNCRATE_CMDID)
 }, MatchvsProtocol.prototype.sendFrameEvent = function (e, t, r, o) {
     var s = new proto.stream.FrameBroadcast;
     s.setRoomid(e), s.setPriority(t), s.setOperation(o), s.setCpproto(stringToUtf8ByteArray(r));
@@ -9029,16 +11397,63 @@ MsProtoMapDesc[MATCHVS_USER_LOGIN_RSP] = proto.stream.LoginRsp, MsProtoMapDesc[M
     s.setRoomid(r), s.setGameid(e), s.setUserid(t), s.setCpproto(stringToUtf8ByteArray(o));
     var i = s.serializeBinary();
     return this.fillHeader(i, CMD_ROOM_JOIN_OPEN_REQ)
+}, MatchvsProtocol.prototype.joinWatchRoom = function (e, t, r, o) {
+    var s = new proto.stream.JoinWatchRoomReq;
+    s.setGameid(e), s.setRoomid(r), s.setUserid(t), s.setUserprofile(stringToUtf8ByteArray(o));
+    var i = s.serializeBinary();
+    return this.fillHeader(i, proto.stream.CmdId.JOINWATCHROOMREQ)
+}, MatchvsProtocol.prototype.enterLiveRoom = function (e, t, r, o, s) {
+    var i = new proto.stream.EnterLiveRoom;
+    i.setBookid(e.getBookid()), i.setTicket(e.getBookkey()), i.setGameid(t), i.setUserid(r), i.setSetid(s), i.setUserprofile(""), i.setRoomid(o);
+    var a = i.serializeBinary();
+    return this.fillHeader(a, proto.stream.SDKWatchCmdID.ENTERLIVEROOMCMDID)
+}, MatchvsProtocol.prototype.leaveWatchRoom = function (e, t, r, o) {
+    var s = new proto.stream.LeaveWatchRoomReq;
+    s.setCpproto(stringToUtf8ByteArray(o)), s.setGameid(e), s.setUserid(t), s.setRoomid(r);
+    var i = s.serializeBinary();
+    return this.fillHeader(i, proto.stream.CmdId.LEAVEWATCHROOMREQ)
+}, MatchvsProtocol.prototype.getWatchRooms = function (e, t) {
+    var r = new proto.stream.GetWatchRoomsReq, o = new proto.stream.RoomFilter;
+    o.setMaxplayer(t.maxPlayer), o.setMode(Number(t.mode)), o.setFull(t.full), o.setCanwatch(t.canWatch), o.setRoomproperty(stringToUtf8ByteArray(t.roomProperty)), o.setState(t.state), r.setGameid(e), r.setRoomfilter(o), r.setSort(t.sort), r.setOrder(t.order), r.setPageno(t.pageNo), r.setPagesize(t.pageSize);
+    var s = r.serializeBinary();
+    return this.fillHeader(s, proto.stream.CmdId.GETWATCHROOMSREQ)
+}, MatchvsProtocol.prototype.liveHeartBeat = function (e, t, r) {
+    var o = new proto.stream.LiveHeartbeat;
+    o.setGameid(Number(e)), o.setRoomid(t), o.setUserid(Number(r));
+    var s = o.serializeBinary();
+    return this.fillHeader(s, proto.stream.SDKWatchCmdID.LIVEHEARTBEATCMDID)
+}, MatchvsProtocol.prototype.broadCastWatch = function (e, t, r, o, s) {
+    var i = new proto.stream.LiveBroadcast;
+    i.setRoomid(e), i.setDstuidsList(t), i.setCpproto(stringToUtf8ByteArray(s));
+    var a = 32 + ((3 & r) << 2) + (3 & o);
+    i.setFlag(a);
+    var n = i.serializeBinary();
+    return this.fillHeader(n, proto.stream.SDKWatchCmdID.LIVEBROADCASTCMDID)
+}, MatchvsProtocol.prototype.setLiveOffset = function (e, t, r, o) {
+    var s = new proto.stream.SetLiveOffset;
+    s.setGameid(e), s.setRoomid(t), s.setUserid(r), s.setOffsetms(o);
+    var i = s.serializeBinary();
+    return this.fillHeader(i, MVS.ProtoCmd.SET_LIVEOFFSET_REQ)
+}, MatchvsProtocol.prototype.changeRoleProto = function (e, t, r, o, s) {
+    var i = new this.proto.ChangeRole;
+    i.setGameid(t), i.setRoomid(r), i.setUserid(e), i.setUserprofile(stringToUtf8ByteArray(s));
+    var a = 0 == o ? this.proto.RoomType.GAMEROOMTYPE : this.proto.RoomType.WATCHROOMTYPE;
+    i.setTargetroomtype(a);
+    var n = i.serializeBinary();
+    return this.fillHeader(n, MVS.ProtoCmd.CHANGE_ROLE_REQ)
+}, MatchvsProtocol.prototype.setReconnectTimeout = function (e, t) {
+    var r = new this.proto.SetReconnectTimeoutReq;
+    r.setTimeout(Number(t)), r.setUserid(Number(e));
+    var o = r.serializeBinary();
+    return this.fillHeader(o, MVS.ProtoCmd.SET_RECONNECT_TIMEOUT_REQ)
 };
-var ErrorRspWork = function (e, t, r) {
-    var o = "";
-    o = void 0 !== MvsErrMsg[t] ? r + ". " + MvsErrMsg[t] : r, MatchvsLog.logI("[error code:" + t + "] " + o), e && e(t, o)
-}, NetWorkCallBackImp = function (i) {
-    MSExtend(this, MatchvsNetWork), this.engineWorkMap = new EngineNetworkMap, this.gtwTimer = 0, this.mHotelTimer = 0, this.frameCache = [], this.hbTimers = [], this.clearAllBeatTimer = function () {
+var NetWorkCallBackImp = function (i) {
+    MSExtend(this, MVS.MatchvsNetWork), this.engineWorkMap = new MVS.EngineNetworkMap, this.gtwTimer = 0, this.watchTimer = 0, this.mHotelTimer = 0, this.frameCache = [], this.hbTimers = [], this.clearAllBeatTimer = function () {
         for (; 0 < this.hbTimers.length;) MVS.ticker.clearInterval(this.hbTimers.pop())
     }, this.onMsg = function (e) {
         var t = i.mProtocol.handleMsg(e), r = new proto.stream.RoomInfo, o = {
             hotelTimer: this.mHotelTimer,
+            watchTimer: this.watchTimer,
             payload: t.payload,
             seq: t.header.seq,
             roomInfo: r,
@@ -9046,392 +11461,13 @@ var ErrorRspWork = function (e, t, r) {
         }, s = this.engineWorkMap[t.header.cmd];
         MVS.mtaReport && MVS.mtaReport.Report(t.header.cmd), s ? s.doSubHandle(o, i) : MatchvsLog.logE("no the cmd: ", t.header.cmd)
     }, this.onErr = function (e, t) {
-        ErrorRspWork(i.mRsp.errorResponse, e, t)
+        MVS.ErrorRspWork(i.mRsp.errorResponse, e, t)
     }, this.onConnect = function (e) {
-        "" !== HttpConf.HOST_HOTEL_ADDR && 0 <= e.indexOf(HttpConf.HOST_HOTEL_ADDR) ? (this.mHotelTimer = MVS.ticker.setInterval(i.hotelHeartBeat, HEART_BEAT_INTERVAL), this.hbTimers.push(this.mHotelTimer)) : "" !== HttpConf.HOST_GATWAY_ADDR && 0 <= e.indexOf(HttpConf.HOST_GATWAY_ADDR) && (this.gtwTimer = MVS.ticker.setInterval(i.heartBeat, HEART_BEAT_INTERVAL), this.hbTimers.push(this.gtwTimer)), i.mRsp.onConnect && i.mRsp.onConnect(e)
+        "" !== HttpConf.HOST_HOTEL_ADDR && 0 <= e.indexOf(HttpConf.HOST_HOTEL_ADDR) ? (this.mHotelTimer = MVS.ticker.setInterval(i.hotelHeartBeat, MVS.Config.HEART_BEAT_INTERVAL), this.hbTimers.push(this.mHotelTimer)) : "" !== MVS.Host.HOST_WATCH_ADDR && 0 <= e.indexOf(MVS.Host.HOST_WATCH_ADDR) ? (this.watchTimer = MVS.ticker.setInterval(i.liveHeartBeat, MVS.Config.HEART_BEAT_INTERVAL), this.hbTimers.push(this.watchTimer)) : "" !== HttpConf.HOST_GATWAY_ADDR && 0 <= e.indexOf(HttpConf.HOST_GATWAY_ADDR) && (this.gtwTimer = MVS.ticker.setInterval(i.heartBeat, MVS.Config.HEART_BEAT_INTERVAL), this.hbTimers.push(this.gtwTimer)), i.mRsp.onConnect && i.mRsp.onConnect(e)
     }, this.onDisConnect = function (e, t) {
-        i.mRsp.onDisConnect && i.mRsp.onDisConnect(e), e.endsWith(HttpConf.HOST_GATWAY_ADDR) ? (i.mEngineState = ENGE_STATE.HAVE_INIT, t && t.code && (t.code === MvsCode.CODE_1000 || t.code === MvsCode.CODE_1005) ? MatchvsLog.logI("gateway close is friend") : (this.clearAllBeatTimer(), i.mHotelNetWork && i.mHotelNetWork.close(), ErrorRspWork(i.mRsp.errorResponse, MvsCode.NetWorkErr, "(" + t.code + ") gateway network error")), MVS.ticker.clearInterval(this.gtwTimer)) : e.endsWith(HttpConf.HOST_HOTEL_ADDR) && (MatchvsLog.logI("hotel disconnect"), t && t.code && (t.code === MvsCode.CODE_1000 || t.code === MvsCode.CODE_1005) ? MatchvsLog.logI("hotel close is friend") : (i.mEngineState = ENGE_STATE.HAVE_INIT, this.clearAllBeatTimer(), i.mNetWork && i.mNetWork.close(), ErrorRspWork(i.mRsp.errorResponse, MvsCode.NetWorkErr, "(" + t.code + ") hotel network error")), MVS.ticker.clearInterval(this.mHotelTimer), i.mEngineState &= ~ENGE_STATE.JOIN_ROOMING, i.mEngineState &= ~ENGE_STATE.LEAVE_ROOMING, i.mEngineState &= ~ENGE_STATE.IN_ROOM, i.mEngineState &= ~ENGE_STATE.CREATEROOM), MatchvsLog.logI("EngineState", i.mEngineState)
+        i.mCntRoomType = MVS.TgRoomType.NRoom, i.mRsp.onDisConnect && i.mRsp.onDisConnect(e), e.endsWith(HttpConf.HOST_GATWAY_ADDR) ? (i.mEngineState = ENGE_STATE.HAVE_INIT, t && t.code && (t.code === MvsCode.CODE_1000 || t.code === MvsCode.CODE_1005) ? MatchvsLog.logI("gateway close is friend") : (this.clearAllBeatTimer(), i.mHotelNetWork && i.mHotelNetWork.close(), MVS.ErrorRspWork(i.mRsp.errorResponse, MvsCode.NetworkErr, "(" + t.code + ") gateway network error")), MVS.ticker.clearInterval(this.gtwTimer)) : "" !== MVS.Host.HOST_WATCH_ADDR && e.endsWith(MVS.Host.HOST_WATCH_ADDR) ? (MatchvsLog.logI("live disconnect"), t && t.code && (t.code === MvsCode.CODE_1000 || t.code === MvsCode.CODE_1005) ? MatchvsLog.logI("live close is friend") : (i.mEngineState = ENGE_STATE.HAVE_INIT, this.clearAllBeatTimer(), i.mWatchNetwrok && i.mWatchNetwrok.close(), MVS.ErrorRspWork(i.mRsp.errorResponse, MvsCode.NetworkErr, "(" + t.code + ") watch network error")), MVS.ticker.clearInterval(this.watchTimer), i.mEngineState &= ~MVS.ENGE_STATE.IN_WATCHING, i.mEngineState &= ~MVS.ENGE_STATE.IN_WATCH) : "" !== HttpConf.HOST_HOTEL_ADDR && e.endsWith(HttpConf.HOST_HOTEL_ADDR) && (MatchvsLog.logI("hotel disconnect"), t && t.code && (t.code === MvsCode.CODE_1000 || t.code === MvsCode.CODE_1005) ? MatchvsLog.logI("hotel close is friend") : (i.mEngineState = ENGE_STATE.HAVE_INIT, this.clearAllBeatTimer(), i.mGTWNetwork && i.mGTWNetwork.close(), MVS.ErrorRspWork(i.mRsp.errorResponse, MvsCode.NetworkErr, "(" + t.code + ") hotel network error")), MVS.ticker.clearInterval(this.mHotelTimer), i.mEngineState &= ~ENGE_STATE.JOIN_ROOMING, i.mEngineState &= ~ENGE_STATE.LEAVE_ROOMING, i.mEngineState &= ~ENGE_STATE.IN_ROOM, i.mEngineState &= ~ENGE_STATE.CREATEROOM), MatchvsLog.logI("EngineState", i.mEngineState)
     }
-}, M_ENGINE;
-
-function LoginRspWork() {
-    this.doSubHandle = function (e, t) {
-        var r = e.payload.getStatus();
-        if (MVS.ccReport && MVS.ccReport.loginRsp(r), 200 === r ? t.mEngineState |= ENGE_STATE.HAVE_LOGIN : (t.mEngineState &= ~ENGE_STATE.LOGINING, t.mEngineState &= ~ENGE_STATE.RECONNECTING, ErrorRspWork(t.mRsp.errorResponse, r, "login is fail")), t.mEngineState &= ~ENGE_STATE.LOGINING, t.mRecntRoomID = e.payload.getRoomid(), (t.mEngineState & ENGE_STATE.RECONNECTING) === ENGE_STATE.RECONNECTING) if ("0" !== t.mRecntRoomID) {
-            var o = new MsRoomJoin(MsEnum.JoinRoomType.reconnect, t.mMsPubArgs.userID, t.mRecntRoomID, t.mMsPubArgs.gameID, 0, 0, 0, "reconnect", [{name: "MatchVS"}]),
-                s = t.mProtocol && t.mProtocol.joinRoomSpecial(o);
-            t.mNetWork && t.mNetWork.send(s)
-        } else t.mEngineState &= ~ENGE_STATE.RECONNECTING, t.mRsp.reconnectResponse && t.mRsp.reconnectResponse(MvsCode.CODE_201, null, null); else t.mRsp.loginResponse(new MsLoginRsp(r, t.mRecntRoomID))
-    }
-}
-
-function JoinRoomRspWork() {
-    this.doSubHandle = function (e, t) {
-        var r = e.payload.getStatus();
-        if (200 === r) {
-            var o = e.payload.getBookinfo();
-            t.mRoomInfo = e.payload.getRoominfo(), t.mUserListForJoinRoomRsp = e.payload.getUsersList(), HttpConf.HOST_HOTEL_ADDR = getHotelUrl(o), t.roomCheckIn(e.payload.getBookinfo(), e.payload.getRoominfo())
-        } else t.mEngineState &= ~ENGE_STATE.JOIN_ROOMING, t.mEngineState &= ~ENGE_STATE.RECONNECTING, ErrorRspWork(t.mRsp.errorResponse, r, "join room failed "), t.mRsp.joinRoomResponse && t.mRsp.joinRoomResponse(r, null, null)
-    }
-}
-
-function CreateRoomRspWork() {
-    this.doSubHandle = function (e, t) {
-        if (200 === e.payload.getStatus()) {
-            var r = e.payload.getBookinfo();
-            e.roomInfo.setRoomid(e.payload.getRoomid()), e.roomInfo.setOwner(e.payload.getOwner()), t.mRoomInfo = e.roomInfo, HttpConf.HOST_HOTEL_ADDR = getHotelUrl(r), t.roomCheckIn(e.payload.getBookinfo(), e.roomInfo)
-        } else t.mEngineState &= ~ENGE_STATE.CREATEROOM, ErrorRspWork(t.mRsp.errorResponse, e.payload.getStatus(), ""), t.mRsp.createRoomResponse && t.mRsp.createRoomResponse(new MsCreateRoomRsp(e.payload.getStatus(), "", 0))
-    }
-}
-
-function CheckInRoomRspWork() {
-    this.doSubHandle = function (e, t) {
-        var r = e.payload.getStatus();
-        if (200 !== r) t.mEngineState = ENGE_STATE.HAVE_INIT, t.mEngineState |= ENGE_STATE.HAVE_LOGIN, ErrorRspWork(t.mRsp.errorResponse, r, "check in error"), t.mHotelNetWork && t.mHotelNetWork.close(); else {
-            t.mAllPlayers = e.payload.getCheckinsList();
-            var o = [];
-            t.mUserListForJoinRoomRsp.forEach(function (e) {
-                var t = new MsRoomUserInfo(e.getUserid(), utf8ByteArrayToString(e.getUserprofile()));
-                o.push(t)
-            });
-            var s = new MsRoomInfo(t.mRoomInfo.getRoomid(), utf8ByteArrayToString(t.mRoomInfo.getRoomproperty()), t.mRoomInfo.getOwner(), t.mRoomInfo.getState());
-            t.mEngineState |= ENGE_STATE.IN_ROOM, (t.mEngineState & ENGE_STATE.CREATEROOM) === ENGE_STATE.CREATEROOM ? (t.mEngineState &= ~ENGE_STATE.CREATEROOM, t.mRsp.createRoomResponse && t.mRsp.createRoomResponse(new MsCreateRoomRsp(r, t.mRoomInfo.getRoomid(), t.mRoomInfo.getOwner()))) : (t.mEngineState & ENGE_STATE.JOIN_ROOMING) === ENGE_STATE.JOIN_ROOMING ? (t.mEngineState &= ~ENGE_STATE.JOIN_ROOMING, t.mRsp.joinRoomResponse && t.mRsp.joinRoomResponse(r, o, s)) : (t.mEngineState & ENGE_STATE.RECONNECTING) === ENGE_STATE.RECONNECTING && (t.mEngineState &= ~ENGE_STATE.RECONNECTING, t.mRsp.reconnectResponse && t.mRsp.reconnectResponse(r, o, s))
-        }
-    }
-}
-
-function CheckInRoomNtfyWork() {
-    this.doSubHandle = function (e, t) {
-        t.joinRoomNotifyInfo && t.mRsp.joinRoomNotify && t.mRsp.joinRoomNotify(t.joinRoomNotifyInfo), t.mAllPlayers = e.payload.getCheckinsList(), t.mRsp.roomCheckInNotify && t.mRsp.roomCheckInNotify(new MsCheckInNotify(e.payload.getUserid(), e.payload.getCheckinsList(), e.payload.getPlayersList(), e.payload.getMaxplayers())), t.joinRoomNotifyInfo = null
-    }
-}
-
-function LeaveRoomRspWork() {
-    this.doSubHandle = function (e, t) {
-        t.mEngineState &= ~ENGE_STATE.LEAVE_ROOMING, 200 !== e.payload.getStatus() && ErrorRspWork(t.mRsp.errorResponse, e.payload.getStatus(), "leave room fail"), e.roomInfo.setRoomid("0"), t.mRoomInfo = e.roomInfo;
-        var r = new MsLeaveRoomRsp(e.payload.getStatus(), e.payload.getRoomid(), e.payload.getUserid(), e.payload.getCpproto());
-        t.mRsp.leaveRoomResponse && t.mRsp.leaveRoomResponse(r), t.mEngineState &= ~ENGE_STATE.IN_ROOM
-    }
-}
-
-function JoinOverRspWork() {
-    this.doSubHandle = function (e, t) {
-        200 !== e.payload.getStatus() && ErrorRspWork(t.mRsp.errorResponse, e.payload.getStatus(), "join over fail"), t.mRsp.joinOverResponse && t.mRsp.joinOverResponse(new MsJoinOverRsp(e.payload.getStatus(), utf8ByteArrayToString(e.payload.getCpproto())))
-    }
-}
-
-function JoinOverNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        var r = new MsJoinOverNotifyInfo(e.payload.getRoomid(), e.payload.getSrcuserid(), utf8ByteArrayToString(e.payload.getCpproto()));
-        t.mRsp.joinOverNotify && t.mRsp.joinOverNotify(r)
-    }
-}
-
-function JoinRoomNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        t.joinRoomNotifyInfo = new MsRoomUserInfo(e.payload.getUser().getUserid(), utf8ByteArrayToString(e.payload.getUser().getUserprofile()))
-    }
-}
-
-function LeaveRoomNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        var r = new MsLeaveRoomNotify(e.payload.getRoomid(), e.payload.getUserid(), e.payload.getOwner(), utf8ByteArrayToString(e.payload.getCpproto()));
-        t.mRsp.leaveRoomNotify && t.mRsp.leaveRoomNotify(r)
-    }
-}
-
-function HeartBeatHotelRspWork() {
-    this.doSubHandle = function (e, t) {
-        t.mRsp.hotelHeartBeatRsp && t.mRsp.hotelHeartBeatRsp(e.payload.getStatus()), MatchvsLog.logI("hotelHeartBeatRsp")
-    }
-}
-
-function SendEventRspWork() {
-    this.doSubHandle = function (e, t) {
-        200 !== e.payload.getStatus() && ErrorRspWork(t.mRsp.errorResponse, e.payload.getStatus(), "send event fail"), t.mRsp.sendEventResponse && t.mRsp.sendEventResponse(new MsSendEventRsp(e.payload.getStatus(), e.seq))
-    }
-}
-
-function SendEventNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        0 === e.payload.getSrcuid() ? t.mRsp.gameServerNotify && t.mRsp.gameServerNotify(new MsGameServerNotifyInfo(e.payload.getSrcuid(), utf8ByteArrayToString(e.payload.getCpproto()))) : t.mRsp.sendEventNotify && t.mRsp.sendEventNotify(new MsSendEventNotify(e.payload.getSrcuid(), utf8ByteArrayToString(e.payload.getCpproto())))
-    }
-}
-
-function SubscribeEventGroupRspWork() {
-    this.doSubHandle = function (e, t) {
-        t.mRsp.subscribeEventGroupResponse && t.mRsp.subscribeEventGroupResponse(e.payload.getStatus(), e.payload.getGroupsList())
-    }
-}
-
-function SendEventGroupRspWork() {
-    this.doSubHandle = function (e, t) {
-        t.mRsp.sendEventGroupResponse && t.mRsp.sendEventGroupResponse(e.payload.getStatus(), e.payload.getDstnum())
-    }
-}
-
-function SendEventGroupNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        t.mRsp.sendEventGroupNotify && t.mRsp.sendEventGroupNotify(e.payload.getSrcuid(), e.payload.getGroupsList(), utf8ByteArrayToString(e.payload.getCpproto()))
-    }
-}
-
-function GatewaySpeedRspWork() {
-    this.doSubHandle = function (e, t) {
-        var r = e.payload.getStatus(), o = e.payload.getSeq();
-        t.mRsp.gatewaySpeedResponse && t.mRsp.gatewaySpeedResponse(new MsGatewaySpeedResponse(r, o))
-    }
-}
-
-function HeartBeatGatewayRspWork() {
-    this.doSubHandle = function (e, t) {
-        var r = e.payload.getGameid(), o = e.payload.getGsexist();
-        t.mEngineState |= ENGE_STATE.HAVE_LOGIN, t.mRsp.heartBeatResponse && t.mRsp.heartBeatResponse(new MsHeartBeatResponse(r, o)), MatchvsLog.logI("gatewayHeartBeatResponse")
-    }
-}
-
-function LoginOutRspWork() {
-    this.doSubHandle = function (e, t) {
-        t.mNetWork.close(), t.mRsp.logoutResponse && t.mRsp.logoutResponse(e.payload.getStatus())
-    }
-}
-
-function GetRoomListRspWork() {
-    this.doSubHandle = function (e, t) {
-        var r = e.payload.getStatus();
-        200 !== r && (t.mRsp.getRoomListResponse && t.mRsp.getRoomListResponse(e.payload.getStatus(), null), ErrorRspWork(t.mRsp.errorResponse, e.payload.getStatus(), "get room list error "));
-        for (var o = e.payload.getRoominfoList(), s = [], i = 0; i < o.length; i++) s[i] = new MsRoomInfoEx(o[i].getRoomid(), o[i].getRoomname(), o[i].getMaxplayer(), o[i].getMode(), o[i].getCanwatch(), utf8ByteArrayToString(o[i].getRoomproperty()));
-        t.mRsp.getRoomListResponse && t.mRsp.getRoomListResponse(r, s)
-    }
-}
-
-function DisConnectRspWork() {
-    this.doSubHandle = function (e, t) {
-        t.mRsp.disConnectResponse && t.mRsp.disConnectResponse(e.payload.getStatus())
-    }
-}
-
-function KickPlayerRspWork() {
-    this.doSubHandle = function (e, t) {
-        200 != e.payload.getStatus() && ErrorRspWork(t.mRsp.errorResponse, e.payload.getStatus(), "kick player error "), t.mRsp.kickPlayerResponse && t.mRsp.kickPlayerResponse(new MsKickPlayerRsp(e.payload.getStatus(), e.payload.getOwner(), e.payload.getUserid()))
-    }
-}
-
-function KickPlayerNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        e.payload.getUserid().toString() === "" + t.mUserID && null != e.hotelTimer && (MVS.ticker.clearInterval(e.hotelTimer), t.mEngineState &= ~ENGE_STATE.IN_ROOM, t.mEngineState |= ENGE_STATE.HAVE_LOGIN, t.mHotelNetWork.close()), t.mRsp.kickPlayerNotify && t.mRsp.kickPlayerNotify(new MsKickPlayerNotify(e.payload.getUserid(), e.payload.getSrcuserid(), utf8ByteArrayToString(e.payload.getCpproto()), e.payload.getOwner()))
-    }
-}
-
-function SetFrameSyncRspWork() {
-    this.doSubHandle = function (e, t) {
-        MatchvsLog.logI("SetFrameSyncRateAck:" + e.payload), t.mRsp.setFrameSyncResponse && t.mRsp.setFrameSyncResponse(new MsSetChannelFrameSyncRsp(e.payload.getStatus()))
-    }
-}
-
-function SetFrameSyncNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        var r = new MVS.MsSetFrameSyncNotify(e.payload.getFramerate(), e.payload.getFrameidx(), e.payload.getTimestamp(), e.payload.getEnablegs());
-        t.mRsp.setFrameSyncNotify(r)
-    }
-}
-
-function SendFrameEventRspWork() {
-    this.doSubHandle = function (e, t) {
-        t.mRsp.sendFrameEventResponse && t.mRsp.sendFrameEventResponse(new MsSendFrameEventRsp(e.payload.getStatus()))
-    }
-}
-
-function FrameDataNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        e.frameCache.push(new MsFrameItem(e.payload.getSrcuid(), utf8ByteArrayToString(e.payload.getCpproto()), e.payload.getTimestamp()))
-    }
-}
-
-function FrameSyncNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        for (var r = []; 0 < e.frameCache.length;) r.push(e.frameCache.pop());
-        var o = new MsFrameData(e.payload.getLastidx(), r, r.length);
-        t.mRsp.frameUpdate && t.mRsp.frameUpdate(o)
-    }
-}
-
-function NetworkStateNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        t.mRsp.networkStateNotify && t.mRsp.networkStateNotify(new MsNetworkStateNotify(e.payload.getRoomid(), e.payload.getUserid(), e.payload.getState(), e.payload.getOwner()))
-    }
-}
-
-function GetRoomListRspWork_Ex() {
-    this.doSubHandle = function (e, t) {
-        var r = e.payload.getRoominfoexList(), o = [];
-        r.forEach(function (e) {
-            var t = new MsRoomAttribute(e.getRoomid(), e.getRoomname(), e.getMaxplayer(), e.getGameplayer(), e.getWatchplayer(), e.getMode(), e.getCanwatch(), utf8ByteArrayToString(e.getRoomproperty()), e.getOwner(), e.getState(), e.getCreatetime().toString());
-            o.push(t)
-        });
-        var s = new MsGetRoomListExRsp(e.payload.getStatus(), e.payload.getTotal(), o);
-        t.mRsp.getRoomListExResponse && t.mRsp.getRoomListExResponse(s)
-    }
-}
-
-function GetRoomDetailRspWork() {
-    this.doSubHandle = function (e, t) {
-        200 !== e.payload.getStatus() && (t.mRsp.getRoomDetailResponse && t.mRsp.getRoomDetailResponse(new MsGetRoomDetailRsp(e.payload.getStatus())), ErrorRspWork(t.mRsp.errorResponse, e.payload.getStatus(), ""));
-        var r = e.payload.getRoomdetail(), o = [];
-        r.getPlayerinfosList().forEach(function (e) {
-            var t = new MsRoomUserInfo(e.getUserid(), utf8ByteArrayToString(e.getUserprofile()));
-            o.push(t)
-        });
-        var s = new MsGetRoomDetailRsp(e.payload.getStatus(), r.getState(), r.getMaxplayer(), r.getMode(), r.getCanwatch(), utf8ByteArrayToString(r.getRoomproperty()), r.getOwner(), r.getCreateflag(), o);
-        t.mRsp.getRoomDetailResponse && t.mRsp.getRoomDetailResponse(s)
-    }
-}
-
-function SetRoomPropertyRspWokr() {
-    this.doSubHandle = function (e, t) {
-        200 !== e.payload.getStatus() && ErrorRspWork(t.errorResponse, e.payload.getStatus(), "set room property fail"), t.mRsp.setRoomPropertyResponse && t.mRsp.setRoomPropertyResponse(new MsSetRoomPropertyRspInfo(e.payload.getStatus(), e.payload.getRoomid(), e.payload.getUserid(), utf8ByteArrayToString(e.payload.getRoomproperty())))
-    }
-}
-
-function SetRoomPropertyNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        t.mRsp.setRoomPropertyNotify && t.mRsp.setRoomPropertyNotify(new MsRoomPropertyNotifyInfo(e.payload.getRoomid(), e.payload.getUserid(), utf8ByteArrayToString(e.payload.getRoomproperty())))
-    }
-}
-
-function JoinOpenRspWork() {
-    this.doSubHandle = function (e, t) {
-        t.mRsp.joinOpenResponse && t.mRsp.joinOpenResponse(new MsReopenRoomResponse(e.payload.getStatus(), utf8ByteArrayToString(e.payload.getCpproto())))
-    }
-}
-
-function JoinOpenNotifyWork() {
-    this.doSubHandle = function (e, t) {
-        t.mRsp.joinOpenNotify && t.mRsp.joinOpenNotify(new MsReopenRoomNotify(e.payload.getRoomid(), e.payload.getUserid(), utf8ByteArrayToString(e.payload.getCpproto())))
-    }
-}
-
-function MatchvsEngine() {
-    (M_ENGINE = this).mChannel = "MatchVS", this.mPlatform = "release", this.mMsPubArgs = new MsPublicMemberArgs, this.mEngineState = ENGE_STATE.NONE, this.mAllPlayers = [], this.mRecntRoomID = 0, this.mUserListForJoinRoomRsp = [], this.joinRoomNotifyInfo = null, this.mNetWork = null, this.mHotelNetWork = null, this.mProtocol = new MatchvsProtocol, this.init = function (e, t, r, o) {
-        return MVS.Game.id = o, MVS.mtaReport && MVS.mtaReport.Report("init"), this.mRsp = e, this.mChannel = t, this.mPlatform = r, this.mGameID = o, this.mMsPubArgs.channel = t, this.mMsPubArgs.platform = r, this.mEngineState = ENGE_STATE.INITING, this.mProtocol.init(), this.getHostList(), 0
-    }, this.premiseInit = function (e, t, r) {
-        return void 0 === t || "" === t ? -1 : (this.mRsp = e, this.mGameID = r, HttpConf.HOST_GATWAY_ADDR = "ws://" + t, this.mEngineState = ENGE_STATE.HAVE_INIT, this.mRsp.initResponse(200), 0)
-    }, this.reconnect = function () {
-        if ((this.mEngineState & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT) return -2;
-        if ((this.mEngineState & ENGE_STATE.RECONNECTING) === ENGE_STATE.RECONNECTING) return -9;
-        if ("0" !== this.mRecntRoomID && (this.mEngineState & ENGE_STATE.HAVE_LOGIN) === ENGE_STATE.HAVE_LOGIN) {
-            this.mEngineState |= ENGE_STATE.RECONNECTING;
-            var e = new MsRoomJoin(MsEnum.JoinRoomType.reconnect, this.mMsPubArgs.userID, this.mRecntRoomID, this.mMsPubArgs.gameID, 0, 0, 0, "reconnect", [{name: "MatchVS"}]),
-                t = this.mProtocol.joinRoomSpecial(e);
-            return this.mNetWork.send(t), this.mRecntRoomID = "0", 0
-        }
-        if (void 0 === this.mMsPubArgs.gameID || void 0 === this.mMsPubArgs.secretKey || void 0 === this.mMsPubArgs.appKey) return -1;
-        if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) === ENGE_STATE.HAVE_LOGIN) return -6;
-        void 0 !== this.mNetWork && null !== this.mNetWork && this.mNetWork.close(), this.mEngineState |= ENGE_STATE.LOGINING, this.mEngineState |= ENGE_STATE.RECONNECTING, this.mNetWorkCallBackImp = new NetWorkCallBackImp(this), this.mNetWork = new MatchvsNetWork(HttpConf.HOST_GATWAY_ADDR, this.mNetWorkCallBackImp);
-        var r = this.mProtocol.login(this.mMsPubArgs.userID, this.mMsPubArgs.token, this.mMsPubArgs.gameID, this.mMsPubArgs.gameVersion, this.mMsPubArgs.appKey, this.mMsPubArgs.secretKey, this.mMsPubArgs.deviceID, this.mMsPubArgs.gatewayID);
-        return this.mNetWork.send(r), 0
-    }, this.login = function (e, t, r, o, s, i, n, a) {
-        if ((this.mEngineState & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT) return -2;
-        if ((this.mEngineState & ENGE_STATE.INITING) === ENGE_STATE.INITING) return -3;
-        if ((this.mEngineState & ENGE_STATE.LOGINING) === ENGE_STATE.LOGINING) return -5;
-        if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) === ENGE_STATE.HAVE_LOGIN) return -6;
-        if ((this.mEngineState & ENGE_STATE.LOGOUTING) === ENGE_STATE.LOGOUTING) return -11;
-        var p = new MVS.AppKeyCheck;
-        if (MVS.Game.id = r, !p.isInvailed(s + "#C")) return -26;
-        MVS.ccReport && MVS.ccReport.init(), MVS.ccReport && MVS.ccReport.login(r), void 0 !== this.mNetWork && null !== this.mNetWork && this.mNetWork.close(), this.mNetWorkCallBackImp = new NetWorkCallBackImp(this), this.mNetWork = new MatchvsNetWork(HttpConf.HOST_GATWAY_ADDR, this.mNetWorkCallBackImp), this.mUserID = e, this.mToken = t, this.mGameID = r, this.mGameVersion = o, this.mAppKey = s, this.mMsPubArgs.userID = e, this.mMsPubArgs.token = t, this.mMsPubArgs.gameID = r, this.mMsPubArgs.gameVersion = o, this.mMsPubArgs.appKey = s, this.mMsPubArgs.deviceID = n, this.mMsPubArgs.gatewayID = a, this.mMsPubArgs.secretKey = i;
-        var g = this.mProtocol.login(e, t, r, o, s, i, n, a);
-        return this.mEngineState |= ENGE_STATE.LOGINING, this.mNetWork.send(g), MatchvsLog.logI("login,userID" + e + ", token:" + t), 0
-    }, this.speed = function () {
-        if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) !== ENGE_STATE.HAVE_LOGIN) return -4;
-        var e = this.mProtocol.speed(this.mUserID, this.mGameID, this.mToken, VERSION, this.mGameVersion);
-        return this.mNetWork.send(e), 0
-    }, this.createRoom = function (e, t) {
-        var r = commEngineStateCheck(this.mEngineState, this.mEngineState, 2);
-        if (0 !== r) return r;
-        if (512 < t.length) return -21;
-        if (e.maxPlayer > MVSCONFIG.MAXPLAYER_LIMIT || e.maxPlayer < MVSCONFIG.MINPLAYER_LIMIT) return -20;
-        var o = new RoomInfo(0, e.roomName, e.maxPlayer, e.mode, e.canWatch, e.visibility, e.roomProperty, 0),
-            s = new PlayerInfo(this.mUserID, t),
-            i = this.mProtocol.roomCreate(e.maxPlayer, 0, this.mGameID, o, s);
-        return 1024 < i.byteLength || 512 < t.length ? -21 : (this.mEngineState |= ENGE_STATE.CREATEROOM, this.mNetWork.send(i), MatchvsLog.logI("create room"), 0)
-    }, this.getVersion = function () {
-        return "MatchVS-SDK-JS_v1.3.0.beta.201805016"
-    }, this.uninit = function () {
-        return this.mEngineState = ENGE_STATE.NONE, this.mRsp = null, MatchvsLog.logI("unInit "), 0
-    }, this.getRoomList = function (e) {
-        var t = commEngineStateCheck(this.mEngineState, this.mEngineState, 2);
-        if (0 !== t) return t;
-        var r = this.mProtocol.getRoomList(this.mGameID, e);
-        return 1024 < r.byteLength ? -21 : (this.mNetWork.send(r), 0)
-    }, this.roomCheckIn = function (e, t) {
-        this.mHotelNetWork = new MatchvsNetWork(HttpConf.HOST_HOTEL_ADDR, this.mNetWorkCallBackImp);
-        var r = this.mProtocol.roomCheckIn(e, t, this.mUserID, this.mGameID);
-        return this.mHotelNetWork.send(r), 0
-    }, this.joinRandomRoom = function (e, t) {
-        var r = commEngineStateCheck(this.mEngineState, this.mEngineState, 2);
-        if (0 !== r) return r;
-        if (e > MVSCONFIG.MAXPLAYER_LIMIT || e < MVSCONFIG.MINPLAYER_LIMIT) return -20;
-        if (512 < t.length) return -21;
-        var o = new MsRoomJoin(MsEnum.JoinRoomType.joinRandomRoom, this.mUserID, 0, this.mGameID, e, 0, 0, t, [{name: "matchvs"}]),
-            s = this.mProtocol.joinRandomRoom(o);
-        return this.mEngineState |= ENGE_STATE.JOIN_ROOMING, this.mNetWork.send(s), 0
-    }, this.joinRoomWithProperties = function (e, t) {
-        var r = commEngineStateCheck(this.mEngineState, this.mEngineState, 2);
-        if (0 !== r) return r;
-        if (512 < t.length) return -21;
-        if ("object" != typeof e) return -1;
-        if ("string" != typeof t) return -1;
-        if (e.maxPlayer > MVSCONFIG.MAXPLAYER_LIMIT || e.maxPlayer < MVSCONFIG.MINPLAYER_LIMIT) return -20;
-        var o = new MsRoomJoin(MsEnum.JoinRoomType.joinRoomWithProperty, this.mUserID, 1, this.mGameID, e.maxPlayer, e.mode, e.canWatch, t, e.tags),
-            s = this.mProtocol.joinRoomWithProperties(o);
-        return this.mEngineState |= ENGE_STATE.JOIN_ROOMING, this.mNetWork.send(s), 0
-    }, this.joinRoom = function (e, t) {
-        var r = commEngineStateCheck(this.mEngineState, this.mEngineState, 2);
-        if (0 !== r) return r;
-        if (!/^[0-9]+$/.test(e)) return -1;
-        var o = String(e).trim();
-        if (0 === o || "" === o) return -1;
-        var s = new MsRoomJoin(MsEnum.JoinRoomType.joinSpecialRoom, this.mUserID, e, this.mGameID, 0, 0, 0, t, [{name: "MatchVS"}]),
-            i = this.mProtocol.joinRoomSpecial(s);
-        return this.mEngineState |= ENGE_STATE.JOIN_ROOMING, this.mNetWork.send(i), MatchvsLog.logI("join room"), 0
-    }, this.joinOver = function (e) {
-        var t = commEngineStateCheck(this.mEngineState, this.mEngineState, 1);
-        if (0 !== t) return t;
-        if (1024 < e.length) return -21;
-        var r = this.mProtocol.joinOver(this.mGameID, this.mRoomInfo.getRoomid(), stringToUtf8ByteArray(e), this.mUserID);
-        return this.mNetWork.send(r), 0
-    }, this.leaveRoom = function (e) {
-        var t = commEngineStateCheck(this.mEngineState, this.mEngineState, 3);
-        if (0 !== t) return t;
-        var r = this.mRecntRoomID;
-        if (this.mRoomInfo && this.mRoomInfo.getRoomid && (r = this.mRoomInfo.getRoomid()), 1024 < e.length) return -21;
-        var o = this.mProtocol.leaveRoom(this.mGameID, this.mUserID, r, e);
-        return this.mNetWork.send(o), this.mEngineState |= ENGE_STATE.LEAVE_ROOMING, this.mHotelNetWork && this.mHotelNetWork.close(), MatchvsLog.logI("leaveRoom"), 0
-    }, this.kickPlayer = function (e, t) {
-        var r = commEngineStateCheck(this.mEngineState, this.mEngineState, 1);
-        if (0 !== r) return r;
-        if (1024 < t.length) return -21;
-        var o = this.mProtocol.kickPlayer(e, this.mUserID, this.mRoomInfo.getRoomid(), t);
-        return this.mNetWork.send(o), 0
-    }, this.setFrameSync = function (e, t) {
-        var r = commEngineStateCheck(this.mEngineState, this.mEngineState, 1);
-        if (0 !== r) return r;
-        if (20 < e || e < 0) return -20;
-        var o = this.mProtocol.setFrameSync(Number(e), this.mRoomInfo.getRoomid(), this.mGameID, 0, 1, t);
-        return this.mHotelNetWork.send(o), 0
-    }, this.sendFrameEvent = function (e, t) {
-        var r = commEngineStateCheck(this.mEngineState, this.mEngineState, 1);
-        if (0 !== r) return r;
-        if (1024 < e.length) return -21;
-        var o = this.mProtocol.sendFrameEvent(this.mRoomInfo.getRoomid(), 0, e, t);
-        return this.mHotelNetWork.send(o), 0
-    }, this.joinOpen = function (e) {
-        var t = commEngineStateCheck(this.mEngineState, this.mEngineState, 1);
-        if (0 !== t) return t;
-        var r = this.mProtocol.joinOpen(this.mGameID, this.mUserID, this.mRoomInfo.getRoomid(), e);
-        return this.mNetWork.send(r), 0
-    }
-}
+};
 
 function MatchvsResponse() {
     this.registerUserResponse = function (e) {
@@ -9472,199 +11508,799 @@ function MatchvsResponse() {
     }, this.reconnectResponse = function (e, t, r) {
     }, this.joinOpenNotify = function (e) {
     }, this.joinOpenResponse = function (e) {
+    }, this.joinWatchRoomResponse = function (e) {
+    }, this.joinWatchRoomNotify = function (e) {
+    }, this.leaveWatchRoomResponse = function (e) {
+    }, this.leaveWatchRoomNotify = function (e) {
+    }, this.getWatchRoomsResponse = function (e) {
+    }, this.watchHeartBeat = function (e) {
+    }, this.liveBroadcastResponse = function (e) {
+    }, this.liveBroadcastNotify = function (e) {
+    }, this.setLiveOffsetResponse = function (e) {
+    }, this.liveOverNotify = function (e) {
+    }, this.liveFrameUpdate = function (e) {
+    }, this.changeRoleResponse = function (e) {
+    }, this.setReconnectTimeoutResponse = function (e) {
     }
 }
 
-function Base64() {
-    _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", this.encode = function (e) {
-        var t, r, o, s, i, n, a, p = "", g = 0;
-        for (e = _utf8_encode(e); g < e.length;) s = (t = e.charCodeAt(g++)) >> 2, i = (3 & t) << 4 | (r = e.charCodeAt(g++)) >> 4, n = (15 & r) << 2 | (o = e.charCodeAt(g++)) >> 6, a = 63 & o, isNaN(r) ? n = a = 64 : isNaN(o) && (a = 64), p = p + _keyStr.charAt(s) + _keyStr.charAt(i) + _keyStr.charAt(n) + _keyStr.charAt(a);
-        return p
-    }, this.decode = function (e) {
-        var t, r, o, s, i, n, a = "", p = 0;
-        for (e = e.replace(/[^A-Za-z0-9\+\/\=]/g, ""); p < e.length;) t = _keyStr.indexOf(e.charAt(p++)) << 2 | (s = _keyStr.indexOf(e.charAt(p++))) >> 4, r = (15 & s) << 4 | (i = _keyStr.indexOf(e.charAt(p++))) >> 2, o = (3 & i) << 6 | (n = _keyStr.indexOf(e.charAt(p++))), a += String.fromCharCode(t), 64 != i && (a += String.fromCharCode(r)), 64 != n && (a += String.fromCharCode(o));
-        return a = _utf8_decode(a)
-    }, _utf8_encode = function (e) {
-        e = e.replace(/\r\n/g, "\n");
-        for (var t = "", r = 0; r < e.length; r++) {
-            var o = e.charCodeAt(r);
-            o < 128 ? t += String.fromCharCode(o) : (127 < o && o < 2048 ? t += String.fromCharCode(o >> 6 | 192) : (t += String.fromCharCode(o >> 12 | 224), t += String.fromCharCode(o >> 6 & 63 | 128)), t += String.fromCharCode(63 & o | 128))
-        }
-        return t
-    }, _utf8_decode = function (e) {
-        for (var t = "", r = 0, o = c1 = c2 = 0; r < e.length;) (o = e.charCodeAt(r)) < 128 ? (t += String.fromCharCode(o), r++) : 191 < o && o < 224 ? (c2 = e.charCodeAt(r + 1), t += String.fromCharCode((31 & o) << 6 | 63 & c2), r += 2) : (c2 = e.charCodeAt(r + 1), c3 = e.charCodeAt(r + 2), t += String.fromCharCode((15 & o) << 12 | (63 & c2) << 6 | 63 & c3), r += 3);
-        return t
-    }
-}
+!function (e) {
+    e.EngineNetworkMap = function () {
+        this[MATCHVS_USER_LOGIN_RSP] = new t, this[MATCHVS_ROOM_JOIN_RSP] = new r, this[MATCHVS_ROOM_NOTICE_USER_JOIN] = new u, this[MATCHVS_ROOM_CHECK_IN_RSP] = new s, this[MATCHVS_ROOM_CREATE_RSP] = new o, this[MATCHVS_ROOM_CHECKIN_NOTIFY] = new i, this[MATCHVS_ROOM_JOIN_OVER_RSP] = new p, this[MATCHVS_ROOM_JOIN_OVER_NOTIFY] = new g, this[MATCHVS_ROOM_LEAVE_RSP] = new a, this[MATCHVS_ROOM_NOTICE_USER_LEAVE] = new l, this[MATCHVS_USER_HEARTBEAT_RSP] = new M, this[MATCHVS_HEARTBEAT_HOTEL_RSP] = new c, this[MATCHVS_BROADCAST_HOTEL_RSP] = new m, this[MATCHVS_HOTEL_NOTIFY] = new d, this[CMD_SUBSCRIBE_ACK_CMDID] = new f, this[CMD_PUBLISH_ACKCMDID] = new h, this[CMD_PUBLISH_NOTIFYCMDID] = new y, this[MATCHVS_USER_GATEWAY_SPEED_RSP] = new R, this[CMD_GET_ROOM_LIST_RSP] = new b, this[MATCHVS_USER_LOGOUT_RSP] = new E, this[CMD_DISCONNECT_RSP] = new S, this[CMD_KICK_PLAYER_NOTIFY] = new v, this[CMD_KICK_PLAYER_RSP] = new _, this[CMD_SET_FRAME_SYNCRATEACK_CMDID] = new I, this[CMD_FRAME_BROADCASTACK_CMDID] = new B, this[CMD_SET_FRAME_SYNCRATENOTIFY_CMDID] = new T, this[CMD_FRAME_DATANOTIFY_CMDID] = new F, this[CMD_FRAME_SYNCNOTIFY_CMDID] = new O, this[MATCHVS_NETWORK_STATE_NOTIFY] = new A, this[CMD_GET_ROOM_LIST_EX_RSP] = new N, this[CMD_GET_ROOM_DETAIL_RSP] = new W, this[CMD_SET_ROOM_PROPERTY_RSP] = new D, this[CMD_SET_ROOM_PROPERTY_NOTIFY] = new w, this[CMD_ROOM_JOIN_OPEN_RSP] = new C, this[CMD_ROOM_JOIN_OPEN_NOT] = new P, this[MVS.ProtoCmd.JOIN_WATCHROOM_RSP] = new L, this[MVS.ProtoCmd.JOIN_WATCHROOM_NOTFY] = new j, this[MVS.ProtoCmd.LEAVE_WATCHROOM_NOTIFY] = new k, this[MVS.ProtoCmd.LEAVE_WATCHROOM_RSP] = new U, this[MVS.ProtoCmd.GET_WATCHROOM_RSP] = new G, this[MVS.ProtoCmd.CHANGE_ROLE_RSP] = new Q, this[MVS.ProtoCmd.ENTER_LIVEROOM_RSP] = new x, this[MVS.ProtoCmd.ENTER_LIVEROOM_NOTIFY] = new z, this[MVS.ProtoCmd.LIVE_HEARTBEAT_RSP] = new V, this[MVS.ProtoCmd.LIVE_BROADCAST_RSP] = new H, this[MVS.ProtoCmd.LIVE_BROADCAST_NOTIFY] = new J, this[MVS.ProtoCmd.SET_LIVEOFFSET_RSP] = new q, this[MVS.ProtoCmd.EXIT_LIVEROOM_NOTIFY] = new $, this[MVS.ProtoCmd.LIVE_OVER_NOTIFY] = new K, this[MVS.ProtoCmd.LIVE_FRAMEDATA_NOTIFY] = new Y, this[MVS.ProtoCmd.LIVE_FRAMESYNC_NOTIFY] = new X, this[MVS.ProtoCmd.SET_RECONNECT_TIMEOUT_RSP] = new Z
+    };
+    var n = function (e, t, r) {
+        var o = "";
+        o = void 0 !== MvsErrMsg[t] ? r + ". " + MvsErrMsg[t] : r, MatchvsLog.logI("[error code:" + t + "] " + o), e && e(t, o)
+    };
 
-MatchvsEngine.prototype.logout = function (e) {
-    if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) !== ENGE_STATE.HAVE_LOGIN) return -4;
-    (this.mEngineState & ENGE_STATE.IN_ROOM) === ENGE_STATE.IN_ROOM && (this.mEngineState |= ENGE_STATE.LEAVE_ROOMING, this.leaveRoom("user logout"), this.mHotelNetWork && this.mHotelNetWork.close()), MVS.ccReport && MVS.ccReport.logout();
-    var t = this.mProtocol.logout(e);
-    return this.mEngineState |= ENGE_STATE.LOGOUTING, this.mNetWork.send(t), 0
-}, MatchvsEngine.prototype.heartBeat = function () {
-    var e, t = M_ENGINE;
-    if (void 0 !== t.mGameID && "" !== t.mGameID && 0 !== t.mGameID && (e = void 0 === t.mRoomInfo ? 0 : t.mRoomInfo.getRoomid(), (t.mEngineState & ENGE_STATE.LOGOUTING) !== ENGE_STATE.LOGOUTING)) {
-        var r = t.mProtocol.heartBeat(t.mGameID, e);
-        t.mNetWork.send(r), MatchvsLog.logI("gateway heartBeat")
-    }
-}, MatchvsEngine.prototype.sendEvent = function (e) {
-    if ((this.mEngineState & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -2
-    };
-    if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) !== ENGE_STATE.HAVE_LOGIN) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -4
-    };
-    if ((this.mEngineState & ENGE_STATE.IN_ROOM) !== ENGE_STATE.IN_ROOM) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -6
-    };
-    if ((this.mEngineState & ENGE_STATE.INITING) === ENGE_STATE.INITING) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -3
-    };
-    if ((this.mEngineState & ENGE_STATE.CREATEROOM) === ENGE_STATE.CREATEROOM) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -7
-    };
-    if ((this.mEngineState & ENGE_STATE.JOIN_ROOMING) === ENGE_STATE.JOIN_ROOMING) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -7
-    };
-    if ("string" != typeof e) return {sequence: this.mProtocol.seq - 1, result: -1};
-    for (var t = [], r = 0, o = 0; o < this.mAllPlayers.length; o++) this.mAllPlayers[o] !== parseInt(this.mUserID) && (t[r++] = this.mAllPlayers[o]);
-    if (t.length > MVSCONFIG.MAXPLAYER_LIMIT) return -20;
-    if (1024 < e.length) return -21;
-    var s = this.mProtocol.broadCast(this.mRoomInfo.getRoomid(), t, 0, 0, stringToUtf8ByteArray(e));
-    return this.mHotelNetWork.send(s), {sequence: this.mProtocol.seq - 1, result: 0}
-}, MatchvsEngine.prototype.sendEventEx = function (e, t, r, o) {
-    if ((this.mEngineState & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -2
-    };
-    if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) !== ENGE_STATE.HAVE_LOGIN) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -4
-    };
-    if ((this.mEngineState & ENGE_STATE.IN_ROOM) !== ENGE_STATE.IN_ROOM) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -6
-    };
-    if ((this.mEngineState & ENGE_STATE.INITING) === ENGE_STATE.INITING) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -3
-    };
-    if ((this.mEngineState & ENGE_STATE.CREATEROOM) === ENGE_STATE.CREATEROOM) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -7
-    };
-    if ((this.mEngineState & ENGE_STATE.JOIN_ROOMING) === ENGE_STATE.JOIN_ROOMING) return {
-        sequence: this.mProtocol.seq - 1,
-        result: -7
-    };
-    if ("string" != typeof t) return {sequence: this.mProtocol.seq - 1, result: -1};
-    if (0 !== e && 1 !== e && 2 !== e) return {sequence: this.mProtocol.seq - 1, result: -23};
-    if (0 !== r && 1 !== r) return {sequence: this.mProtocol.seq - 1, result: -24};
-    if (1024 < t.length) return -21;
-    var s = this.mProtocol.broadCast(this.mRoomInfo.getRoomid(), o, r, e, stringToUtf8ByteArray(t));
-    return this.mHotelNetWork.send(s), {sequence: this.mProtocol.seq - 1, result: 0}
-}, MatchvsEngine.prototype.subscribeEventGroup = function (e, t) {
-    var r = commEngineStateCheck(this.mEngineState, this.mEngineState, 1);
-    if (0 !== r) return r;
-    if (0 === e.length && 0 === t.length) return -20;
-    var o = this.mProtocol.subscribeEventGroup(this.mGameID, this.mRoomInfo.getRoomid(), e, t);
-    return this.mHotelNetWork.send(o), 0
-}, MatchvsEngine.prototype.sendEventGroup = function (e, t) {
-    var r = commEngineStateCheck(this.mEngineState, this.mEngineState, 1);
-    if (0 !== r) return r;
-    if (t.length <= 0) return -20;
-    if (1024 < e.length) return -21;
-    var o = this.mProtocol.sendEventGroup(this.mGameID, this.mRoomInfo.getRoomid(), 1, t, e);
-    return this.mHotelNetWork.send(o), 0
-}, MatchvsEngine.prototype.hotelHeartBeat = function () {
-    var e = M_ENGINE;
-    e.mEngineState |= ENGE_STATE.IN_ROOM, e.mEngineState |= ENGE_STATE.HAVE_LOGIN;
-    var t = e.mProtocol.hotelHeartBeat(e.mGameID, e.mRoomInfo.getRoomid(), e.mUserID);
-    e.mHotelNetWork.send(t), MatchvsLog.logI("hotel heartBeat")
-}, MatchvsEngine.prototype.registerUser = function () {
-    if (MVS.mtaReport && MVS.mtaReport.Report("registerUser"), (this.mEngineState & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT) return -2;
-    var e = this.mChannel, r = "regUserInfo" + e + this.mPlatform, t = this.mGameVersion,
-        o = LocalStore_Load(r);
-    if (o) {
-        var s = JSON.parse(o);
-        return this.mRsp.registerUserResponse(new MsRegistRsp(s.status, s.data.userid, s.data.token, s.data.nickname, s.data.avatar)), MatchvsLog.logI("load user info from cache:" + s), 0
-    }
-    var i = HttpConf.REGISTER_USER_URL + "/wc3/regit.do?mac=0&deviceid=javascript&channel=" + e + "&pid=13&version=" + t,
-        n = new MatchvsNetWorkCallBack;
-    return n.rsp = this.mRsp.registerUserResponse, n.onMsg = function (e) {
-        var t = JSON.parse(e);
-        0 === t.status ? (LocalStore_Save(r, e), this.rsp(new MsRegistRsp(t.status, t.data.userid, t.data.token, t.data.nickname, t.data.avatar))) : this.rsp(new MsRegistRsp(t.status, 0, "err", e, "err")), MVS.mtaReport && MVS.mtaReport.Report("registerUserResponse")
-    }, n.onErr = function (e, t) {
-        this.rsp(new MsRegistRsp(0 === e ? -1 : e, 0, "err", t, "err"))
-    }, new MatchvsHttp(n).get(i), 0
-}, MatchvsEngine.prototype.getHostList = function () {
-    var e = this.mGameID, t = this.mChannel, r = this.mPlatform, o = isNeedUseWSS(),
-        s = "https://sdk.matchvs.com/v1/gateway/query?mac=0&gameid=" + e + "&channel=" + t + "&platform=" + r + (o ? "&useWSSProxy=1" : ""),
-        i = new MatchvsNetWorkCallBack, n = this;
-    return i.onMsg = function (e) {
-        var t = JSON.parse(e);
-        if (200 === t.status) {
-            n.mEngineState |= ENGE_STATE.HAVE_INIT, n.mEngineState &= ~ENGE_STATE.INITING;
-            var r = "https://";
-            HttpConf.REGISTER_USER_URL = r + t.data.vsuser, HttpConf.HOST_GATWAY_ADDR = (o ? "wss://" : "ws://") + (o ? t.data.wssProxy : t.data.engine + ":7001"), HttpConf.CMSNS_URL = r + t.data.cmsns, HttpConf.VS_OPEN_URL = r + t.data.vsopen, HttpConf.VS_PAY_URL = r + t.data.vspay, HttpConf.VS_PRODUCT_URL = r + t.data.VS_PRODUCT_URL
+    function t() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload.getStatus();
+            if (MVS.ccReport && MVS.ccReport.loginRsp(r), 200 === r ? t.mEngineState |= ENGE_STATE.HAVE_LOGIN : (t.mEngineState &= ~ENGE_STATE.LOGINING, t.mEngineState &= ~ENGE_STATE.RECONNECTING, n(t.mRsp.errorResponse, r, "login is fail")), t.mEngineState &= ~ENGE_STATE.LOGINING, t.mRecntRoomID = e.payload.getRoomid(), (t.mEngineState & ENGE_STATE.RECONNECTING) === ENGE_STATE.RECONNECTING) if ("0" !== t.mRecntRoomID) {
+                var o = new MsRoomJoin(MsEnum.JoinRoomType.reconnect, t.mMsPubArgs.userID, t.mRecntRoomID, t.mMsPubArgs.gameID, 0, 0, 0, "reconnect", [{name: "MatchVS"}]),
+                    s = t.mProtocol && t.mProtocol.joinRoomSpecial(o);
+                t.mGTWNetwork && t.mGTWNetwork.send(s)
+            } else t.mEngineState &= ~ENGE_STATE.RECONNECTING, t.mRsp.reconnectResponse && t.mRsp.reconnectResponse(MvsCode.CODE_201, [], {}); else t.mRsp.loginResponse(new MsLoginRsp(r, t.mRecntRoomID))
         }
-        MVS.mtaReport && MVS.mtaReport.Report("initResponse"), n.mRsp.initResponse(t.status)
-    }, i.onErr = function (e, t) {
-        console.error("getHostListErrCode" + e + " getHostListErrMsg" + t), n.mRsp.errorResponse(e, t)
-    }, new MatchvsHttp(i).get(s), 0
-}, MatchvsEngine.prototype.getRoomListEx = function (e) {
-    var t = commEngineStateCheck(this.mEngineState, this.mEngineState, 0);
-    if (0 !== t) return t;
-    var r = this.mProtocol.getRoomListEx(this.mGameID, e);
-    return this.mNetWork.send(r), 0
-}, MatchvsEngine.prototype.getRoomDetail = function (e) {
-    var t = commEngineStateCheck(this.mEngineState, this.mEngineState, 0);
-    if (0 !== t) return t;
-    var r = this.mProtocol.getRoomDetail(this.mGameID, e);
-    return this.mNetWork.send(r), 0
-}, MatchvsEngine.prototype.setRoomProperty = function (e, t) {
-    if (0 === t.length) return -1;
-    if (1024 < t.length) return -21;
-    var r = commEngineStateCheck(this.mEngineState, this.mEngineState, 1);
-    if (0 !== r) return r;
-    var o = this.mProtocol.setRoomProperty(this.mGameID, this.mUserID, e, t);
-    return this.mNetWork.send(o), 0
-}, MatchvsEngine.prototype.disConnect = function (e) {
-    var t = engine.mProtocol.disConnect(this.mUserID, this.mGameID, e);
-    this.mNetWork.send(t)
-}, MatchvsEngine.prototype.hashSet = function (e, t, r, o) {
-    var s = "gameID=" + e + "&key=" + r + "&userID=" + t + "&value=" + o,
-        i = hex_md5(this.mAppKey + "&" + s + "&" + this.mToken),
-        n = HttpConf.VS_OPEN_URL + "/wc5/hashSet.do?" + s + "&sign=" + i,
-        a = new MatchvsNetWorkCallBack, p = new MatchvsHttp(a);
-    a.onMsg = function (e) {
-        MatchvsLog.logI("hashSetRsp:", e)
-    }, a.onErr = function (e, t) {
-        MatchvsLog.logI("hashSetRsp:errCode=" + e + " errMsg=" + t)
-    }, p.get(n)
-}, MatchvsEngine.prototype.hashGet = function (e, t, r) {
-    var o = "gameID=" + e + "&key=" + r + "&userID=" + t,
-        s = hex_md5(this.mAppKey + "&" + o + "&" + this.mToken),
-        i = HttpConf.VS_OPEN_URL + "/wc5/hashGet.do?" + o + "&sign=" + s,
-        n = new MatchvsNetWorkCallBack, a = new MatchvsHttp(n);
-    n.onMsg = function (e) {
-        MatchvsLog.logI("hashGetRsp:", e)
-    }, n.onErr = function (e, t) {
-        MatchvsLog.logI("hashGetRsp:errCode=" + e + " errMsg=" + t)
-    }, a.get(i)
-};
+    }
+
+    function r() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload.getStatus();
+            if (200 === r) {
+                var o = e.payload.getBookinfo();
+                t.mRoomInfo = e.payload.getRoominfo(), t.mUserListForJoinRoomRsp = e.payload.getUsersList(), HttpConf.HOST_HOTEL_ADDR = MVS.MsUtil.getHotelUrl(o), t.roomCheckIn(e.payload.getBookinfo(), e.payload.getRoominfo())
+            } else t.mEngineState &= ~ENGE_STATE.JOIN_ROOMING, t.mEngineState &= ~ENGE_STATE.RECONNECTING, n(t.mRsp.errorResponse, r, "join room failed "), t.mRsp.joinRoomResponse && t.mRsp.joinRoomResponse(r, null, null)
+        }
+    }
+
+    function o() {
+        this.doSubHandle = function (e, t) {
+            if (200 === e.payload.getStatus()) {
+                var r = e.payload.getBookinfo();
+                e.roomInfo.setRoomid(e.payload.getRoomid()), e.roomInfo.setOwner(e.payload.getOwner()), t.mRoomInfo = e.roomInfo, HttpConf.HOST_HOTEL_ADDR = MVS.MsUtil.getHotelUrl(r), t.roomCheckIn(e.payload.getBookinfo(), e.roomInfo)
+            } else t.mEngineState &= ~ENGE_STATE.CREATEROOM, n(t.mRsp.errorResponse, e.payload.getStatus(), ""), t.mRsp.createRoomResponse && t.mRsp.createRoomResponse(new MsCreateRoomRsp(e.payload.getStatus(), "", 0))
+        }
+    }
+
+    function s() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload.getStatus();
+            if (200 !== r) t.mEngineState = ENGE_STATE.HAVE_INIT, t.mEngineState |= ENGE_STATE.HAVE_LOGIN, n(t.mRsp.errorResponse, r, "check in error"), t.mHotelNetWork && t.mHotelNetWork.close(); else {
+                t.mCntRoomType = MVS.TgRoomType.PRoom, t.mRecntRoomID = t.mRoomInfo.getRoomid(), t.mAllPlayers = e.payload.getCheckinsList();
+                var o = [];
+                t.mUserListForJoinRoomRsp.forEach(function (e) {
+                    var t = new MsRoomUserInfo(e.getUserid(), utf8ByteArrayToString(e.getUserprofile()));
+                    o.push(t)
+                });
+                var s = new MsRoomInfo(t.mRoomInfo.getRoomid(), utf8ByteArrayToString(t.mRoomInfo.getRoomproperty()), t.mRoomInfo.getOwner(), t.mRoomInfo.getState());
+                t.mEngineState |= ENGE_STATE.IN_ROOM, (t.mEngineState & ENGE_STATE.CREATEROOM) === ENGE_STATE.CREATEROOM ? (t.mEngineState &= ~ENGE_STATE.CREATEROOM, t.mRsp.createRoomResponse && t.mRsp.createRoomResponse(new MsCreateRoomRsp(r, t.mRoomInfo.getRoomid(), t.mRoomInfo.getOwner()))) : (t.mEngineState & ENGE_STATE.JOIN_ROOMING) === ENGE_STATE.JOIN_ROOMING ? (t.mEngineState &= ~ENGE_STATE.JOIN_ROOMING, t.mRsp.joinRoomResponse && t.mRsp.joinRoomResponse(r, o, s)) : (t.mEngineState & ENGE_STATE.RECONNECTING) === ENGE_STATE.RECONNECTING && (t.mEngineState &= ~ENGE_STATE.RECONNECTING, t.mRsp.reconnectResponse && t.mRsp.reconnectResponse(r, o, s))
+            }
+        }
+    }
+
+    function i() {
+        this.doSubHandle = function (e, t) {
+            t.joinRoomNotifyInfo && t.mRsp.joinRoomNotify && t.mRsp.joinRoomNotify(t.joinRoomNotifyInfo), t.mAllPlayers = e.payload.getCheckinsList(), t.mRsp.roomCheckInNotify && t.mRsp.roomCheckInNotify(new MsCheckInNotify(e.payload.getUserid(), e.payload.getCheckinsList(), e.payload.getPlayersList(), e.payload.getMaxplayers())), t.joinRoomNotifyInfo = null
+        }
+    }
+
+    function a() {
+        this.doSubHandle = function (e, t) {
+            t.mEngineState &= ~ENGE_STATE.LEAVE_ROOMING, 200 !== e.payload.getStatus() && n(t.mRsp.errorResponse, e.payload.getStatus(), "leave room fail"), e.roomInfo.setRoomid("0"), t.mRoomInfo = e.roomInfo;
+            var r = new MsLeaveRoomRsp(e.payload.getStatus(), e.payload.getRoomid(), e.payload.getUserid(), e.payload.getCpproto());
+            t.mRsp.leaveRoomResponse && t.mRsp.leaveRoomResponse(r), t.mEngineState &= ~ENGE_STATE.IN_ROOM
+        }
+    }
+
+    function p() {
+        this.doSubHandle = function (e, t) {
+            200 !== e.payload.getStatus() && n(t.mRsp.errorResponse, e.payload.getStatus(), "join over fail"), t.mRsp.joinOverResponse && t.mRsp.joinOverResponse(new MsJoinOverRsp(e.payload.getStatus(), utf8ByteArrayToString(e.payload.getCpproto())))
+        }
+    }
+
+    function g() {
+        this.doSubHandle = function (e, t) {
+            var r = new MsJoinOverNotifyInfo(e.payload.getRoomid(), e.payload.getSrcuserid(), utf8ByteArrayToString(e.payload.getCpproto()));
+            t.mRsp.joinOverNotify && t.mRsp.joinOverNotify(r)
+        }
+    }
+
+    function u() {
+        this.doSubHandle = function (e, t) {
+            t.joinRoomNotifyInfo = new MsRoomUserInfo(e.payload.getUser().getUserid(), utf8ByteArrayToString(e.payload.getUser().getUserprofile()))
+        }
+    }
+
+    function l() {
+        this.doSubHandle = function (e, t) {
+            var r = new MsLeaveRoomNotify(e.payload.getRoomid(), e.payload.getUserid(), e.payload.getOwner(), utf8ByteArrayToString(e.payload.getCpproto()));
+            t.mRsp.leaveRoomNotify && t.mRsp.leaveRoomNotify(r)
+        }
+    }
+
+    function c() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.hotelHeartBeatRsp && t.mRsp.hotelHeartBeatRsp(e.payload.getStatus()), MatchvsLog.logI("hotelHeartBeatRsp")
+        }
+    }
+
+    function m() {
+        this.doSubHandle = function (e, t) {
+            200 !== e.payload.getStatus() && n(t.mRsp.errorResponse, e.payload.getStatus(), "send event fail"), t.mRsp.sendEventResponse && t.mRsp.sendEventResponse(new MsSendEventRsp(e.payload.getStatus(), e.seq))
+        }
+    }
+
+    function d() {
+        this.doSubHandle = function (e, t) {
+            0 === e.payload.getSrcuid() ? t.mRsp.gameServerNotify && t.mRsp.gameServerNotify(new MsGameServerNotifyInfo(e.payload.getSrcuid(), utf8ByteArrayToString(e.payload.getCpproto()))) : t.mRsp.sendEventNotify && t.mRsp.sendEventNotify(new MsSendEventNotify(e.payload.getSrcuid(), utf8ByteArrayToString(e.payload.getCpproto())))
+        }
+    }
+
+    function f() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.subscribeEventGroupResponse && t.mRsp.subscribeEventGroupResponse(e.payload.getStatus(), e.payload.getGroupsList())
+        }
+    }
+
+    function h() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.sendEventGroupResponse && t.mRsp.sendEventGroupResponse(e.payload.getStatus(), e.payload.getDstnum())
+        }
+    }
+
+    function y() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.sendEventGroupNotify && t.mRsp.sendEventGroupNotify(e.payload.getSrcuid(), e.payload.getGroupsList(), utf8ByteArrayToString(e.payload.getCpproto()))
+        }
+    }
+
+    function R() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload.getStatus(), o = e.payload.getSeq();
+            t.mRsp.gatewaySpeedResponse && t.mRsp.gatewaySpeedResponse(new MsGatewaySpeedResponse(r, o))
+        }
+    }
+
+    function M() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload.getGameid(), o = e.payload.getGsexist();
+            t.mEngineState |= ENGE_STATE.HAVE_LOGIN, t.mRsp.heartBeatResponse && t.mRsp.heartBeatResponse(new MsHeartBeatResponse(r, o)), MatchvsLog.logI("gatewayHeartBeatResponse")
+        }
+    }
+
+    function E() {
+        this.doSubHandle = function (e, t) {
+            t.mGTWNetwork.close(), t.mRsp.logoutResponse && t.mRsp.logoutResponse(e.payload.getStatus())
+        }
+    }
+
+    function b() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload.getStatus();
+            200 !== r && (t.mRsp.getRoomListResponse && t.mRsp.getRoomListResponse(e.payload.getStatus(), null), n(t.mRsp.errorResponse, e.payload.getStatus(), "get room list error "));
+            for (var o = e.payload.getRoominfoList(), s = [], i = 0; i < o.length; i++) s[i] = new MsRoomInfoEx(o[i].getRoomid(), o[i].getRoomname(), o[i].getMaxplayer(), o[i].getMode(), o[i].getCanwatch(), utf8ByteArrayToString(o[i].getRoomproperty()));
+            t.mRsp.getRoomListResponse && t.mRsp.getRoomListResponse(r, s)
+        }
+    }
+
+    function S() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.disConnectResponse && t.mRsp.disConnectResponse(e.payload.getStatus())
+        }
+    }
+
+    function _() {
+        this.doSubHandle = function (e, t) {
+            200 != e.payload.getStatus() && n(t.mRsp.errorResponse, e.payload.getStatus(), "kick player error "), t.mRsp.kickPlayerResponse && t.mRsp.kickPlayerResponse(new MsKickPlayerRsp(e.payload.getStatus(), e.payload.getOwner(), e.payload.getUserid()))
+        }
+    }
+
+    function v() {
+        this.doSubHandle = function (e, t) {
+            e.payload.getUserid().toString() === "" + t.mUserID && null != e.hotelTimer && (MVS.ticker.clearInterval(e.hotelTimer), t.mEngineState &= ~ENGE_STATE.IN_ROOM, t.mEngineState |= ENGE_STATE.HAVE_LOGIN, t.mHotelNetWork.close()), t.mRsp.kickPlayerNotify && t.mRsp.kickPlayerNotify(new MsKickPlayerNotify(e.payload.getUserid(), e.payload.getSrcuserid(), utf8ByteArrayToString(e.payload.getCpproto()), e.payload.getOwner()))
+        }
+    }
+
+    function I() {
+        this.doSubHandle = function (e, t) {
+            MatchvsLog.logI("SetFrameSyncRateAck:" + e.payload), t.mRsp.setFrameSyncResponse && t.mRsp.setFrameSyncResponse(new MsSetChannelFrameSyncRsp(e.payload.getStatus()))
+        }
+    }
+
+    function T() {
+        this.doSubHandle = function (e, t) {
+            var r = new MVS.MsSetFrameSyncNotify(e.payload.getFramerate(), e.payload.getFrameidx(), e.payload.getTimestamp(), e.payload.getEnablegs());
+            t.mRsp.setFrameSyncNotify(r)
+        }
+    }
+
+    function B() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.sendFrameEventResponse && t.mRsp.sendFrameEventResponse(new MsSendFrameEventRsp(e.payload.getStatus()))
+        }
+    }
+
+    function F() {
+        this.doSubHandle = function (e, t) {
+            e.frameCache.unshift(new MsFrameItem(e.payload.getSrcuid(), utf8ByteArrayToString(e.payload.getCpproto()), e.payload.getTimestamp()))
+        }
+    }
+
+    function O() {
+        this.doSubHandle = function (e, t) {
+            for (var r = []; 0 < e.frameCache.length;) r.push(e.frameCache.pop());
+            var o = new MsFrameData(e.payload.getLastidx(), r, r.length);
+            t.mRsp.frameUpdate && t.mRsp.frameUpdate(o)
+        }
+    }
+
+    function A() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.networkStateNotify && t.mRsp.networkStateNotify(new MsNetworkStateNotify(e.payload.getRoomid(), e.payload.getUserid(), e.payload.getState(), e.payload.getOwner()))
+        }
+    }
+
+    function N() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload.getRoominfoexList(), s = [];
+            r.forEach(function (e) {
+                var t = e.getWatchinfo().getWatchsetting(),
+                    r = new MVS.MsWatchSet(t.getCachetime(), t.getMaxwatch(), t.getWatchdelayms(), t.getWatchpersistent()),
+                    o = new MsRoomAttribute(e.getRoomid(), e.getRoomname(), e.getMaxplayer(), e.getGameplayer(), e.getWatchplayer(), e.getMode(), e.getCanwatch(), utf8ByteArrayToString(e.getRoomproperty()), e.getOwner(), e.getState(), e.getCreatetime().toString(), r);
+                s.push(o)
+            });
+            var o = new MsGetRoomListExRsp(e.payload.getStatus(), e.payload.getTotal(), s);
+            t.mRsp.getRoomListExResponse && t.mRsp.getRoomListExResponse(o)
+        }
+    }
+
+    function W() {
+        this.doSubHandle = function (e, t) {
+            200 !== e.payload.getStatus() && (t.mRsp.getRoomDetailResponse && t.mRsp.getRoomDetailResponse(new MsGetRoomDetailRsp(e.payload.getStatus())), n(t.mRsp.errorResponse, e.payload.getStatus(), ""));
+            var r = e.payload.getRoomdetail(), o = [];
+            r.getPlayerinfosList().forEach(function (e) {
+                var t = new MsRoomUserInfo(e.getUserid(), utf8ByteArrayToString(e.getUserprofile()));
+                o.push(t)
+            });
+            var s = new MsGetRoomDetailRsp(e.payload.getStatus(), r.getState(), r.getMaxplayer(), r.getMode(), r.getCanwatch(), utf8ByteArrayToString(r.getRoomproperty()), r.getOwner(), r.getCreateflag(), o);
+            t.mRsp.getRoomDetailResponse && t.mRsp.getRoomDetailResponse(s)
+        }
+    }
+
+    function D() {
+        this.doSubHandle = function (e, t) {
+            200 !== e.payload.getStatus() && n(t.mRsp.errorResponse, e.payload.getStatus(), "set room property fail"), t.mRsp.setRoomPropertyResponse && t.mRsp.setRoomPropertyResponse(new MsSetRoomPropertyRspInfo(e.payload.getStatus(), e.payload.getRoomid(), e.payload.getUserid(), utf8ByteArrayToString(e.payload.getRoomproperty())))
+        }
+    }
+
+    function w() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.setRoomPropertyNotify && t.mRsp.setRoomPropertyNotify(new MsRoomPropertyNotifyInfo(e.payload.getRoomid(), e.payload.getUserid(), utf8ByteArrayToString(e.payload.getRoomproperty())))
+        }
+    }
+
+    function C() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.joinOpenResponse && t.mRsp.joinOpenResponse(new MsReopenRoomResponse(e.payload.getStatus(), utf8ByteArrayToString(e.payload.getCpproto())))
+        }
+    }
+
+    function P() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.joinOpenNotify && t.mRsp.joinOpenNotify(new MsReopenRoomNotify(e.payload.getRoomid(), e.payload.getUserid(), utf8ByteArrayToString(e.payload.getCpproto())))
+        }
+    }
+
+    function L() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload, o = r.getStatus();
+            if (200 !== o) return t.mEngineState &= ~MVS.ENGE_STATE.IN_WATCHING, n(t.mRsp.errorResponse, o, "join watch room error "), void(t.mRsp.joinWatchRoom && t.mRsp.joinWatchRoom(o));
+            var s = r.getBookinfo();
+            MVS.DEBUG && console.log("JoinWatchRoomRspWork bookInfo", s), MVS.Host.HOST_WATCH_ADDR = MVS.MsUtil.getLiveUrl(s, t.mGameID, r.getRoomid(), r.getSetid()), t.enterLiveRoom(r.getBookinfo(), r.getRoomid())
+        }
+    }
+
+    function j() {
+        this.doSubHandle = function (e, t) {
+            var r = new MsRoomUserInfo(e.payload.watcher().getUserid(), utf8ByteArrayToString(e.payload.watcher().getUserprofile()));
+            MVS.DEBUG && console.log(MVS.LgFormat("JoinWatchRoomNotifyWork"), r), t.mRsp.joinWatchRoomNotify && t.mRsp.joinWatchRoomNotify(r)
+        }
+    }
+
+    function k() {
+        this.doSubHandle = function (e, t) {
+        }
+    }
+
+    function U() {
+        this.doSubHandle = function (e, t) {
+            t.mWatchNetwrok && t.mWatchNetwrok.close();
+            var r = e.payload;
+            MVS.DEBUG && console.log(MVS.LgFormat("LeaveWatchRoomRspWork"), r), 200 !== r.getStatus() && n(t.mRsp.errorResponse(r.getStatus(), " leave watch room error ")), t.mWatchRoomID = "0", t.mRsp.leaveWatchRoomResponse && t.mRsp.leaveWatchRoomResponse(r.getStatus())
+        }
+    }
+
+    function G() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload;
+            if (200 !== r.getStatus()) return t.mRsp.getRoomListExResponse && t.mRsp.getRoomListExResponse(new MsGetRoomListExRsp(r.getStatus(), 0, [])), void n(t.mRsp.errorResponse, r.getStatus(), "get watch room list error ");
+            var o = r.getRoominfoexList(), s = [];
+            o.forEach(function (e) {
+                var t = e.getWatchinfo().getWatchsetting(),
+                    r = new MVS.MsWatchSet(t.getCachetime(), t.getMaxwatch(), t.getWatchdelayms(), t.getWatchpersistent()),
+                    o = new MsRoomAttribute(e.getRoomid(), e.getRoomname(), e.getMaxplayer(), e.getGameplayer(), e.getWatchplayer(), e.getMode(), e.getCanwatch(), utf8ByteArrayToString(e.getRoomproperty()), e.getOwner(), e.getState(), e.getCreatetime().toString(), r);
+                s.push(o)
+            });
+            var i = new MsGetRoomListExRsp(r.getStatus(), r.getTotal(), s);
+            t.mRsp.getWatchRoomsResponse && t.mRsp.getWatchRoomsResponse(i)
+        }
+    }
+
+    function x() {
+        this.doSubHandle = function (e, t) {
+            t.mEngineState &= ~MVS.ENGE_STATE.IN_WATCHING;
+            var r = e.payload, o = {};
+            if (200 !== r.getStatus()) n(t.mRsp.errorResponse, r.getStatus(), "enter live room error"), o = new MVS.MsJoinWatchRoomRsp(r.getStatus(), 0, "", {}); else {
+                t.mEngineState |= MVS.ENGE_STATE.IN_WATCH;
+                var s = r.getWathchinfo(), i = [];
+                t.mCntRoomType = MVS.TgRoomType.WRoom, t.mWatchRoomID = s.getRoomid(), s.getLastaudiencesList().forEach(function (e) {
+                    var t = new MVS.MsLiveAudience(e.getUserid(), utf8ByteArrayToString(e.getProfile()), e.getEntertime());
+                    i.push(t)
+                });
+                var a = new MVS.MsLiveWatchInfo(s.getRoomid(), s.getStartts(), s.getDelayms(), s.getCachems(), s.getMaxaudiences(), s.getCuraudiences(), s.getPeakaudiences(), i);
+                o = new MVS.MsJoinWatchRoomRsp(r.getStatus(), r.getRoomstatus(), r.getReserved(), a)
+            }
+            t.mRsp.joinWatchRoomResponse && t.mRsp.joinWatchRoomResponse(o)
+        }
+    }
+
+    function z() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload,
+                o = new MsRoomUserInfo(r.getUserid(), utf8ByteArrayToString(r.getUserprofile()));
+            MVS.DEBUG && console.log(MVS.LgFormat("EnterLiveRoomNotifyWork"), r), t.mRsp.joinWatchRoomNotify && t.mRsp.joinWatchRoomNotify(o)
+        }
+    }
+
+    function V() {
+        this.doSubHandle = function (e, t) {
+            t.mRsp.watchHeartBeat && t.mRsp.watchHeartBeat(e.payload.getStatus())
+        }
+    }
+
+    function H() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload;
+            200 !== r.getStatus() && n(t.mRsp.errorResponse, r.getStatus(), " watch send message error "), t.mRsp.liveBroadcastResponse && t.mRsp.liveBroadcastResponse(r.getStatus())
+        }
+    }
+
+    function J() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload;
+            t.mRsp.liveBroadcastNotify && t.mRsp.liveBroadcastNotify(new MsSendEventNotify(r.getSrcuid(), utf8ByteArrayToString(r.getCpproto())))
+        }
+    }
+
+    function q() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload;
+            t.mRsp.setLiveOffsetResponse && t.mRsp.setLiveOffsetResponse(r.getStatus())
+        }
+    }
+
+    function $() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload,
+                o = new MVS.MsExitLiveRoomNotify(r.getUserid(), utf8ByteArrayToString(r.getUserprofile()));
+            MVS.DEBUG && console.log(MVS.LgFormat("ExitLiveRoomNotifyWork"), o), t.mRsp.leaveWatchRoomNotify && t.mRsp.leaveWatchRoomNotify(o)
+        }
+    }
+
+    function K() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload;
+            MVS.DEBUG && console.log(MVS.LgFormat("LiveOverNotifyWork"), r), t.mRsp.liveOverNotify && t.mRsp.liveOverNotify(new MVS.MsLiveOverNotify(r.getGameid(), r.getRoomid()))
+        }
+    }
+
+    function Y() {
+        var s = 0;
+        this.doSubHandle = function (e, t) {
+            var r = e.payload, o = utf8ByteArrayToString(r.getCpproto());
+            console.log("收到数据总数：", s++, "context=" + o), e.frameCache.unshift(new MsFrameItem(r.getSrcuid(), o, r.getTimestamp()))
+        }
+    }
+
+    function X() {
+        this.doSubHandle = function (e, t) {
+            for (var r = []; 0 < e.frameCache.length;) r.push(e.frameCache.pop());
+            var o = new MsFrameData(e.payload.getLastidx(), r, r.length);
+            t.mRsp.liveFrameUpdate && t.mRsp.liveFrameUpdate(o)
+        }
+    }
+
+    function Q() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload;
+            if (200 !== r.getStatus()) n(t.mRsp.errorResponse, r.getStatus(), " watch send message error "); else {
+                var o = r.getBookinfo();
+                if (r.getTargetroomtype() == MVS.TgRoomType.PRoom) {
+                    MVS.ticker.clearInterval(e.watchTimer), t.mWatchNetwrok && t.mWatchNetwrok.close();
+                    var s = r.getPlayroom().getRoominfo();
+                    t.mRoomInfo = s, HttpConf.HOST_HOTEL_ADDR = MVS.MsUtil.getHotelUrl(o), console.log("getRoomid():", s.getRoomid()), t.roomCheckIn(o, s)
+                } else r.getTargetroomtype() == MVS.TgRoomType.WRoom && (MVS.ticker.clearInterval(e.hotelTimer), t.mEngineState &= ~ENGE_STATE.IN_ROOM, t.mEngineState |= ENGE_STATE.HAVE_LOGIN, t.mHotelNetWork && t.mHotelNetWork.close(), MVS.Host.HOST_WATCH_ADDR = MVS.MsUtil.getLiveUrl(o, t.mGameID, r.getRoomid(), r.getSetid()), t.enterLiveRoom(r.getBookinfo(), r.getRoomid()))
+            }
+            t.mRsp.changeRoleResponse(new MVS.MsChangeRoleRsp(r.getStatus(), r.getTargetroomtype()))
+        }
+    }
+
+    function Z() {
+        this.doSubHandle = function (e, t) {
+            var r = e.payload.getStatus();
+            200 !== r && n(t.mRsp.errorResponse, r, " set reconnect timeout value response error"), t.mRsp.setReconnectTimeoutResponse && t.mRsp.setReconnectTimeoutResponse(r)
+        }
+    }
+
+    e.ErrorRspWork = n
+}(MVS || {}), function (e) {
+    var o;
+
+    function t() {
+        (o = this).mChannel = "MatchVS", this.mPlatform = "release", this.mMsPubArgs = new MsPublicMemberArgs, this.mEngineState = ENGE_STATE.NONE, this.mAllPlayers = [], this.mRecntRoomID = 0, this.mWatchRoomID = 0, this.mNetWorkCallBackImp = null, this.mUserListForJoinRoomRsp = [], this.joinRoomNotifyInfo = null, this.mCntRoomType = MVS.TgRoomType.NRoom, this.mGTWNetwork = null, this.mHotelNetWork = null, this.mWatchNetwrok = null, this.mProtocol = new MatchvsProtocol, this.init = function (e, t, r, o) {
+            return MVS.Game.id = o, MVS.mtaReport && MVS.mtaReport.Report("init"), this.mRsp = e, this.mChannel = t, this.mPlatform = r, this.mGameID = o, this.mMsPubArgs.channel = t, this.mMsPubArgs.platform = r, this.mEngineState = ENGE_STATE.INITING, this.mProtocol.init(), this.getHostList(), 0
+        }, this.premiseInit = function (e, t, r) {
+            return void 0 === t || "" === t ? -1 : (this.mRsp = e, this.mGameID = r, HttpConf.HOST_GATWAY_ADDR = "ws://" + t, this.mEngineState = ENGE_STATE.HAVE_INIT, this.mRsp.initResponse(200), 0)
+        }, this.reconnect = function () {
+            if ((this.mEngineState & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT) return -2;
+            if ((this.mEngineState & ENGE_STATE.RECONNECTING) === ENGE_STATE.RECONNECTING) return -9;
+            if ("0" !== this.mRecntRoomID && (this.mEngineState & ENGE_STATE.HAVE_LOGIN) === ENGE_STATE.HAVE_LOGIN) {
+                this.mEngineState |= ENGE_STATE.RECONNECTING;
+                var e = new MsRoomJoin(MsEnum.JoinRoomType.reconnect, this.mMsPubArgs.userID, this.mRecntRoomID, this.mMsPubArgs.gameID, 0, 0, 0, "reconnect", [{name: "MatchVS"}]),
+                    t = this.mProtocol.joinRoomSpecial(e);
+                return this.mGTWNetwork.send(t), this.mRecntRoomID = "0", 0
+            }
+            if (void 0 === this.mMsPubArgs.gameID || void 0 === this.mMsPubArgs.appKey) return -1;
+            if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) === ENGE_STATE.HAVE_LOGIN) return -6;
+            void 0 !== this.mGTWNetwork && null !== this.mGTWNetwork && this.mGTWNetwork.close(), this.mEngineState |= ENGE_STATE.LOGINING, this.mEngineState |= ENGE_STATE.RECONNECTING, this.mNetWorkCallBackImp = new NetWorkCallBackImp(this), this.mGTWNetwork = new MVS.MatchvsNetWork(HttpConf.HOST_GATWAY_ADDR, this.mNetWorkCallBackImp);
+            var r = this.mProtocol.login(this.mMsPubArgs.userID, this.mMsPubArgs.token, this.mMsPubArgs.gameID, this.mMsPubArgs.gameVersion, this.mMsPubArgs.appKey, this.mMsPubArgs.deviceID);
+            return this.mGTWNetwork.send(r), 0
+        }, this.login = function (e, t, r, o, s, i) {
+            if ((this.mEngineState & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT) return -2;
+            if ((this.mEngineState & ENGE_STATE.INITING) === ENGE_STATE.INITING) return -3;
+            if ((this.mEngineState & ENGE_STATE.LOGINING) === ENGE_STATE.LOGINING) return -5;
+            if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) === ENGE_STATE.HAVE_LOGIN) return -6;
+            if ((this.mEngineState & ENGE_STATE.LOGOUTING) === ENGE_STATE.LOGOUTING) return -11;
+            var a = new MVS.AppKeyCheck;
+            if (MVS.Game.id = r, !a.isInvailed(s)) return -26;
+            MVS.ccReport && MVS.ccReport.init(), MVS.ccReport && MVS.ccReport.login(r), void 0 !== this.mGTWNetwork && null !== this.mGTWNetwork && this.mGTWNetwork.close(), this.mNetWorkCallBackImp = new NetWorkCallBackImp(this), this.mGTWNetwork = new MVS.MatchvsNetWork(HttpConf.HOST_GATWAY_ADDR, this.mNetWorkCallBackImp), this.mUserID = e, this.mToken = t, this.mGameID = r, this.mGameVersion = o, this.mAppKey = s, this.mMsPubArgs.userID = e, this.mMsPubArgs.token = t, this.mMsPubArgs.gameID = r, this.mMsPubArgs.gameVersion = o, this.mMsPubArgs.appKey = s, this.mMsPubArgs.deviceID = i;
+            var n = this.mProtocol.login(e, t, r, o, s, i);
+            return this.mEngineState |= ENGE_STATE.LOGINING, this.mGTWNetwork.send(n), MatchvsLog.logI("login,userID" + e + ", token:" + t), 0
+        }, this.speed = function () {
+            if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) !== ENGE_STATE.HAVE_LOGIN) return -4;
+            var e = this.mProtocol.speed(this.mUserID, this.mGameID, this.mToken, VERSION, this.mGameVersion);
+            return this.mGTWNetwork.send(e), 0
+        }, this.createRoom = function (e, t, r) {
+            var o = commEngineStateCheck(this.mEngineState, 2);
+            if (0 !== o) return o;
+            if (512 < t.length) return -21;
+            if (e.maxPlayer > MVS.Config.MAXPLAYER_LIMIT || e.maxPlayer < MVS.Config.MINPLAYER_LIMIT) return -20;
+            var s = {
+                    roomID: 0,
+                    roomName: e.roomName,
+                    maxPlayer: e.maxPlayer,
+                    mode: e.mode,
+                    canWatch: e.canWatch,
+                    visibility: e.visibility,
+                    roomProperty: e.roomProperty,
+                    owner: 0
+                }, i = {userID: this.mUserID, userProfile: t},
+                a = this.mProtocol.roomCreate(this.mGameID, s, i, r);
+            return 1024 < a.byteLength || 512 < t.length ? -21 : (this.mEngineState |= ENGE_STATE.CREATEROOM, this.mGTWNetwork.send(a), MatchvsLog.logI("create room"), 0)
+        }, this.uninit = function () {
+            return this.mEngineState = ENGE_STATE.NONE, this.mRsp = null, MatchvsLog.logI("unInit "), 0
+        }, this.getRoomList = function (e) {
+            var t = commEngineStateCheck(this.mEngineState, 2);
+            if (0 !== t) return t;
+            var r = this.mProtocol.getRoomList(this.mGameID, e);
+            return 1024 < r.byteLength ? -21 : (this.mGTWNetwork.send(r), 0)
+        }, this.roomCheckIn = function (e, t) {
+            this.mNetWorkCallBackImp.frameCache = [], this.mHotelNetWork = new MVS.MatchvsNetWork(HttpConf.HOST_HOTEL_ADDR, this.mNetWorkCallBackImp);
+            var r = this.mProtocol.roomCheckIn(e, t, this.mUserID, this.mGameID);
+            return this.mHotelNetWork.send(r), 0
+        }, this.joinRandomRoom = function (e, t) {
+            var r = commEngineStateCheck(this.mEngineState, 2);
+            if (0 !== r) return r;
+            if (e > MVS.Config.MAXPLAYER_LIMIT || e < MVS.Config.MINPLAYER_LIMIT) return -20;
+            if (512 < t.length) return -21;
+            var o = new MsRoomJoin(MsEnum.JoinRoomType.joinRandomRoom, this.mUserID, 0, this.mGameID, e, 0, 0, t, [{name: "matchvs"}]),
+                s = this.mProtocol.joinRandomRoom(o);
+            return this.mEngineState |= ENGE_STATE.JOIN_ROOMING, this.mGTWNetwork.send(s), 0
+        }, this.joinRoomWithProperties = function (e, t, r) {
+            var o = commEngineStateCheck(this.mEngineState, 2);
+            if (0 !== o) return o;
+            if (512 < t.length) return -21;
+            if ("object" != typeof e) return -1;
+            if ("string" != typeof t) return -1;
+            if (e.maxPlayer > MVS.Config.MAXPLAYER_LIMIT || e.maxPlayer < MVS.Config.MINPLAYER_LIMIT) return -20;
+            var s = new MsRoomJoin(MsEnum.JoinRoomType.joinRoomWithProperty, this.mUserID, 1, this.mGameID, e.maxPlayer, e.mode, e.canWatch, t, e.tags, e.visibility, e.roomProperty),
+                i = this.mProtocol.joinRoomWithProperties(s, r);
+            return this.mEngineState |= ENGE_STATE.JOIN_ROOMING, this.mGTWNetwork.send(i), 0
+        }, this.joinRoom = function (e, t) {
+            var r = commEngineStateCheck(this.mEngineState, 2);
+            if (0 !== r) return r;
+            if (!/^[0-9]+$/.test(e)) return -1;
+            var o = String(e).trim();
+            if (0 === o || "" === o) return -1;
+            var s = new MsRoomJoin(MsEnum.JoinRoomType.joinSpecialRoom, this.mUserID, e, this.mGameID, 0, 0, 0, t, [{name: "MatchVS"}]),
+                i = this.mProtocol.joinRoomSpecial(s);
+            return this.mEngineState |= ENGE_STATE.JOIN_ROOMING, this.mGTWNetwork.send(i), MatchvsLog.logI("join room"), 0
+        }, this.joinOver = function (e) {
+            var t = commEngineStateCheck(this.mEngineState, 1);
+            if (0 !== t) return t;
+            if (1024 < e.length) return -21;
+            var r = this.mProtocol.joinOver(this.mGameID, this.mRoomInfo.getRoomid(), stringToUtf8ByteArray(e), this.mUserID);
+            return this.mGTWNetwork.send(r), 0
+        }, this.leaveRoom = function (e) {
+            var t = commEngineStateCheck(this.mEngineState, 3);
+            if (0 !== t) return t;
+            var r = this.mRecntRoomID;
+            if (this.mRoomInfo && this.mRoomInfo.getRoomid && (r = this.mRoomInfo.getRoomid()), 1024 < e.length) return -21;
+            var o = this.mProtocol.leaveRoom(this.mGameID, this.mUserID, r, e);
+            return this.mGTWNetwork.send(o), this.mEngineState |= ENGE_STATE.LEAVE_ROOMING, this.mHotelNetWork && this.mHotelNetWork.close(), MatchvsLog.logI("leaveRoom"), 0
+        }, this.kickPlayer = function (e, t) {
+            var r = commEngineStateCheck(this.mEngineState, 1);
+            if (0 !== r) return r;
+            if (1024 < t.length) return -21;
+            var o = this.mProtocol.kickPlayer(e, this.mUserID, this.mRoomInfo.getRoomid(), t);
+            return this.mGTWNetwork.send(o), 0
+        }, this.setFrameSync = function (e, t) {
+            var r = commEngineStateCheck(this.mEngineState, 1);
+            if (0 !== r) return r;
+            if (20 < e || e < 0) return -20;
+            var o = this.mProtocol.setFrameSync(Number(e), this.mRoomInfo.getRoomid(), this.mGameID, 0, 1, t);
+            return this.mHotelNetWork.send(o), 0
+        }, this.sendFrameEvent = function (e, t) {
+            var r = commEngineStateCheck(this.mEngineState, 1);
+            if (0 !== r) return r;
+            if (1024 < e.length) return -21;
+            var o = this.mProtocol.sendFrameEvent(this.mRoomInfo.getRoomid(), 0, e, t);
+            return this.mHotelNetWork.send(o), 0
+        }, this.joinOpen = function (e) {
+            var t = commEngineStateCheck(this.mEngineState, 1);
+            if (0 !== t) return t;
+            var r = this.mProtocol.joinOpen(this.mGameID, this.mUserID, this.mRoomInfo.getRoomid(), e);
+            return this.mGTWNetwork.send(r), 0
+        }
+    }
+
+    t.prototype.logout = function (e) {
+        if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) !== ENGE_STATE.HAVE_LOGIN) return -4;
+        (this.mEngineState & ENGE_STATE.IN_ROOM) === ENGE_STATE.IN_ROOM && (this.mEngineState |= ENGE_STATE.LEAVE_ROOMING, this.leaveRoom("user logout"), this.mHotelNetWork && this.mHotelNetWork.close()), MVS.ccReport && MVS.ccReport.logout();
+        var t = this.mProtocol.logout(e);
+        return this.mEngineState |= ENGE_STATE.LOGOUTING, this.mGTWNetwork.send(t), 0
+    }, t.prototype.heartBeat = function () {
+        var e, t = o;
+        if (void 0 !== t.mGameID && "" !== t.mGameID && 0 !== t.mGameID && (e = void 0 === t.mRoomInfo ? 0 : t.mRoomInfo.getRoomid(), (t.mEngineState & ENGE_STATE.LOGOUTING) !== ENGE_STATE.LOGOUTING)) {
+            var r = t.mProtocol.heartBeat(t.mGameID, e);
+            t.mGTWNetwork.send(r), MatchvsLog.logI("gateway heartBeat")
+        }
+    }, t.prototype.sendEvent = function (e) {
+        if ((this.mEngineState & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -2
+        };
+        if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) !== ENGE_STATE.HAVE_LOGIN) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -4
+        };
+        if ((this.mEngineState & ENGE_STATE.IN_ROOM) !== ENGE_STATE.IN_ROOM) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -6
+        };
+        if ((this.mEngineState & ENGE_STATE.INITING) === ENGE_STATE.INITING) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -3
+        };
+        if ((this.mEngineState & ENGE_STATE.CREATEROOM) === ENGE_STATE.CREATEROOM) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -7
+        };
+        if ((this.mEngineState & ENGE_STATE.JOIN_ROOMING) === ENGE_STATE.JOIN_ROOMING) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -7
+        };
+        if ("string" != typeof e) return {sequence: this.mProtocol.seq - 1, result: -1};
+        for (var t = [], r = 0, o = 0; o < this.mAllPlayers.length; o++) this.mAllPlayers[o] !== parseInt(this.mUserID) && (t[r++] = this.mAllPlayers[o]);
+        if (t.length > MVS.Config.MAXPLAYER_LIMIT) return -20;
+        if (1024 < e.length) return -21;
+        var s = this.mProtocol.broadCast(this.mRoomInfo.getRoomid(), t, 0, 0, stringToUtf8ByteArray(e));
+        return this.mHotelNetWork.send(s), {sequence: this.mProtocol.seq - 1, result: 0}
+    }, t.prototype.sendEventEx = function (e, t, r, o) {
+        if ((this.mEngineState & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -2
+        };
+        if ((this.mEngineState & ENGE_STATE.HAVE_LOGIN) !== ENGE_STATE.HAVE_LOGIN) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -4
+        };
+        if ((this.mEngineState & ENGE_STATE.IN_ROOM) !== ENGE_STATE.IN_ROOM) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -6
+        };
+        if ((this.mEngineState & ENGE_STATE.INITING) === ENGE_STATE.INITING) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -3
+        };
+        if ((this.mEngineState & ENGE_STATE.CREATEROOM) === ENGE_STATE.CREATEROOM) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -7
+        };
+        if ((this.mEngineState & ENGE_STATE.JOIN_ROOMING) === ENGE_STATE.JOIN_ROOMING) return {
+            sequence: this.mProtocol.seq - 1,
+            result: -7
+        };
+        if ("string" != typeof t) return {sequence: this.mProtocol.seq - 1, result: -1};
+        if (0 !== e && 1 !== e && 2 !== e) return {sequence: this.mProtocol.seq - 1, result: -23};
+        if (0 !== r && 1 !== r) return {sequence: this.mProtocol.seq - 1, result: -24};
+        if (1024 < t.length) return -21;
+        var s = this.mProtocol.broadCast(this.mRoomInfo.getRoomid(), o, r, e, stringToUtf8ByteArray(t));
+        return this.mHotelNetWork.send(s), {sequence: this.mProtocol.seq - 1, result: 0}
+    }, t.prototype.subscribeEventGroup = function (e, t) {
+        var r = commEngineStateCheck(this.mEngineState, 1);
+        if (0 !== r) return r;
+        if (0 === e.length && 0 === t.length) return -20;
+        var o = this.mProtocol.subscribeEventGroup(this.mGameID, this.mRoomInfo.getRoomid(), e, t);
+        return this.mHotelNetWork.send(o), 0
+    }, t.prototype.sendEventGroup = function (e, t) {
+        var r = commEngineStateCheck(this.mEngineState, 1);
+        if (0 !== r) return r;
+        if (t.length <= 0) return -20;
+        if (1024 < e.length) return -21;
+        var o = this.mProtocol.sendEventGroup(this.mGameID, this.mRoomInfo.getRoomid(), 1, t, e);
+        return this.mHotelNetWork.send(o), 0
+    }, t.prototype.hotelHeartBeat = function () {
+        var e = o;
+        if ((e.mEngineState & ENGE_STATE.LEAVE_ROOMING) === ENGE_STATE.LEAVE_ROOMING) return 0;
+        e.mEngineState |= ENGE_STATE.IN_ROOM, e.mEngineState |= ENGE_STATE.HAVE_LOGIN;
+        var t = e.mProtocol.hotelHeartBeat(e.mGameID, e.mRoomInfo.getRoomid(), e.mUserID);
+        e.mHotelNetWork.send(t), MatchvsLog.logI("hotel heartBeat")
+    }, t.prototype.registerUser = function () {
+        if (MVS.mtaReport && MVS.mtaReport.Report("registerUser"), (this.mEngineState & ENGE_STATE.HAVE_INIT) !== ENGE_STATE.HAVE_INIT) return -2;
+        var e = this.mChannel, r = "regUserInfo" + e + this.mPlatform, t = this.mGameVersion,
+            o = LocalStore_Load(r);
+        if (o) {
+            var s = JSON.parse(o);
+            return this.mRsp.registerUserResponse(new MsRegistRsp(s.status, s.data.userid, s.data.token, s.data.nickname, s.data.avatar)), MatchvsLog.logI("load user info from cache:" + s), 0
+        }
+        var i = HttpConf.REGISTER_USER_URL + "/wc3/regit.do?mac=0&deviceid=javascript&channel=" + e + "&pid=13&version=" + t,
+            a = new MVS.MatchvsNetWorkCallBack;
+        return a.rsp = this.mRsp.registerUserResponse, a.onMsg = function (e) {
+            var t = JSON.parse(e);
+            0 === t.status ? (LocalStore_Save(r, e), this.rsp(new MsRegistRsp(t.status, t.data.userid, t.data.token, t.data.nickname, t.data.avatar))) : this.rsp(new MsRegistRsp(t.status, 0, "err", e, "err")), MVS.mtaReport && MVS.mtaReport.Report("registerUserResponse")
+        }, a.onErr = function (e, t) {
+            this.rsp(new MsRegistRsp(0 === e ? -1 : e, 0, "err", t, "err"))
+        }, new MVS.MatchvsHttp(a).get(i), 0
+    }, t.prototype.getHostList = function () {
+        var e = this.mGameID, t = this.mChannel, r = this.mPlatform, o = isNeedUseWSS(),
+            s = "https://sdk.matchvs.com/v1/gateway/query?mac=0&gameid=" + e + "&channel=" + t + "&platform=" + r + (o ? "&useWSSProxy=1" : ""),
+            i = new MVS.MatchvsNetWorkCallBack, a = this;
+        return i.onMsg = function (e) {
+            var t = JSON.parse(e);
+            if (200 === t.status) {
+                a.mEngineState |= ENGE_STATE.HAVE_INIT, a.mEngineState &= ~ENGE_STATE.INITING;
+                var r = "https://";
+                HttpConf.REGISTER_USER_URL = r + t.data.vsuser, HttpConf.HOST_GATWAY_ADDR = (o ? "wss://" : "ws://") + (o ? t.data.wssProxy : t.data.engine + ":7001"), HttpConf.CMSNS_URL = r + t.data.cmsns, HttpConf.VS_OPEN_URL = r + t.data.vsopen, HttpConf.VS_PAY_URL = r + t.data.vspay, HttpConf.VS_PRODUCT_URL = r + t.data.VS_PRODUCT_URL
+            }
+            MVS.mtaReport && MVS.mtaReport.Report("initResponse"), a.mRsp.initResponse(t.status)
+        }, i.onErr = function (e, t) {
+            console.error("getHostListErrCode" + e + " getHostListErrMsg" + t), a.mRsp.errorResponse(e, t)
+        }, new MVS.MatchvsHttp(i).get(s), 0
+    }, t.prototype.getRoomListEx = function (e) {
+        var t = commEngineStateCheck(this.mEngineState, 0);
+        if (0 !== t) return t;
+        var r = this.mProtocol.getRoomListEx(this.mGameID, e);
+        return this.mGTWNetwork.send(r), 0
+    }, t.prototype.getRoomDetail = function (e) {
+        var t = commEngineStateCheck(this.mEngineState, 0);
+        if (0 !== t) return t;
+        var r = this.mProtocol.getRoomDetail(this.mGameID, e);
+        return this.mGTWNetwork.send(r), 0
+    }, t.prototype.setRoomProperty = function (e, t) {
+        if (0 === t.length) return -1;
+        if (1024 < t.length) return -21;
+        var r = commEngineStateCheck(this.mEngineState, 1);
+        if (0 !== r) return r;
+        var o = this.mProtocol.setRoomProperty(this.mGameID, this.mUserID, e, t);
+        return this.mGTWNetwork.send(o), 0
+    }, t.prototype.disConnect = function (e) {
+        var t = engine.mProtocol.disConnect(this.mUserID, this.mGameID, e);
+        this.mGTWNetwork.send(t)
+    }, t.prototype.hashSet = function (e, t, r, o) {
+        var s = "gameID=" + e + "&key=" + r + "&userID=" + t + "&value=" + o,
+            i = hex_md5(this.mAppKey + "&" + s + "&" + this.mToken),
+            a = HttpConf.VS_OPEN_URL + "/wc5/hashSet.do?" + s + "&sign=" + i,
+            n = new MVS.MatchvsNetWorkCallBack, p = new MVS.MatchvsHttp(n);
+        n.onMsg = function (e) {
+            MatchvsLog.logI("hashSetRsp:", e)
+        }, n.onErr = function (e, t) {
+            MatchvsLog.logI("hashSetRsp:errCode=" + e + " errMsg=" + t)
+        }, p.get(a)
+    }, t.prototype.hashGet = function (e, t, r) {
+        var o = "gameID=" + e + "&key=" + r + "&userID=" + t,
+            s = hex_md5(this.mAppKey + "&" + o + "&" + this.mToken),
+            i = HttpConf.VS_OPEN_URL + "/wc5/hashGet.do?" + o + "&sign=" + s,
+            a = new MVS.MatchvsNetWorkCallBack, n = new MVS.MatchvsHttp(a);
+        a.onMsg = function (e) {
+            MatchvsLog.logI("hashGetRsp:", e)
+        }, a.onErr = function (e, t) {
+            MatchvsLog.logI("hashGetRsp:errCode=" + e + " errMsg=" + t)
+        }, n.get(i)
+    }, t.prototype.joinWatchRoom = function (e, t) {
+        var r = commEngineStateCheck(this.mEngineState, 2);
+        if (0 !== r) return r;
+        if (512 < t.length) return -21;
+        this.mWatchRoomID = e;
+        var o = this.mProtocol.joinWatchRoom(this.mGameID, this.mUserID, this.mWatchRoomID, t);
+        return this.mEngineState |= MVS.ENGE_STATE.IN_WATCHING, this.mGTWNetwork.send(o), r
+    }, t.prototype.enterLiveRoom = function (e, t) {
+        this.mNetWorkCallBackImp.frameCache = [], t && (this.mWatchRoomID = t), this.mWatchNetwrok = new MVS.MatchvsNetWork(MVS.Host.HOST_WATCH_ADDR, this.mNetWorkCallBackImp);
+        var r = this.mProtocol.enterLiveRoom(e, this.mGameID, this.mUserID, this.mWatchRoomID, 0);
+        return this.mWatchNetwrok.send(r), 0
+    }, t.prototype.liveHeartBeat = function () {
+        var e = o, t = e.mRecntRoomID, r = e.mProtocol.liveHeartBeat(e.mGameID, t, e.mUserID);
+        return e.mWatchNetwrok.send(r), MatchvsLog.logI("live heartBeat"), 0
+    }, t.prototype.leaveWatchRoom = function (e) {
+        var t = commEngineStateCheck(this.mEngineState, 0);
+        if (0 != t) return t;
+        var r = this.mWatchRoomID,
+            o = this.mProtocol.leaveWatchRoom(this.mGameID, this.mUserID, r, e);
+        return this.mGTWNetwork.send(o), MatchvsLog.logI("leaveWatchRoom"), 0
+    }, t.prototype.sendWatchEvent = function (e, t, r, o) {
+        var s = this.mRecntRoomID;
+        if (1024 < o.length) return -21;
+        var i = this.mProtocol.broadCastWatch(s, e, r, t, o);
+        return this.mWatchNetwrok.send(i), 0
+    }, t.prototype.setLiveOffset = function (e) {
+        var t = commEngineStateCheck(this.mEngineState, 4);
+        if (0 != t) return t;
+        var r = this.mWatchRoomID,
+            o = this.mProtocol.setLiveOffset(this.mGameID, r, this.mUserID, e);
+        return this.mWatchNetwrok.send(o), 0
+    }, t.prototype.getWatchRoomList = function (e) {
+        var t = commEngineStateCheck(this.mEngineState, 0);
+        if (0 != t) return t;
+        var r = this.mProtocol.getWatchRooms(this.mGameID, e);
+        return this.mGTWNetwork.send(r), 0
+    }, t.prototype.changeRole = function (e, t) {
+        var r = this.mWatchRoomID, o = 0, s = commEngineStateCheck(this.mEngineState, 0);
+        if (0 != s) return s;
+        if (MatchvsLog.logI("targetRoomType:" + t + " mCntRoomType:" + this.mCntRoomType + " roomID:" + this.mRecntRoomID), this.mCntRoomType == MVS.TgRoomType.PRoom) {
+            if (s = commEngineStateCheck(this.mEngineState, 1), this.mCntRoomType == t) return -30;
+            r = this.mRecntRoomID, o = MVS.TgRoomType.WRoom
+        } else {
+            if (this.mCntRoomType != MVS.TgRoomType.WRoom) return -1;
+            if (s = commEngineStateCheck(this.mEngineState, 4), this.mCntRoomType == t) return -30;
+            r = this.mWatchRoomID, o = MVS.TgRoomType.PRoom
+        }
+        if (0 != s) return s;
+        var i = this.mProtocol.changeRoleProto(this.mUserID, this.mGameID, r, o, e);
+        return this.mGTWNetwork.send(i), 0
+    }, t.prototype.setReconnectTimeout = function (e) {
+        var t = Number(e), r = commEngineStateCheck(this.mEngineState, 0);
+        if (0 != r) return r;
+        if (t < 0 || 600 < t) return -27;
+        var o = this.mProtocol.setReconnectTimeout(this.mUserID, e);
+        return this.mGTWNetwork.send(o), 0
+    }, window.MatchvsEngine = t, e.MatchvsEngine = t
+}(MVS || {});
 try {
     module && module.exports && (module.exports = {
         MVS: MVS,
         MatchvsLog: MatchvsLog,
-        MatchvsEngine: MatchvsEngine,
+        MatchvsEngine: MVS.MatchvsEngine,
         MatchvsResponse: MatchvsResponse,
         MsMatchInfo: MsMatchInfo,
         MsCreateRoomInfo: MsCreateRoomInfo,
@@ -9673,9 +12309,9 @@ try {
         LocalStore_Clear: LocalStore_Clear,
         MsReopenRoomResponse: MsReopenRoomResponse,
         MsReopenRoomNotify: MsReopenRoomNotify,
-        MatchvsHttp: MatchvsHttp
+        MatchvsHttp: MVS.MatchvsHttp
     })
 } catch (e) {
     console.log(e)
 }
-window.MVS = MVS, window.MatchvsLog = MatchvsLog, window.MatchvsEngine = MatchvsEngine, window.MatchvsResponse = MatchvsResponse, window.MsMatchInfo = MsMatchInfo, window.MsCreateRoomInfo = MsCreateRoomInfo, window.MsRoomFilter = MsRoomFilter, window.MsRoomFilterEx = MsRoomFilterEx, window.LocalStore_Clear = LocalStore_Clear, window.MsReopenRoomResponse = MsReopenRoomResponse, window.MsReopenRoomNotify = MsReopenRoomNotify, window.MatchvsHttp = MatchvsHttp;
+window.MVS = MVS, window.MatchvsLog = MatchvsLog, window.MatchvsEngine = MatchvsEngine, window.MatchvsResponse = MatchvsResponse, window.MsMatchInfo = MsMatchInfo, window.MsCreateRoomInfo = MsCreateRoomInfo, window.MsRoomFilter = MsRoomFilter, window.MsRoomFilterEx = MsRoomFilterEx, window.LocalStore_Clear = LocalStore_Clear, window.MsReopenRoomResponse = MsReopenRoomResponse, window.MsReopenRoomNotify = MsReopenRoomNotify, window.MatchvsHttp = MVS.MatchvsHttp;

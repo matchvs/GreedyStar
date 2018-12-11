@@ -18,7 +18,6 @@ public class App extends GameServerRoomEventHandler {
     private Map<Long, GreedyStarRoom> roomMap = new ConcurrentHashMap(256);
 //    private Map<Long,ArrayList<Food>> fondMap = new HashMap<>();
 
-
     public static void main(String[] args) {
         String[] path = new String[1];
 
@@ -290,7 +289,7 @@ public class App extends GameServerRoomEventHandler {
                 room = roomMap.get(roomID);
                 if (room != null && room.userList != null) {
                     log.info("发送主动创建房间开始游戏的消息");
-                    room.countDown = Const.GAME_TIME;
+                    room.countDown = Const.GAME_TIME_NUM;
                     GameServerMsg gameServerMsg = new GameServerMsg("startGame", room.userList);
                     gameServerMsg.profile = room.countDown;
                     sendMsgToOtherUserInRoom(roomMap.get(roomID).channel,roomID, JsonUtil.toString(gameServerMsg).getBytes(), new int[]{userID});

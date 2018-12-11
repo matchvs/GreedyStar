@@ -15,7 +15,7 @@ module.exports = {
     deviceId: "123456789",
     gatewayId: 0,
     token: "",
-
+    FPS:20,
     // test
     gameID: 202326,
     appKey: '495cf9da60df4fae854ef9e595176d4e#M',

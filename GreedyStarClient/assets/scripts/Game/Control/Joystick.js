@@ -38,35 +38,34 @@ cc.Class({
         }.bind(this));
         
         this.node.on(cc.Node.EventType.TOUCH_START,function (event) {
-                let touchPos = this.convertToNodeSpaceAR(event.getLocation());
+                let touchPos = self.node.convertToNodeSpaceAR(event.getLocation());
                 let posX = self.joyStickX + touchPos.x;
                 let posY = self.joyStickY + touchPos.y;
-                let distance = cc.pDistance(touchPos, cc.p(0, 0));
+                let distance = touchPos.sub(cc.v2(0,0));
                 var rad = Math.atan2(touchPos.y, touchPos.x);
                 isDirection(rad,8);
                 if (self.ringRadius > distance) {
-                    self.dot.setPosition(cc.p(posX, posY));
+                    self.dot.setPosition(cc.v2(posX, posY));
                     return true;
                 }
                 return false;
         });
 
         this.node.on(cc.Node.EventType.TOUCH_MOVE, function (event) {
-            let touchPos = this.convertToNodeSpaceAR(event.getLocation());
+            let touchPos = self.node.convertToNodeSpaceAR(event.getLocation());
             let posX = self.joyStickX + touchPos.x;
             let posY = self.joyStickY + touchPos.y;
-            let distance =  cc.pDistance(touchPos, cc.p(0, 0));
+            let distance =  touchPos.sub(cc.v2(0,0));
             var rad = Math.atan2(touchPos.y, touchPos.x);// [-PI, PI]
             isDirection(rad,8);
             if (self.ringRadius > distance) {
-                self.dot.setPosition(cc.p(posX, posY))
+                self.dot.setPosition(cc.v2(posX, posY))
             } else {
-                let bPosX = self.node.getPosition().x + Math.cos(getRadian(cc.p(posX, posY))) * self.ringRadius;
-                let bPosY = self.node.getPosition().y + Math.sin(getRadian(cc.p(posX, posY))) * self.ringRadius;
-                self.dot.setPosition(cc.p(bPosX, bPosY))
+                let bPosX = self.node.getPosition().x + Math.cos(getRadian(cc.v2(posX, posY))) * self.ringRadius;
+                let bPosY = self.node.getPosition().y + Math.sin(getRadian(cc.v2(posX, posY))) * self.ringRadius;
+                self.dot.setPosition(cc.v2(bPosX, bPosY))
             }
             syncKeyCode2Input();
-
         });
 
         this.node.on(cc.Node.EventType.TOUCH_END, function (event) {

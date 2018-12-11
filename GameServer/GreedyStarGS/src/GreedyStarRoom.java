@@ -20,7 +20,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     private Logger log = LoggerFactory.getLogger("GreedyStarRoom");
     private App app;
     public int foodNum;
-    public int countDown = Const.GAME_TIME;
+    public int countDown = Const.GAME_TIME_NUM;
 
 //    private int status = 0;
 //    private static int GameOver = 1;
@@ -32,11 +32,11 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-//            countDown--;
+            countDown--;
             if (countDown <=0) {
-                destroy();
                 GameServerMsg msg = new GameServerMsg("GameOver", "");
                 app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
+                destroy();
             } else {
                 if (userList != null) {
                     isUserContain();

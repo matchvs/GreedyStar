@@ -50,7 +50,10 @@ cc.Class({
             default: null,
             type: cc.Label
         },
-
+        camera: {
+            default: null,
+            type: cc.Node
+        },
         rank:0,
         countDown:0,
         countDownTime:undefined,
@@ -87,7 +90,7 @@ cc.Class({
                 }
                 var child = self.starLayer.getChildByName(player.userID + "");
                 if (child !== null) {
-                    self.action = cc.moveTo(0.05, cc.v2(player.x, player.y));
+                    self.action = cc.moveTo(0.1, cc.v2(player.x, player.y));
                     child.stopAllActions();
                     child.runAction(self.action);
                 }
@@ -95,35 +98,45 @@ cc.Class({
         });
     },
 
-
+    /**
+     * 相机跟随
+     */
     lateUpdate:function() {
         var targetPos = this.getUserTargetPos();
         if (targetPos !== undefined) {
-            if (Math.abs(targetPos.x - this.node.x) >= 500 ||
-                Math.abs(targetPos.y - this.node.y) >= 500) {
-                this.node.position =this.node.parent.convertToNodeSpaceAR(targetPos);
+            if (Math.abs(targetPos.x - this.camera.x) >= 500 ||
+                Math.abs(targetPos.y - this.camera.y) >= 500) {
+                this.camera.position =this.camera.parent.convertToNodeSpaceAR(targetPos);
             } else {
-                if (Math.abs(targetPos.x - this.node.x) >= 120 ||
-                    Math.abs(targetPos.y - this.node.y) >= 120) {//when camera and target distance is larger than max distance
+                if (Math.abs(targetPos.x - this.camera.x) >= 120 ||
+                    Math.abs(targetPos.y - this.camera.y) >= 120) {//when camera and target distance is larger than max distance
                     this.startFollow = true;
                 }
                 if (this.startFollow) {
-                    this.node.position = this.node.position.lerp(this.node.parent.convertToNodeSpaceAR(targetPos),0.05);
-                    if (cc.pDistance(targetPos, this.node.position) <= 30) {
+                    this.camera.position = this.camera.position.lerp(this.camera.parent.convertToNodeSpaceAR(targetPos),0.05);
+                    if (targetPos.sub(this.camera.position).mag() <= 30) {
                         this.startFollow = false;
                     }
                 }
             }
-            let camerRectInMap = cc.rect(this.node.position.x - 480, this.node.position.y - 320, 1100 , 780);
+            let camerRectInMap = cc.rect(this.camera.position.x - 480, this.camera.position.y - 320, 1100 , 780);
             var m_pViewEntitys = this.starLayer.children;
             for(var i = 2; i < m_pViewEntitys.length;i++) {
                 var pEntity = m_pViewEntitys[i];
                 if (pEntity) {
                     var targetPos1 = pEntity.getPosition();
                     if (camerRectInMap.contains(targetPos1)) {
-                        pEntity.active = true;
+                        if (!cc.RenderComponent) {
+                            pEntity._sgNode.visibility = true;
+                        } else {
+                            pEntity.active = true;
+                        }
                     } else {
-                        pEntity.active = false;
+                        if (!cc.RenderComponent) {
+                            pEntity._sgNode.visibility = false;
+                        } else {
+                            pEntity.active = false;
+                        }
                     }
                 }
             }
@@ -179,6 +192,10 @@ cc.Class({
         }
     },
 
+    /**
+     * 接收GameServer消息
+     * @param event
+     */
     onUIEvent(event) {
         var particleSystem ;
         var color;
@@ -201,6 +218,8 @@ cc.Class({
                 color = new cc.Color(colorArr[0], colorArr[1], colorArr[2])
                 var tempPlayer = event.data;
                 let node1 = cc.instantiate(this.playPrefab);
+                let userName = node1.getChildByName('userName').getComponent(cc.Label);
+                userName.string = tempPlayer.userID+"";
                 node1.x = tempPlayer.x;
                 node1.y = tempPlayer.y;
                 particleSystem = node1.getComponent(cc.ParticleSystem);
@@ -211,7 +230,7 @@ cc.Class({
                 this.starLayer.addChild(node1);
                 var targetPos = this.getUserTargetPos();
                 if (targetPos !== undefined) {
-                    this.node.position = this.node.parent.convertToNodeSpaceAR(targetPos);
+                    this.camera.position = this.camera.parent.convertToNodeSpaceAR(targetPos);
                 }
                 break;
             case "otherPlayer":
@@ -226,13 +245,28 @@ cc.Class({
                 }
                 break;
             case "move":
-                // this.receiveMsgNum++;
-                // if (this.Seconds !== new Date().getSeconds()) {
-                //     this.netDelayLable.string = "每秒收到移动包的数量：" + this.receiveMsgNum;
-                //     this.receiveMsgNum = 0;
-                //     this.Seconds = new Date().getSeconds();
-                // }
+                this.receiveMsgNum++;
+                if (this.Seconds !== new Date().getSeconds()) {
+                    this.netDelayLable.string = "每秒收到移动包的数量：" + this.receiveMsgNum;
+                    this.receiveMsgNum = 0;
+                    this.Seconds = new Date().getSeconds();
+                }
                 this.sync.update(event.data);
+                // let players = event.data;
+                // this.showScoreList(players);
+                // for (var n = 0; n < players.length; n++) {
+                //     var player = players[n];
+                //     if (player.userID === Const.userID) {
+                //         this.rank = n + 1;
+                //         this.userScore = player.score;
+                //     }
+                //     var child = this.starLayer.getChildByName(player.userID + "");
+                //     if (child !== null) {
+                //         this.action = cc.moveTo(0.05, cc.v2(player.x, player.y));
+                //         child.stopAllActions();
+                //         child.runAction(this.action);
+                //     }
+                // }
                 break;
             case "GameOver":
                 engine.prototype.leaveRoom();
@@ -241,12 +275,12 @@ cc.Class({
                 let room = event.data;
                 this.addPlayers(room);
                 if (GameData.GameMode) {
-                    this.countDown = Math.floor(event.profile/30);
+                    this.countDown = Math.floor(event.profile/Const.FPS);
                     this.textCountDown();
                 }
                 break;
             case "countDown":
-                this.countDown = Math.floor(event.data/30);
+                this.countDown = Math.floor(event.data/Const.FPS);
                 this.textCountDown();
                 break;
 
@@ -254,7 +288,9 @@ cc.Class({
     },
 
 
-
+    /**
+     * 倒计时
+     */
     textCountDown() {
         if ( this.countDownTime === undefined) {
             this.countDownTime = setInterval(() => {
@@ -275,7 +311,7 @@ cc.Class({
             if (node) {
                 particleSystem = node.getComponent(cc.ParticleSystem);
                 particleSystem.startSize = data[i].size;
-                particleSystem.startColor = color
+                particleSystem.startColor = color;
                 node.x = data[i].x;
                 node.y = data[i].y;
                 node.name = "" + data[i].ID;
@@ -285,7 +321,7 @@ cc.Class({
                 node = cc.instantiate(this.starPrefab);
                 particleSystem = node.getComponent(cc.ParticleSystem);
                 particleSystem.startSize = data[i].size;
-                particleSystem.startColor = color
+                particleSystem.startColor = color;
                 node.x = data[i].x;
                 node.y = data[i].y;
                 node.name = "" + data[i].ID;
@@ -294,15 +330,21 @@ cc.Class({
         }
     },
 
+    /**
+     * 添加玩家
+     * @param userList
+     */
     addPlayers(userList) {
         let colorArr = utils.getRandomColor(),color,particleSystem;
         for (var c = 0; c < userList.length; c++) {
             color = new cc.Color(colorArr[0], colorArr[1], colorArr[2]);
             let node2 = cc.instantiate(this.playPrefab);
+            let userName = node2.getChildByName('userName').getComponent(cc.Label);
+            userName.string = userList[c].userID+"";
             node2.x = userList[c].x;
             node2.y = userList[c].y;
             particleSystem = node2.getComponent(cc.ParticleSystem);
-            // particleSystem.startSize = userList[c].size;
+            particleSystem.startSize = userList[c].size;
             particleSystem.startColor = color;
             node2.name = userList[c].userID + "";
             this.starLayer.addChild(node2);
@@ -315,6 +357,9 @@ cc.Class({
         this.rankLable.string = this.rank;
     },
 
+    /**
+     * 退出游戏
+     */
     halfOver() {
         this.node.stopAllActions();
         this.mvsUnBind();
@@ -328,6 +373,10 @@ cc.Class({
         this.node.off(msg.MATCHVS_LEAVE_ROOM, this);
     },
 
+    /**
+     * 展示分数列表
+     * @param infoData
+     */
     showScoreList: function (infoData) {
         let spacing = 5;
         this.scoreList = infoData;
