@@ -633,9 +633,9 @@ cc.Class({
             this.showPrompt("该位置没有玩家，冷静一下");
             return;
         }
-        for (var i = 0; i < GameData.players.length; i++) {
-            if (GameData.players[i].userName === userName) {
-                var userID = GameData.players[i].userID;
+        for (var i = 0; i < this.players.length; i++) {
+            if (this.players[i].userName === userName) {
+                var userID = this.players[i].userID;
                 engine.prototype.kickPlayer(userID, "你被踢出去了");
                 break;
             }

@@ -20,7 +20,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     private Logger log = LoggerFactory.getLogger("GreedyStarRoom");
     private App app;
     public int foodNum;
-    public int countDown = Const.GAME_TIME_NUM;
+    private int countDown = Const.GAME_TIME_NUM;
 
 //    private int status = 0;
 //    private static int GameOver = 1;
@@ -29,7 +29,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
 //    private long createTime = 0;
 //30*180
 
-    Runnable runnable = new Runnable() {
+    private Runnable runnable = new Runnable() {
         @Override
         public void run() {
             countDown--;
@@ -66,13 +66,13 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
         Main.gameServer.setInterval(runnable, Const.FPS);
     }
 
-    public void destroy() {
+    private void destroy() {
         log.info("销毁定时器");
         Main.gameServer.clearInterval(runnable);
     }
 
 
-    public GreedyStarRoom(long roomID, StreamObserver<Simple.Package.Frame> clientChannel, App app) {
+    private GreedyStarRoom(long roomID, StreamObserver<Simple.Package.Frame> clientChannel, App app) {
         super(roomID, clientChannel);
         this.app = app;
         init();
@@ -82,7 +82,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     /**
      * 检查所有人的碰撞
      */
-    public void isUserContain() {
+    private void isUserContain() {
         for (int i = 0; i < userList.size(); i++) {
             GreedStarUser p1 = userList.get(i);
             for (int j = i + 1; j < userList.size(); j++) {
@@ -104,10 +104,10 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     /**
      * 移动
      */
-    public boolean personMove() {
+    private boolean personMove() {
         boolean isMove = false;
-        for (int i = 0; i < userList.size(); i++) {
-            if (userList.get(i).move()) {
+        for (GreedStarUser anUserList : userList) {
+            if (anUserList.move()) {
                 isMove = true;
             }
         }
@@ -118,8 +118,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
      * 玩家每移动一步就判断他与其他星星是否碰撞
      */
     private void isPersonContain() {
-        for (int i = 0; i < userList.size(); i++) {
-            GreedStarUser user = userList.get(i);
+        for (GreedStarUser user : userList) {
             for (int j = 0; j < foodList.size(); j++) {
                 Food food = foodList.get(j);
                 if (Utils.isCollisionWithCircle(food.x, food.y, food.size, user.x, user.y, user.size)) {
@@ -140,8 +139,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
      * 玩家边界检测
      */
     private void isBorderContain() {
-        for (int i = 0; i < userList.size(); i++) {
-            GreedStarUser user = userList.get(i);
+        for (GreedStarUser user : userList) {
             int lAcme = user.x - user.size;
             int rAcme = user.x + user.size;
             int uAcme = user.y + user.size;
@@ -180,7 +178,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
      * 房间用户排名
      */
     private void roomUserRank() {
-        Collections.sort(userList, new Comparator<GreedStarUser>() {
+        userList.sort(new Comparator<GreedStarUser>() {
             @Override
             public int compare(GreedStarUser o1, GreedStarUser o2) {
                 if (o1.score == o2.score) {
