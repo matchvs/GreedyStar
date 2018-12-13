@@ -1,3 +1,5 @@
+import javax.xml.bind.annotation.XmlType;
+
 public class Const {
 
     //准备
@@ -51,5 +53,8 @@ public class Const {
 
     //计算FPS次玩家位置， 当局游戏事件为 GAME_TIM秒
     public static int GAME_TIME_NUM = FPS*GAME_TIME;
+
+    //默认死亡时间 -1代表存活
+    public static int DEFAULT_DEATH_TIME = -1;
 
 }

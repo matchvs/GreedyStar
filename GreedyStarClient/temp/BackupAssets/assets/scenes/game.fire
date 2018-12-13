@@ -2732,7 +2732,7 @@
       "__id__": 57
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "游戏结束",
@@ -2757,9 +2757,7 @@
       "__id__": 57
     },
     "_enabled": true,
-    "alignMode": 1,
-    "_wasAlignOnce": {},
-    "isAlignOnce": {},
+    "alignMode": 0,
     "_target": null,
     "_alignFlags": 1,
     "_left": 0,
@@ -2821,7 +2819,7 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": -230,
+      "x": -150,
       "y": 45,
       "z": 0
     },
@@ -2915,7 +2913,7 @@
       "__id__": 61
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "本局分数",
@@ -2958,7 +2956,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 89,
+      "width": 88.98,
       "height": 40
     },
     "_anchorPoint": {
@@ -3001,7 +2999,7 @@
       "__id__": 63
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "1234",
@@ -3061,7 +3059,7 @@
         "__id__": 69
       }
     ],
-    "_active": true,
+    "_active": false,
     "_level": 0,
     "_components": [
       {
@@ -3183,7 +3181,7 @@
       "__id__": 67
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "本局金币",
@@ -3226,7 +3224,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 67,
+      "width": 66.74,
       "height": 40
     },
     "_anchorPoint": {
@@ -3269,7 +3267,7 @@
       "__id__": 69
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "100",
@@ -3357,7 +3355,7 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 230,
+      "x": 150,
       "y": 45,
       "z": 0
     },
@@ -3451,7 +3449,7 @@
       "__id__": 73
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "本局排名",
@@ -3494,7 +3492,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 22,
+      "width": 22.25,
       "height": 40
     },
     "_anchorPoint": {
@@ -3537,7 +3535,7 @@
       "__id__": 75
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "1",
@@ -3954,7 +3952,7 @@
       "__id__": 84
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "返回大厅",

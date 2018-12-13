@@ -94,7 +94,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                     GreedStarUser win = p1.score > p2.score ? p1 : p2;
                     GreedStarUser lose = p1.score < p2.score ? p1 : p2;
                     win.score += lose.score;
-                    lose.resetState();
+                    lose.resetState(this.countDown);
                 }
             }
         }
@@ -147,7 +147,9 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
             if (lAcme > 0 && rAcme < Const.width && uAcme < Const.height && dAcme > 0) {
 //                break;
             } else {
-                user.resetState();
+                GameServerMsg msg = new GameServerMsg("die", "");
+                app.sendMsgToOtherUserInRoom(ID,JsonUtil.toString(msg).getBytes());
+                user.resetState(this.countDown);
             }
         }
     }

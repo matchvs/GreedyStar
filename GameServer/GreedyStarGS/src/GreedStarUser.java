@@ -12,6 +12,7 @@ public class GreedStarUser extends IGameServerRoomHandler.User {
     //2 进行游戏
     //3 死亡
     public int status;
+    public int deathTime = Const.DEFAULT_DEATH_TIME;  // -1 代表没有死亡
     public int score;
     public int size; //体积
     public int x;
@@ -72,12 +73,14 @@ public class GreedStarUser extends IGameServerRoomHandler.User {
     /**
      * 重生
      */
-    public void resetState() {
+    public void resetState(int deathTime) {
         int[] position = Utils.getRandomPosition();
         this.score = 0;
         this.size = Const.USER_SIZE;
         this.x= position[0];
         this.y = position[1];
         this.speed = Const.SPEED;
+        this.status = 3;
+        this.deathTime = deathTime;
     }
 }

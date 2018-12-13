@@ -90,9 +90,16 @@ cc.Class({
                 }
                 var child = self.starLayer.getChildByName(player.userID + "");
                 if (child !== null) {
-                    self.action = cc.moveTo(0.1, cc.v2(player.x, player.y));
-                    child.stopAllActions();
-                    child.runAction(self.action);
+                    if (Math.abs(child.x - player.x) >= 500 ||
+                        Math.abs(child.y - player.y) >= 500) {
+                        child.stopAllActions();
+                        child.x = player.x;
+                        child.y = player.y;
+                    } else {
+                        child.stopAllActions();
+                        self.action = cc.moveTo(0.1, cc.v2(player.x, player.y));
+                        child.runAction(self.action);
+                    }
                 }
             }
         });
@@ -106,6 +113,7 @@ cc.Class({
         if (targetPos !== undefined) {
             if (Math.abs(targetPos.x - this.camera.x) >= 500 ||
                 Math.abs(targetPos.y - this.camera.y) >= 500) {
+                // targetPos.stopAllActions();
                 this.camera.position =this.camera.parent.convertToNodeSpaceAR(targetPos);
             } else {
                 if (Math.abs(targetPos.x - this.camera.x) >= 120 ||
@@ -119,7 +127,7 @@ cc.Class({
                     }
                 }
             }
-            let camerRectInMap = cc.rect(this.camera.position.x - 480, this.camera.position.y - 320, 1100 , 780);
+            let camerRectInMap = cc.rect(this.camera.position.x - 480, this.camera.position.y - 320, 1200 , 800);
             var m_pViewEntitys = this.starLayer.children;
             for(var i = 2; i < m_pViewEntitys.length;i++) {
                 var pEntity = m_pViewEntitys[i];

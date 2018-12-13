@@ -12,17 +12,15 @@ function MoveSync(onMoveSync) {
                 if (this.cacheSize > 0 && this.cacheQueue.length > this.cacheSize) {
                     while (this.cacheQueue.length > (this.cacheSize - 1)) {
                         onMoveSync(this.cacheQueue.pop());
-                        console.warn('[WARN] should jump frame ! the cacheQueue.len' + this.cacheQueue.length + '  >  ' + this.cacheSize);
+                        // console.warn('[WARN] should jump frame ! the cacheQueue.len' + this.cacheQueue.length + '  >  ' + this.cacheSize);
                     }
                     this.isCacheing = true;
                 }
+            } else {
+                // console.log('[INFO] caching, queue.size:' + this.cacheQueue.length);
             }
-            else {
-                console.log('[INFO] caching, queue.size:' + this.cacheQueue.length);
-            }
-        }
-        else {
-            console.warn('[WARN] the cache is not enough !');
+        } else {
+            // console.warn('[WARN] the cache is not enough !');
         }
     }.bind(this), 1000 / MoveSync.FPS);
 }
