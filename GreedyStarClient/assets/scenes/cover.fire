@@ -817,7 +817,7 @@
       "__id__": 17
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "退出游戏",
@@ -1070,7 +1070,7 @@
       "__id__": 23
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "你已掉线 请刷新 重开",
