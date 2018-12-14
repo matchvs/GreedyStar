@@ -388,43 +388,6 @@ cc.Class({
     },
 
 
-    // 用户头像被点击
-    avatarImageClickHandler() {
-        let avatarUrl = Const.avatarUrl;
-        let avatarNode = cc.find('Canvas/stage1/layerProfile/avator');
-        let sprite = avatarNode.getComponent(cc.Sprite);
-        // 微信image
-        try {
-            let image = wx.createImage();
-            image.onload = () => {
-                try {
-                    let texture = new cc.Texture2D();
-                    texture.initWithElement(image);
-                    texture.handleLoadedTexture();
-                    sprite.spriteFrame = new cc.SpriteFrame(texture);
-                } catch (e) {
-                    console.log('wx onload image error');
-                } finally {
-                    this.isshowUserProfileLayer(true);
-                    this.hideJoinRoomLayer();
-                }
-            }
-            image.src = avatarUrl;
-        } catch (e) {
-            console.log('not wx runtime');
-            cc.loader.load(avatarUrl, (err, res) => {
-                if (err) {
-                    console.error('avatar image click, load avatar image error', err);
-                    return;
-                }
-                // let png = avatarNode.getComponent(cc.Sprite);
-                sprite.spriteFrame = new cc.SpriteFrame(res);
-                this.isshowUserProfileLayer(true);
-                this.hideJoinRoomLayer();
-            })
-        }
-    },
-
     // 是否展示用户详细
     isshowUserProfileLayer(isShow) {
         let layerProfile = cc.find('Canvas/stage1/layerProfile');
