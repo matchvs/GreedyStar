@@ -1,4 +1,3 @@
-let Mvs = require('../Lib/Mvs');
 let Const = require('../Const/Const');
 let Config = require('../Global/Config');
 let GameData = require('../Global/GameData');
@@ -135,6 +134,9 @@ cc.Class({
                 });
                 this.showRoomView();
                 this.roomUserListChangeNotify(this.players, this.ownerID);
+                if (!GameData.GameMode) {
+                    this.shouldStartGame();
+                }
                 break;
             case msg.MATCHVS_CREATE_ROOM:
                 let label1 = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
@@ -156,6 +158,7 @@ cc.Class({
                     let roomListNode = cc.find('Canvas/stage1/scrollview/view/roomList');
                     roomListNode.removeAllChildren(true);
                 }
+
                 break;
             case msg.MATCHVS_LEAVE_ROOM_NOTIFY:
                 this.ownerID = eventData.leaveRoomInfo.owner;
@@ -422,9 +425,9 @@ cc.Class({
         let result = engine.prototype.joinRandomRoom(maxPlayer, userProfile);
         if (result !== 0) {
             this.showPromptOfError("随机加入房间[sdk]失败 请刷新 重试", true);
-        } else {
-            this.shouldStartGame();
         }
+
+
     },
 
     /**
@@ -589,9 +592,9 @@ cc.Class({
      */
     shouldStartGame() {
         this.showPromptOfError("正在加载 请稍等", true);
-        if (GameData.isOwner) {
-            engine.prototype.joinOver();
-        }
+        // if (GameData.isOwner) {
+        //     engine.prototype.joinOver();
+        // }
         cc.director.loadScene('game', () => {
             this && this.hidePromptOfError && this.hidePromptOfError();
         });

@@ -9,7 +9,7 @@ module.exports = {
 
     gameVersion: 1,
     channel: "Matchvs",
-    platform: "alpha",
+    platform: "release",
     // TEST:
     // platform: "alpha",
     deviceId: "123456789",

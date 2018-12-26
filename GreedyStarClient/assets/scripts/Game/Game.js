@@ -66,11 +66,18 @@ cc.Class({
     },
 
     onLoad() {
+        console.log("game","load");
+        this.mvsBind(this);
+    },
+
+    start() {
+        console.log("game","start");
         var self = this;
         this.scoreList = new  Array();
-        this.mvsBind(self);
         if (GameData.GameMode) {
             engine.prototype.sendEventEx(1,JSON.stringify({type: "startGame"}));
+        } else {
+            engine.prototype.sendEventEx(1,JSON.stringify({type:"ready"}));
         }
         this.settingBtn.on(cc.Node.EventType.TOUCH_END, function () {
             self.halfLeaveBtn.active = self.halfLeaveBtn.active? false:true;
@@ -79,7 +86,6 @@ cc.Class({
             engine.prototype.leaveRoom();
             self.halfOver();
         });
-
         self.sync = new MoveSync(function (players) {
             self.showScoreList(players);
             for (var n = 0; n < players.length; n++) {
@@ -127,7 +133,7 @@ cc.Class({
                     }
                 }
             }
-            let camerRectInMap = cc.rect(this.camera.position.x - 480, this.camera.position.y - 320, 1200 , 800);
+            let camerRectInMap = cc.rect(this.camera.position.x - 480, this.camera.position.y - 320, 1500 , 1000);
             var m_pViewEntitys = this.starLayer.children;
             for(var i = 2; i < m_pViewEntitys.length;i++) {
                 var pEntity = m_pViewEntitys[i];
@@ -210,6 +216,7 @@ cc.Class({
         let colorArr = utils.getRandomColor();
         switch (event.type) {
             case "addFood":
+                console.log("game","addFood");
                 this.addFood(event.data);
                 break;
             case "removeFood":
@@ -223,6 +230,7 @@ cc.Class({
                 }
                 break;
             case "addPlayer":
+                console.log("game","addPlayer");
                 color = new cc.Color(colorArr[0], colorArr[1], colorArr[2])
                 var tempPlayer = event.data;
                 let node1 = cc.instantiate(this.playPrefab);
@@ -242,6 +250,7 @@ cc.Class({
                 }
                 break;
             case "otherPlayer":
+                console.log("game","otherPlayer");
                 this.addPlayers(event.data);
                 break;
             case "removePlayer":
