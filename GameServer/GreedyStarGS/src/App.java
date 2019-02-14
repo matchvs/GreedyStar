@@ -25,7 +25,7 @@ public class App extends GameServerRoomEventHandler {
         /**
          * 本地调试时在此处填写自己config.Json的绝对路径,正式发布上线注释下面代码即可。
          */
-        path[0] = "E:\\project\\GreedyStar\\GameServer\\Config.json";
+//        path[0] = "E:\\project\\GreedyStar\\GameServer\\Config.json";
         try {
             Main.main(path);
         } catch (Exception e) {
@@ -41,75 +41,22 @@ public class App extends GameServerRoomEventHandler {
             request = Gsmvs.Request.parseFrom(clientEvent.getMessage());
 
             switch (clientEvent.getCmdId()) {
+                // 接收客户端发来的消息
                 case Gshotel.HotelGsCmdID.HotelBroadcastCMDID_VALUE:
                     Gshotel.HotelBroadcast boardMsg = Gshotel.HotelBroadcast.parseFrom(clientEvent.getMessage());
                     String msg = boardMsg.getCpProto().toStringUtf8();
                     try {
-                        examplePush(boardMsg.getRoomID(), boardMsg.getUserID(), msg);
+                        examplePush(boardMsg.getRoomID(), boardMsg.getUserID(), msg,request,clientChannel);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     break;
-                case Gsmvs.MvsGsCmdID.MvsCreateRoomReq_VALUE:
-                    log.debug("请求创建房间: 房间ID：" + request.getRoomID());
-                    break;
-                //删除房间
-                case Gshotel.HotelGsCmdID.HotelCloseConnet_VALUE:
-                    log.debug("接到 Hotel Close Connet 消息: status：" + Gshotel.CloseConnectAck.parseFrom(clientEvent.getMessage()).getStatus());
-                    break;
-                // 玩家checkin
-                case Gshotel.HotelGsCmdID.HotelPlayerCheckin_VALUE:
-                    log.debug("玩家进入房间成功(CheckIn):  userID:" + request.getUserID());
-                    JoinRoom(request, clientChannel);
-                    log.debug("加入房间的通道【hotel】 channel " + Utils.getChannel(clientChannel));
-                    break;
-                case Gsmvs.MvsGsCmdID.MvsJoinRoomReq_VALUE:
-                    log.debug("请求进入房间(JoinRoom)  玩家" + request.getUserID() + "进入房间，房间ID为：" + request.getRoomID());
-                    log.debug("请求进入房间  【 mvs 】 channel " + Utils.getChannel(clientChannel));
-                    break;
                 case Gsmvs.MvsGsCmdID.MvsKickPlayerReq_VALUE:
                     leaveRoom(request);
-                    log.debug("请求踢人: 房间：" + request.getRoomID() + "玩家：" + request.getUserID() + "被踢出");
                     break;
                 case Gsmvs.MvsGsCmdID.MvsLeaveRoomReq_VALUE:
                     leaveRoom(request);
-                    log.debug("请求离开房间成功： 玩家" + request.getUserID() + "离开房间，房间ID为：" + request.getRoomID());
                     break;
-                case Gsmvs.MvsGsCmdID.MvsJoinOpenReq_VALUE:
-                    log.debug("请求房间打开:  roomID：" + request.getRoomID());
-                    break;
-                case Gsmvs.MvsGsCmdID.MvsJoinOverReq_VALUE:
-                    log.debug("请求房间关闭: roomID：" + request.getRoomID());
-                    break;
-                case Gsmvs.MvsGsCmdID.MvsSetRoomPropertyReq_VALUE:
-                    Gsmvs.SetRoomPropertyReq roomPropertyReq = Gsmvs.SetRoomPropertyReq.parseFrom(clientEvent.getMessage());
-                    log.debug("修改房间属性: ");
-                    log.debug(roomPropertyReq + "");
-                    break;
-                case Gsmvs.MvsGsCmdID.MvsGetRoomDetailPush_VALUE:
-                    Gsmvs.RoomDetail roomDetail = Gsmvs.RoomDetail.parseFrom(clientEvent.getMessage());
-                    log.debug("主动获取房间回调:");
-                    log.debug(roomDetail + "");
-                    break;
-                case Gshotel.HotelGsCmdID.GSSetFrameSyncRateNotifyCMDID_VALUE:
-                    Gshotel.GSSetFrameSyncRateNotify setFrameSyncRateNotify = Gshotel.GSSetFrameSyncRateNotify.parseFrom(clientEvent.getMessage());
-                    log.debug("帧率通知");
-                    log.debug(setFrameSyncRateNotify + "");
-                    break;
-                case Gshotel.HotelGsCmdID.GSFrameDataNotifyCMDID_VALUE:
-                    Gshotel.GSFrameDataNotify frameDataNotify = Gshotel.GSFrameDataNotify.parseFrom(clientEvent.getMessage());
-                    log.debug("帧数据通知");
-                    log.debug(frameDataNotify + "");
-                    break;
-                case Gshotel.HotelGsCmdID.GSFrameSyncNotifyCMDID_VALUE:
-                    Gshotel.GSFrameSyncNotify frameSyncNotify = Gshotel.GSFrameSyncNotify.parseFrom(clientEvent.getMessage());
-                    log.debug("帧同步通知");
-                    log.debug(frameSyncNotify + "");
-                    break;
-                case Gsmvs.MvsGsCmdID.MvsNetworkStateReq_VALUE:
-                    log.debug("NetworkStateReq channel " + Utils.getChannel(clientChannel));
-                    break;
-
             }
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
@@ -128,7 +75,6 @@ public class App extends GameServerRoomEventHandler {
     private void JoinRoom(Gsmvs.Request request, StreamObserver<Simple.Package.Frame> clientChannel) {
         GameServerMsg msg;
         long roomID = request.getRoomID();
-//        room.fondList = new ArrayList<>();
         if (!roomMap.containsKey(roomID)) {
             room = new GreedyStarRoom(roomID, clientChannel,this);
             roomMap.put(roomID, room);
@@ -270,7 +216,7 @@ public class App extends GameServerRoomEventHandler {
      *
      * @param msg
      */
-    private void examplePush(long roomID, int userID, String msg) throws JSONException {
+    private void examplePush(long roomID, int userID, String msg,Gsmvs.Request request, StreamObserver<Simple.Package.Frame> clientChannel) throws JSONException {
         JSONObject jsonObject = new JSONObject(msg);
         switch (jsonObject.getString("type")) {
             case "input":
@@ -296,6 +242,9 @@ public class App extends GameServerRoomEventHandler {
                     sendMsgToOtherUserInRoom(roomMap.get(roomID).channel,roomID, JsonUtil.toString(gameServerMsg).getBytes(), new int[]{userID});
                     sendFoodMsg(room.foodList, roomID, userID);
                 }
+                break;
+            case "ready":
+                JoinRoom(request,clientChannel);
                 break;
         }
     }

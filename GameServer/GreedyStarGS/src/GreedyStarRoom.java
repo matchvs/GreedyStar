@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import stream.Simple;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -14,7 +13,6 @@ import java.util.Comparator;
  */
 public class GreedyStarRoom extends IGameServerRoomHandler.Room {
 
-    //    public long roomID; // 房间ID
     public ArrayList<GreedStarUser> userList; //玩家列表
     public ArrayList<Food> foodList = new ArrayList<>(); //星星列表
     private Logger log = LoggerFactory.getLogger("GreedyStarRoom");
@@ -33,6 +31,8 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
         @Override
         public void run() {
             countDown--;
+//            GameServerMsg timeMsg = new GameServerMsg("time",countDown);
+//            app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(timeMsg).getBytes());
             if (countDown <=0) {
                 GameServerMsg msg = new GameServerMsg("GameOver", "");
                 app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
@@ -46,6 +46,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                     roomUserRank();
                     if (personMove()) {
                         GameServerMsg msg = new GameServerMsg("move", userList);
+//                        msg.profile = countDown;
                         boolean sendResult = app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
                         if (!sendResult) {
                             log.info("send fail destroy room");
