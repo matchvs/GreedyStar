@@ -11,9 +11,9 @@ function MatchvsDemoEngine() {
  * @param platform
  * @param gameID
  */
-MatchvsDemoEngine.prototype.init = function(channel, platform, gameID){
+MatchvsDemoEngine.prototype.init = function(channel, platform, gameID,threshold){
     response.prototype.bind();
-    var result = mvs.engine.init(mvs.response,channel,platform,gameID);
+    var result = mvs.engine.init(mvs.response,channel,platform,gameID,Const.appKey,Const.gameVersion,threshold);
     console.log("初始化result"+result);
     return result;
 };
@@ -28,7 +28,12 @@ MatchvsDemoEngine.prototype.premiseInit = function (endPoint, gameID) {
     var result = mvs.engine.premiseInit(mvs.response,endPoint,gameID);
     console.log("独立部署初始化result"+result);
     return result;
-}
+};
+
+MatchvsDemoEngine.prototype.getNodeList = function () {
+    var result = mvs.engine.getNodeList();
+    return result;
+};
 
 /**
  * 注册
@@ -40,17 +45,24 @@ MatchvsDemoEngine.prototype.registerUser = function() {
     return result;
 };
 
+MatchvsDemoEngine.prototype.changeNode =  function (nodeID,userID,token,) {
+    var DeviceID = 'abcdef';
+    var args = {"nodeID":nodeID,"nodeID":userID,"token":token,"deviceID":DeviceID};
+    var result = mvs.engine.changeNode(args);
+    return result;
+};
+
+
 /**
  * 注册
  * @param userID
  * @param token
+ * @param nodeID 节点ID
  * @returns {DataView|*|number|void}
  */
-MatchvsDemoEngine.prototype.login = function(userID,token){
+MatchvsDemoEngine.prototype.login = function(userID,token,nodeID){
     var DeviceID = 'abcdef';
-    var gatewayID = 0;
-    var result = mvs.engine.login(userID,token,Const.gameID,Const.gameVersion,
-        Const.appKey,Const.secretKey,DeviceID,gatewayID);
+    var result = mvs.engine.login(userID,token,DeviceID,nodeID);
     console.log("登录result"+result);
     return result;
 };

@@ -365,6 +365,32 @@ MatchvsDemoResponse.prototype.gameServerNotify = function (eventInfo) {
     this.context.node.emit(msg.MATCHVS_GAME_SERVER_NOTIFY,{eventInfo:eventInfo,type:msg.MATCHVS_GAME_SERVER_NOTIFY});
 };
 
+
+MatchvsDemoResponse.prototype.gzip = function(text){
+    var buf = new Buffer(text);
+    var zipRes = null;
+    async.auto({
+        zip:function(cb){
+            zlib.gzip(buf,function(err,res){
+                zipRes = res;
+                cb(err,res);
+            })
+        },
+        unzip:['zip',function(cb,res){
+            var zipRes = res.zip;
+
+            zlib.unzip(zipRes,function(err,res){
+                cb(err,res.toString());
+            })
+        }]
+
+    },function(err,res){
+        console.log(zipRes);
+        console.log(res.unzip);
+    })
+}
+
+
 MatchvsDemoResponse.prototype.onMsg = function (buf) {
     var data = JSON.parse(buf);
     if (data.status == 0) {

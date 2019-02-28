@@ -9,7 +9,7 @@ module.exports = {
 
     gameVersion: 1,
     channel: "Matchvs",
-    platform: "release",
+    platform: "alpha",
     // TEST:
     // platform: "alpha",
     deviceId: "123456789",
@@ -17,11 +17,13 @@ module.exports = {
     token: "",
     FPS:20,
     // test
-    gameID: 202326,
-    appKey: '495cf9da60df4fae854ef9e595176d4e#M',
-    secretKey: '170313f9147a4fdf9b9b56a082630369',
-
+    // gameID: 202326,
+    gameID:2016290,
+    // appKey: '495cf9da60df4fae854ef9e595176d4e#M',
+    appKey: '040e6fe0229a4e8aa04d36388966d5ea#M',
     // client room event
     GAME_START_EVENT: 'game_start_event',
+
+    threshold:60,
 
 };

@@ -111,34 +111,38 @@ cc.Class({
                 this.updateRoomItem(eventData.rsp.roomAttrs);
                 break;
             case msg.MATCHVS_JOIN_ROOM_NOTIFY:
-                this.players.push({
-                    userID: eventData.roomUserInfo.userID,
-                    userName: JSON.parse(eventData.roomUserInfo.userProfile).profile,
-                });
-                //joinRoomNotify 不涉及房主变更，房主ID传0。
-                this.roomUserListChangeNotify(this.players, this.ownerID);
+                if (GameData.GameMode) {
+                    this.players.push({
+                        userID: eventData.roomUserInfo.userID,
+                        userName: JSON.parse(eventData.roomUserInfo.userProfile).profile,
+                    });
+                    //joinRoomNotify 不涉及房主变更，房主ID传0。
+                    this.roomUserListChangeNotify(this.players, this.ownerID);
+                }
                 break;
             case msg.MATCHVS_JOIN_ROOM_RSP:
-                let label = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
-                this.ownerID = eventData.userInfoList.owner;
-                label.string = '房间ID: ' + eventData.userInfoList.roomID;
-                for(var i = 0; i < eventData.userInfoList.length;i++) {
-                    this.players.push({
-                        userID: eventData.userInfoList[i].userID,
-                        userName: JSON.parse(eventData.userInfoList[i].userProfile).profile,
-                    });
-                }
-                this.players.push({
-                    userID: Const.userID,
-                    userName: Const.userName,
-                });
-                this.showRoomView();
-                this.roomUserListChangeNotify(this.players, this.ownerID);
                 if (!GameData.GameMode) {
                     this.shouldStartGame();
+                } else {
+                    let label = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
+                    this.ownerID = eventData.userInfoList.owner;
+                    label.string = '房间ID: ' + eventData.userInfoList.roomID;
+                    for(var i = 0; i < eventData.userInfoList.length;i++) {
+                        this.players.push({
+                            userID: eventData.userInfoList[i].userID,
+                            userName: JSON.parse(eventData.userInfoList[i].userProfile).profile,
+                        });
+                    }
+                    this.players.push({
+                        userID: Const.userID,
+                        userName: Const.userName,
+                    });
+                    this.showRoomView();
+                    this.roomUserListChangeNotify(this.players, this.ownerID);
                 }
                 break;
             case msg.MATCHVS_CREATE_ROOM:
+
                 let label1 = cc.find('Canvas/stage2/boxRoom/title').getComponent(cc.Label);
                 label1.string = '房间ID: ' + eventData.rsp.roomID;
                 this.ownerID = eventData.rsp.owner
@@ -150,24 +154,28 @@ cc.Class({
                 this.roomUserListChangeNotify(this.players,this.ownerID);
                 break;
             case msg.MATCHVS_LEAVE_ROOM:
-                if (eventData.leaveRoomRsp.status !== 200) {
-                    this.showPromptOfError('离开房间失败', true);
-                } else {
-                    this.players.length = 0;
-                    this.hideRoomView();
-                    let roomListNode = cc.find('Canvas/stage1/scrollview/view/roomList');
-                    roomListNode.removeAllChildren(true);
+                if (GameData.GameMode) {
+                    if (eventData.leaveRoomRsp.status !== 200) {
+                        this.showPromptOfError('离开房间失败', true);
+                    } else {
+                        this.players.length = 0;
+                        this.hideRoomView();
+                        let roomListNode = cc.find('Canvas/stage1/scrollview/view/roomList');
+                        roomListNode.removeAllChildren(true);
+                    }
                 }
 
                 break;
             case msg.MATCHVS_LEAVE_ROOM_NOTIFY:
-                this.ownerID = eventData.leaveRoomInfo.owner;
-                for(var i = 0; i < this.players.length;i++) {
-                    if (this.players[i].userID === eventData.leaveRoomInfo.userID) {
-                        this.players.splice(i,1);
+                if (GameData.GameMode) {
+                    this.ownerID = eventData.leaveRoomInfo.owner;
+                    for(var i = 0; i < this.players.length;i++) {
+                        if (this.players[i].userID === eventData.leaveRoomInfo.userID) {
+                            this.players.splice(i,1);
+                        }
                     }
+                    this.roomUserListChangeNotify(this.players, this.ownerID);
                 }
-                this.roomUserListChangeNotify(this.players, this.ownerID);
                 break;
             case msg.MATCHVS_KICK_PLAYER:
                 if (eventData.kickPlayerRsp.status === 200) {
@@ -420,7 +428,7 @@ cc.Class({
     quickJoinBtnHandler() {
         GameData.GameMode = false;
         this.isshowUserProfileLayer(false);
-        let maxPlayer = 6;
+        let maxPlayer = 8;
         let userProfile = Const.userName;
         let result = engine.prototype.joinRandomRoom(maxPlayer, userProfile);
         if (result !== 0) {
@@ -592,9 +600,6 @@ cc.Class({
      */
     shouldStartGame() {
         this.showPromptOfError("正在加载 请稍等", true);
-        // if (GameData.isOwner) {
-        //     engine.prototype.joinOver();
-        // }
         cc.director.loadScene('game', () => {
             this && this.hidePromptOfError && this.hidePromptOfError();
         });
