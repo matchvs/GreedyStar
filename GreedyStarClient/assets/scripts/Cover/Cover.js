@@ -95,7 +95,7 @@ cc.Class({
                 var item = cc.instantiate(this.nodeItem);
                 this.nodeistView.addChild(item);
                 item.name = this.nodeListData[i].nodeID+"";
-                item.setPosition(0, item.height * (0.5 + i) - spacing * (i + 1));
+                item.setPosition(0, item.height * (0.1 - i) + spacing * (i + 1));
                 item.getComponent('NodeItem').updateItem(this.nodeListData[i]);
                 item.on(cc.Node.EventType.TOUCH_END,this.nodeListItemOnclick,this);
 

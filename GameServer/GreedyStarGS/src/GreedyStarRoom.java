@@ -20,22 +20,13 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     public int foodNum;
     public int countDown = Const.GAME_TIME_NUM;
 
-//    private int status = 0;
-//    private static int GameOver = 1;
-//    private static int TOTAL_TIME = 5 * 60 * 1000;
-//    private long currentTime = 0;
-//    private long createTime = 0;
-//30*180
 
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
             countDown--;
-//            GameServerMsg timeMsg = new GameServerMsg("time",countDown);
-//            app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(timeMsg).getBytes());
-            if (countDown <=0) {
-                GameServerMsg msg = new GameServerMsg("GameOver", "");
-                app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
+            if (countDown <= 0) {
+                app.sendMsg(ID,"GameOver", "");
                 destroy();
             } else {
                 if (userList != null) {
@@ -44,27 +35,37 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                     isBorderContain();
                     isFoodListFull();
                     roomUserRank();
+                    isUserRevive();
                     if (personMove()) {
-                        GameServerMsg msg = new GameServerMsg("move", userList);
-//                        msg.profile = countDown;
-                        boolean sendResult = app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
+                        boolean sendResult = app.sendMsg(ID,"move", userList);
                         if (!sendResult) {
                             log.info("send fail destroy room");
                             destroy();
                         }
-
                     }
                 }
             }
         }
     };
 
+    /**
+     * 判断玩家的复活状态
+     */
+    private void isUserRevive() {
+        for (int i = 0; i < userList.size(); i++) {
+            GreedStarUser p1 = userList.get(i);
+            if (p1.status == Const.USER_DIE) {
+                if (p1.deathTime - this.countDown >= (Const.FPS * Const.DEATH_TIME)) {
+                    p1.status = Const.USER_IN_THE_GAME;
+                }
+            }
+        }
+    }
+
 
     private void init() {
         log.info("roomID :" + ID + "初始定时器");
-//        GreedyStarRoom.this.createTime = System.currentTimeMillis();
-//        foodNum = 0;
-        Main.gameServer.setInterval(runnable, 1000/Const.FPS);
+        Main.gameServer.setInterval(runnable, 1000 / Const.FPS);
     }
 
     public void destroy() {
@@ -86,16 +87,20 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     private void isUserContain() {
         for (int i = 0; i < userList.size(); i++) {
             GreedStarUser p1 = userList.get(i);
-            for (int j = i + 1; j < userList.size(); j++) {
-                GreedStarUser p2 = userList.get(j);
-                if (Utils.isCollisionWithCircle(p1.x, p1.y, p1.size, p2.x, p2.y, p2.size)) {
-                    if (p1.score == p2.score) {
-                        break;
+            if (p1.status == Const.USER_IN_THE_GAME) {
+                for (int j = i + 1; j < userList.size(); j++) {
+                    GreedStarUser p2 = userList.get(j);
+                    if (p2.status == Const.USER_IN_THE_GAME) {
+                        if (Utils.isCollisionWithCircle(p1.x, p1.y, p1.size, p2.x, p2.y, p2.size)) {
+                            if (p1.score == p2.score) {
+                                break;
+                            }
+                            GreedStarUser win = p1.score > p2.score ? p1 : p2;
+                            GreedStarUser lose = p1.score < p2.score ? p1 : p2;
+                            win.score += lose.score;
+                            this.userDie(lose, this.countDown);
+                        }
                     }
-                    GreedStarUser win = p1.score > p2.score ? p1 : p2;
-                    GreedStarUser lose = p1.score < p2.score ? p1 : p2;
-                    win.score += lose.score;
-                    lose.resetState(this.countDown);
                 }
             }
         }
@@ -108,8 +113,10 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     private boolean personMove() {
         boolean isMove = false;
         for (GreedStarUser anUserList : userList) {
-            if (anUserList.move()) {
-                isMove = true;
+            if (anUserList.status == Const.USER_IN_THE_GAME) {
+                if (anUserList.move()) {
+                    isMove = true;
+                }
             }
         }
         return isMove;
@@ -120,20 +127,20 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
      */
     private void isPersonContain() {
         for (GreedStarUser user : userList) {
-            for (int j = 0; j < foodList.size(); j++) {
-                Food food = foodList.get(j);
-                if (Utils.isCollisionWithCircle(food.x, food.y, food.size, user.x, user.y, user.size)) {
-                    user.score += food.score;
-                    user.size = Const.USER_SIZE + user.score / Const.SIZE_MULTIPLE;
-                    int speed = Const.SPEED - user.score / Const.SPEED_MULTIPLE;
-                    user.speed = speed > Const.USER_MIN_SPEED ? speed : Const.USER_MIN_SPEED;
-                    GameServerMsg msg = new GameServerMsg("removeFood", foodList.get(j).ID);
-                    foodList.remove(j);
-                    app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
+            if (user.status == Const.USER_IN_THE_GAME) {
+                for (int j = 0; j < foodList.size(); j++) {
+                    Food food = foodList.get(j);
+                    if (Utils.isCollisionWithCircle(food.x, food.y, food.size, user.x, user.y, user.size)) {
+                        user.score += food.score;
+                        user.size = Const.USER_SIZE + user.score / Const.SIZE_MULTIPLE;
+                        int speed = Const.SPEED - user.score / Const.SPEED_MULTIPLE;
+                        user.speed = speed > Const.USER_MIN_SPEED ? speed : Const.USER_MIN_SPEED;
+                        app.sendMsg(ID,"removeFood", foodList.get(j).ID);
+                        foodList.remove(j);
+                    }
                 }
             }
         }
-
     }
 
     /**
@@ -141,16 +148,16 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
      */
     private void isBorderContain() {
         for (GreedStarUser user : userList) {
-            int lAcme = user.x - user.size;
-            int rAcme = user.x + user.size;
-            int uAcme = user.y + user.size;
-            int dAcme = user.y - user.size;
-            if (lAcme > 0 && rAcme < Const.width && uAcme < Const.height && dAcme > 0) {
+            if (user.status == Const.USER_IN_THE_GAME) {
+                int lAcme = user.x - user.size;
+                int rAcme = user.x + user.size;
+                int uAcme = user.y + user.size;
+                int dAcme = user.y - user.size;
+                if (lAcme > 0 && rAcme < Const.width && uAcme < Const.height && dAcme > 0) {
 //                break;
-            } else {
-                GameServerMsg msg = new GameServerMsg("die", "");
-                app.sendMsgToOtherUserInRoom(ID,JsonUtil.toString(msg).getBytes());
-                user.resetState(this.countDown);
+                } else {
+                    this.userDie(user, this.countDown);
+                }
             }
         }
     }
@@ -168,12 +175,10 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                 list.add(food);
             } else {
                 if (list.size() > 0) {
-                    GameServerMsg msg = new GameServerMsg("addFood", list);
-                    app.sendMsgToAllUserInRoom(ID, JsonUtil.toString(msg).getBytes());
+                    app.sendMsg(ID,"addFood", list);
                 }
                 return;
             }
-
         }
     }
 
@@ -194,6 +199,11 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                 }
             }
         });
-
     }
+
+    private void userDie(GreedStarUser user, int ditTime) {
+        user.die(ditTime);
+        app.sendMsg(ID, "die", user.userID);
+    }
+
 }

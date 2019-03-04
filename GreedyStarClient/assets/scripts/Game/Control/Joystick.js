@@ -19,6 +19,7 @@ cc.Class({
         this.initInput(this);
     },
 
+
     initInput(self) {
        var keycode = {37: 0, 38: 0, 39: 0, 40: 0, 32:0, 1000:0, 1001:0, 1003:0, 1004:0};
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, function (event) {

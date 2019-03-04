@@ -57,4 +57,6 @@ public class Const {
     //默认死亡时间 -1代表存活
     public static int DEFAULT_DEATH_TIME = -1;
 
+    public static int DEATH_TIME = 3;
+
 }
