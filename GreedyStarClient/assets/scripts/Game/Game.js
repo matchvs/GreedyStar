@@ -396,13 +396,22 @@ cc.Class({
      */
     showScoreList: function (infoData) {
         let spacing = 5;
+        let item;
         this.scoreList = infoData;
         this.totalCount  = this.scoreList.length;
         this.scoreListView.height = this.totalCount*(this.scoreItem.height + spacing) + spacing;
-        this.scoreListView.removeAllChildren(true);
-        for(var i = 0; i < this.scoreList.length;i++) {
-            var item = cc.instantiate(this.scoreItem);
-            this.scoreListView.addChild(item);
+        let itemNum = this.scoreList.length - this.scoreListView.children.length;
+        if (itemNum  >= 0) {
+            for (var i = 0; i < itemNum; i++) {
+                item = cc.instantiate(this.scoreItem);
+                item.name = i + "";
+                this.scoreListView.addChild(item);
+            }
+        } else {
+            this.scoreListView.children.length + itemNum;
+        }
+        for(var i = 0; i < this.scoreListView.children.length;i++) {
+            item = this.scoreListView.getChildByName(i+"");
             item.setPosition(0, -item.height * (0.5 + i) - spacing * (i + 1));
             item.getComponent('Item').updateItem(this.scoreList[i]);
         }
