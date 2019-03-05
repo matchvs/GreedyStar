@@ -152,13 +152,11 @@ cc.Class({
             case msg.MATCHVS_LEAVE_ROOM:
                 if (eventData.leaveRoomRsp.status !== 200) {
                     this.showPromptOfError('离开房间失败', true);
-                } else {
-                    this.players.length = 0;
-                    this.hideRoomView();
-                    let roomListNode = cc.find('Canvas/stage1/scrollview/view/roomList');
-                    roomListNode.removeAllChildren(true);
                 }
-
+                this.players.length = 0;
+                this.hideRoomView();
+                let roomListNode = cc.find('Canvas/stage1/scrollview/view/roomList');
+                roomListNode.removeAllChildren(true);
                 break;
             case msg.MATCHVS_LEAVE_ROOM_NOTIFY:
                 this.ownerID = eventData.leaveRoomInfo.owner;
