@@ -9,12 +9,12 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        nodeDelayLabel:{
+        nodeDelayLabel: {
             default: null,
             type: cc.Label
         },
 
-        nodeNameLabel:{
+        nodeNameLabel: {
             default: null,
             type: cc.Label
         },
@@ -54,7 +54,7 @@ cc.Class({
             var gameID = 202326;
             result = engine.prototype.premiseInit(endport, gameID)
         } else {
-            result = engine.prototype.init(Const.channel, Const.platform, Const.gameID,Const.threshold)
+            result = engine.prototype.init(Const.channel, Const.platform, Const.gameID, Const.threshold)
         }
         if (result !== 0)
             this.showPromptOfError('初始化[sdk]失败 请刷新 重试', true);
@@ -80,37 +80,38 @@ cc.Class({
     getNodeList() {
         this.nodeListData = engine.prototype.getNodeList();
         if (this.nodeListData.length > 0) {
-           this.nodeDelayLabel.string = this.nodeListData[0].latency+"ms";
-           this.nodeNameLabel.string = this.nodeListData[0].area;
-           this.nodeID = this.nodeListData[0].nodeID;
+            this.nodeDelayLabel.string = this.nodeListData[0].latency + "ms";
+            this.nodeNameLabel.string = this.nodeListData[0].area;
+            this.nodeID = this.nodeListData[0].nodeID;
         }
         console.log(this.nodeListData);
     },
 
     seletNode() {
-        let spacing = 20;
-        if (!this.nodeistView.active) {
-            this.nodeistView.active = true;
-            for(var i = 0; i <  this.nodeListData.length;i++) {
-                var item = cc.instantiate(this.nodeItem);
-                this.nodeistView.addChild(item);
-                item.name = this.nodeListData[i].nodeID+"";
-                item.setPosition(0, item.height * (i) - spacing * (i + 1));
-                item.getComponent('NodeItem').updateItem(this.nodeListData[i]);
-                item.on(cc.Node.EventType.TOUCH_END,this.nodeListItemOnclick,this);
+        if (this.nodeListData !== undefined) {
+            let spacing = 20;
+            if (!this.nodeistView.active) {
+                this.nodeistView.active = true;
+                for (var i = 0; i < this.nodeListData.length; i++) {
+                    var item = cc.instantiate(this.nodeItem);
+                    this.nodeistView.addChild(item);
+                    item.name = this.nodeListData[i].nodeID + "";
+                    item.setPosition(0, item.height * (i) - spacing * (i + 1));
+                    item.getComponent('NodeItem').updateItem(this.nodeListData[i]);
+                    item.on(cc.Node.EventType.TOUCH_END, this.nodeListItemOnclick, this);
 
+                }
+            } else {
+                this.nodeistView.active = false;
             }
-        } else  {
-            this.nodeistView.active = false;
         }
-
     },
 
     nodeListItemOnclick(event) {
         this.nodeID = parseInt(event.currentTarget.name);
-        for(var i = 0; i < this.nodeListData.length;i++) {
+        for (var i = 0; i < this.nodeListData.length; i++) {
             if (this.nodeID === this.nodeListData[i].nodeID) {
-                this.nodeDelayLabel.string = this.nodeListData[i].latency+"ms";
+                this.nodeDelayLabel.string = this.nodeListData[i].latency + "ms";
                 this.nodeNameLabel.string = this.nodeListData[i].area;
             }
         }
@@ -151,7 +152,7 @@ cc.Class({
      */
     login(id, token) {
         Const.userID = id;
-        engine.prototype.login(id, token,this.nodeID);
+        engine.prototype.login(id, token, this.nodeID);
         try {
             wxshare.getWxUserInfo((userinfo) => {
                 console.log("get wx.userinfo success ", userinfo);

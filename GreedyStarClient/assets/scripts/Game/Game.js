@@ -66,7 +66,6 @@ cc.Class({
     },
 
     onLoad() {
-        console.log("game", "load");
         this.mvsBind(this);
     },
     /**
@@ -410,22 +409,40 @@ cc.Class({
      */
     showScoreList: function (infoData) {
         let spacing = 5;
+        let item;
         this.scoreList = infoData;
         this.totalCount = this.scoreList.length;
         this.scoreListView.height = this.totalCount * (this.scoreItem.height + spacing) + spacing;
         // this.scoreListView.removeAllChildren(true);
-        for (var i = 0; i < this.scoreList.length; i++) {
-            var item;
-            // this.scoreListView.addChild(item);
-            if (this.scoreList.getChildByTag(i)) {
-                item = this.scoreList.getChildByTag(i);
-            } else {
+        let itemNum = this.scoreList.length - this.scoreListView.length;
+
+
+        if (itemNum  >= 0) {
+            for (var i = 0; i < itemNum; i++) {
                 item = cc.instantiate(this.scoreItem);
                 this.scoreListView.addChild(item);
             }
+        } else {
+            this.scoreListView.length + itemNum;
+        }
+
+        for(var i = 0; i < this.scoreListView.length;i++) {
+            item = this.scoreListView.getChildByTag(i);
             item.setPosition(0, -item.height * (0.5 + i) - spacing * (i + 1));
             item.getComponent('Item').updateItem(this.scoreList[i]);
         }
+
+        // for (var i = 0; i < this.scoreList.length; i++) {
+        //
+        //     // this.scoreListView.addChild(item);
+        //     if (this.scoreList.getChildByTag(i)) {
+        //         item = this.scoreList.getChildByTag(i);
+        //     } else {
+        //         item = cc.instantiate(this.scoreItem);
+        //         this.scoreListView.addChild(item);
+        //     }
+        //
+        // }
     },
 
     onDestroy() {

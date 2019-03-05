@@ -35,7 +35,7 @@ var MVS = (function (_obj) {
         Init:function(){
             this.Notice();
             if(MVS.Host.MAIN_URL === "@MAIN_URL"){
-                MVS.Host.MAIN_URL = "https://matchvssdk.matchvs.com";
+                MVS.Host.MAIN_URL = "https://sdk.matchvs.com";
             }
         },
 

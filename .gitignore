@@ -11,3 +11,4 @@ GameServer/GreedyStarGS/out/production/java/logback.xml
 GameServer/GreedyStarGS/out/production/java/Utils.class
 GreedyStarClient/settings/services.json
 GreedyStarClient/settings/builder.json
+GreedyStarClient/settings/project.json
