@@ -25,7 +25,7 @@ public class App extends GameServerRoomEventHandler {
         /**
          * 本地调试时在此处填写自己config.Json的绝对路径,正式发布上线注释下面代码即可。
          */
-//        path[0] = "E:\\project\\GreedyStar\\GameServer\\Config.json";
+        path[0] = "E:\\project\\GreedyStar\\GameServer\\Config.json";
         try {
             Main.main(path);
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class App extends GameServerRoomEventHandler {
             }
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
-            log.error(e.toString());
+            log.info(e.toString());
         }
         return false;
     }
@@ -155,7 +155,7 @@ public class App extends GameServerRoomEventHandler {
     private void roomAddUser1(GreedyStarRoom room, int userID) {
         int[] Position = Utils.getRandomPosition();
         Input input = new Input();
-        GreedStarUser user = new GreedStarUser(userID, Const.USER_PREPARE, 0, Const.USER_SIZE, Position[0], Position[1], Const.SPEED, input);
+        GreedStarUser user = new GreedStarUser(userID, Const.USER_IN_THE_GAME, 0, Const.USER_SIZE, Position[0], Position[1], Const.SPEED, input);
         if (room.userList != null) {
             for (int i = 0; i < room.userList.size(); i++) {
                 if (room.userList.get(i).userID == userID) {
@@ -246,6 +246,18 @@ public class App extends GameServerRoomEventHandler {
             case "ready":
                 JoinRoom(request,clientChannel);
                 break;
+            case "ping":
+                sendMsgToAllUserInRoom(roomID, msg.getBytes());
+//                sendMsgToOtherUserInRoom(roomMap.get(roomID).channel,roomID, msg.getBytes(), new int[]{userID});
+                log.info("user:"+userID+" ,ping:"+msg);
+                break;
         }
     }
+
+    public boolean sendMsg(long roomID,String msgType,Object msgData) {
+        GameServerMsg gameServerMsg = new GameServerMsg(msgType,msgData);
+        boolean sendResult =  sendMsgToAllUserInRoom(roomID,JsonUtil.toString(gameServerMsg).getBytes());
+        return sendResult;
+    }
+
 }

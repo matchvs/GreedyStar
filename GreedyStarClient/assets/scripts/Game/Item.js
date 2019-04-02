@@ -11,6 +11,9 @@ cc.Class({
     },
 
     updateItem: function(obj) {
+        if (this.scoreLable.string !== "") {
+            this.scoreLable.string = "";
+        }
         this.scoreLable.string = obj.userID+"："+obj.score;
     }
 

@@ -5,6 +5,7 @@ let utils = require('../Util/index');
 let engine = require("../Lib/MatchvsEngine");
 let Const = require('../Const/Const');
 let MoveSync = require('MoveSync');
+let stats = require('../Util/stats');
 
 cc.Class({
     extends: cc.Component,
@@ -109,12 +110,16 @@ cc.Class({
                 }
             }
         });
+       this.pingTimer = setInterval(function () {
+            engine.prototype.sendEventEx(1,JSON.stringify({type: "ping",data:new Date().getTime()}));
+        },1000);
     },
-
+    pingTimer:0,
     /**
      * 相机跟随
      */
     lateUpdate:function() {
+
         var targetPos = this.getUserTargetPos();
         if (targetPos !== undefined) {
             if (Math.abs(targetPos.x - this.camera.x) >= 500 ||
@@ -187,6 +192,7 @@ cc.Class({
         response.prototype.init(self);
         this.node.on(msg.MATCHVS_GAME_SERVER_NOTIFY, this.onEvent, this);
         this.node.on(msg.MATCHVS_LEAVE_ROOM, this.onEvent, this);
+        this.node.on(msg.PING,this.onEvent, this);
     },
 
 
@@ -196,6 +202,7 @@ cc.Class({
             eventData = event;
         }
         switch (event.type) {
+
             case msg.MATCHVS_GAME_SERVER_NOTIFY:
                 var data = JSON.parse(eventData.eventInfo.cpProto);
                 this.onUIEvent(data)
@@ -300,6 +307,19 @@ cc.Class({
                 this.countDown = Math.floor(event.data/Const.FPS);
                 this.textCountDown();
                 break;
+            case "die":
+                var child = this.starLayer.getChildByName(event.data + "");
+                child.active = false;
+                // if (Const.userID === event.data) {
+                //
+                // }
+
+
+                break;
+            case "ping":
+                var ping = new Date().getTime()-event.data;
+                stats.statsUpload(ping);
+                break;
 
         }
     },
@@ -388,6 +408,7 @@ cc.Class({
     mvsUnBind() {
         this.node.off(msg.MATCHVS_GAME_SERVER_NOTIFY, this);
         this.node.off(msg.MATCHVS_LEAVE_ROOM, this);
+        this.node.off(msg.PING, this);
     },
 
     /**
@@ -419,6 +440,7 @@ cc.Class({
 
     onDestroy() {
         clearInterval(this.countDownTime);
+        clearInterval(this.pingTimer);
     },
 
 
