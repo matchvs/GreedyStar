@@ -11,9 +11,10 @@ function MatchvsDemoEngine() {
  * @param platform
  * @param gameID
  */
-MatchvsDemoEngine.prototype.init = function(channel, platform, gameID){
+MatchvsDemoEngine.prototype.init = function(channel, platform){
     response.prototype.bind();
-    var result = mvs.engine.init(mvs.response,channel,platform,gameID);
+    let gameVersion = 1;
+    let result = mvs.engine.init(mvs.response, channel, platform,Const.gameID,Const.appKey,gameVersion);
     console.log("初始化result"+result);
     return result;
 };
@@ -49,8 +50,7 @@ MatchvsDemoEngine.prototype.registerUser = function() {
 MatchvsDemoEngine.prototype.login = function(userID,token){
     var DeviceID = 'abcdef';
     var gatewayID = 0;
-    var result = mvs.engine.login(userID,token,Const.gameID,Const.gameVersion,
-        Const.appKey,Const.secretKey,DeviceID,gatewayID);
+    var result = mvs.engine.login(userID, token,DeviceID);
     console.log("登录result"+result);
     return result;
 };
