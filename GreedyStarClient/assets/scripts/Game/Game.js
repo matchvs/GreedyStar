@@ -88,7 +88,7 @@ cc.Class({
             self.halfOver();
         });
         self.sync = new MoveSync(function (players) {
-            self.showScoreList(players);
+            // self.showScoreList(players);
             for (var n = 0; n < players.length; n++) {
                 var player = players[n];
                 if (player.userID === Const.userID) {
@@ -318,7 +318,7 @@ cc.Class({
                 break;
             case "ping":
                 var ping = new Date().getTime()-event.data;
-                stats.statsUpload(ping);
+                stats.statsUpload(ping,Const.userID);
                 break;
 
         }

@@ -9,7 +9,7 @@ module.exports = {
 
     gameVersion: 1,
     channel: "Matchvs",
-    platform: "release",
+    platform: "alpha",//alpha选项必须开启gameserver本地调试，默认release
     // TEST:
     // platform: "alpha",
     deviceId: "123456789",
