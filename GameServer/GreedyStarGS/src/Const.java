@@ -13,8 +13,8 @@ public class Const {
     public static int USER_SIZE = 20;
 
     //初始移动速度
-    public static int SPEED = 5;
     public static int FPS = 20;
+    public static int SPEED = 100/FPS;
 
 
 
@@ -49,7 +49,7 @@ public class Const {
     public static int SPEED_DISSIPATION_SCORE = 3;
 
     //游戏时间 秒
-    public static int GAME_TIME = 120;
+    public static int GAME_TIME = 120*100;
 
     //计算FPS次玩家位置， 当局游戏事件为 GAME_TIM秒
     public static int GAME_TIME_NUM = FPS*GAME_TIME;

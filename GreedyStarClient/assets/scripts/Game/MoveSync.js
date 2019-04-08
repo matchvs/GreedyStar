@@ -1,4 +1,4 @@
-let Const = require('../Const/Const');
+var Const = require('../Const/Const');
 
 
 function MoveSync(onMoveSync) {

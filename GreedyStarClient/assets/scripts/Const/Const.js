@@ -15,13 +15,16 @@ module.exports = {
     deviceId: "123456789",
     gatewayId: 0,
     token: "",
-    FPS:20,
+    appKey: '495cf9da60df4fae854ef9e595176d4e#M',
     // test
     gameID: 202326,
-    appKey: '495cf9da60df4fae854ef9e595176d4e#M',
     secretKey: '170313f9147a4fdf9b9b56a082630369',
-
     // client room event
     GAME_START_EVENT: 'game_start_event',
+
+    FPS:20,
+    SPEED_UP:2,
+    SPEED:3,
+    SPEED_DISSIPATION_SCORE : 3,
 
 };

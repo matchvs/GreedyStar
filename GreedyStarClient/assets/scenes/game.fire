@@ -47,8 +47,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.5210690896354389,
-      "y": 0.5210690896354389,
+      "x": 0.5907958984375,
+      "y": 0.5907958984375,
       "z": 1
     },
     "_quat": {
@@ -361,6 +361,8 @@
     "netDelayLable": {
       "__id__": 16
     },
+    "score": 0,
+    "speed": 10,
     "_id": "7a/tfMZBNJjICqilZhkIhO"
   },
   {
@@ -1873,6 +1875,7 @@
     "speed": {
       "__id__": 42
     },
+    "game": null,
     "_id": "8f7mJom/JCQ51ugRxoEPre"
   },
   {

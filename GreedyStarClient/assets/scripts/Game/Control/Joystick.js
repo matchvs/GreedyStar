@@ -1,5 +1,4 @@
-let engine = require('../../Lib/MatchvsEngine');
-
+var engine = require('../../Lib/MatchvsEngine');
 cc.Class({
     extends: cc.Component,
 
@@ -9,7 +8,7 @@ cc.Class({
     },
 
 
-    onLoad() {
+    onLoad:function() {
         this.input = {l: 0, r: 0, u: 0, d: 0,p:0};
         this.ringRadius = this.node.width / 2;
         //操纵杆X坐标
@@ -19,7 +18,7 @@ cc.Class({
         this.initInput(this);
     },
 
-    initInput(self) {
+    initInput:function(self) {
        var keycode = {37: 0, 38: 0, 39: 0, 40: 0, 32:0, 1000:0, 1001:0, 1003:0, 1004:0};
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, function (event) {
             if ((event.keyCode >31 && event.keyCode < 42) || (event.keyCode > 999 && event.keyCode < 1005) || keycode[event.keyCode] != 1) {
@@ -35,10 +34,10 @@ cc.Class({
         }.bind(this));
         
         this.node.on(cc.Node.EventType.TOUCH_START,function (event) {
-                let touchPos = self.node.convertToNodeSpaceAR(event.getLocation());
-                let posX = self.joyStickX + touchPos.x;
-                let posY = self.joyStickY + touchPos.y;
-                let distance = touchPos.sub(cc.v2(0,0));
+                var touchPos = self.node.convertToNodeSpaceAR(event.getLocation());
+                var posX = self.joyStickX + touchPos.x;
+                var posY = self.joyStickY + touchPos.y;
+                var distance = touchPos.sub(cc.v2(0,0));
                 var rad = Math.atan2(touchPos.y, touchPos.x);
                 isDirection(rad,8);
                 if (self.ringRadius > distance) {
@@ -49,17 +48,17 @@ cc.Class({
         });
 
         this.node.on(cc.Node.EventType.TOUCH_MOVE, function (event) {
-            let touchPos = self.node.convertToNodeSpaceAR(event.getLocation());
-            let posX = self.joyStickX + touchPos.x;
-            let posY = self.joyStickY + touchPos.y;
-            let distance = touchPos.sub(cc.v2(0,0));
+            var touchPos = self.node.convertToNodeSpaceAR(event.getLocation());
+            var posX = self.joyStickX + touchPos.x;
+            var posY = self.joyStickY + touchPos.y;
+            var distance = touchPos.sub(cc.v2(0,0));
             var rad = Math.atan2(touchPos.y, touchPos.x);// [-PI, PI]
             isDirection(rad,8);
             if (self.ringRadius > distance) {
                 self.dot.setPosition(cc.v2(posX, posY))
             } else {
-                let bPosX = self.node.getPosition().x + Math.cos(getRadian(cc.v2(posX, posY))) * self.ringRadius;
-                let bPosY = self.node.getPosition().y + Math.sin(getRadian(cc.v2(posX, posY))) * self.ringRadius;
+                var bPosX = self.node.getPosition().x + Math.cos(getRadian(cc.v2(posX, posY))) * self.ringRadius;
+                var bPosY = self.node.getPosition().y + Math.sin(getRadian(cc.v2(posX, posY))) * self.ringRadius;
                 self.dot.setPosition(cc.v2(bPosX, bPosY))
             }
             syncKeyCode2Input();
@@ -88,7 +87,11 @@ cc.Class({
             self.input.r = keycode["39"] == 1 || keycode["1001"] == 1 ? 1 : 0;
             self.input.d = keycode["40"] == 1 || keycode["1004"] == 1 ? 1 : 0;
             self.input.p = keycode["32"];
-            engine.prototype.sendEventEx(1,JSON.stringify({type: "input", data: self.input}))
+            var value = {type: "input", data: self.input};
+            engine.prototype.sendEventEx(1, JSON.stringify(value));
+
+            var game = cc.find("bg/Camera").getComponent("Game");
+            game&&game.predictMove(value.data);
         }
 
         function isDirection (rad,count) {

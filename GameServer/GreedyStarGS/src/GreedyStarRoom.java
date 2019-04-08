@@ -24,6 +24,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
+            long lastTime = System.currentTimeMillis();
             countDown--;
             if (countDown <= 0) {
                 app.sendMsg(ID, "GameOver", "");
@@ -45,7 +46,14 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                     }
                 }
             }
+
+
+            long l = System.currentTimeMillis() - lastTime;
+            if(l >16){
+                 log.error("took time >16 ms:{}",l);
+            }
         }
+
     };
 
     /**
@@ -134,7 +142,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                         user.score += food.score;
                         user.size = Const.USER_SIZE + user.score / Const.SIZE_MULTIPLE;
                         int speed = Const.SPEED - user.score / Const.SPEED_MULTIPLE;
-                        user.speed = speed > Const.USER_MIN_SPEED ? speed : Const.USER_MIN_SPEED;
+//                        user.speed = speed > Const.USER_MIN_SPEED ? speed : Const.USER_MIN_SPEED;//根据实物量，减少运动速度
                         app.sendMsg(ID, "removeFood", foodList.get(j).ID);
                         foodList.remove(j);
                     }

@@ -14,7 +14,7 @@ public class GreedStarUser extends IGameServerRoomHandler.User {
     public int size; //体积
     public int x;
     public int y;
-    public int speed;
+    private int speed;
     public transient Input input;
 //    public int rank = 0; //排名
 

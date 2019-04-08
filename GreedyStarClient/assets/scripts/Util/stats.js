@@ -74,9 +74,14 @@
     };
 	
 	
-	var statsUpload = function (data,ID) {
-
-         Http.get(getUrl("stats/add?ID="+(ID||0)+"&value=" + data), {
+	var statsUpload = function (ping,ID) {
+        var now = new Date();
+        var data = {
+            name :now.toString(),
+            value:[now.getTime(),ping]
+        };
+        data = encodeURIComponent(JSON.stringify(data));
+        Http.get(getUrl("stats/add?ID="+(ID||0)+"&value=" +data ), {
                  onMsg: function (res) {
                      // console.log("[INFO]  "+res);
                  },
