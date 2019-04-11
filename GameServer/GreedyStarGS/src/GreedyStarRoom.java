@@ -50,7 +50,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
 
             long l = System.currentTimeMillis() - lastTime;
             if(l >16){
-                 log.error("took time >16 ms:{}",l);
+                 log.info("took time {}>16 ms:",l);
             }
         }
 

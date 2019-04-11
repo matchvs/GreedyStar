@@ -249,7 +249,7 @@ public class App extends GameServerRoomEventHandler {
             case "ping":
 //                sendMsgToAllUserInRoom(roomID, msg.getBytes());
                 sendMsgToOtherUserInRoom(roomMap.get(roomID).channel,roomID, msg.getBytes(), new int[]{userID});
-                log.info("user:"+userID+" ,ping:"+msg);
+//                log.info("user:"+userID+" ,ping:"+msg);
                 break;
         }
     }
