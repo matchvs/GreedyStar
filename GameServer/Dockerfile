@@ -3,7 +3,7 @@ WORKDIR /gameServer-java
 COPY GameServer-Java.jar /gameServer-java
 COPY Config.json /gameServer-java
 COPY Makefile /gameServer-java
-CMD java  -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=48000 -jar GameServer-Java.jar   
+CMD java  -jar GameServer-Java.jar -vmargs -Xms64M -Xmx200M -XX:PermSize=32M -XX:MaxPermSize=56M
 
 #FROM java:alpine
 
