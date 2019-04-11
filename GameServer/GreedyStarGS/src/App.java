@@ -35,8 +35,8 @@ public class App extends GameServerRoomEventHandler {
 
     @Override
     public boolean onReceive(Simple.Package.Frame clientEvent, StreamObserver<Simple.Package.Frame> clientChannel) {
-        super.onReceive(clientEvent, clientChannel);
         try {
+            super.onReceive(clientEvent, clientChannel);
             Gsmvs.Request request = null;
             request = Gsmvs.Request.parseFrom(clientEvent.getMessage());
 
@@ -58,9 +58,9 @@ public class App extends GameServerRoomEventHandler {
                     leaveRoom(request);
                     break;
             }
-        } catch (InvalidProtocolBufferException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            log.info(e.toString());
+            log.error("game logic error:",e);
         }
         return false;
     }
