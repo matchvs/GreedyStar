@@ -218,9 +218,14 @@ public class App extends GameServerRoomEventHandler {
      */
     private void examplePush(long roomID, int userID, String msg,Gsmvs.Request request, StreamObserver<Simple.Package.Frame> clientChannel) throws JSONException {
         JSONObject jsonObject = new JSONObject(msg);
+        GreedyStarRoom greedyStarRoom = roomMap.get(roomID);
+        if(greedyStarRoom==null||greedyStarRoom.channel==null){
+            log.info("user {} not in room ",userID);
+            return;
+        }
         switch (jsonObject.getString("type")) {
             case "input":
-                room = roomMap.get(roomID);
+                room = greedyStarRoom;
                 //gs 停止时，玩家创建房间，gs 未存储房间，此处需要判断空,调试时常遇到
                 if (room != null && room.userList != null) {
                     for (int i = 0; i < room.userList.size(); i++) {
@@ -233,13 +238,13 @@ public class App extends GameServerRoomEventHandler {
                 break;
             //主动创建房间
             case "startGame":
-                room = roomMap.get(roomID);
+                room = greedyStarRoom;
                 if (room != null && room.userList != null) {
                     log.info("发送主动创建房间开始游戏的消息");
                     room.countDown = Const.GAME_TIME_NUM;
                     GameServerMsg gameServerMsg = new GameServerMsg("startGame", room.userList);
                     gameServerMsg.profile = room.countDown;
-                    sendMsgToOtherUserInRoom(roomMap.get(roomID).channel,roomID, JsonUtil.toString(gameServerMsg).getBytes(), new int[]{userID});
+                    sendMsgToOtherUserInRoom(greedyStarRoom.channel,roomID, JsonUtil.toString(gameServerMsg).getBytes(), new int[]{userID});
                     sendFoodMsg(room.foodList, roomID, userID);
                 }
                 break;
@@ -248,7 +253,7 @@ public class App extends GameServerRoomEventHandler {
                 break;
             case "ping":
 //                sendMsgToAllUserInRoom(roomID, msg.getBytes());
-                sendMsgToOtherUserInRoom(roomMap.get(roomID).channel,roomID, msg.getBytes(), new int[]{userID});
+                sendMsgToOtherUserInRoom(greedyStarRoom.channel,roomID, msg.getBytes(), new int[]{userID});
 //                log.info("user:"+userID+" ,ping:"+msg);
                 break;
         }
