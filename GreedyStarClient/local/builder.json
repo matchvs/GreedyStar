@@ -1,0 +1,21 @@
+{
+  "actualPlatform": "wechatgame",
+  "apiLevel": "android-21",
+  "appABIs": [
+    "armeabi"
+  ],
+  "buildPath": "./build",
+  "debug": false,
+  "embedWebDebugger": false,
+  "keystoreAlias": "",
+  "keystoreAliasPassword": "",
+  "keystorePassword": "",
+  "keystorePath": "",
+  "platform": "wechatgame",
+  "previewHeight": "720",
+  "previewWidth": "1280",
+  "sourceMaps": false,
+  "template": "default",
+  "useDebugKeystore": true,
+  "vsVersion": "auto"
+}

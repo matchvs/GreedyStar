@@ -1,0 +1,36 @@
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <appender name="INFO" class="ch.qos.logback.core.ConsoleAppender" >
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}] [%-5.5level] %logger{15}- %msg %n</pattern>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+<!--            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>-->
+        </filter>
+    </appender>
+    <appender name="ERROR" class="ch.qos.logback.core.ConsoleAppender" >
+        <encoder>
+            <pattern>--------%n[%d{HH:mm:ss.SSS}] [%-8.8thread] [%-5.5level] [%c] Case By: %msg %n%caller{3}--------%n</pattern>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!--  &lt;!&ndash; logback为java中的包 &ndash;&gt;
+      <logger name="logback"/>
+      &lt;!&ndash;logback.LogbackDemo：类的全路径 &ndash;&gt;
+      <logger name="logback.LogbackDemo" level="INFO" additivity="false">
+          <appender-ref ref="STDOUT"/>
+      </logger>
+  -->
+    <root level="INFO">
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="ERROR"/>
+    </root>
+</configuration>
