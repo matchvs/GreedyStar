@@ -7,15 +7,18 @@ import org.slf4j.LoggerFactory;
 import stream.Simple;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class App extends GameServerRoomEventHandler {
 
-    private Logger log = LoggerFactory.getLogger("App");
+    private static Logger log = LoggerFactory.getLogger("App");
     private Map<Long, GreedyStarRoom> roomMap = new ConcurrentHashMap(256);
-//    private Map<Long,ArrayList<Food>> fondMap = new HashMap<>();
+    //    private Map<Long,ArrayList<Food>> fondMap = new HashMap<>();
+    private static AtomicLong clock = new AtomicLong();
 
     public static void main(String[] args) {
         String[] path = new String[1];
@@ -24,8 +27,14 @@ public class App extends GameServerRoomEventHandler {
         /**
          * 本地调试时在此处填写自己config.Json的绝对路径,正式发布上线注释下面代码即可。
          */
-        path[0] = "E:\\project\\GreedyStar\\GameServer\\Config.json";
+//        path[0] = "E:\\project\\GreedyStar\\GameServer\\Config.json";
         try {
+            int i1 = 10000 * 10000;
+            long lastTime = System.currentTimeMillis();
+            for (int i = 0; i < i1; i++) {
+                clock.getAndIncrement();
+            }
+            log.info("BenchMark: {}/624", (System.currentTimeMillis() - lastTime));
             Main.main(path);
         } catch (Exception e) {
             e.printStackTrace();
@@ -227,15 +236,14 @@ public class App extends GameServerRoomEventHandler {
             log.info("user {} jsonObject no 'type' {}", userID, msg);
             return;
         }
-        GreedyStarRoom greedyStarRoom = roomMap.get(roomID);
-        if (!"ready".equals(type) && greedyStarRoom == null) {
-            log.info("user {} not in room ,msg {}", userID, msg);
+        GreedyStarRoom room = roomMap.get(roomID);
+        if (!"ready".equals(type) && (room == null || room.channel == null)) {
+            log.info(" not in room or channel is null ,user {} ,msg {}", userID, msg);
             return;
         }
 
         switch (type) {
             case "input":
-                room = greedyStarRoom;
                 //gs 停止时，玩家创建房间，gs 未存储房间，此处需要判断空,调试时常遇到
                 if (room != null && room.userList != null) {
                     for (int i = 0; i < room.userList.size(); i++) {
@@ -248,13 +256,12 @@ public class App extends GameServerRoomEventHandler {
                 break;
             //主动创建房间
             case "startGame":
-                room = greedyStarRoom;
                 if (room != null && room.userList != null) {
                     log.info("发送主动创建房间开始游戏的消息");
                     room.countDown = Const.GAME_TIME_NUM;
                     GameServerMsg gameServerMsg = new GameServerMsg("startGame", room.userList);
                     gameServerMsg.profile = room.countDown;
-                    sendMsgToOtherUserInRoom(greedyStarRoom.channel, roomID, JsonUtil.toString(gameServerMsg).getBytes(), new int[]{userID});
+                    sendMsgToOtherUserInRoom(room.channel, roomID, JsonUtil.toString(gameServerMsg).getBytes(), new int[]{userID});
                     sendFoodMsg(room.foodList, roomID, userID);
                 }
                 break;
@@ -263,7 +270,7 @@ public class App extends GameServerRoomEventHandler {
                 break;
             case "ping":
 //                sendMsgToAllUserInRoom(roomID, msg.getBytes());
-                sendMsgToOtherUserInRoom(greedyStarRoom.channel, roomID, msg.getBytes(), new int[]{userID});
+                sendMsgToOtherUserInRoom(room.channel, roomID, msg.getBytes(), new int[]{userID});
 //                log.info("user:"+userID+" ,ping:"+msg);
                 break;
         }
