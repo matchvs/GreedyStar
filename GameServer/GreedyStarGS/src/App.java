@@ -217,12 +217,15 @@ public class App extends GameServerRoomEventHandler {
      * @param msg
      */
     private void examplePush(long roomID, int userID, String msg,Gsmvs.Request request, StreamObserver<Simple.Package.Frame> clientChannel) throws JSONException {
+        if(msg==null){
+            return;
+        }
         JSONObject jsonObject = new JSONObject(msg);
         GreedyStarRoom greedyStarRoom = roomMap.get(roomID);
         if (jsonObject != null && jsonObject.optString("type") != null
-                && !"ready".equals(jsonObject.getString("type"))
+                && !"ready".equals(jsonObject.optString("type"))
                 && greedyStarRoom == null || greedyStarRoom.channel == null) {
-            log.info("user {} not in room ", userID);
+            log.info("user {} not in room ,msg {}", userID,msg);
             return;
         }
         switch (jsonObject.getString("type")) {
