@@ -5,12 +5,12 @@ function getRandom(min, max) {
 }
 
 function getRandomColor() {
-    let colorList = config.colorList;
+    var colorList = config.colorList;
     return colorList[getRandom(0, colorList.length - 1)]
 }
 
 function getRandomScore() {
-    let scoreList = config.scoreList;
+    var scoreList = config.scoreList;
     return scoreList[getRandom(0, scoreList.length - 1)]
 }
 

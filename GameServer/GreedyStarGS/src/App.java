@@ -6,20 +6,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stream.Simple;
 
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class App extends GameServerRoomEventHandler {
 
     private static Logger log = LoggerFactory.getLogger("App");
-    private Map<Long, GreedyStarRoom> roomMap = new ConcurrentHashMap(256);
     //    private Map<Long,ArrayList<Food>> fondMap = new HashMap<>();
     private static AtomicLong clock = new AtomicLong();
-
+    public Map<Long, GreedyStarRoom> greedRoomMap = new HashMap(256);
     public static void main(String[] args) {
         String[] path = new String[1];
 
@@ -27,7 +23,7 @@ public class App extends GameServerRoomEventHandler {
         /**
          * 本地调试时在此处填写自己config.Json的绝对路径,正式发布上线注释下面代码即可。
          */
-//        path[0] = "E:\\project\\GreedyStar\\GameServer\\Config.json";
+        path[0] = "E:\\project\\GreedyStar\\GameServer\\Config.json";
         try {
             int i1 = 10000 * 10000;
             long lastTime = System.currentTimeMillis();
@@ -65,6 +61,9 @@ public class App extends GameServerRoomEventHandler {
                 case Gsmvs.MvsGsCmdID.MvsLeaveRoomReq_VALUE:
                     leaveRoom(request);
                     break;
+                case Gshotel.HotelGsCmdID.HotelPlayerCheckin_VALUE:
+                    JoinRoom(request, clientChannel);
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,16 +83,16 @@ public class App extends GameServerRoomEventHandler {
         GameServerMsg msg;
         long roomID = request.getRoomID();
 
-        if (!roomMap.containsKey(roomID)) {
+        if (!greedRoomMap.containsKey(roomID)) {
             GreedyStarRoom room = new GreedyStarRoom(roomID, clientChannel, this);
-            roomMap.put(roomID, room);
+            greedRoomMap.put(roomID, room);
             for (int i = 0; i < Const.FOOD_INITIAL_NUB; i++) {
                 Food food = Food.addFood(i);
                 room.foodList.add(food);
             }
             room.foodNum = room.foodList.size();
         }
-        GreedyStarRoom room = roomMap.get(roomID);
+        GreedyStarRoom room = greedRoomMap.get(roomID);
         roomAddUser1(room, request.getUserID());
         sendFoodMsg(room.foodList, roomID, request.getUserID());
         //给后进入的玩家同步前面的玩家的信息
@@ -106,7 +105,7 @@ public class App extends GameServerRoomEventHandler {
         if (arrayList.size() > 0) {
             msg = new GameServerMsg("otherPlayer", arrayList);
             log.info("otherPlayer" + JsonUtil.toString(msg));
-            sendMsgToOtherUserInRoom(roomMap.get(roomID).channel, roomID, JsonUtil.toString(msg).getBytes(), new int[]{request.getUserID()});
+            sendMsgInclude(roomID, JsonUtil.toString(msg).getBytes(), new int[]{request.getUserID()});
         }
 
     }
@@ -119,13 +118,13 @@ public class App extends GameServerRoomEventHandler {
      */
     private void leaveRoom(Gsmvs.Request request) {
         long roomID = request.getRoomID();
-        if (roomMap.containsKey(roomID)) {
-            if (!roomRemoveUser1(roomMap.get(roomID), request.getUserID())) {
+        if (greedRoomMap.containsKey(roomID)) {
+            if (!roomRemoveUser1(greedRoomMap.get(roomID), request.getUserID())) {
                 log.warn("not found userID:" + request.getUserID());
             } else {
-                if (roomMap.get(request.getRoomID()).userList.size() <= 0) {
-                    roomMap.get(request.getRoomID()).destroy();
-                    roomMap.remove(request.getRoomID());
+                if (greedRoomMap.get(request.getRoomID()).userList.size() <= 0) {
+                    greedRoomMap.get(request.getRoomID()).destroy();
+                    greedRoomMap.remove(request.getRoomID());
                 }
             }
         } else {
@@ -148,9 +147,9 @@ public class App extends GameServerRoomEventHandler {
         for (List food : foods) {
             GameServerMsg msg = new GameServerMsg("addFood", food);
             if (userID == 0) {
-                sendMsgToOtherUserInRoom(roomMap.get(roomID).channel, roomID, JsonUtil.toString(msg).getBytes());
+                broadcast(roomID, JsonUtil.toString(msg).getBytes());
             } else {
-                sendMsgToOtherUserInRoom(roomMap.get(roomID).channel, roomID, JsonUtil.toString(msg).getBytes(), new int[]{userID});
+                sendMsgInclude(roomID, JsonUtil.toString(msg).getBytes(), new int[]{userID});
             }
         }
     }
@@ -180,11 +179,11 @@ public class App extends GameServerRoomEventHandler {
 
         GameServerMsg msg = new GameServerMsg("addPlayer", user);
         log.info("addPlayer:" + JsonUtil.toString(msg));
-        sendMsgToOtherUserInRoom(room.channel, room.ID, (JsonUtil.toString(msg)).getBytes());
+        broadcast(room.ID, (JsonUtil.toString(msg)).getBytes());
 
         msg.type = "countDown";
         msg.data = room.countDown;
-        sendMsgToOtherUserInRoom(room.ID, (JsonUtil.toString(msg)).getBytes());
+        broadcast(room.ID, (JsonUtil.toString(msg)).getBytes());
     }
 
     /**
@@ -196,7 +195,7 @@ public class App extends GameServerRoomEventHandler {
             if (userID == room.userList.get(i).userID) {
                 GameServerMsg msg = new GameServerMsg("removePlayer", room.userList.get(i));
                 room.userList.remove(i);
-                sendMsgToOtherUserInRoom(room.ID, JsonUtil.toString(msg).getBytes(), null);
+                broadcast(room.ID, JsonUtil.toString(msg).getBytes());
                 return true;
             }
         }
@@ -215,11 +214,6 @@ public class App extends GameServerRoomEventHandler {
         log.info("onStop");
     }
 
-    @Override
-    public boolean onRoomEvent(Room room, Simple.Package.Frame receivedFrame, StreamObserver<Simple.Package.Frame> clientChannel) {
-        return false;
-    }
-
 
     /**
      * API使用示例
@@ -236,9 +230,9 @@ public class App extends GameServerRoomEventHandler {
             log.info("user {} jsonObject no 'type' {}", userID, msg);
             return;
         }
-        GreedyStarRoom room = roomMap.get(roomID);
+        GreedyStarRoom room = greedRoomMap.get(roomID);
         if (!"ready".equals(type) && (room == null || room.channel == null)) {
-            log.info(" not in room or channel is null ,user {} ,msg {}", userID, msg);
+            log.info(" not in room or channel is null ,roomID:{} user: {} ,msg: {}", roomID,userID, msg);
             return;
         }
 
@@ -261,7 +255,7 @@ public class App extends GameServerRoomEventHandler {
                     room.countDown = Const.GAME_TIME_NUM;
                     GameServerMsg gameServerMsg = new GameServerMsg("startGame", room.userList);
                     gameServerMsg.profile = room.countDown;
-                    sendMsgToOtherUserInRoom(room.channel, roomID, JsonUtil.toString(gameServerMsg).getBytes(), new int[]{userID});
+                    sendMsgInclude(roomID, JsonUtil.toString(gameServerMsg).getBytes(), new int[]{userID});
                     sendFoodMsg(room.foodList, roomID, userID);
                 }
                 break;
@@ -269,9 +263,7 @@ public class App extends GameServerRoomEventHandler {
                 JoinRoom(request, clientChannel);
                 break;
             case "ping":
-//                sendMsgToAllUserInRoom(roomID, msg.getBytes());
-                sendMsgToOtherUserInRoom(room.channel, roomID, msg.getBytes(), new int[]{userID});
-//                log.info("user:"+userID+" ,ping:"+msg);
+                sendMsgInclude(roomID, msg.getBytes(), new int[]{userID});
                 break;
         }
 

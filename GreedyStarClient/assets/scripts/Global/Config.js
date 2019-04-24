@@ -1,5 +1,5 @@
 // 星星颜色
-let colorList = [
+var colorList = [
     [20, 191, 255],
     [39, 209, 175],
     [107, 193, 54],
@@ -12,7 +12,7 @@ let colorList = [
 ];
 
 // 星星分数
-let scoreList = [20, 40, 60];
+var scoreList = [20, 40, 60];
 
 module.exports = {
     ADD_FOOD_DT: 2, // 3秒
@@ -21,11 +21,11 @@ module.exports = {
 
     // game
     MAX_PLAYER_COUNT: 6,
-    SYSTEM_ROOM_MIN_PLAYER_COUNT: 3,
-    CUSTOM_ROOM_MIN_PLAYER_COUNT: 4,
+    SYSTEM_ROOM_MIN_PLAYER_COUNT: 2,
+    CUSTOM_ROOM_MIN_PLAYER_COUNT: 2,
 
-    colorList,
-    scoreList,
+    colorList:[255,255,255],
+    scoreList:[],
 
     // debug
     isDebug: true,
