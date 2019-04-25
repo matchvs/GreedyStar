@@ -106,7 +106,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                             GreedStarUser win = p1.score > p2.score ? p1 : p2;
                             GreedStarUser lose = p1.score < p2.score ? p1 : p2;
                             win.score += lose.score;
-                            this.userDie(lose, this.countDown);
+                            this.userDie(lose, 1);
                         }
                     }
                 }

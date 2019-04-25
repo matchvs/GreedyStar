@@ -266,5 +266,10 @@ MatchvsDemoEngine.prototype.getUserProfile = function (profile) {
     return userProfileStr;
 };
 
+MatchvsDemoEngine.prototype.setReconnectTimeout = function (time) {
+    var result = mvs.engine.setReconnectTimeout(time);
+    return result;
+};
+
 
 module.exports = MatchvsDemoEngine;

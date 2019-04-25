@@ -165,11 +165,11 @@ public class App extends GameServerRoomEventHandler {
     private void roomAddUser1(GreedyStarRoom room, int userID) {
         int[] Position = Utils.getRandomPosition();
         GreedStarUser user = null;
-        boolean isHasExist = false;
         for (int i = 0; i < room.userList.size(); i++) {
             GreedStarUser temp = room.userList.get(i);
             if (temp.userID == userID) {
                 user = temp;
+                log.warn("user {} has exist .", temp.userID);
                 break;
             }
         }
@@ -179,7 +179,7 @@ public class App extends GameServerRoomEventHandler {
                     new Input());
             room.userList.add(user);
         }
-
+        
         GameServerMsg msg = new GameServerMsg("addPlayer", user);
         log.info("addPlayer:" + JsonUtil.toString(msg));
         broadcast(room.ID, (JsonUtil.toString(msg)).getBytes());
@@ -187,6 +187,8 @@ public class App extends GameServerRoomEventHandler {
         msg.type = "countDown";
         msg.data = room.countDown;
         broadcast(room.ID, (JsonUtil.toString(msg)).getBytes());
+
+
     }
 
     /**

@@ -84,6 +84,7 @@ cc.Class({
         } else {
             engine.prototype.sendEventEx(1, JSON.stringify({type: "ready"}));
         }
+        engine.prototype.setReconnectTimeout(-1);
         this.settingBtn.on(cc.Node.EventType.TOUCH_END, function () {
             self.halfLeaveBtn.active = self.halfLeaveBtn.active ? false : true;
         });
@@ -293,19 +294,21 @@ cc.Class({
                 console.log("game", "addPlayer");
                 color = new cc.Color(colorArr[0], colorArr[1], colorArr[2])
                 var tempPlayer = event.data;
-                var node1 = cc.instantiate(this.playPrefab);
-                var userName = node1.getChildByName('userName').getComponent(cc.Label);
-                userName.string = tempPlayer.userID + "";
-                node1.x = tempPlayer.x;
-                node1.y = tempPlayer.y;
-                particleSystem = node1.getComponent(cc.ParticleSystem);
-                // particleSystem.startSize = tempPlayer.size;
-                particleSystem.startColor = color;
-                particleSystem.positionType = 0;
-                node1.name = tempPlayer.userID + "";
-                this.starLayer.addChild(node1);
 
-                console.log("add node x,"+node1.x+",y:"+node1.y);
+                if (!this.starLayer.getChildByName(tempPlayer.userID+"")){
+                    var node1 = cc.instantiate(this.playPrefab);
+                    var userName = node1.getChildByName('userName').getComponent(cc.Label);
+                    userName.string = tempPlayer.userID + "";
+                    node1.x = tempPlayer.x;
+                    node1.y = tempPlayer.y;
+                    particleSystem = node1.getComponent(cc.ParticleSystem);
+                    // particleSystem.startSize = tempPlayer.size;
+                    particleSystem.startColor = color;
+                    particleSystem.positionType = 0;
+                    node1.name = tempPlayer.userID + "";
+                    this.starLayer.addChild(node1);
+                    console.log("add node x,"+node1.x+",y:"+node1.y);
+                }
                 var targetPos = this.getUserTargetPos();
                 if (targetPos !== undefined) {
                     this.camera.position = this.camera.parent.convertToNodeSpaceAR(targetPos);
