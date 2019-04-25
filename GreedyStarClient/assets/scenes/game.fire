@@ -47,8 +47,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.5907958984375,
-      "y": 0.5907958984375,
+      "x": 0.3298583984375,
+      "y": 0.3298583984375,
       "z": 1
     },
     "_quat": {
@@ -58,7 +58,6 @@
       "z": 0,
       "w": 1
     },
-    "_zIndex": 0,
     "groupIndex": 0,
     "autoReleaseAssets": false,
     "_id": "925822d7-8609-4383-a4ea-97fcdb4c23ec"
@@ -127,7 +126,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "075m6tyyBIAZYvO2cGPT2p"
   },
@@ -188,7 +186,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "9fqymXuh5Fhb8abjjRnDSM"
   },
@@ -200,8 +197,6 @@
       "__id__": 3
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "8fe7a444-5f35-4a06-bc63-1cf5da8f44e0"
     },
@@ -218,6 +213,8 @@
     "_isTrimmedMode": false,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "43mgMgI5BMEolbK+Ik/HBi"
   },
   {
@@ -280,7 +277,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "19eurjzBxMYK84QssxmrEg"
   },
@@ -432,7 +428,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "6emkr+u1hFpJjfQ0YvbR3E"
   },
@@ -530,7 +525,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "e08u1oFoxBC57lFGFcRXHp"
   },
@@ -591,7 +585,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "c403pah0pFUbBTG0dIPnAX"
   },
@@ -677,7 +670,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "a7Td/sARpEFqjudQByQd4a"
   },
@@ -689,8 +681,6 @@
       "__id__": 12
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "",
     "_N$string": "",
@@ -705,6 +695,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "2eoPe11TVIY6vH1/tGUlFV"
   },
   {
@@ -791,7 +782,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "52mKIYtbNL7oglB1oKoLFK"
   },
@@ -803,8 +793,6 @@
       "__id__": 15
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "",
     "_N$string": "",
@@ -819,6 +807,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "b9PteOrChAYK7Ddc3HGC5P"
   },
   {
@@ -878,7 +867,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "69tAm5cOtKYbOAfxzWTNx2"
   },
@@ -946,7 +934,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "4fsiEjxopPIJe+GdXuUXoQ"
   },
@@ -1007,7 +994,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "69fXVWlYZOeakglp8olAuj"
   },
@@ -1019,8 +1005,6 @@
       "__id__": 19
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "e91e8a56-130e-4c5e-992f-cfd531e9be67"
     },
@@ -1037,6 +1021,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "a80Ze876hNY4zlWK3656Mu"
   },
   {
@@ -1096,7 +1082,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "f5p5ysHtVAW4irOsJi1ndB"
   },
@@ -1108,8 +1093,6 @@
       "__id__": 21
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "0",
     "_N$string": "0",
@@ -1124,6 +1107,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "f14g4g+vpKdrAa17iaJA2k"
   },
   {
@@ -1134,8 +1118,6 @@
       "__id__": 18
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "07d3011a-94c2-47cd-9aa7-c75df1bb2080"
     },
@@ -1152,6 +1134,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "64dIwRvU9Aga/0qh91QDj4"
   },
   {
@@ -1172,7 +1156,7 @@
         "__id__": 33
       }
     ],
-    "_active": true,
+    "_active": false,
     "_level": 0,
     "_components": [
       {
@@ -1221,7 +1205,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "69dpuyJ+ZNpoSLVAbWEJp9"
   },
@@ -1286,7 +1269,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "83x5C1l+xEGZUpoqxlq4G7"
   },
@@ -1347,7 +1329,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "0aZ89wOelDmZj/vyER6X5R"
   },
@@ -1359,8 +1340,6 @@
       "__id__": 26
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "玩家数值",
     "_N$string": "玩家数值",
@@ -1375,6 +1354,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "e5UbBFZuVPY4c2OJApqu0z"
   },
   {
@@ -1385,8 +1365,6 @@
       "__id__": 25
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "07d3011a-94c2-47cd-9aa7-c75df1bb2080"
     },
@@ -1403,6 +1381,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "65cBFe6+lMX4E5l1np2qvz"
   },
   {
@@ -1466,7 +1446,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "27b3GA4JVCSaiZmxKQpa80"
   },
@@ -1527,7 +1506,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "e4BlEk3bRK+L4O/0ISVd1O"
   },
@@ -1539,8 +1517,6 @@
       "__id__": 30
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "游戏实时数据排行",
     "_N$string": "游戏实时数据排行",
@@ -1555,6 +1531,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "a6JXxaW5RKfb1j2sI3TfLs"
   },
   {
@@ -1565,8 +1542,6 @@
       "__id__": 29
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "22843136-d8f3-406e-9bb1-88f76e7e950c"
     },
@@ -1583,6 +1558,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "35+SxI+TJI4otw/hEQLegV"
   },
   {
@@ -1642,7 +1619,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "83c44AjclASLGZJfRwoPzP"
   },
@@ -1654,8 +1630,6 @@
       "__id__": 33
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "22843136-d8f3-406e-9bb1-88f76e7e950c"
     },
@@ -1672,6 +1646,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "74uF+SycxMOrJvL6ifc5HQ"
   },
   {
@@ -1765,7 +1741,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "f9bq2LSIdNM4ufg7NMPsd3"
   },
@@ -1829,7 +1804,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "a50Cfh5OROL6q/AN66FpyF"
   },
@@ -1841,8 +1815,6 @@
       "__id__": 37
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "234de2da-aa09-4c96-8d6a-696450e7339b"
     },
@@ -1859,6 +1831,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "a4V7lyinlFxJ5xQ14Mm5/W"
   },
   {
@@ -1875,7 +1849,6 @@
     "speed": {
       "__id__": 42
     },
-    "game": null,
     "_id": "8f7mJom/JCQ51ugRxoEPre"
   },
   {
@@ -1935,7 +1908,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "25acAN4/hBTK4OpBsyDpx+"
   },
@@ -1947,8 +1919,6 @@
       "__id__": 40
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "eda45c1b-864c-4657-9428-f23c3a90a24f"
     },
@@ -1965,6 +1935,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "1742uCc2VGOr9Vt2zgQZKF"
   },
   {
@@ -2028,7 +2000,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "eeOKEtKBxD7ZcWeMu0lEKX"
   },
@@ -2089,7 +2060,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "c7AMzkwFdEBZjd11sLgtdt"
   },
@@ -2101,8 +2071,6 @@
       "__id__": 43
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "be0cad54-974a-4c9a-8e01-88f453954bc8"
     },
@@ -2119,6 +2087,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "0aFwn4La1ECKEIBZnaTkMA"
   },
   {
@@ -2232,7 +2202,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "3ak9skYNtOYKjP3xSqdjPh"
   },
@@ -2244,8 +2213,6 @@
       "__id__": 47
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 1,
@@ -2260,6 +2227,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "7dM8VECqFHDKhkLc7bEQKQ"
   },
   {
@@ -2319,7 +2288,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "8c5U3dqf5EVbbZdPnVDWNg"
   },
@@ -2380,7 +2348,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "11dxAXzodDkpdC2WZzEAwf"
   },
@@ -2392,8 +2359,6 @@
       "__id__": 50
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "复活倒计时:3s",
     "_N$string": "复活倒计时:3s",
@@ -2408,6 +2373,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "9bdZHdLmJIlIuOxP1Ir0fp"
   },
   {
@@ -2471,7 +2437,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "021rHmfGhO6K8T3BwjWI9E"
   },
@@ -2532,7 +2497,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "bdlEayC25Lf62iwvEk5PhK"
   },
@@ -2544,8 +2508,6 @@
       "__id__": 53
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "其他玩家掉线 正在重连 已退出游戏",
     "_N$string": "其他玩家掉线 正在重连 已退出游戏",
@@ -2560,6 +2522,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "afWBvkeRRKp6pDHF1ebGAN"
   },
   {
@@ -2570,8 +2533,6 @@
       "__id__": 52
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "f9a974f7-87bc-4c7d-bc0d-4c6fa885e467"
     },
@@ -2588,6 +2549,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "836An32HpMcLDtwgYmoKAS"
   },
   {
@@ -2666,7 +2629,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 2,
     "_id": "2eC7dlWdRPso8ccgfSA2I4"
   },
@@ -2730,7 +2692,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "96NXToJOpH06npWlkdZPBp"
   },
@@ -2742,8 +2703,6 @@
       "__id__": 57
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "游戏结束",
     "_N$string": "游戏结束",
@@ -2758,6 +2717,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "37UOKDtHJDHaJM7iWHlVz0"
   },
   {
@@ -2851,7 +2811,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "4acBvYy29NaJriRYIEAN3C"
   },
@@ -2912,7 +2871,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "42QJIQUNNA0b+x126Kst5D"
   },
@@ -2924,8 +2882,6 @@
       "__id__": 61
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "本局分数",
     "_N$string": "本局分数",
@@ -2940,6 +2896,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "c3UxsZ/TNNi5ma60i19vGt"
   },
   {
@@ -2999,7 +2956,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "29wtfsuatEiYJ58HWCS1VB"
   },
@@ -3011,8 +2967,6 @@
       "__id__": 63
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "1234",
     "_N$string": "1234",
@@ -3027,6 +2981,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "293Pedw7BPD5EJ5rcR9CFO"
   },
   {
@@ -3037,8 +2992,6 @@
       "__id__": 60
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "8b6b4591-f853-4d7d-95ca-8cf3c9c6c31a"
     },
@@ -3055,6 +3008,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "3fd6mH0uBL+J0UAWUVmkU2"
   },
   {
@@ -3121,7 +3076,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "f3+wnQzEhGvLCFPwC29AH9"
   },
@@ -3182,7 +3136,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "45ZwiMufdB35uYKVuRyj00"
   },
@@ -3194,8 +3147,6 @@
       "__id__": 67
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "本局金币",
     "_N$string": "本局金币",
@@ -3210,6 +3161,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "9btmv4HHNLmqxZRaODVwEs"
   },
   {
@@ -3269,7 +3221,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "0dcFroabNIDrLCCAqzaf/W"
   },
@@ -3281,8 +3232,6 @@
       "__id__": 69
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "100",
     "_N$string": "100",
@@ -3297,6 +3246,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "e5LDcyT+9HeZtjOyfJWVvb"
   },
   {
@@ -3307,8 +3257,6 @@
       "__id__": 66
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "31a26c34-7019-4790-8f42-a63c7c04e85e"
     },
@@ -3325,6 +3273,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "73Uua1p+lLOJLcB10Cb7PC"
   },
   {
@@ -3391,7 +3341,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "d0prrccP5O+JjfdHtojwlm"
   },
@@ -3452,7 +3401,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "22j2S25+lCL5MetPQ8iZ/m"
   },
@@ -3464,8 +3412,6 @@
       "__id__": 73
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "本局排名",
     "_N$string": "本局排名",
@@ -3480,6 +3426,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "91ATpqxdZCzL8FkFTIdLHk"
   },
   {
@@ -3539,7 +3486,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "5aypmIDzFGSagF7PRrY5uB"
   },
@@ -3551,8 +3497,6 @@
       "__id__": 75
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "1",
     "_N$string": "1",
@@ -3567,6 +3511,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "a36blOkD5NUYl1ZEDtUJR0"
   },
   {
@@ -3577,8 +3522,6 @@
       "__id__": 72
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "0c7579f1-74c5-48ce-87fc-99f07e076c36"
     },
@@ -3595,6 +3538,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "61La1fattJ4Ka2fKw65OHk"
   },
   {
@@ -3661,7 +3606,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "3149lYwFBFBaIbGlpl6pSN"
   },
@@ -3722,7 +3666,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "99HJ7xd3FFFLUp3QfIVu84"
   },
@@ -3734,8 +3677,6 @@
       "__id__": 79
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "再来一局",
     "_N$string": "再来一局",
@@ -3750,6 +3691,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 1,
+    "_N$cacheMode": 0,
     "_id": "fde8OrXU9Oa6EvbsP7LRzb"
   },
   {
@@ -3760,8 +3702,6 @@
       "__id__": 78
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "b046b482-41f3-4eb5-9a52-18b02365be8f"
     },
@@ -3778,6 +3718,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "2e9/MOnsZGqJ0tQhpSkrch"
   },
   {
@@ -3912,7 +3854,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "ce1/0MpnNJTaw0vkgxLKzQ"
   },
@@ -3973,7 +3914,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "63TqXxvThCALAWhzx95e+y"
   },
@@ -3985,8 +3925,6 @@
       "__id__": 84
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "返回大厅",
     "_N$string": "返回大厅",
@@ -4001,6 +3939,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 1,
+    "_N$cacheMode": 0,
     "_id": "acgJLrMLtH0LGmmP1VHYQM"
   },
   {
@@ -4011,8 +3950,6 @@
       "__id__": 83
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "b046b482-41f3-4eb5-9a52-18b02365be8f"
     },
@@ -4029,6 +3966,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "92KPnEnUlI175iRa2NoDsd"
   },
   {
@@ -4121,8 +4060,6 @@
       "__id__": 56
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "b18343d6-62fd-4275-91db-3444aaa97ff2"
     },
@@ -4139,6 +4076,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "19BYxKAXxOQaatRLzsCKG6"
   },
   {
@@ -4222,7 +4161,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "e0ur3sTLVBqIE6caiRyQzq"
   },
@@ -4286,7 +4224,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "14T2QKLZtO2Z7/bYfcegH5"
   },
@@ -4298,8 +4235,6 @@
       "__id__": 92
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "中途离开游戏",
     "_N$string": "中途离开游戏",
@@ -4314,6 +4249,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Microsoft YaHei UI",
     "_N$overflow": 0,
+    "_N$cacheMode": 0,
     "_id": "afqaov+GtMdofiQYM7RM3e"
   },
   {
@@ -4342,8 +4278,6 @@
       "__id__": 91
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "bf2ae4d2-8b57-452b-9834-10cda9dedee6"
     },
@@ -4360,6 +4294,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "51EDWsWVlNBpRUG0hLsO39"
   },
   {
@@ -4462,8 +4398,6 @@
       "__id__": 8
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "b69e75a6-5676-4d25-9d22-ff81e64df52d"
     },
@@ -4480,6 +4414,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "d0tfu0IFpD05Bw4bRz/gKZ"
   },
   {
@@ -4651,7 +4587,6 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_zIndex": 0,
     "groupIndex": 0,
     "_id": "7cXqACsIdHob8yFrcu8j3A"
   },
@@ -4663,8 +4598,6 @@
       "__id__": 102
     },
     "_enabled": true,
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 771,
     "_useOriginalSize": false,
     "_string": "11",
     "_N$string": "11",
@@ -4679,6 +4612,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 2,
+    "_N$cacheMode": 0,
     "_id": "46swQZwWVFpYKrB/uOlSSX"
   },
   {
@@ -4702,8 +4636,6 @@
       "__id__": 2
     },
     "_enabled": true,
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
     "_spriteFrame": {
       "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
     },
@@ -4720,6 +4652,8 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "_id": "3eC18IQcZAlJI0wLNFPuXI"
   }
 ]

@@ -110,7 +110,6 @@ cc.Class({
             userSpeed = this.speed + Const.SPEED_UP;
         }
         var child = this.starLayer.getChildByName(Const.userID + "");
-        // var child = this.starLayer.getChildByName(Const.userID + "").shadowNode;
 
         if (input != null && child != null) {
             var isMove = false;
@@ -167,10 +166,6 @@ cc.Class({
                     var action = cc.moveTo(2*1 / Const.FPS, cc.v2(player.x, player.y));
                     console.log("real.node x,"+player.x+",y:"+player.y);
                     child.runAction(action);
-                    if(player.userID==Const.userID){
-                        child.shadowNode.x =player.x;
-                        child.shadowNode.y =player.y;
-                    }
                 }
             }
         }
@@ -310,11 +305,6 @@ cc.Class({
                 node1.name = tempPlayer.userID + "";
                 this.starLayer.addChild(node1);
 
-                var shadowNode = cc.instantiate(this.playPrefab);
-                shadowNode.x = node1.x;
-                shadowNode.y = node1.y;
-                node1.shadowNode = shadowNode;
-                this.starLayer.addChild(shadowNode);
                 console.log("add node x,"+node1.x+",y:"+node1.y);
                 var targetPos = this.getUserTargetPos();
                 if (targetPos !== undefined) {
