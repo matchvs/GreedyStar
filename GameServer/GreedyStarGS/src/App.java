@@ -16,6 +16,7 @@ public class App extends GameServerRoomEventHandler {
     //    private Map<Long,ArrayList<Food>> fondMap = new HashMap<>();
     private static AtomicLong clock = new AtomicLong();
     public Map<Long, GreedyStarRoom> greedRoomMap = new HashMap(256);
+
     public static void main(String[] args) {
         String[] path = new String[1];
 
@@ -163,19 +164,21 @@ public class App extends GameServerRoomEventHandler {
      */
     private void roomAddUser1(GreedyStarRoom room, int userID) {
         int[] Position = Utils.getRandomPosition();
-        Input input = new Input();
-        GreedStarUser user = new GreedStarUser(userID, Const.USER_IN_THE_GAME, 0, Const.USER_SIZE, Position[0], Position[1], Const.SPEED, input);
-        if (room.userList != null) {
-            for (int i = 0; i < room.userList.size(); i++) {
-                if (room.userList.get(i).userID == userID) {
-                    log.warn("Players already exist :" + userID);
-                    return;
-                }
+        GreedStarUser user = null;
+        boolean isHasExist = false;
+        for (int i = 0; i < room.userList.size(); i++) {
+            GreedStarUser temp = room.userList.get(i);
+            if (temp.userID == userID) {
+                user = temp;
+                break;
             }
-        } else {
-            room.userList = new ArrayList<>();
         }
-        room.userList.add(user);
+        if (user == null) {
+            user = new GreedStarUser(userID, Const.USER_IN_THE_GAME, 0,
+                    Const.USER_SIZE, Position[0], Position[1], Const.SPEED,
+                    new Input());
+            room.userList.add(user);
+        }
 
         GameServerMsg msg = new GameServerMsg("addPlayer", user);
         log.info("addPlayer:" + JsonUtil.toString(msg));
@@ -232,7 +235,7 @@ public class App extends GameServerRoomEventHandler {
         }
         GreedyStarRoom room = greedRoomMap.get(roomID);
         if (!"ready".equals(type) && (room == null || room.channel == null)) {
-            log.info(" not in room or channel is null ,roomID:{} user: {} ,msg: {}", roomID,userID, msg);
+            log.info(" not in room or channel is null ,roomID:{} user: {} ,msg: {}", roomID, userID, msg);
             return;
         }
 

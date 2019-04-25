@@ -13,7 +13,7 @@ import java.util.Comparator;
  */
 public class GreedyStarRoom extends IGameServerRoomHandler.Room {
 
-    public ArrayList<GreedStarUser> userList; //玩家列表
+    public ArrayList<GreedStarUser> userList  = new ArrayList<>();; //玩家列表
     public ArrayList<Food> foodList = new ArrayList<>(); //星星列表
     private Logger log = LoggerFactory.getLogger("GreedyStarRoom");
     private App app;
