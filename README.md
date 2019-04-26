@@ -18,7 +18,7 @@
 
 ### 体验地址
 [](./screenshot/QQ图片20180725163010.jpg)
-PC [直接体验地址](http://demo.matchvs.com/GreedyStar_Test)
+PC [直接体验地址](http://demo.matchvs.com/GreedyStar)
 # client
 
 ## 环境准备
