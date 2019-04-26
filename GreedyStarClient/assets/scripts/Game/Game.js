@@ -339,6 +339,7 @@ cc.Class({
             case "die":
                 var child = this.starLayer.getChildByName(event.data + "");
                 child && (child.active = false);
+                Toast.makeText("啊! 挂掉啦,马上复活").show();
                 break;
             case "ping":
                 var ping = new Date().getTime() - event.data;

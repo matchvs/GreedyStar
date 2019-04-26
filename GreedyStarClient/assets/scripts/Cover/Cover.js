@@ -8,7 +8,7 @@ let wxshare = require('../Util/wxshare');
 cc.Class({
     extends: cc.Component,
 
-    onLoad() {
+    onLoad:function() {
         //不展示FSP信息
         // cc.director.setDisplayStats(false);
         // 监听键盘
@@ -17,7 +17,7 @@ cc.Class({
         this.initEvent(this);
     },
 
-    initEvent(self) {
+    initEvent:function(self) {
         response.prototype.init(self);
         this.node.on(msg.MATCHVS_ERROE_MSG, this.onEvent, this);
         this.node.on(msg.MATCHVS_INIT, this.onEvent, this);
@@ -28,7 +28,7 @@ cc.Class({
     /**
      * 初始化
      */
-    init() {
+    init:function() {
         var result;
         if (GameData.isPremiseInit) {
             var endport = "172.25.119.77";
@@ -42,7 +42,7 @@ cc.Class({
         }
     },
 
-    onEvent(event) {
+    onEvent:function(event) {
         var eventData = event.detail;
         if (eventData == undefined) {
             eventData = event;
@@ -88,14 +88,14 @@ cc.Class({
 
     },
 
-    mvsErrorResponse(code, errMsg) {
+    mvsErrorResponse:function(code, errMsg) {
         if (code === 1001) {
             this.showPromptOfError('你已掉线请重新登录',true);
             console.log(code,errMsg);
         }
     },
 
-    showPromptOfError(str,isShow) {
+    showPromptOfError:function(str,isShow) {
         let promptNode = cc.find('Canvas/prompt');
         if (isShow) {
             let promptTxt = promptNode.getChildByName('label').getComponent(cc.Label);
@@ -115,7 +115,7 @@ cc.Class({
         }
     },
 
-    removeEvent () {
+    removeEvent:function () {
         this.node.off(msg.MATCHVS_ERROE_MSG, this.onEvent, this);
         this.node.off(msg.MATCHVS_INIT, this.onEvent, this);
         this.node.off(msg.MATCHVS_REGISTER_USER,this.onEvent,this);
@@ -124,7 +124,7 @@ cc.Class({
         this.node.off(msg.MATCHVS_RE_CONNECT,this.onEvent,this);
     },
 
-    onDestroy() {
+    onDestroy:function() {
         this.removeEvent();
         console.log("Cover页面销毁");
     }
