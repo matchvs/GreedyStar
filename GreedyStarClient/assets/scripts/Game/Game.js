@@ -151,7 +151,7 @@ cc.Class({
             }
             var child = this.starLayer.getChildByName(player.userID + "");
             if (child !== null) {
-                if (!child.active){
+                if (!child.active) {
                     child.active = true;
                 }
                 if (Math.abs(child.x - player.x) >= 500 ||
@@ -166,8 +166,8 @@ cc.Class({
                     console.log("real.node x," + player.x + ",y:" + player.y);
                     child.runAction(action);
                 }
-            }else{
-                console.warn("user not be found at move:",player.userID);
+            } else {
+                console.warn("user not be found at move:", player.userID);
             }
         }
     },
@@ -339,7 +339,11 @@ cc.Class({
             case "die":
                 var child = this.starLayer.getChildByName(event.data + "");
                 child && (child.active = false);
-                Toast.makeText("啊! 挂掉啦,马上复活").show();
+                if (event.data == Const.userID) {
+                    var i = new Date().getTime() % 5;
+                    var reliveString = ["真是浪得一匹"," 哎哟,不错噢","令人知悉的操作","简直不可思议","You Are Dead"];
+                    Toast.makeText(reliveString[i]).show();
+                }
                 break;
             case "ping":
                 var ping = new Date().getTime() - event.data;
@@ -415,8 +419,8 @@ cc.Class({
                 particleSystem.startColor = color;
                 node.name = userList[c].userID + "";
                 this.starLayer.addChild(node);
-            }else{
-                console.warn("user has exist",player.userID);
+            } else {
+                console.warn("user has exist", player.userID);
             }
         }
     },
