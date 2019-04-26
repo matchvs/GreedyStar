@@ -1,9 +1,5 @@
-import javax.xml.bind.annotation.XmlType;
-
 public class Const {
 
-    //准备
-    public static int USER_PREPARE = 1;
     //正在进行游戏
     public static int USER_IN_THE_GAME = 2;
     //死亡

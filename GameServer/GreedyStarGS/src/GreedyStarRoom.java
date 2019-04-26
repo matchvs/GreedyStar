@@ -36,7 +36,6 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                     isBorderContain();
                     isFoodListFull();
                     roomUserRank();
-                    isUserRevive();
                     if (personMove()) {
                         boolean sendResult = app.sendMsg(ID, "move", userList);
                         if (!sendResult) {
@@ -55,20 +54,6 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
         }
 
     };
-
-    /**
-     * 判断玩家的复活状态
-     */
-    private void isUserRevive() {
-        for (int i = 0; i < userList.size(); i++) {
-            GreedStarUser p1 = userList.get(i);
-            if (p1.status == Const.USER_DIE) {
-                if (p1.deathTime - this.countDown >= (Const.FPS * Const.DEATH_TIME)) {
-                    p1.status = Const.USER_IN_THE_GAME;
-                }
-            }
-        }
-    }
 
 
     private void init() {
@@ -106,7 +91,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                             GreedStarUser win = p1.score > p2.score ? p1 : p2;
                             GreedStarUser lose = p1.score < p2.score ? p1 : p2;
                             win.score += lose.score;
-                            this.userDie(lose, 1);
+                            this.userDie(lose, Const.DEATH_TIME);
                         }
                     }
                 }
@@ -163,7 +148,7 @@ public class GreedyStarRoom extends IGameServerRoomHandler.Room {
                 int dAcme = user.y - user.size;
                 if (lAcme > 0 && rAcme < Const.width && uAcme < Const.height && dAcme > 0) {
                 } else {
-                    this.userDie(user, this.countDown);
+                    this.userDie(user, Const.DEATH_TIME);
                 }
             }
         }

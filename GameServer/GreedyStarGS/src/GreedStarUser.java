@@ -1,6 +1,10 @@
+import jdk.nashorn.internal.runtime.logging.DebugLogger;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.Util;
+import sun.rmi.runtime.Log;
 
 /**
  * 玩家
@@ -16,6 +20,7 @@ public class GreedStarUser extends IGameServerRoomHandler.User {
     public int y;
     private int speed;
     public transient Input input;
+    private Logger log = LoggerFactory.getLogger(GreedStarUser.class);
 //    public int rank = 0; //排名
 
     public GreedStarUser(int userID, int status, int score, int size, int x, int y,int speed,Input input) {
@@ -67,28 +72,26 @@ public class GreedStarUser extends IGameServerRoomHandler.User {
     }
 
     public void die(int ditTime) {
+        log.info(" die : {}",userID);
+        this.status = Const.USER_DIE;
+        Main.gameServer.setTimeOut(new Runnable() {
+            @Override
+            public void run() {
+                GreedStarUser.this.relive();
+            }
+        },ditTime*1000);
+    }
+
+    public void relive() {
         int[] position = Utils.getRandomPosition();
         this.score = 0;
         this.size = Const.USER_SIZE;
-        this.x= position[0];
+        this.x = position[0];
         this.y = position[1];
         this.speed = Const.SPEED;
-        this.status = Const.USER_DIE;
-        this.deathTime = ditTime;
+        this.status = Const.USER_IN_THE_GAME;
+        log.info(" relive : {}",userID);
     }
 
 
-//    /**
-//     * 重生
-//     */
-//    public void resetState(int deathTime) {
-//        int[] position = Utils.getRandomPosition();
-//        this.score = 0;
-//        this.size = Const.USER_SIZE;
-//        this.x= position[0];
-//        this.y = position[1];
-//        this.speed = Const.SPEED;
-//        this.status = 3;
-//        this.deathTime = deathTime;
-//    }
 }

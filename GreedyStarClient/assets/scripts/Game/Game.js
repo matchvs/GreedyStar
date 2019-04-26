@@ -151,6 +151,9 @@ cc.Class({
             }
             var child = this.starLayer.getChildByName(player.userID + "");
             if (child !== null) {
+                if (!child.active){
+                    child.active = true;
+                }
                 if (Math.abs(child.x - player.x) >= 500 ||
                     Math.abs(child.y - player.y) >= 500) {
                     child.stopAllActions();
@@ -163,6 +166,8 @@ cc.Class({
                     console.log("real.node x," + player.x + ",y:" + player.y);
                     child.runAction(action);
                 }
+            }else{
+                console.warn("user not be found at move:",player.userID);
             }
         }
     },
@@ -334,11 +339,6 @@ cc.Class({
             case "die":
                 var child = this.starLayer.getChildByName(event.data + "");
                 child && (child.active = false);
-                // if (Const.userID === event.data) {
-                //
-                // }
-
-
                 break;
             case "ping":
                 var ping = new Date().getTime() - event.data;
