@@ -47,8 +47,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.3298583984375,
-      "y": 0.3298583984375,
+      "x": 0.6025146484374996,
+      "y": 0.6025146484374996,
       "z": 1
     },
     "_quat": {
@@ -4495,8 +4495,8 @@
     "target": {
       "__id__": 2
     },
-    "component": "Game",
-    "_componentId": "",
+    "component": "",
+    "_componentId": "d9079l1jFNKUZVIHU/32KxJ",
     "handler": "settingBtnHandler",
     "customEventData": ""
   },

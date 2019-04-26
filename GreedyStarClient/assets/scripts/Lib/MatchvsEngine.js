@@ -52,6 +52,7 @@ MatchvsDemoEngine.prototype.login = function(userID,token){
     var gatewayID = 0;
     var result = mvs.engine.login(userID, token,DeviceID);
     console.log("登录result"+result);
+    mvs.engine.setReconnectTimeout(-1);
     return result;
 };
 

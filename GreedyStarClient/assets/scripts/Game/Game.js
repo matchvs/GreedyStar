@@ -79,12 +79,7 @@ cc.Class({
         console.log("game", "start");
         var self = this;
         this.scoreList = new Array();
-        if (GameData.GameMode) {
-            engine.prototype.sendEventEx(1, JSON.stringify({type: "startGame"}));
-        } else {
-            engine.prototype.sendEventEx(1, JSON.stringify({type: "ready"}));
-        }
-        engine.prototype.setReconnectTimeout(-1);
+        engine.prototype.sendEventEx(1, JSON.stringify({type: "startGame"}));
         this.settingBtn.on(cc.Node.EventType.TOUCH_END, function () {
             self.halfLeaveBtn.active = self.halfLeaveBtn.active ? false : true;
         });
@@ -101,11 +96,11 @@ cc.Class({
             }));
         }, 1000);
     },
-    predictMove : function (input) {
+    predictMove: function (input) {
         this.predicter.update(input);
     },
     onPlayersMoveDr: function (input) {
-        var userSpeed = 10/ (1000/MovePredict.FPS);
+        var userSpeed = 10 / (1000 / MovePredict.FPS);
         if (this.score >= Const.SPEED_DISSIPATION_SCORE && input.p == 1) {
             this.score -= Const.SPEED_DISSIPATION_SCORE;
             userSpeed = this.speed + Const.SPEED_UP;
@@ -114,26 +109,26 @@ cc.Class({
 
         if (input != null && child != null) {
             var isMove = false;
-            var x,y;
-            x = child.x ;
+            var x, y;
+            x = child.x;
             y = child.y;
-            if (1==input.l ) {
-               x = child.x - userSpeed;
+            if (1 == input.l) {
+                x = child.x - userSpeed;
                 isMove = true;
             }
-            if (1 == input.r ) {
+            if (1 == input.r) {
                 x = child.x + userSpeed;
                 isMove = true;
             }
-            if (1 == input.u ) {
-               y = child.y + userSpeed;
+            if (1 == input.u) {
+                y = child.y + userSpeed;
                 isMove = true;
             }
-            if (1 == input.d ) {
-               y = child.y - userSpeed;
+            if (1 == input.d) {
+                y = child.y - userSpeed;
                 isMove = true;
             }
-            if(isMove){
+            if (isMove) {
                 // child.stopAllActions();
 
                 // if(child.actions.length==0){
@@ -164,8 +159,8 @@ cc.Class({
                 } else {
                     child.stopAllActions();
                     console.log("move anima")
-                    var action = cc.moveTo(2*1 / Const.FPS, cc.v2(player.x, player.y));
-                    console.log("real.node x,"+player.x+",y:"+player.y);
+                    var action = cc.moveTo(2 * 1 / Const.FPS, cc.v2(player.x, player.y));
+                    console.log("real.node x," + player.x + ",y:" + player.y);
                     child.runAction(action);
                 }
             }
@@ -292,23 +287,8 @@ cc.Class({
                 break;
             case "addPlayer":
                 console.log("game", "addPlayer");
-                color = new cc.Color(colorArr[0], colorArr[1], colorArr[2])
-                var tempPlayer = event.data;
 
-                if (!this.starLayer.getChildByName(tempPlayer.userID+"")){
-                    var node1 = cc.instantiate(this.playPrefab);
-                    var userName = node1.getChildByName('userName').getComponent(cc.Label);
-                    userName.string = tempPlayer.userID + "";
-                    node1.x = tempPlayer.x;
-                    node1.y = tempPlayer.y;
-                    particleSystem = node1.getComponent(cc.ParticleSystem);
-                    // particleSystem.startSize = tempPlayer.size;
-                    particleSystem.startColor = color;
-                    particleSystem.positionType = 0;
-                    node1.name = tempPlayer.userID + "";
-                    this.starLayer.addChild(node1);
-                    console.log("add node x,"+node1.x+",y:"+node1.y);
-                }
+                this.creatPlayerNode([event.data]);
                 var targetPos = this.getUserTargetPos();
                 if (targetPos !== undefined) {
                     this.camera.position = this.camera.parent.convertToNodeSpaceAR(targetPos);
@@ -316,7 +296,7 @@ cc.Class({
                 break;
             case "otherPlayer":
                 console.log("game", "otherPlayer");
-                this.addPlayers(event.data);
+                this.creatPlayerNode(event.data);
                 break;
             case "removePlayer":
                 var tempPlayer3 = event.data;
@@ -341,7 +321,7 @@ cc.Class({
                 break;
             case "startGame":
                 var room = event.data;
-                this.addPlayers(room);
+                this.creatPlayerNode(room);
                 if (GameData.GameMode) {
                     this.countDown = Math.floor(event.profile / Const.FPS);
                     this.textCountDown();
@@ -353,7 +333,7 @@ cc.Class({
                 break;
             case "die":
                 var child = this.starLayer.getChildByName(event.data + "");
-                child&&(child.active = false);
+                child && (child.active = false);
                 // if (Const.userID === event.data) {
                 //
                 // }
@@ -415,20 +395,28 @@ cc.Class({
      * 添加玩家
      * @param userList
      */
-    addPlayers: function (userList) {
-        var colorArr = utils.getRandomColor(), color, particleSystem;
+    creatPlayerNode: function (userList) {
         for (var c = 0; c < userList.length; c++) {
-            color = new cc.Color(colorArr[0], colorArr[1], colorArr[2]);
-            var node2 = cc.instantiate(this.playPrefab);
-            var userName = node2.getChildByName('userName').getComponent(cc.Label);
-            userName.string = userList[c].userID + "";
-            node2.x = userList[c].x;
-            node2.y = userList[c].y;
-            particleSystem = node2.getComponent(cc.ParticleSystem);
-            particleSystem.startSize = userList[c].size;
-            particleSystem.startColor = color;
-            node2.name = userList[c].userID + "";
-            this.starLayer.addChild(node2);
+            var player = userList[c];
+            if (!player) {
+                continue;
+            }
+            if (!this.starLayer.getChildByName(player.userID + "")) {
+                var colorArr = utils.getRandomColor();
+                var color = new cc.Color(colorArr[0], colorArr[1], colorArr[2]);
+                var node = cc.instantiate(this.playPrefab);
+                var userName = node.getChildByName('userName').getComponent(cc.Label);
+                userName.string = userList[c].userID + "";
+                node.x = userList[c].x;
+                node.y = userList[c].y;
+                var particleSystem = node.getComponent(cc.ParticleSystem);
+                particleSystem.startSize = userList[c].size;
+                particleSystem.startColor = color;
+                node.name = userList[c].userID + "";
+                this.starLayer.addChild(node);
+            }else{
+                console.warn("user has exist",player.userID);
+            }
         }
     },
 
@@ -485,8 +473,8 @@ cc.Class({
     onDestroy: function () {
         clearInterval(this.countDownTime);
         clearInterval(this.pingTimer);
-        this.predicter&&this.predicter.dispose();
-        this.sync&&this.sync.dispose();
+        this.predicter && this.predicter.dispose();
+        this.sync && this.sync.dispose();
     },
 
 

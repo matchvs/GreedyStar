@@ -1,4 +1,3 @@
-import com.google.protobuf.InvalidProtocolBufferException;
 import io.grpc.stub.StreamObserver;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import stream.Simple;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class App extends GameServerRoomEventHandler {
@@ -81,8 +79,8 @@ public class App extends GameServerRoomEventHandler {
      * @param clientChannel 房间信息通道
      */
     private void JoinRoom(Gsmvs.Request request, StreamObserver<Simple.Package.Frame> clientChannel) {
-        GameServerMsg msg;
         long roomID = request.getRoomID();
+        int requestUserID = request.getUserID();
 
         if (!greedRoomMap.containsKey(roomID)) {
             GreedyStarRoom room = new GreedyStarRoom(roomID, clientChannel, this);
@@ -93,22 +91,35 @@ public class App extends GameServerRoomEventHandler {
             }
             room.foodNum = room.foodList.size();
         }
+
+    }
+
+    /**
+     * 同步房间内的游戏状态(user&food)给某个玩家.
+     * @param roomID 房间ID
+     * @param requestUserID 信息的接收者ID
+     */
+    private void syncRoomState2User(long roomID, int requestUserID) {
         GreedyStarRoom room = greedRoomMap.get(roomID);
-        roomAddUser1(room, request.getUserID());
-        sendFoodMsg(room.foodList, roomID, request.getUserID());
-        //给后进入的玩家同步前面的玩家的信息
+        if(room==null){
+            log.warn("room has not exist {}",roomID);
+            return;
+        }
+        syncMyself(room, requestUserID);
+        sendFoodMsg(room.foodList, roomID, requestUserID);
+        //同步其他的玩家的信息
         ArrayList<GreedStarUser> arrayList = new ArrayList<>();
         for (int i = 0; i < room.userList.size(); i++) {
-            if (request.getUserID() != room.userList.get(i).userID) {
+            if (requestUserID != room.userList.get(i).userID) {
                 arrayList.add(room.userList.get(i));
             }
         }
+        GameServerMsg msg;
         if (arrayList.size() > 0) {
             msg = new GameServerMsg("otherPlayer", arrayList);
             log.info("otherPlayer" + JsonUtil.toString(msg));
-            sendMsgInclude(roomID, JsonUtil.toString(msg).getBytes(), new int[]{request.getUserID()});
+            sendMsgInclude(roomID, JsonUtil.toString(msg).getBytes(), new int[]{requestUserID});
         }
-
     }
 
     /**
@@ -157,12 +168,12 @@ public class App extends GameServerRoomEventHandler {
 
 
     /**
-     * 房间加入玩家
+     * 同步某个玩家独有的信息
      *
      * @param room   玩家
      * @param userID 用户ID
      */
-    private void roomAddUser1(GreedyStarRoom room, int userID) {
+    private void syncMyself(GreedyStarRoom room, int userID) {
         int[] Position = Utils.getRandomPosition();
         GreedStarUser user = null;
         for (int i = 0; i < room.userList.size(); i++) {
@@ -181,12 +192,12 @@ public class App extends GameServerRoomEventHandler {
         }
         
         GameServerMsg msg = new GameServerMsg("addPlayer", user);
-        log.info("addPlayer:" + JsonUtil.toString(msg));
-        broadcast(room.ID, (JsonUtil.toString(msg)).getBytes());
-
+        String s = JsonUtil.toString(msg);
+        broadcast(room.ID, s.getBytes());
+        log.warn("[SYNC] userSelf {}  .", userID);
         msg.type = "countDown";
         msg.data = room.countDown;
-        broadcast(room.ID, (JsonUtil.toString(msg)).getBytes());
+        broadcast(room.ID, s.getBytes());
 
 
     }
@@ -253,19 +264,10 @@ public class App extends GameServerRoomEventHandler {
                     }
                 }
                 break;
-            //主动创建房间
             case "startGame":
                 if (room != null && room.userList != null) {
-                    log.info("发送主动创建房间开始游戏的消息");
-                    room.countDown = Const.GAME_TIME_NUM;
-                    GameServerMsg gameServerMsg = new GameServerMsg("startGame", room.userList);
-                    gameServerMsg.profile = room.countDown;
-                    sendMsgInclude(roomID, JsonUtil.toString(gameServerMsg).getBytes(), new int[]{userID});
-                    sendFoodMsg(room.foodList, roomID, userID);
+                    syncRoomState2User(roomID, userID);
                 }
-                break;
-            case "ready":
-                JoinRoom(request, clientChannel);
                 break;
             case "ping":
                 sendMsgInclude(roomID, msg.getBytes(), new int[]{userID});
